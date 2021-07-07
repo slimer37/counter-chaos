@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 235475064}
   - component: {fileID: 235475063}
   - component: {fileID: 235475066}
+  - component: {fileID: 235475067}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -433,6 +434,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   camera: {fileID: 1687258584}
+--- !u!114 &235475067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235475062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd71bf98870d039478ece77668e3dd0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdingPosition: {x: 0, y: -0.5, z: 1}
+  pickupTime: 1
 --- !u!4 &235475068
 Transform:
   m_ObjectHideFlags: 0
@@ -576,7 +591,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 0dbd5309bbb0a544a986e5d95b4e873a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -873,7 +888,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 8c0b0f3407d5de14cab1d19292fae6d9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -942,7 +957,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdPosition: {x: 0, y: -0.5, z: 1}
   hoverable: {fileID: 1923853137}
   rb: {fileID: 1923853139}
 --- !u!54 &1923853139
