@@ -25,6 +25,12 @@ namespace Interactables.Holding
 
         public void Drop() => Setup(null);
 
+        public void Toss(Vector3 direction, float force)
+        {
+            Drop();
+            rb.AddForce(direction * force, ForceMode.Impulse);
+        }
+
         void Setup(Transform holder)
         {
             transform.parent = holder;

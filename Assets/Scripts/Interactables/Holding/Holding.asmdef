@@ -2,7 +2,8 @@
     "name": "Holding",
     "rootNamespace": "",
     "references": [
-        "GUID:a4059a1249fca784ebf292afcfb78be1"
+        "GUID:a4059a1249fca784ebf292afcfb78be1",
+        "GUID:774cbf8dec953074490f3406b31cf818"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
