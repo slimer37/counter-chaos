@@ -2,6 +2,7 @@ using Core;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Interactables.Holding
 {
@@ -10,6 +11,11 @@ namespace Interactables.Holding
         [SerializeField] Vector3 holdingPosition;
         [SerializeField] float pickupTime;
         [SerializeField, Layer] int heldObjectLayer;
+
+        [Header("Drop Obstacle Detection")]
+        [SerializeField] Vector3 checkOrigin;
+        [SerializeField] Vector3 checkExtents;
+        [SerializeField] LayerMask obstacleMask;
         
         [Header("Tossing")]
         [SerializeField] new Transform camera;
@@ -18,6 +24,7 @@ namespace Interactables.Holding
         [SerializeField] float minTossForce;
         [SerializeField] float maxTossForce;
         [SerializeField] float maxForceHoldTime;
+        [SerializeField] Image holdIndicator;
 
         Pickuppable heldItem;
         int tempLayer;
@@ -25,11 +32,18 @@ namespace Interactables.Holding
         bool isHoldingToss;
         float holdTime;
 
+        readonly Collider[] obstacleResults = new Collider[3];
+
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
             Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.5f);
+            Gizmos.color = new Color(1, 0, 0, 0.3f);
+            Gizmos.DrawCube(transform.TransformPoint(checkOrigin), checkExtents * 2);
         }
+
+        bool CheckForObstacles() => Physics.OverlapBoxNonAlloc(transform.TransformPoint(checkOrigin), checkExtents,
+            obstacleResults, transform.rotation, obstacleMask) > 0;
 
         void OnEnable() => Pickuppable.ItemPickedUp += OnPickup; 
         void OnDisable() => Pickuppable.ItemPickedUp -= OnPickup;
@@ -49,12 +63,14 @@ namespace Interactables.Holding
         void OnToss(InputValue value)
         {
             if (!heldItem) return;
+
+            holdIndicator.enabled = value.isPressed;
+            isHoldingToss = value.isPressed;
             
             // Button press and release conditions
             if (value.isPressed)
             {
                 holdTime = 0;
-                isHoldingToss = true;
                 heldItem.transform.parent = camera;
                 
                 // Finish pickup animation in case it's still running
@@ -63,18 +79,27 @@ namespace Interactables.Holding
                 heldItem.transform.DOLocalMove(tossFromPosition, timeToTossPosition);
             }
             else
-                Drop(true);
+            {
+                // Return the item to the holding position if an obstacle is detected.
+                if (CheckForObstacles())
+                    heldItem.transform.DOLocalMove(holdingPosition, timeToTossPosition);
+                else
+                    Drop(true);
+            }
         }
 
         void Update()
         {
             if (isHoldingToss)
+            {
                 holdTime += Time.deltaTime;
+                holdIndicator.fillAmount = Mathf.Clamp01(holdTime / maxForceHoldTime);
+            }
         }
 
         void Drop(bool toss)
         {
-            if (!heldItem) return;
+            if (!heldItem || CheckForObstacles()) return;
             
             // Finish tweens if still in progress.
             heldItem.transform.DOComplete();
