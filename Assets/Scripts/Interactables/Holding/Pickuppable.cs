@@ -7,12 +7,20 @@ namespace Interactables.Holding
     {
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
+        [SerializeField] Renderer boundingBoxSource;
 
         bool isHeld;
+        Bounds bounds;
 
         public static event Action<Pickuppable> ItemPickedUp;
 
         static bool playerIsHoldingObject;
+
+        void Awake() => bounds = boundingBoxSource.bounds;
+
+        public bool IsIntersecting(LayerMask mask, Collider[] results, float extentIncrease) =>
+            Physics.OverlapBoxNonAlloc(transform.position, bounds.extents + Vector3.one * extentIncrease,
+                results, transform.rotation, mask) > 0;
         
         public void OnInteract(Transform player)
         {

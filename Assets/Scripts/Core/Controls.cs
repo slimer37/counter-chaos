@@ -54,7 +54,7 @@ namespace Core
                 },
                 {
                     ""name"": ""Drop"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""4b4e7243-6056-4bff-8a30-ec185ba26502"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
