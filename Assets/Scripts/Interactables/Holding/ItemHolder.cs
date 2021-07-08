@@ -55,36 +55,52 @@ namespace Interactables.Holding
             tempLayer = go.layer;
             go.layer = heldObjectLayer;
             
-            heldItem.transform.DOLocalMove(holdingPosition, pickupTime);
-            heldItem.transform.DOLocalRotateQuaternion(Quaternion.identity, pickupTime);
+            MoveAndRotateHeldItem(holdingPosition, pickupTime);
         }
 
-        void OnDrop() => Drop(false);
+        void MoveAndRotateHeldItem(Vector3 position, float time)
+        {
+            // Finish tweens if still in progress.
+            heldItem.transform.DOComplete();
+            heldItem.transform.DOLocalMove(position, time);
+            heldItem.transform.DOLocalRotateQuaternion(Quaternion.identity, time);
+        }
+
+        void OnDrop()
+        {
+            if (isHoldingToss) return;
+            Drop(false);
+        }
+        
         void OnToss(InputValue value)
         {
             if (!heldItem) return;
 
             holdIndicator.enabled = value.isPressed;
-            isHoldingToss = value.isPressed;
             
             // Button press and release conditions
             if (value.isPressed)
             {
                 holdTime = 0;
-                heldItem.transform.parent = camera;
-                
-                // Finish pickup animation in case it's still running
-                heldItem.transform.DOComplete();
-                
-                heldItem.transform.DOLocalMove(tossFromPosition, timeToTossPosition);
+                isHoldingToss = true;
+                ParentAndPosition(camera, tossFromPosition);
             }
-            else
+            // Only do release actions if a toss was held; do nothing if click was just released, e.g. if mouse was held before pickup.
+            else if (isHoldingToss)
             {
+                isHoldingToss = false;
+                
                 // Return the item to the holding position if an obstacle is detected.
                 if (CheckForObstacles())
-                    heldItem.transform.DOLocalMove(holdingPosition, timeToTossPosition);
+                    ParentAndPosition(transform, holdingPosition);
                 else
                     Drop(true);
+            }
+            
+            void ParentAndPosition(Transform newParent, Vector3 position)
+            {
+                heldItem.transform.parent = newParent;
+                MoveAndRotateHeldItem(position, timeToTossPosition);
             }
         }
 
@@ -97,7 +113,7 @@ namespace Interactables.Holding
             }
         }
 
-        void Drop(bool toss)
+        void Drop(bool addForce)
         {
             if (!heldItem || CheckForObstacles()) return;
             
@@ -106,7 +122,7 @@ namespace Interactables.Holding
             
             heldItem.gameObject.layer = tempLayer;
             
-            if (toss)
+            if (addForce)
             {
                 var tossForce = Mathf.Lerp(minTossForce, maxTossForce, holdTime / maxForceHoldTime);
                 heldItem.Toss(camera.forward, tossForce);
