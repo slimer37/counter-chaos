@@ -1,6 +1,7 @@
 using Core;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 namespace Interactables.Holding
 {
@@ -8,11 +9,21 @@ namespace Interactables.Holding
     {
         [SerializeField] Vector3 holdingPosition;
         [SerializeField] float pickupTime;
-        [SerializeField] float tossForce;
         [SerializeField, Layer] int heldObjectLayer;
+        
+        [Header("Tossing")]
+        [SerializeField] new Transform camera;
+        [SerializeField] Vector3 tossFromPosition;
+        [SerializeField] float timeToTossPosition;
+        [SerializeField] float minTossForce;
+        [SerializeField] float maxTossForce;
+        [SerializeField] float maxForceHoldTime;
 
         Pickuppable heldItem;
         int tempLayer;
+        
+        bool isHoldingToss;
+        float holdTime;
 
         void OnDrawGizmosSelected()
         {
@@ -35,7 +46,31 @@ namespace Interactables.Holding
         }
 
         void OnDrop() => Drop(false);
-        void OnToss() => Drop(true);
+        void OnToss(InputValue value)
+        {
+            if (!heldItem) return;
+            
+            // Button press and release conditions
+            if (value.isPressed)
+            {
+                holdTime = 0;
+                isHoldingToss = true;
+                heldItem.transform.parent = camera;
+                
+                // Finish pickup animation in case it's still running
+                heldItem.transform.DOComplete();
+                
+                heldItem.transform.DOLocalMove(tossFromPosition, timeToTossPosition);
+            }
+            else
+                Drop(true);
+        }
+
+        void Update()
+        {
+            if (isHoldingToss)
+                holdTime += Time.deltaTime;
+        }
 
         void Drop(bool toss)
         {
@@ -47,9 +82,14 @@ namespace Interactables.Holding
             heldItem.gameObject.layer = tempLayer;
             
             if (toss)
-                heldItem.Toss(transform.forward, tossForce);
+            {
+                var tossForce = Mathf.Lerp(minTossForce, maxTossForce, holdTime / maxForceHoldTime);
+                heldItem.Toss(camera.forward, tossForce);
+            }
             else
                 heldItem.Drop();
+
+            heldItem = null;
         }
     }
 }

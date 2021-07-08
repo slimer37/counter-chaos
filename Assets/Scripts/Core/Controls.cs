@@ -62,7 +62,7 @@ namespace Core
                 },
                 {
                     ""name"": ""Toss"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""c16c4857-2936-4b3d-8003-a95b9618a054"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
