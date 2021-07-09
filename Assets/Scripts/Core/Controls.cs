@@ -67,6 +67,14 @@ namespace Core
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""0fe83fe5-c0fb-49ba-9860-6776c16f135b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -179,6 +187,17 @@ namespace Core
                     ""action"": ""Toss"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""810094d7-7b87-4c95-952b-8c91f7f15f73"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -210,6 +229,7 @@ namespace Core
             m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
             m_Gameplay_Drop = m_Gameplay.FindAction("Drop", throwIfNotFound: true);
             m_Gameplay_Toss = m_Gameplay.FindAction("Toss", throwIfNotFound: true);
+            m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -265,6 +285,7 @@ namespace Core
         private readonly InputAction m_Gameplay_Interact;
         private readonly InputAction m_Gameplay_Drop;
         private readonly InputAction m_Gameplay_Toss;
+        private readonly InputAction m_Gameplay_Rotate;
         public struct GameplayActions
         {
             private @Controls m_Wrapper;
@@ -275,6 +296,7 @@ namespace Core
             public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
             public InputAction @Drop => m_Wrapper.m_Gameplay_Drop;
             public InputAction @Toss => m_Wrapper.m_Gameplay_Toss;
+            public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -302,6 +324,9 @@ namespace Core
                     @Toss.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToss;
                     @Toss.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToss;
                     @Toss.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnToss;
+                    @Rotate.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
+                    @Rotate.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
+                    @Rotate.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -324,6 +349,9 @@ namespace Core
                     @Toss.started += instance.OnToss;
                     @Toss.performed += instance.OnToss;
                     @Toss.canceled += instance.OnToss;
+                    @Rotate.started += instance.OnRotate;
+                    @Rotate.performed += instance.OnRotate;
+                    @Rotate.canceled += instance.OnRotate;
                 }
             }
         }
@@ -345,6 +373,7 @@ namespace Core
             void OnInteract(InputAction.CallbackContext context);
             void OnDrop(InputAction.CallbackContext context);
             void OnToss(InputAction.CallbackContext context);
+            void OnRotate(InputAction.CallbackContext context);
         }
     }
 }

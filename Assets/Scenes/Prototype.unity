@@ -549,6 +549,7 @@ MonoBehaviour:
   pickupTime: 0.4
   timeBetweenHoldPositions: 0.1
   heldObjectLayer: 7
+  rotationSpeed: 45
   tossCheckOrigin: {x: 0, y: 0.1, z: 0.8}
   tossCheckExtents: {x: 0.4, y: 0.9, z: 0.425}
   tossObstacleMask:

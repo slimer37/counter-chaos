@@ -14,6 +14,9 @@ namespace Interactables.Holding
         [SerializeField] float pickupTime;
         [SerializeField] float timeBetweenHoldPositions;
         [SerializeField, Layer] int heldObjectLayer;
+
+        [Header("Item Manipulation")]
+        [SerializeField] float rotationSpeed;
         
         [Header("Drop Obstacle Detection")]
         [SerializeField] Vector3 tossCheckOrigin;
@@ -40,6 +43,7 @@ namespace Interactables.Holding
         
         bool isHoldingToss;
         bool isHoldingDrop;
+        bool isRotating;
         float holdTime;
 
         readonly Collider[] obstacleResults = new Collider[1];
@@ -71,6 +75,8 @@ namespace Interactables.Holding
             
             MoveAndRotateHeldItem(holdingPosition, pickupTime);
         }
+
+        void OnRotate(InputValue value) => isRotating = value.isPressed;
 
         void MoveAndRotateHeldItem(Vector3 position, float time)
         {
@@ -147,13 +153,17 @@ namespace Interactables.Holding
 
             if (isHoldingDrop)
             {
+                var itemTransform = heldItem.transform;
                 var itemPosition = transform.TransformPoint(defaultDropPosition);
                 if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, dropReach, dropSurfaceMask))
                     itemPosition = hit.point + hit.normal * dropHeight;
-                heldItem.transform.position = itemPosition;
+                itemTransform.position = itemPosition;
                 
                 if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults, dropCheckIncrease))
-                    heldItem.transform.position = transform.TransformPoint(defaultDropPosition);
+                    itemTransform.position = transform.TransformPoint(defaultDropPosition);
+
+                if (isRotating)
+                    itemTransform.localEulerAngles += rotationSpeed * Time.deltaTime * Vector3.up;
             }
         }
 
