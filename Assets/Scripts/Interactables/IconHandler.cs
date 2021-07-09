@@ -1,4 +1,3 @@
-using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +5,7 @@ namespace Interactables
 {
     public enum InteractionIcon { Invalid, Access, }
     
-    public class IconHandler : Singleton<IconHandler>
+    public class IconHandler : MonoBehaviour
     {
         [SerializeField] Image iconImage;
         [SerializeField] Image pointerImage;

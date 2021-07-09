@@ -310,7 +310,7 @@ Transform:
   m_LocalScale: {x: 9, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &220197179
 GameObject:
@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 220197181}
   - component: {fileID: 220197180}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Icon and Pointer UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,7 +390,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!224 &220197183
 RectTransform:
@@ -406,8 +406,8 @@ RectTransform:
   - {fileID: 4393140}
   - {fileID: 785347705}
   - {fileID: 1932740820}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 235475068}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -531,6 +531,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   camera: {fileID: 1687258584}
+  iconHandler: {fileID: 4393141}
 --- !u!114 &235475067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +582,7 @@ Transform:
   m_Children:
   - {fileID: 1687258585}
   - {fileID: 1700259186}
+  - {fileID: 220197183}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -731,7 +733,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1431355057
 GameObject:
@@ -1232,7 +1234,7 @@ Transform:
   m_LocalScale: {x: 5, y: 1, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &1923853132
 GameObject:

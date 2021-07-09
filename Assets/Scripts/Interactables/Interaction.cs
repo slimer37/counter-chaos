@@ -7,6 +7,7 @@ namespace Interactables
         [SerializeField] float reach;
         [SerializeField] LayerMask mask;
         [SerializeField] new Camera camera;
+        [SerializeField] IconHandler iconHandler;
 
         Hoverable hoveredTransform;
 
@@ -19,7 +20,7 @@ namespace Interactables
                 var hoverable = hit.transform.GetComponent<Hoverable>();
                 
                 if (hoverable)
-                    (hoveredTransform = hoverable).OnHover();
+                    (hoveredTransform = hoverable).OnHover(iconHandler);
             }
             else if (hoveredTransform)
             {
