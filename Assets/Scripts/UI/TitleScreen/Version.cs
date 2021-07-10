@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace UI.TitleScreen
 {
     [ExecuteInEditMode, RequireComponent(typeof(TextMeshProUGUI))]
     public class Version : MonoBehaviour
