@@ -157,7 +157,8 @@ namespace Interactables.Holding
                     var distanceOffSurface = extraDropHeight;
                     
                     // Only use bound diagonal if the surface is not horizontal (e.g. the ground).
-                    distanceOffSurface += Mathf.Abs(Vector3.Angle(hit.normal, Vector3.forward)) - 90 < flatSurfaceTolerance
+                    var angle = Vector3.Angle(hit.normal, Vector3.up);
+                    distanceOffSurface += angle < flatSurfaceTolerance || 180 - angle < flatSurfaceTolerance
                         ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
                     
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
