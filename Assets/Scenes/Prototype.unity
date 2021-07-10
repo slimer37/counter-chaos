@@ -550,6 +550,7 @@ MonoBehaviour:
   timeBetweenHoldPositions: 0.1
   heldObjectLayer: 7
   rotationSpeed: 45
+  flatSurfaceTolerance: 5
   tossCheckOrigin: {x: 0, y: 0.1, z: 0.8}
   tossCheckExtents: {x: 0.4, y: 0.9, z: 0.425}
   tossObstacleMask:
@@ -557,14 +558,13 @@ MonoBehaviour:
     m_Bits: 1
   dropObstacleMask:
     serializedVersion: 2
-    m_Bits: 9
-  dropCheckIncrease: 0
+    m_Bits: 73
   defaultDropPosition: {x: 0, y: 0, z: 1}
   dropReach: 3
-  dropHeight: 0.3
+  extraDropHeight: 0.05
   dropSurfaceMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   tossFromPosition: {x: 0, y: 0, z: 1}
   minTossForce: 3
   maxTossForce: 15
@@ -1363,7 +1363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverable: {fileID: 1923853137}
   rb: {fileID: 1923853139}
-  boundingBoxSource: {fileID: 1923853134}
+  rend: {fileID: 1923853134}
 --- !u!54 &1923853139
 Rigidbody:
   m_ObjectHideFlags: 0

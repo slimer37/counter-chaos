@@ -17,18 +17,18 @@ namespace Interactables.Holding
 
         [Header("Item Manipulation")]
         [SerializeField] float rotationSpeed;
+        [SerializeField] float flatSurfaceTolerance;
         
         [Header("Drop Obstacle Detection")]
         [SerializeField] Vector3 tossCheckOrigin;
         [SerializeField] Vector3 tossCheckExtents;
         [SerializeField] LayerMask tossObstacleMask;
         [SerializeField] LayerMask dropObstacleMask;
-        [SerializeField] float dropCheckIncrease;
         
         [Header("Dropping")]
         [SerializeField] Vector3 defaultDropPosition;
         [SerializeField] float dropReach;
-        [SerializeField] float dropHeight;
+        [SerializeField] float extraDropHeight;
         [SerializeField] LayerMask dropSurfaceMask;
 
         [Header("Tossing")]
@@ -55,12 +55,6 @@ namespace Interactables.Holding
             
             Gizmos.color = new Color(1, 0, 0, 0.3f);
             Gizmos.DrawCube(transform.TransformPoint(tossCheckOrigin), tossCheckExtents * 2);
-        }
-
-        void OnValidate()
-        {
-            if (dropCheckIncrease > dropHeight)
-                Debug.LogWarning($"{nameof(dropCheckIncrease)} is greater than {nameof(dropHeight)}. Intersection checks will always fail.");
         }
 
         void OnEnable() => Pickuppable.ItemPickedUp += OnPickup; 
@@ -101,7 +95,7 @@ namespace Interactables.Holding
             {
                 isHoldingDrop = false;
                 
-                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults, dropCheckIncrease))
+                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
                     MoveAndRotateHeldItem(holdingPosition, timeBetweenHoldPositions);
                 else
                     Drop(false);
@@ -154,16 +148,27 @@ namespace Interactables.Holding
             if (isHoldingDrop)
             {
                 var itemTransform = heldItem.transform;
-                var itemPosition = transform.TransformPoint(defaultDropPosition);
-                if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, dropReach, dropSurfaceMask))
-                    itemPosition = hit.point + hit.normal * dropHeight;
-                itemTransform.position = itemPosition;
                 
-                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults, dropCheckIncrease))
-                    itemTransform.position = transform.TransformPoint(defaultDropPosition);
-
                 if (isRotating)
                     itemTransform.localEulerAngles += rotationSpeed * Time.deltaTime * Vector3.up;
+                
+                if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, dropReach, dropSurfaceMask))
+                {
+                    var distanceOffSurface = extraDropHeight;
+                    
+                    // Only use bound diagonal if the surface is not horizontal (e.g. the ground).
+                    distanceOffSurface += Mathf.Abs(Vector3.Angle(hit.normal, Vector3.forward)) - 90 < flatSurfaceTolerance
+                        ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
+                    
+                    itemTransform.position = hit.point + hit.normal * distanceOffSurface;
+                    
+                    if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                        SetDefaultDropPosition();
+                }
+                else
+                    SetDefaultDropPosition();
+                
+                void SetDefaultDropPosition() => itemTransform.position = transform.TransformPoint(defaultDropPosition);
             }
         }
 

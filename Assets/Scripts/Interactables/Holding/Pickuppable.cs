@@ -7,20 +7,32 @@ namespace Interactables.Holding
     {
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
-        [SerializeField] Renderer boundingBoxSource;
+        [SerializeField] Renderer rend;
 
+        Bounds meshBounds;
         bool isHeld;
-        Bounds bounds;
+
+        public float BoundHalfDiagonal { get; private set; }
+        public float VerticalExtent => rend.bounds.extents.y;
 
         public static event Action<Pickuppable> ItemPickedUp;
 
         static bool playerIsHoldingObject;
 
-        void Awake() => bounds = boundingBoxSource.bounds;
+        void OnDrawGizmosSelected()
+        {
+            if (Application.isPlaying)
+                Gizmos.DrawWireSphere(transform.position, BoundHalfDiagonal);
+        }
 
-        public bool IsIntersecting(LayerMask mask, Collider[] results, float extentIncrease) =>
-            Physics.OverlapBoxNonAlloc(transform.position, bounds.extents + Vector3.one * extentIncrease,
-                results, transform.rotation, mask) > 0;
+        void Awake()
+        {
+            meshBounds = rend.bounds;
+            BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
+        }
+
+        public bool IsIntersecting(LayerMask mask, Collider[] results) =>
+            Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
         
         public void OnInteract(Transform player)
         {
