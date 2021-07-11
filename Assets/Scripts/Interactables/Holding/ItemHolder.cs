@@ -121,7 +121,7 @@ namespace Interactables.Holding
                 isHoldingToss = false;
                 
                 // Return the item to the holding position if an obstacle is detected.
-                if (CheckForTossObstacles(true))
+                if (CheckForTossObstacles())
                     ParentAndPosition(transform, holdingPosition);
                 else
                     Drop(true);
@@ -133,7 +133,7 @@ namespace Interactables.Holding
                 MoveAndRotateHeldItem(position, timeBetweenHoldPositions);
             }
             
-            bool CheckForTossObstacles(bool useTossCheckBox) => Physics.OverlapBoxNonAlloc(transform.TransformPoint(tossCheckOrigin),
+            bool CheckForTossObstacles() => Physics.OverlapBoxNonAlloc(transform.TransformPoint(tossCheckOrigin),
                 tossCheckExtents, obstacleResults, transform.rotation, tossObstacleMask) > 0;
         }
 
