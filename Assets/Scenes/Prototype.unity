@@ -546,9 +546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reach: 4
-  mask:
-    serializedVersion: 2
-    m_Bits: 64
+  interactablesLayer: 6
   camera: {fileID: 1687258584}
   iconHandler: {fileID: 4393141}
 --- !u!114 &235475067
