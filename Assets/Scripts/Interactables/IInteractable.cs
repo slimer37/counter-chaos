@@ -4,6 +4,6 @@ namespace Interactables
 {
     public interface IInteractable
     {
-        public abstract void OnInteract(Transform player);
+        public abstract void OnInteract(Transform sender);
     }
 }
