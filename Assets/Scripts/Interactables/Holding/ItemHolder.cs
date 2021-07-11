@@ -19,10 +19,9 @@ namespace Interactables.Holding
         [SerializeField] float rotationSpeed;
         [SerializeField] float flatSurfaceTolerance;
         
-        [Header("Drop Obstacle Detection")]
-        [SerializeField] Vector3 tossCheckOrigin;
-        [SerializeField] Vector3 tossCheckExtents;
+        [Header("Obstacle Detection")]
         [SerializeField] LayerMask tossObstacleMask;
+        [SerializeField] LayerMask cameraBlockRaycastMask;
         [SerializeField] LayerMask dropObstacleMask;
         
         [Header("Dropping")]
@@ -54,9 +53,6 @@ namespace Interactables.Holding
         {
             Gizmos.color = Color.green;
             Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.5f);
-            
-            Gizmos.color = new Color(1, 0, 0, 0.3f);
-            Gizmos.DrawCube(transform.TransformPoint(tossCheckOrigin), tossCheckExtents * 2);
         }
 
         internal void OnPickup(Pickuppable pickuppable)
@@ -133,10 +129,14 @@ namespace Interactables.Holding
                 heldItem.transform.parent = newParent;
                 MoveAndRotateHeldItem(position, timeBetweenHoldPositions);
             }
-            
-            bool CheckForTossObstacles() => Physics.OverlapBoxNonAlloc(transform.TransformPoint(tossCheckOrigin),
-                tossCheckExtents, obstacleResults, transform.rotation, tossObstacleMask) > 0;
+
+            bool CheckForTossObstacles() =>
+                heldItem.IsIntersecting(tossObstacleMask, obstacleResults)
+                || Physics.Raycast(GetCameraRay(), out var hit, tossFromPosition.magnitude, cameraBlockRaycastMask)
+                && hit.transform != heldItem.transform;
         }
+
+        Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
         void Update()
         {
@@ -153,7 +153,7 @@ namespace Interactables.Holding
                 if (isRotating)
                     itemTransform.localEulerAngles += rotationSpeed * Time.deltaTime * Vector3.up;
                 
-                if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, dropReach, dropSurfaceMask))
+                if (Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask))
                 {
                     var distanceOffSurface = extraDropHeight;
                     

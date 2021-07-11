@@ -568,11 +568,12 @@ MonoBehaviour:
   heldObjectLayer: 7
   rotationSpeed: 45
   flatSurfaceTolerance: 5
-  tossCheckOrigin: {x: 0, y: 0.1, z: 0.8}
-  tossCheckExtents: {x: 0.4, y: 0.9, z: 0.425}
   tossObstacleMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
+  cameraBlockRaycastMask:
+    serializedVersion: 2
+    m_Bits: 193
   dropObstacleMask:
     serializedVersion: 2
     m_Bits: 73
