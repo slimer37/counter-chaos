@@ -27,7 +27,7 @@ namespace Interactables
                 var hoverable = hit.transform.GetComponent<Hoverable>();
                 
                 if (hoverable)
-                    (hoveredTransform = hoverable).OnHover(iconHandler);
+                    (hoveredTransform = hoverable).OnHover(iconHandler, transform);
             }
             else
                 HoverOff();
