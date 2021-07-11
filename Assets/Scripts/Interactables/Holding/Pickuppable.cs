@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Interactables.Holding
@@ -15,8 +14,6 @@ namespace Interactables.Holding
         public float BoundHalfDiagonal { get; private set; }
         public float VerticalExtent => rend.bounds.extents.y;
 
-        static event Action<bool> UpdateHover;
-
         void OnDrawGizmosSelected()
         {
             if (Application.isPlaying)
@@ -27,23 +24,23 @@ namespace Interactables.Holding
         {
             meshBounds = rend.bounds;
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
+            hoverable.OnAttemptHover += OnAttemptHover;
         }
 
-        void OnEnable() => UpdateHover += SetHoverable;
-        void OnDisable() => UpdateHover -= SetHoverable;
+        // Can hover if the sender is not holding anything.
+        bool OnAttemptHover(Transform sender) => !sender.GetComponent<ItemHolder>().IsHoldingItem;
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
         
         public void OnInteract(Transform sender)
         {
-            if (!hoverable.enabled || isHeld) return;
+            var holder = sender.GetComponent<ItemHolder>();
+            if (isHeld || holder && holder.IsHoldingItem) return;
             
-            hoverable.OnHoverExit();
             Setup(sender);
-            
-            // Activate ItemHolder on player
-            sender.GetComponent<ItemHolder>().OnPickup(this);
+
+            holder?.OnPickup(this);
         }
 
         public void Drop() => Setup(null);
@@ -61,10 +58,7 @@ namespace Interactables.Holding
             var pickingUp = (bool)holder;
             isHeld = pickingUp;
             rb.isKinematic = pickingUp;
-
-            UpdateHover?.Invoke(!pickingUp);
+            hoverable.enabled = !pickingUp;
         }
-
-        void SetHoverable(bool value) => hoverable.enabled = value;
     }
 }

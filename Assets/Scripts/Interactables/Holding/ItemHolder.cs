@@ -38,6 +38,8 @@ namespace Interactables.Holding
         [SerializeField] float maxForceHoldTime;
         [SerializeField] Image holdIndicator;
 
+        public bool IsHoldingItem => heldItem;
+        
         Pickuppable heldItem;
         int tempLayer;
         
