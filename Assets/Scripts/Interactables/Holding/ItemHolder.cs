@@ -57,11 +57,10 @@ namespace Interactables.Holding
             Gizmos.DrawCube(transform.TransformPoint(tossCheckOrigin), tossCheckExtents * 2);
         }
 
-        void OnEnable() => Pickuppable.ItemPickedUp += OnPickup; 
-        void OnDisable() => Pickuppable.ItemPickedUp -= OnPickup;
-
-        void OnPickup(Pickuppable pickuppable)
+        internal void OnPickup(Pickuppable pickuppable)
         {
+            if (heldItem) return;
+            
             heldItem = pickuppable;
             var go = heldItem.gameObject;
             tempLayer = go.layer;

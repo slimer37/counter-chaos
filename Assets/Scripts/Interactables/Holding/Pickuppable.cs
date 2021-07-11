@@ -15,10 +15,7 @@ namespace Interactables.Holding
         public float BoundHalfDiagonal { get; private set; }
         public float VerticalExtent => rend.bounds.extents.y;
 
-        public static event Action<Pickuppable> ItemPickedUp;
         static event Action<bool> UpdateHover;
-
-        static bool playerIsHoldingObject;
 
         void OnDrawGizmosSelected()
         {
@@ -38,12 +35,15 @@ namespace Interactables.Holding
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
         
-        public void OnInteract(Transform player)
+        public void OnInteract(Transform sender)
         {
-            if (playerIsHoldingObject || isHeld) return;
-
+            if (!hoverable.enabled || isHeld) return;
+            
             hoverable.OnHoverExit();
-            Setup(player);
+            Setup(sender);
+            
+            // Activate ItemHolder on player
+            sender.GetComponent<ItemHolder>().OnPickup(this);
         }
 
         public void Drop() => Setup(null);
@@ -61,10 +61,6 @@ namespace Interactables.Holding
             var pickingUp = (bool)holder;
             isHeld = pickingUp;
             rb.isKinematic = pickingUp;
-            playerIsHoldingObject = pickingUp;
-            
-            if (pickingUp)
-                ItemPickedUp?.Invoke(this);
 
             UpdateHover?.Invoke(!pickingUp);
         }
