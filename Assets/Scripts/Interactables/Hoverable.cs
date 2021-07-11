@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Interactables
@@ -8,17 +9,30 @@ namespace Interactables
         
         IconHandler tempIconHandler;
 
-        public void OnHover(IconHandler iconHandler)
+        internal void OnHover(IconHandler iconHandler)
         {
             if (!enabled) return;
             tempIconHandler = iconHandler;
             iconHandler.ShowIcon(icon);
         }
         
-        public void OnHoverExit()
+        internal void OnHoverExit()
         {
             if (!enabled) return;
+            if (!tempIconHandler) throw new InvalidOperationException("HoverExit called without a target.");
+            HideIcon();
+        }
+
+        void OnDisable()
+        {
+            if (!tempIconHandler) return;
+            HideIcon();
+        }
+
+        void HideIcon()
+        {
             tempIconHandler.HideIcon();
+            tempIconHandler = null;
         }
     }
 }
