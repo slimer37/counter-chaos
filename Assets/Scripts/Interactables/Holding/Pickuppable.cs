@@ -16,6 +16,7 @@ namespace Interactables.Holding
         public float VerticalExtent => rend.bounds.extents.y;
 
         public static event Action<Pickuppable> ItemPickedUp;
+        static event Action<bool> UpdateHover;
 
         static bool playerIsHoldingObject;
 
@@ -31,6 +32,9 @@ namespace Interactables.Holding
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
         }
 
+        void OnEnable() => UpdateHover += SetHoverable;
+        void OnDisable() => UpdateHover -= SetHoverable;
+
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
         
@@ -40,7 +44,6 @@ namespace Interactables.Holding
 
             hoverable.OnHoverExit();
             Setup(player);
-            ItemPickedUp?.Invoke(this);
         }
 
         public void Drop() => Setup(null);
@@ -54,10 +57,18 @@ namespace Interactables.Holding
         void Setup(Transform holder)
         {
             transform.parent = holder;
-            isHeld = holder;
-            rb.isKinematic = holder;
-            playerIsHoldingObject = holder;
-            hoverable.enabled = !holder;
+
+            var pickingUp = (bool)holder;
+            isHeld = pickingUp;
+            rb.isKinematic = pickingUp;
+            playerIsHoldingObject = pickingUp;
+            
+            if (pickingUp)
+                ItemPickedUp?.Invoke(this);
+
+            UpdateHover?.Invoke(!pickingUp);
         }
+
+        void SetHoverable(bool value) => hoverable.enabled = value;
     }
 }
