@@ -3,6 +3,7 @@
   <component name="ContentModelUserStore">
     <attachedFolders />
     <explicitIncludes>
+      <Path>Library/PackageCache/com.unity.ai.navigation.components@0fc6f532e4</Path>
       <Path>Library/PackageCache/com.unity.collab-proxy@1.5.7</Path>
       <Path>Library/PackageCache/com.unity.ext.nunit@1.0.6</Path>
       <Path>Library/PackageCache/com.unity.ide.rider@3.0.6</Path>
@@ -11,7 +12,9 @@
       <Path>Library/PackageCache/com.unity.inputsystem@1.0.2</Path>
       <Path>Library/PackageCache/com.unity.mathematics@1.2.1</Path>
       <Path>Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0</Path>
+      <Path>Library/PackageCache/com.unity.probuilder@5.0.3</Path>
       <Path>Library/PackageCache/com.unity.searcher@4.3.2</Path>
+      <Path>Library/PackageCache/com.unity.settings-manager@1.0.3</Path>
       <Path>Library/PackageCache/com.unity.test-framework@1.1.24</Path>
       <Path>Library/PackageCache/com.unity.textmeshpro@3.0.6</Path>
       <Path>Library/PackageCache/com.unity.timeline@1.5.5</Path>
