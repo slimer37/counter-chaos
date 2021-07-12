@@ -52,7 +52,7 @@ namespace Interactables.Holding
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.5f);
+            Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.25f);
         }
 
         internal void OnPickup(Pickuppable pickuppable)
