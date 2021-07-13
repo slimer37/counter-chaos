@@ -11,7 +11,7 @@ namespace Register
         
         [Header("Scrolling Texture")]
         [SerializeField] Renderer rend;
-        [SerializeField] Vector2 scrollDirection = Vector2.up;
+        [SerializeField] Vector2 scrollDirection = Vector2.up * 0.3f;
 
         List<CharacterController> collidingControllers = new List<CharacterController>();
 
@@ -20,8 +20,6 @@ namespace Register
             TryGetComponent(out rb);
             TryGetComponent(out rend);
         }
-
-        void Awake() => scrollDirection.Normalize();
 
         void OnTriggerEnter(Collider other)
         {
@@ -45,7 +43,7 @@ namespace Register
                 controller.Move(delta);
             
             var offset = rend.material.mainTextureOffset;
-            offset += speed / 3 * Time.fixedDeltaTime * scrollDirection;
+            offset += speed * Time.fixedDeltaTime * scrollDirection;
             offset.x %= 1;
             offset.y %= 1;
             rend.material.mainTextureOffset = offset;
