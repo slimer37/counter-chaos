@@ -46,7 +46,7 @@ namespace Core
                 },
                 {
                     ""name"": ""Interact"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""b1cc4888-a331-4bfd-ba99-60f092c5936e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

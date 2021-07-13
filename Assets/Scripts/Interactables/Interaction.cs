@@ -1,5 +1,6 @@
 using UnityEngine;
 using Core;
+using UnityEngine.InputSystem;
 
 namespace Interactables
 {
@@ -10,9 +11,15 @@ namespace Interactables
         [SerializeField] new Camera camera;
         [SerializeField] IconHandler iconHandler;
 
-        Hoverable hoveredTransform;
+        Hoverable hoveredObject;
 
-        void OnInteract() => hoveredTransform?.GetComponent<IInteractable>()?.OnInteract(transform);
+        void OnInteract(InputValue value)
+        {
+            if (value.isPressed)
+                hoveredObject?.GetComponent<IInteractable>()?.OnInteract(transform);
+            else
+                hoveredObject?.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
+        }
 
         void Update()
         {
@@ -23,20 +30,23 @@ namespace Interactables
                     HoverOff();
                     return;
                 }
+
+                if (hoveredObject && hoveredObject.transform == hit.transform) return;
                 
                 var hoverable = hit.transform.GetComponent<Hoverable>();
                 
                 if (hoverable)
-                    (hoveredTransform = hoverable).OnHover(iconHandler, transform);
+                    (hoveredObject = hoverable).OnHover(iconHandler, transform);
             }
             else
                 HoverOff();
 
             void HoverOff()
             {
-                if (!hoveredTransform) return;
-                hoveredTransform.OnHoverExit();
-                hoveredTransform = null;
+                if (!hoveredObject) return;
+                hoveredObject.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
+                hoveredObject.OnHoverExit();
+                hoveredObject = null;
             }
         }
     }

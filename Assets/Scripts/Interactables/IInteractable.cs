@@ -4,6 +4,11 @@ namespace Interactables
 {
     public interface IInteractable
     {
-        public abstract void OnInteract(Transform sender);
+        public void OnInteract(Transform sender);
+    }
+
+    public interface IStopInteractHandler
+    {
+        public void OnStopInteract(Transform sender);
     }
 }
