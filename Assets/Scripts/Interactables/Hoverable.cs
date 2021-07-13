@@ -11,6 +11,12 @@ namespace Interactables
         
         IconHandler tempIconHandler;
 
+        void Reset()
+        {
+            if (gameObject.layer != LayerMask.NameToLayer("Interactable"))
+                Debug.Log($"{name} is not on the Interactable layer.");
+        }
+
         internal void OnHover(IconHandler iconHandler, Transform sender)
         {
             if (!enabled) return;
