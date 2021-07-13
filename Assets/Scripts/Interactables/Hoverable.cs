@@ -20,10 +20,14 @@ namespace Interactables
         internal void OnHover(IconHandler iconHandler, Transform sender)
         {
             if (!enabled) return;
-            if (OnAttemptHover != null && !OnAttemptHover(sender)) return;
             
-            tempIconHandler = iconHandler;
-            iconHandler.ShowIcon(icon);
+            if (OnAttemptHover == null || OnAttemptHover(sender))
+            {
+                tempIconHandler = iconHandler;
+                iconHandler.ShowIcon(icon);
+            }
+            else
+                HideIcon();
         }
         
         internal void OnHoverExit()
