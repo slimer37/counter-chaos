@@ -1,14 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace Register
 {
     public class ConveyorBelt : MonoBehaviour
     {
-        [SerializeField] float speed;
+        [SerializeField] float speed = 1;
         [SerializeField] Rigidbody rb;
+        
+        [Header("Scrolling Texture")]
+        [SerializeField] Renderer rend;
+        [SerializeField] Vector2 scrollDirection = Vector2.up;
 
         List<CharacterController> collidingControllers = new List<CharacterController>();
+
+        void Reset()
+        {
+            TryGetComponent(out rb);
+            TryGetComponent(out rend);
+        }
+
+        void Awake() => scrollDirection.Normalize();
 
         void OnTriggerEnter(Collider other)
         {
@@ -30,6 +43,12 @@ namespace Register
 
             foreach (var controller in collidingControllers)
                 controller.Move(delta);
+            
+            var offset = rend.material.mainTextureOffset;
+            offset += speed / 3 * Time.fixedDeltaTime * scrollDirection;
+            offset.x %= 1;
+            offset.y %= 1;
+            rend.material.mainTextureOffset = offset;
         }
     }
 }
