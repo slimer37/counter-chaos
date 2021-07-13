@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Interactables.Holding
@@ -36,6 +37,9 @@ namespace Interactables.Holding
         public void OnInteract(Transform sender)
         {
             var holder = sender.GetComponent<ItemHolder>();
+            
+            if (!holder && isHeld) throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
+            
             if (isHeld || holder && holder.IsHoldingItem) return;
             
             Setup(sender);
