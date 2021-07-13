@@ -1,5 +1,4 @@
 using System.Collections;
-using DG.Tweening;
 using Interactables.Holding;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,16 +8,9 @@ namespace Customers
     public class CustomerBrain : MonoBehaviour
     {
         [SerializeField] NavMeshAgent agent;
-        [SerializeField] Vector3 holdingPosition;
-        [SerializeField] float holdAnimDuration;
         [SerializeField] float dampenSpeed;
         [SerializeField] Animator animator;
-
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.color = new Color(0, 1, 0, 0.5f);
-            Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.25f);
-        }
+        [SerializeField] CustomerHold holder;
 
         void Update() => animator.speed = agent.velocity.magnitude / dampenSpeed;
 
@@ -26,8 +18,7 @@ namespace Customers
         {
             var target = FindObjectOfType<Pickuppable>();
             yield return MoveToward(target.transform.position);
-            target.OnInteract(transform);
-            yield return target.transform.DOLocalMove(holdingPosition, holdAnimDuration).WaitForCompletion();
+            yield return holder.Pickup(target);
         }
 
         IEnumerator MoveToward(Vector3 position)
