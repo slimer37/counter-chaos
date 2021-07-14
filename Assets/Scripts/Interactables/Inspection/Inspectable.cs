@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Interactables.Letter
+namespace Interactables.Inspection
 {
     public class Inspectable : MonoBehaviour, IInteractable, IStopInteractHandler
     {
