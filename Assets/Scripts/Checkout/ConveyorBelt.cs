@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
-namespace Register
+namespace Checkout
 {
     public class ConveyorBelt : MonoBehaviour
     {
