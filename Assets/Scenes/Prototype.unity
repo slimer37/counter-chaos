@@ -367,7 +367,7 @@ MonoBehaviour:
   hoverable: {fileID: 187696981}
   distanceFromCamera: 0.7
   offsetRotation: {x: 90, y: 0, z: 0}
-  animTime: 1
+  animTime: 0.6
 --- !u!114 &187696981
 MonoBehaviour:
   m_ObjectHideFlags: 0
