@@ -33,6 +33,8 @@ namespace Register
             collidingControllers.Remove(other.GetComponent<CharacterController>());
         }
 
+        void Awake() => scrollDirection *= rend.material.mainTextureScale;
+
         void FixedUpdate()
         {
             var delta = speed * Time.fixedDeltaTime * transform.forward;
