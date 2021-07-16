@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Products;
 
 namespace Checkout
 {
@@ -7,6 +9,8 @@ namespace Checkout
         [SerializeField] LayerMask raycastMask;
         [SerializeField] Vector3 laserDirection = Vector3.up;
         [SerializeField] float maxDistance = 0.5f;
+
+        public event Action<ProductIdentifier> onScan;
 
         Ray scanRay;
         Transform lastScanned;
@@ -22,7 +26,8 @@ namespace Checkout
         void Scan(Transform scanned)
         {
             lastScanned = scanned;
-            print(scanned);
+            if (scanned.TryGetComponent(out ProductIdentifier productIdentifier))
+                onScan?.Invoke(productIdentifier);
         }
 
         void FixedUpdate()
