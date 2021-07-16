@@ -31,10 +31,12 @@ namespace Interactables
                     return;
                 }
 
-                if (hoveredObject && hoveredObject.transform == hit.transform)
+                if (hoveredObject)
                 {
-                    hoveredObject.OnHover(iconHandler, transform);
-                    return;
+                    if (hoveredObject.transform == hit.transform)
+                        hoveredObject.OnHover(iconHandler, transform);
+                    else
+                        HoverOff();
                 }
                 
                 var hoverable = hit.transform.GetComponent<Hoverable>();
