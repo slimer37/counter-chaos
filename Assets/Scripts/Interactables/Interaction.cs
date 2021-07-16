@@ -33,10 +33,13 @@ namespace Interactables
 
                 if (hoveredObject)
                 {
-                    if (hoveredObject.transform == hit.transform)
-                        hoveredObject.OnHover(iconHandler, transform);
-                    else
+                    if (hoveredObject.transform != hit.transform)
                         HoverOff();
+                    else
+                    {
+                        hoveredObject.OnHover(iconHandler, transform);
+                        return;
+                    }
                 }
                 
                 var hoverable = hit.transform.GetComponent<Hoverable>();
