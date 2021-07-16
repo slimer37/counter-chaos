@@ -44,7 +44,7 @@ namespace Interactables.Holding
             
             Setup(sender);
 
-            holder?.OnPickup(this);
+            holder?.Give(this);
         }
 
         public void Drop() => Setup(null);

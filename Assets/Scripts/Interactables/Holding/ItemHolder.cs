@@ -55,7 +55,9 @@ namespace Interactables.Holding
             Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.25f);
         }
 
-        internal void OnPickup(Pickuppable pickuppable)
+        public void Give(Pickuppable pickuppable) => OnPickup(pickuppable);
+
+        void OnPickup(Pickuppable pickuppable)
         {
             if (heldItem) return;
             
