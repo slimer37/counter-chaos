@@ -106,7 +106,7 @@ MonoBehaviour:
       m_Calls: []
   animate: 1
   pushAmount: {x: 0, y: -0.04, z: 0}
-  animTime: 0.1
+  animTime: 0.06
   ease: 1
 --- !u!114 &4621393673587757711
 MonoBehaviour:

@@ -1,7 +1,10 @@
 {
     "name": "Checkout",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Products",
+        "Unity.TextMeshPro"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
