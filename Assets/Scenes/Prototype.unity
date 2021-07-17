@@ -1149,7 +1149,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '<size=0.65><align=right>-----
 
-    TOTAL: $0.00</align></size>'
+    <size=0.55># OF ITEMS: 0 - </size>TOTAL:
+    $0.00</align></size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1774,6 +1775,7 @@ MonoBehaviour:
   headerSize: 0.32
   itemListSize: 0.6
   totalAmountSize: 0.65
+  numItemsSize: 0.55
   maxItemsShown: 8
   ellipsisSize: 0.4
   transactionHeader: TRANSACTION MODE

@@ -20,6 +20,7 @@ namespace Checkout
         [Header("Transaction Mode")]
         [SerializeField] float itemListSize;
         [SerializeField] float totalAmountSize;
+        [SerializeField] float numItemsSize;
         [SerializeField] int maxItemsShown;
         [SerializeField] float ellipsisSize;
         [SerializeField, TextArea] string transactionHeader = "TRANSACTION MODE";
@@ -34,7 +35,9 @@ namespace Checkout
 
         bool IsInTransaction => mode == Mode.Transaction && transactionItems.Count > 0;
 
-        string GetTotalFormat(float price) => $"<size={totalAmountSize}><align=right>-----\nTOTAL: {price:c}</align></size>";
+        string GetTotalFormat(float price) =>
+            $"<size={totalAmountSize}><align=right>-----\n" +
+            $"<size={numItemsSize}># OF ITEMS: {transactionItems.Count} - </size>TOTAL: {price:c}</align></size>";
 
         void OnValidate()
         {
