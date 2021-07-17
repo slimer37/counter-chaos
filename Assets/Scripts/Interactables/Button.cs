@@ -16,12 +16,22 @@ namespace Interactables
 
         Vector3 originalPos;
 
+        void OnDrawGizmosSelected()
+        {
+            if (!animate) return;
+            Gizmos.color = Color.yellow;
+            if (TryGetComponent(out MeshFilter filter))
+                Gizmos.DrawMesh(filter.sharedMesh, transform.TransformPoint(pushAmount), transform.rotation);
+            else
+                Gizmos.DrawLine(transform.position, transform.TransformPoint(pushAmount));
+        }
+
         void Awake() => originalPos = transform.position;
 
         public void OnInteract(Transform sender)
         {
             if (animate)
-                transform.DOMove(originalPos + transform.TransformDirection(pushAmount), animTime).SetEase(ease);
+                transform.DOMove(transform.TransformPoint(pushAmount), animTime).SetEase(ease);
             
             onPress.Invoke();
         }
