@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   <DisplayName>k__BackingField: Test
-  <Price>k__BackingField: 0
+  <Price>k__BackingField: 1.5
   <Description>k__BackingField: Test
