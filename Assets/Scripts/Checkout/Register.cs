@@ -109,14 +109,10 @@ namespace Checkout
                 displayList = transactionItems.GetRange(numItems - maxItemsShown, maxItemsShown);
             }
             
-            // Add item names and prices to screen and record total.
-            var total = 0.0f;
-            foreach (var item in displayList)
-            {
-                screenText.text += $"{item.DisplayName} - {item.Price:c}\n";
-                total += item.Price;
-            }
+            displayList.ForEach(item =>
+                screenText.text += $"{item.DisplayName} - {item.Price:c}\n");
             
+            var total = transactionItems.Sum(item => item.Price);
             bottomText.text = GetTotalFormat(total);
         }
 
