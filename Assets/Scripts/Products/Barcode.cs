@@ -16,10 +16,7 @@ namespace Products
             var tempState = Random.state;
             Random.InitState(seed);
             
-            var barcodeTex = new Texture2D(BarcodeWidth, 1)
-            {
-                filterMode = FilterMode.Point
-            };
+            var barcodeTex = new Texture2D(BarcodeWidth, 1) {filterMode = FilterMode.Point};
 
             var onBar = true;
             var pixels = new Color[BarcodeWidth];
