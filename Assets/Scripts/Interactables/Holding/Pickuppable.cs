@@ -1,4 +1,5 @@
 using System;
+using Interactables.Base;
 using UnityEngine;
 
 namespace Interactables.Holding

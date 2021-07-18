@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Interactables.Base;
 using UnityEngine;
 
 namespace Interactables.Inspection

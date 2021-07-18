@@ -1,10 +1,11 @@
-using UnityEngine;
 using Core;
+using Interactables.Base;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Interactables
 {
-    public class Interaction : MonoBehaviour
+    internal class Interaction : MonoBehaviour
     {
         [SerializeField] float reach;
         [SerializeField, Layer] int interactablesLayer;

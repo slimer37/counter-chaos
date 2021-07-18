@@ -1,7 +1,9 @@
 {
-    "name": "Interactables",
+    "name": "PlayerInteraction",
     "rootNamespace": "",
     "references": [
+        "GUID:774cbf8dec953074490f3406b31cf818",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:11f3352786a03014da4f46f23c9d7b7f"
     ],
     "includePlatforms": [],

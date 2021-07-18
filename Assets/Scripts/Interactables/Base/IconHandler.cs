@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Interactables
+namespace Interactables.Base
 {
     public enum InteractionIcon { Invalid, Access, }
     
@@ -11,13 +11,13 @@ namespace Interactables
         [SerializeField] Image pointerImage;
         [SerializeField] Sprite[] icons;
 
-        public void ShowIcon(InteractionIcon icon)
+        internal void ShowIcon(InteractionIcon icon)
         {
             EnableIcon(true);
             iconImage.sprite = icons[(int)icon];
         }
 
-        public void HideIcon() => EnableIcon(false);
+        internal void HideIcon() => EnableIcon(false);
 
         void EnableIcon(bool value)
         {

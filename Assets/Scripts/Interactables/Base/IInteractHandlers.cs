@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Interactables
+namespace Interactables.Base
 {
     public interface IInteractHandler
     {

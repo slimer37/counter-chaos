@@ -1,9 +1,7 @@
 {
-    "name": "Interactables",
+    "name": "Base",
     "rootNamespace": "",
-    "references": [
-        "GUID:11f3352786a03014da4f46f23c9d7b7f"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

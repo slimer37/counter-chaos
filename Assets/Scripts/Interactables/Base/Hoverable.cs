@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Interactables
+namespace Interactables.Base
 {
     public class Hoverable : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace Interactables
                 Debug.LogWarning($"{name} is not on the Interactable layer.", gameObject);
         }
 
-        internal void OnHover(IconHandler iconHandler, Transform sender)
+        public void OnHover(IconHandler iconHandler, Transform sender)
         {
             if (!enabled) return;
             
@@ -30,7 +30,7 @@ namespace Interactables
                 HideIcon();
         }
         
-        internal void OnHoverExit()
+        public void OnHoverExit()
         {
             if (!enabled) return;
             HideIcon();
