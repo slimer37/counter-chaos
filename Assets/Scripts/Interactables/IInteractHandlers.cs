@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Interactables
 {
-    public interface IInteractable
+    public interface IInteractHandler
     {
         public void OnInteract(Transform sender);
     }

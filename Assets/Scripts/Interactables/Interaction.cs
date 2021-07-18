@@ -16,7 +16,7 @@ namespace Interactables
         void OnInteract(InputValue value)
         {
             if (value.isPressed)
-                hoveredObject?.GetComponent<IInteractable>()?.OnInteract(transform);
+                hoveredObject?.GetComponent<IInteractHandler>()?.OnInteract(transform);
             else
                 hoveredObject?.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
         }

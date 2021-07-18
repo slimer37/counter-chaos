@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Interactables.Holding
 {
-    public sealed class Pickuppable : MonoBehaviour, IInteractable
+    public sealed class Pickuppable : MonoBehaviour, IInteractHandler
     {
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;

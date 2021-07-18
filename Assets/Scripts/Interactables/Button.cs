@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Interactables
 {
-    public class Button : MonoBehaviour, IInteractable, IStopInteractHandler
+    public class Button : MonoBehaviour, IInteractHandler, IStopInteractHandler
     {
         public UnityEvent onPress;
         public UnityEvent onRelease;

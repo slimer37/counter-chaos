@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Interactables.Inspection
 {
-    public class Inspectable : MonoBehaviour, IInteractable, IStopInteractHandler
+    public class Inspectable : MonoBehaviour, IInteractHandler, IStopInteractHandler
     {
         [SerializeField] Hoverable hoverable;
         [SerializeField] float distanceFromCamera;
