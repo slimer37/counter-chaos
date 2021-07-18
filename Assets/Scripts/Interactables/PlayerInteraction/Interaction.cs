@@ -22,6 +22,14 @@ namespace Interactables
                 hoveredObject?.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
         }
 
+        void OnSecondaryInteract(InputValue value)
+        {
+            if (value.isPressed)
+                hoveredObject?.GetComponent<ISecondaryInteractHandler>()?.OnSecondaryInteract(transform);
+            else
+                hoveredObject?.GetComponent<IStopSecondaryInteractHandler>()?.OnStopSecondaryInteract(transform);
+        }
+
         void Update()
         {
             if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, reach))
@@ -55,6 +63,7 @@ namespace Interactables
             {
                 if (!hoveredObject) return;
                 hoveredObject.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
+                hoveredObject.GetComponent<IStopSecondaryInteractHandler>()?.OnStopSecondaryInteract(transform);
                 hoveredObject.OnHoverExit();
                 hoveredObject = null;
             }

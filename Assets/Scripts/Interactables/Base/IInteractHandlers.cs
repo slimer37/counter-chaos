@@ -11,4 +11,14 @@ namespace Interactables.Base
     {
         public void OnStopInteract(Transform sender);
     }
+
+    public interface ISecondaryInteractHandler
+    {
+        public void OnSecondaryInteract(Transform sender);
+    }
+
+    public interface IStopSecondaryInteractHandler
+    {
+        public void OnStopSecondaryInteract(Transform sender);
+    }
 }

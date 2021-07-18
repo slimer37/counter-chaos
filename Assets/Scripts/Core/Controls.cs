@@ -53,6 +53,14 @@ namespace Core
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Secondary Interact"",
+                    ""type"": ""Value"",
+                    ""id"": ""21172373-e067-4232-8987-06a08f9e0b98"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Drop"",
                     ""type"": ""Value"",
                     ""id"": ""4b4e7243-6056-4bff-8a30-ec185ba26502"",
@@ -198,6 +206,17 @@ namespace Core
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c93a9064-0d70-4a2a-8169-9969ebbb0b7a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Secondary Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +246,7 @@ namespace Core
             m_Gameplay_MoveMouse = m_Gameplay.FindAction("Move Mouse", throwIfNotFound: true);
             m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
             m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
+            m_Gameplay_SecondaryInteract = m_Gameplay.FindAction("Secondary Interact", throwIfNotFound: true);
             m_Gameplay_Drop = m_Gameplay.FindAction("Drop", throwIfNotFound: true);
             m_Gameplay_Toss = m_Gameplay.FindAction("Toss", throwIfNotFound: true);
             m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
@@ -283,6 +303,7 @@ namespace Core
         private readonly InputAction m_Gameplay_MoveMouse;
         private readonly InputAction m_Gameplay_Sprint;
         private readonly InputAction m_Gameplay_Interact;
+        private readonly InputAction m_Gameplay_SecondaryInteract;
         private readonly InputAction m_Gameplay_Drop;
         private readonly InputAction m_Gameplay_Toss;
         private readonly InputAction m_Gameplay_Rotate;
@@ -294,6 +315,7 @@ namespace Core
             public InputAction @MoveMouse => m_Wrapper.m_Gameplay_MoveMouse;
             public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
             public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
+            public InputAction @SecondaryInteract => m_Wrapper.m_Gameplay_SecondaryInteract;
             public InputAction @Drop => m_Wrapper.m_Gameplay_Drop;
             public InputAction @Toss => m_Wrapper.m_Gameplay_Toss;
             public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
@@ -318,6 +340,9 @@ namespace Core
                     @Interact.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
                     @Interact.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
                     @Interact.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
+                    @SecondaryInteract.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryInteract;
+                    @SecondaryInteract.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryInteract;
+                    @SecondaryInteract.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryInteract;
                     @Drop.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDrop;
                     @Drop.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDrop;
                     @Drop.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDrop;
@@ -343,6 +368,9 @@ namespace Core
                     @Interact.started += instance.OnInteract;
                     @Interact.performed += instance.OnInteract;
                     @Interact.canceled += instance.OnInteract;
+                    @SecondaryInteract.started += instance.OnSecondaryInteract;
+                    @SecondaryInteract.performed += instance.OnSecondaryInteract;
+                    @SecondaryInteract.canceled += instance.OnSecondaryInteract;
                     @Drop.started += instance.OnDrop;
                     @Drop.performed += instance.OnDrop;
                     @Drop.canceled += instance.OnDrop;
@@ -371,6 +399,7 @@ namespace Core
             void OnMoveMouse(InputAction.CallbackContext context);
             void OnSprint(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
+            void OnSecondaryInteract(InputAction.CallbackContext context);
             void OnDrop(InputAction.CallbackContext context);
             void OnToss(InputAction.CallbackContext context);
             void OnRotate(InputAction.CallbackContext context);

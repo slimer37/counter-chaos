@@ -38,6 +38,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Secondary Interact",
+                    "type": "Value",
+                    "id": "21172373-e067-4232-8987-06a08f9e0b98",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Drop",
                     "type": "Value",
                     "id": "4b4e7243-6056-4bff-8a30-ec185ba26502",
@@ -181,6 +189,17 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c93a9064-0d70-4a2a-8169-9969ebbb0b7a",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Secondary Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
