@@ -4,7 +4,7 @@ namespace Products
 {
     public static class Barcode
     {
-        public static int BarcodeWidth = 80;
+        const int BarcodeWidth = 50;
         
         static readonly Color SpaceColor = Color.clear;
         static readonly Color BarColor = Color.white;
@@ -13,6 +13,7 @@ namespace Products
 
         public static Texture2D Generate(int seed)
         {
+            var tempState = Random.state;
             Random.InitState(seed);
             
             var barcodeTex = new Texture2D(BarcodeWidth, 1)
@@ -39,6 +40,9 @@ namespace Products
         
             barcodeTex.SetPixels(pixels);
             barcodeTex.Apply();
+            
+            // Revert RNG state.
+            Random.state = tempState;
 
             return barcodeTex;
         }
