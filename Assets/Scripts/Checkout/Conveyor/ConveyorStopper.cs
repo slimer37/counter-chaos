@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace Checkout
+namespace Checkout.Conveyor
 {
-    public class ConveyorStopper : MonoBehaviour
+    internal class ConveyorStopper : MonoBehaviour
     {
         [SerializeField] bool useTrigger;
         [SerializeField] ConveyorBelt conveyorBelt;

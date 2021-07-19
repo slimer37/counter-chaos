@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Checkout
+namespace Checkout.Conveyor
 {
-    public class ConveyorBelt : MonoBehaviour
+    internal class ConveyorBelt : MonoBehaviour
     {
         [SerializeField] float speed = 1;
         [SerializeField] Rigidbody rb;
