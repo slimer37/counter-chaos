@@ -16,7 +16,8 @@ namespace Products
         public Texture2D Barcode { get; private set; }
 
         static List<int> usedIDs = new List<int>();
-        const int IDLength = 5;
+        
+        public const int IDLength = 5;
 
         public void Init(int barcodeSeed)
         {
