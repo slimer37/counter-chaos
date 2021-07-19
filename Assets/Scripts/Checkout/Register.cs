@@ -28,6 +28,9 @@ namespace Checkout
         [SerializeField] string entryHeader;
         [SerializeField] float inputSize;
         [SerializeField, TextArea] string inputInstructions;
+        [SerializeField, Tooltip("{0}: Name"), RequireSubstring(true, "{0}")] string idSuccessMessage;
+        [SerializeField, TextArea] string idFailureMessage;
+        [SerializeField, TextArea] string idTooShortMessage;
         [SerializeField] GameObject enableDuringEntry;
         
         [Header("Inquiry Mode")]
@@ -71,6 +74,29 @@ namespace Checkout
             else if (idInput.Length < ProductInfo.IDLength) idInput += c;
             
             FormatModeText();
+        }
+
+        public void SubmitID()
+        {
+            if (mode != Mode.Entry) return;
+
+            FormatModeText();
+            screenText.text += "\n";
+            
+            if (idInput.Length < ProductInfo.IDLength)
+            {
+                screenText.text += idTooShortMessage;
+                return;
+            }
+            
+            var info = ProductInfo.LookUp(Convert.ToInt32(idInput));
+            if (!info)
+                screenText.text += idFailureMessage;
+            else
+            {
+                screenText.text += string.Format(idSuccessMessage, info.DisplayName);
+                transactionItems.Add(info);
+            }
         }
         
         public void ToggleInquireMode() => ActivateMode(Mode.Inquiry);
@@ -131,7 +157,7 @@ namespace Checkout
 
             if (mode == Mode.Transaction)
                 AppendTransactionText();
-            else if (mode == Mode.Entry) screenText.text += $"\n<size={inputSize}>" + idInput + "</size>\n\n" + inputInstructions;
+            else if (mode == Mode.Entry) screenText.text += $"\n<size={inputSize}>" + idInput + "</size>\n\n" + inputInstructions + "\n";
         }
     }
 }

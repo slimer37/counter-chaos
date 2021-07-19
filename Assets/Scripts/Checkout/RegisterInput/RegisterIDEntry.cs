@@ -9,6 +9,7 @@ namespace Checkout.RegisterInput
     {
         [SerializeField] Hoverable hoverable;
         [SerializeField] UnityEvent<char?> onNumberInput;
+        [SerializeField] UnityEvent onSubmitInput;
 
         bool enteringID;
         PlayerController.PlayerController playerController;
@@ -22,8 +23,15 @@ namespace Checkout.RegisterInput
         void Update()
         {
             if (!enteringID) return;
-            if (Keyboard.current.backspaceKey.wasPressedThisFrame)
+
+            var keyboard = Keyboard.current;
+            
+            if (keyboard.backspaceKey.wasPressedThisFrame)
                 onNumberInput.Invoke(null);
+            
+            if (keyboard.enterKey.wasPressedThisFrame)
+                onSubmitInput.Invoke();
+                
         }
 
         void OnEnable()

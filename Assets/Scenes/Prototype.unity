@@ -2005,8 +2005,14 @@ MonoBehaviour:
   truncationString: <size=0.35>... (some items not shown)</size>
   entryHeader: MANUAL ENTRY
   inputSize: 0.6
-  inputInstructions: <size=0.35>Hold E on this screen and enter numbers to manually
-    look up a product. Press ENTER again to exit.</size>
+  inputInstructions: <size=0.35>Hold E on this screen and type numbers to manually
+    look up a product. Use backspace to delete and enter to submit. Press ENTRY again
+    to exit.</size>
+  idSuccessMessage: <size=0.4><color=green>Added "{0}" to transaction. Press the
+    ENTRY button to see transaction.
+  idFailureMessage: <size=0.4><color=red>Lookup failed. Could not find a product
+    with that ID
+  idTooShortMessage: <size=0.4><color=red>Enter 5 numbers.
   enableDuringEntry: {fileID: 1348471113}
   productInquiryHeader: INQUIRE MODE
   productInquiryFormat: '
@@ -2235,7 +2241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4621393675282241055, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
       propertyPath: m_text
-      value: enter
+      value: entry
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
@@ -2602,9 +2608,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onBackspace:
+  onSubmitInput:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1155246544}
+        m_TargetAssemblyTypeName: Checkout.Register, Checkout
+        m_MethodName: SubmitID
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1431355057
 GameObject:
   m_ObjectHideFlags: 0
