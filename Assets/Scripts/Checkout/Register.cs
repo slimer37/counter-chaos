@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using Products;
+using Core;
 
 namespace Checkout
 {
@@ -18,8 +19,8 @@ namespace Checkout
 
         [Header("Transaction Mode")]
         [SerializeField] string transactionHeader;
-        [SerializeField, Tooltip("{0-1}: Name, Price")] string itemListFormat;
-        [SerializeField, TextArea, Tooltip("{0-1}: # of items, Total")] string totalInfoFormat;
+        [SerializeField, Tooltip("{0-1}: Name, Price"), RequireSubstring("{0}", "{1}")] string itemListFormat;
+        [SerializeField, Tooltip("{0-1}: # of items, Total"), RequireSubstring(true, "{0}", "{1}")] string totalInfoFormat;
         [SerializeField] int maxItemsShown;
         [SerializeField] string truncationString;
 
@@ -31,7 +32,8 @@ namespace Checkout
         
         [Header("Inquiry Mode")]
         [SerializeField] string productInquiryHeader;
-        [SerializeField, TextArea, Tooltip("{0-2}: Name, Price, Description")] string productInquiryFormat;
+        [SerializeField, Tooltip("{0-2}: Name, Price, Description"),
+         RequireSubstring(true, 4, "{0}", "{1}", "{2}")] string productInquiryFormat;
 
         readonly List<ProductInfo> transactionItems = new List<ProductInfo>();
 
