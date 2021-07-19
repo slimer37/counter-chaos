@@ -15,7 +15,7 @@ namespace Products
         public int ID { get; private set; }
         public Texture2D Barcode { get; private set; }
 
-        static List<int> usedIDs = new List<int>();
+        static Dictionary<int, ProductInfo> idTable = new Dictionary<int, ProductInfo>();
         
         public const int IDLength = 5;
 
@@ -27,11 +27,13 @@ namespace Products
                 idString = Random.Range(1, 10).ToString();
                 for (var i = 0; i < IDLength - 1; i++)
                     idString += Random.Range(0, 10);
-            } while (usedIDs.Contains(Convert.ToInt32(idString)));
+            } while (idTable.ContainsKey(Convert.ToInt32(idString)));
             
             ID = Convert.ToInt32(idString);
-            usedIDs.Add(ID);
+            idTable[ID] = this;
             Barcode = Products.Barcode.Generate(barcodeSeed);
         }
+
+        public static ProductInfo LookUp(int id) => idTable.ContainsKey(id) ? idTable[id] : null;
     }
 }
