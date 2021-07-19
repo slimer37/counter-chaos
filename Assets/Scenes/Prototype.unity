@@ -1221,7 +1221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
       propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleMode
+      value: ToggleInquireMode
       objectReference: {fileID: 0}
     - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
       propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1299,10 +1299,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<size=0.65><align=right>-----
-
-    <size=0.55># OF ITEMS: 0 - </size>TOTAL:
-    $0.00</align></size>'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1336,7 +1333,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1820,7 +1817,7 @@ GameObject:
   - component: {fileID: 1128504031}
   - component: {fileID: 1128504030}
   m_Layer: 0
-  m_Name: Keyboard Frame (1)
+  m_Name: Keyboard Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1907,6 +1904,7 @@ GameObject:
   - component: {fileID: 1155246543}
   - component: {fileID: 1155246542}
   - component: {fileID: 1155246544}
+  - component: {fileID: 1155246545}
   m_Layer: 0
   m_Name: Register
   m_TagString: Untagged
@@ -1927,6 +1925,7 @@ Transform:
   m_Children:
   - {fileID: 1458550900}
   - {fileID: 674522675}
+  - {fileID: 1348471114}
   m_Father: {fileID: 6320322049908461030}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1997,14 +1996,39 @@ MonoBehaviour:
   bottomText: {fileID: 674522676}
   scanner: {fileID: 1739586382}
   headerSize: 0.32
-  itemListSize: 0.6
-  totalAmountSize: 0.65
-  numItemsSize: 0.55
-  maxItemsShown: 8
-  ellipsisSize: 0.4
   transactionHeader: TRANSACTION MODE
+  itemListFormat: <size=0.5>{0} - {1}</size>
+  totalInfoFormat: '------
+
+    <size=0.38>No. ITEMS: {0} <size=0.5>TOTAL: {1}'
+  maxItemsShown: 8
+  truncationString: <size=0.35>... (some items not shown)</size>
+  entryHeader: MANUAL ENTRY
+  inputSize: 0.6
+  inputInstructions: <size=0.35>Hold E on this screen and enter numbers to manually
+    look up a product. Press ENTER again to exit.</size>
+  enableDuringEntry: {fileID: 1348471113}
   productInquiryHeader: INQUIRE MODE
-  productInquiryFormat: '{0}\n<size=0.4f>{1}\n{2}'
+  productInquiryFormat: '
+
+    {0}
+
+    <size=0.4f>{1}
+
+    {2}'
+--- !u!65 &1155246545
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155246540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2653604, y: 0.94901997, z: 0.17000854}
+  m_Center: {x: -0.00000011926184, y: -6.333301e-10, z: -0.08500423}
 --- !u!1 &1164440805
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,6 +2204,34 @@ PrefabInstance:
     - target: {fileID: 4621393673587757707, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1155246544}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleEntryMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Checkout.Register, Checkout
+      objectReference: {fileID: 0}
+    - target: {fileID: 4621393673587757710, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
+      propertyPath: onPress.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4621393675282241055, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
       propertyPath: m_text
@@ -2463,6 +2515,96 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4621393673587757707, guid: 80f371d927dbe3849970f4e942b44f8a, type: 3}
   m_PrefabInstance: {fileID: 1244867950}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1348471113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1348471114}
+  - component: {fileID: 1348471117}
+  - component: {fileID: 1348471116}
+  - component: {fileID: 1348471115}
+  m_Layer: 6
+  m_Name: ID Entry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1348471114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348471113}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: -0.168}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1155246541}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1348471115
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348471113}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.18, y: 0.86, z: 0.02}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1348471116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348471113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab86fc62513470247a6f7c5f7460a6d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: 1
+--- !u!114 &1348471117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348471113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29531d166196f8d4095ff9799f6adb8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverable: {fileID: 1348471116}
+  onNumberInput:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1155246544}
+        m_TargetAssemblyTypeName: Checkout.Register, Checkout
+        m_MethodName: InputID
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onBackspace:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1431355057
 GameObject:
   m_ObjectHideFlags: 0
@@ -2647,18 +2789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<size=0.32>HEADER</size>
-
-    <size=0.4>...</size>
-
-    <size=0.6>Item
-    - Price</size>
-
-    Inquiry Sample
-
-    <size=0.4f>Price
-
-    Description'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

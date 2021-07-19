@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using TMPro;
 using Products;
@@ -10,7 +9,7 @@ namespace Checkout
 {
     public class Register : MonoBehaviour
     {
-        enum Mode { Transaction, Inquiry }
+        enum Mode { Transaction, Inquiry, Entry }
         
         [SerializeField] TextMeshPro screenText;
         [SerializeField] TextMeshPro bottomText;
@@ -18,74 +17,72 @@ namespace Checkout
         [SerializeField] float headerSize;
 
         [Header("Transaction Mode")]
-        [SerializeField] float itemListSize;
-        [SerializeField] float totalAmountSize;
-        [SerializeField] float numItemsSize;
+        [SerializeField] string transactionHeader;
+        [SerializeField, Tooltip("{0-1}: Name, Price")] string itemListFormat;
+        [SerializeField, TextArea, Tooltip("{0-1}: # of items, Total")] string totalInfoFormat;
         [SerializeField] int maxItemsShown;
-        [SerializeField] float ellipsisSize;
-        [SerializeField, TextArea] string transactionHeader = "TRANSACTION MODE";
+        [SerializeField] string truncationString;
+
+        [Header("Manual Entry")]
+        [SerializeField] string entryHeader;
+        [SerializeField] float inputSize;
+        [SerializeField, TextArea] string inputInstructions;
+        [SerializeField] GameObject enableDuringEntry;
         
         [Header("Inquiry Mode")]
-        [SerializeField, TextArea] string productInquiryHeader = "INQUIRE MODE";
-        [SerializeField, TextArea] string productInquiryFormat = "{0}\\n<size=0.4>{1}\\n{2}";
+        [SerializeField] string productInquiryHeader;
+        [SerializeField, TextArea, Tooltip("{0-2}: Name, Price, Description")] string productInquiryFormat;
 
-        List<ProductInfo> transactionItems = new List<ProductInfo>();
+        readonly List<ProductInfo> transactionItems = new List<ProductInfo>();
 
         Mode mode = Mode.Transaction;
-
-        bool IsInTransaction => mode == Mode.Transaction && transactionItems.Count > 0;
-
-        string GetTotalFormat(float price) =>
-            $"<size={totalAmountSize}><align=right>-----\n" +
-            $"<size={numItemsSize}># OF ITEMS: {transactionItems.Count} - </size>TOTAL: {price:c}</align></size>";
-
-        void OnValidate()
-        {
-            // If the header doesn't contain {0} through {2}, log a warning.
-            if (!new[] {"{0}", "{1}", "{2}"}.All(productInquiryFormat.Contains))
-                Debug.LogWarning(nameof(productInquiryFormat) + " does not contain format items {0} through {2}.",
-                    gameObject);
-
-            screenText.text = $"<size={headerSize}>HEADER</size>\n" +
-                        $"<size={ellipsisSize}>...</size>\n" +
-                        $"<size={itemListSize}>Item - Price</size>\n" +
-                        string.Format(Regex.Unescape(productInquiryFormat), "Inquiry Sample", "Price", "Description");
-
-            bottomText.text = GetTotalFormat(0);
-        }
+        string idInput;
 
         void Awake()
         {
+            enableDuringEntry.SetActive(false);
             scanner.onScan += OnScan;
             FormatModeText();
         }
 
         void OnScan(ProductIdentifier productIdentifier)
         {
+            if (mode == Mode.Entry) return;
+            
             var info = productIdentifier.productInfo;
+            
+            if (mode == Mode.Transaction)
+                transactionItems.Add(info);
+
             FormatModeText();
 
             if (mode == Mode.Inquiry)
-            {
-                screenText.text += string.Format(Regex.Unescape(productInquiryFormat),
-                    info.DisplayName,info.Price.ToString("c"), info.Description);
-            }
-            else if (mode == Mode.Transaction)
-            {
-                transactionItems.Add(info);
-                ShowTransactionText();
-            }
+                screenText.text += string.Format(productInquiryFormat,
+                    info.DisplayName, info.Price.ToString("c"), info.Description);
         }
 
-        public void ToggleMode()
+        public void InputID(char? c)
         {
-            var numModes = Enum.GetNames(typeof(Mode)).Length;
-            mode = (Mode)(((int)mode + 1) % numModes);
+            if (mode != Mode.Entry) return;
+            
+            if (c == null && idInput.Length > 0) idInput = idInput.Remove(idInput.Length - 1);
+            else if (idInput.Length < ProductInfo.IDLength) idInput += c;
             
             FormatModeText();
+        }
+        
+        public void ToggleInquireMode() => ActivateMode(Mode.Inquiry);
+        public void ToggleEntryMode() => ActivateMode(Mode.Entry);
+        
+        void ActivateMode(Mode newMode)
+        {
+            // Return to Transaction mode if newMode is the current mode.
+            mode = mode == newMode ? Mode.Transaction : newMode;
+
+            if (mode == Mode.Entry) idInput = "";
+            enableDuringEntry.SetActive(mode == Mode.Entry);
             
-            if (mode == Mode.Transaction)
-                ShowTransactionText();
+            FormatModeText();
         }
 
         public void UndoLastItem() => EditTransaction(() => transactionItems.RemoveAt(transactionItems.Count - 1));
@@ -93,30 +90,28 @@ namespace Checkout
 
         void EditTransaction(Action editAction)
         {
-            if (!IsInTransaction) return;
+            if (mode != Mode.Transaction || transactionItems.Count == 0) return;
             editAction();
             FormatModeText();
-            ShowTransactionText();
         }
 
-        void ShowTransactionText()
+        void AppendTransactionText()
         {
-            var numItems = transactionItems.Count;
             var displayList = transactionItems;
-            screenText.text += $"<size={itemListSize}>";
             
             // Add ellipsis and trim beginning of display list if there are too many items to show.
+            var numItems = transactionItems.Count;
             if (numItems > maxItemsShown)
             {
-                screenText.text += $"<size={ellipsisSize}>...</size>\n";
+                screenText.text += truncationString + "\n";
                 displayList = transactionItems.GetRange(numItems - maxItemsShown, maxItemsShown);
             }
             
             displayList.ForEach(item =>
-                screenText.text += $"{item.DisplayName} - {item.Price:c}\n");
+                screenText.text += string.Format(itemListFormat, item.DisplayName, item.Price.ToString("c")) + "\n");
             
             var total = transactionItems.Sum(item => item.Price);
-            bottomText.text = GetTotalFormat(total);
+            bottomText.text = string.Format(totalInfoFormat, transactionItems.Count, total.ToString("c"));
         }
 
         void FormatModeText()
@@ -125,12 +120,16 @@ namespace Checkout
             {
                 Mode.Inquiry => productInquiryHeader,
                 Mode.Transaction => transactionHeader,
+                Mode.Entry => entryHeader,
                 _ => throw new Exception("Invalid mode.")
             };
             
             screenText.text = $"<size={headerSize}>{header}</size>\n";
+            bottomText.text = "";
 
-            bottomText.text = mode == Mode.Transaction ? GetTotalFormat(0) : "";
+            if (mode == Mode.Transaction)
+                AppendTransactionText();
+            else if (mode == Mode.Entry) screenText.text += $"\n<size={inputSize}>" + idInput + "</size>\n\n" + inputInstructions;
         }
     }
 }

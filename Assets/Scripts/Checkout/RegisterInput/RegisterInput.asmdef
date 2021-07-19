@@ -1,0 +1,18 @@
+{
+    "name": "RegisterInput",
+    "rootNamespace": "",
+    "references": [
+        "GUID:11f3352786a03014da4f46f23c9d7b7f",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:3dd278bd875114e4ba257569963e2e15"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
