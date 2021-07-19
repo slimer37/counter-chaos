@@ -10,7 +10,7 @@ namespace Checkout
         [SerializeField] Vector3 laserDirection = Vector3.up;
         [SerializeField] float maxDistance = 0.5f;
 
-        public event Action<ProductIdentifier> onScan;
+        public event Action<ProductIdentifier> OnScan;
 
         Ray scanRay;
         Transform lastScanned;
@@ -27,7 +27,7 @@ namespace Checkout
         {
             lastScanned = scanned;
             if (scanned.TryGetComponent(out ProductIdentifier productIdentifier))
-                onScan?.Invoke(productIdentifier);
+                OnScan?.Invoke(productIdentifier);
         }
 
         void FixedUpdate()

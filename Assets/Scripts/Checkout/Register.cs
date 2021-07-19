@@ -41,7 +41,7 @@ namespace Checkout
         void Awake()
         {
             enableDuringEntry.SetActive(false);
-            scanner.onScan += OnScan;
+            scanner.OnScan += OnScan;
             FormatModeText();
         }
 
