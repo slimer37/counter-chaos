@@ -19,8 +19,11 @@ namespace Products
         
         public const int IDLength = 5;
 
-        public void Init(int barcodeSeed)
+        public void Init(int seed)
         {
+            var tempState = Random.state;
+            Random.InitState(seed);
+            
             string idString;
             do
             {
@@ -31,7 +34,9 @@ namespace Products
             
             ID = Convert.ToInt32(idString);
             idTable[ID] = this;
-            Barcode = Products.Barcode.Generate(barcodeSeed);
+            Barcode = Products.Barcode.Generate();
+
+            Random.state = tempState;
         }
 
         public static ProductInfo LookUp(int id) => idTable.ContainsKey(id) ? idTable[id] : null;

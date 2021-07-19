@@ -11,11 +11,8 @@ namespace Products
         const int NarrowWidth = 1;
         const int WideWidth = 2;
 
-        public static Texture2D Generate(int seed)
+        public static Texture2D Generate()
         {
-            var tempState = Random.state;
-            Random.InitState(seed);
-            
             var barcodeTex = new Texture2D(BarcodeWidth, 1) {filterMode = FilterMode.Point};
 
             var onBar = true;
@@ -37,9 +34,6 @@ namespace Products
         
             barcodeTex.SetPixels(pixels);
             barcodeTex.Apply();
-            
-            // Revert RNG state.
-            Random.state = tempState;
 
             return barcodeTex;
         }
