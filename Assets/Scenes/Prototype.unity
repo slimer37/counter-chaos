@@ -2008,8 +2008,8 @@ MonoBehaviour:
   inputInstructions: <size=0.35>Hold E on this screen and type numbers to manually
     look up a product. Use backspace to delete and enter to submit. Press ENTRY again
     to exit.</size>
-  idSuccessMessage: <size=0.4><color=green>Added "{0}" to transaction. Press the
-    ENTRY button to see transaction.
+  idSuccessMessage: <size=0.4><color=green>Added "{0}" to transaction. Press enter
+    again or ENTRY to see transaction.
   idFailureMessage: <size=0.4><color=red>Lookup failed. Could not find a product
     with that ID
   idTooShortMessage: <size=0.4><color=red>Enter 5 numbers.

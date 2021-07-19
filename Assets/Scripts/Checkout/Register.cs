@@ -80,6 +80,12 @@ namespace Checkout
         {
             if (mode != Mode.Entry) return;
 
+            if (idInput.Length == 0)
+            {
+                ActivateMode(Mode.Transaction);
+                return;
+            }
+
             FormatModeText();
             screenText.text += "\n";
             
@@ -97,6 +103,7 @@ namespace Checkout
                 screenText.text += string.Format(idSuccessMessage, info.DisplayName);
                 transactionItems.Add(info);
             }
+            idInput = "";
         }
         
         public void ToggleInquireMode() => ActivateMode(Mode.Inquiry);
