@@ -48,9 +48,9 @@ namespace Interactables.Holding
             holder?.Give(this);
         }
 
-        public void Drop() => Setup(null);
+        internal void Drop() => Setup(null);
 
-        public void Toss(Vector3 direction, float force)
+        internal void Toss(Vector3 direction, float force)
         {
             Drop();
             rb.AddForce(direction * force, ForceMode.Impulse);
