@@ -62,6 +62,10 @@ namespace Interactables.Holding
             pickuppable.Setup(transform);
             
             heldItem = pickuppable;
+
+            foreach (Transform child in heldItem.transform)
+                child.gameObject.layer = heldObjectLayer;
+            
             var go = heldItem.gameObject;
             tempLayer = go.layer;
             go.layer = heldObjectLayer;
@@ -184,6 +188,9 @@ namespace Interactables.Holding
             heldItem.transform.DOComplete();
             
             heldItem.gameObject.layer = tempLayer;
+            
+            foreach (Transform child in heldItem.transform)
+                child.gameObject.layer = tempLayer;
             
             if (addForce)
             {
