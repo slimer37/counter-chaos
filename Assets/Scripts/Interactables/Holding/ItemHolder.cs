@@ -10,7 +10,7 @@ namespace Interactables.Holding
     public class ItemHolder : MonoBehaviour
     {
         [SerializeField] new Camera camera;
-        [SerializeField] Vector3 holdingPosition;
+        [SerializeField] Vector3 defaultHoldingPosition;
         [SerializeField] float pickupTime;
         [SerializeField] float timeBetweenHoldPositions;
         [SerializeField, Layer] int heldObjectLayer;
@@ -40,6 +40,7 @@ namespace Interactables.Holding
         public bool IsHoldingItem => heldItem;
         
         Pickuppable heldItem;
+        Vector3 holdingPosition;
         int tempLayer;
         
         bool isHoldingToss;
@@ -52,12 +53,16 @@ namespace Interactables.Holding
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawCube(transform.TransformPoint(holdingPosition), Vector3.one * 0.25f);
+            Gizmos.DrawCube(transform.TransformPoint(defaultHoldingPosition), Vector3.one * 0.25f);
         }
 
-        public void Give(Pickuppable pickuppable)
+        public void Give(Pickuppable pickuppable) => Give(pickuppable, defaultHoldingPosition);
+
+        public void Give(Pickuppable pickuppable, Vector3 overridePosition)
         {
             if (heldItem) return;
+
+            holdingPosition = overridePosition;
             
             pickuppable.Setup(transform);
             

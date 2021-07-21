@@ -693,7 +693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1687258584}
-  holdingPosition: {x: 0.42, y: 0.25, z: 0.8}
+  defaultHoldingPosition: {x: 0.42, y: 0.25, z: 0.8}
   pickupTime: 0.4
   timeBetweenHoldPositions: 0.1
   heldObjectLayer: 7
@@ -4008,6 +4008,7 @@ MonoBehaviour:
   hoverable: {fileID: 1915634758}
   rb: {fileID: 1915634762}
   rend: {fileID: 1915634759}
+  overrideHoldingPosition: {x: 0, y: 0, z: 1}
   animator: {fileID: 1915634755}
   contents:
   - {fileID: 290364779}

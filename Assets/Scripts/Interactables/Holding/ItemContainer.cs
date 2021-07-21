@@ -7,6 +7,7 @@ namespace Interactables.Holding
 {
     public class ItemContainer : Pickuppable, ISecondaryInteractHandler
     {
+        [SerializeField] Vector3 overrideHoldingPosition;
         [SerializeField] Animator animator;
         [SerializeField] List<Pickuppable> contents;
         
@@ -23,11 +24,11 @@ namespace Interactables.Holding
             contents.AddRange(toStore);
         }
         
-        new public void OnInteract(Transform sender)
+        public override void OnInteract(Transform sender)
         {
             if (!open)
             {
-                base.OnInteract(sender);
+                OnPickup(sender, overrideHoldingPosition);
                 return;
             }
 

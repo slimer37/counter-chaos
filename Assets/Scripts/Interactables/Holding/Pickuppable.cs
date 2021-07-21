@@ -34,8 +34,10 @@ namespace Interactables.Holding
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
-        
-        public void OnInteract(Transform sender)
+
+        public virtual void OnInteract(Transform sender) => OnPickup(sender, Vector3.zero);
+
+        protected void OnPickup(Transform sender, Vector3 overridePosition)
         {
             var holder = sender.GetComponent<ItemHolder>();
             
@@ -44,7 +46,12 @@ namespace Interactables.Holding
             if (isHeld || holder && holder.IsHoldingItem) return;
             
             if (holder)
-                holder.Give(this);
+            {
+                if (overridePosition != Vector3.zero)
+                    holder.Give(this, overridePosition);
+                else
+                    holder.Give(this);
+            }
             else
                 Setup(sender);
         }
