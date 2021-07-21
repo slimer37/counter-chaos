@@ -43,7 +43,10 @@ namespace Interactables.Holding
             
             if (isHeld || holder && holder.IsHoldingItem) return;
             
-            holder?.Give(this);
+            if (holder)
+                holder.Give(this);
+            else
+                Setup(sender);
         }
 
         internal void Drop() => Setup(null);
