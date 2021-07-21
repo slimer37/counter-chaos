@@ -43,8 +43,6 @@ namespace Interactables.Holding
             
             if (isHeld || holder && holder.IsHoldingItem) return;
             
-            Setup(sender);
-
             holder?.Give(this);
         }
 
@@ -56,7 +54,7 @@ namespace Interactables.Holding
             rb.AddForce(direction * force, ForceMode.Impulse);
         }
 
-        void Setup(Transform holder)
+        internal void Setup(Transform holder)
         {
             transform.parent = holder;
 
