@@ -1,0 +1,210 @@
+fileFormatVersion: 2
+guid: 40f18a1393957e8469581cf971f135af
+ModelImporter:
+  serializedVersion: 21100
+  internalIDToNameTable:
+  - first:
+      74: -6749555110477934219
+    second: box flap l|box flap lAction
+  - first:
+      74: 4596567789261939046
+    second: box flap l|box flap rAction
+  - first:
+      74: 3722962856531473088
+    second: box flap l|box flap under.001Action
+  - first:
+      74: -2709928049959435200
+    second: box flap l|box flap under.001Action.001
+  - first:
+      74: 2166633199553222699
+    second: box flap l|box flap underAction
+  - first:
+      74: 5806683033883065758
+    second: box flap l|box flap underAction.001
+  - first:
+      74: -6733330073905677236
+    second: box flap r|box flap lAction
+  - first:
+      74: 2099369085720130077
+    second: box flap r|box flap rAction
+  - first:
+      74: -8213093237732718233
+    second: box flap r|box flap under.001Action
+  - first:
+      74: 4021480633326543345
+    second: box flap r|box flap under.001Action.001
+  - first:
+      74: -1435930032573870892
+    second: box flap r|box flap underAction
+  - first:
+      74: 4198785330977705642
+    second: box flap r|box flap underAction.001
+  - first:
+      74: -7015304743455387951
+    second: box flap under|box flap lAction
+  - first:
+      74: -7894631840554652081
+    second: box flap under|box flap rAction
+  - first:
+      74: 5754582626848374550
+    second: box flap under|box flap under.001Action
+  - first:
+      74: 4653084488437634783
+    second: box flap under|box flap under.001Action.001
+  - first:
+      74: -6387179891686980799
+    second: box flap under|box flap underAction
+  - first:
+      74: -1435155840363115430
+    second: box flap under|box flap underAction.001
+  - first:
+      74: 8007640576111824031
+    second: box flap under.001|box flap lAction
+  - first:
+      74: -802746247411379508
+    second: box flap under.001|box flap rAction
+  - first:
+      74: -6533201974612418477
+    second: box flap under.001|box flap under.001Action
+  - first:
+      74: 8615317817825845873
+    second: box flap under.001|box flap under.001Action.001
+  - first:
+      74: 1147053890069102619
+    second: box flap under.001|box flap underAction
+  - first:
+      74: -512715100144834201
+    second: box flap under.001|box flap underAction.001
+  - first:
+      74: 4276671896112289274
+    second: box flap l|box flap under backAction
+  - first:
+      74: 8692022232489883676
+    second: box flap l|box flap under forwardAction
+  - first:
+      74: 9162931964254942726
+    second: box flap r|box flap under backAction
+  - first:
+      74: -2669587314441150875
+    second: box flap r|box flap under forwardAction
+  - first:
+      74: 757213649921470072
+    second: box flap under back|box flap lAction
+  - first:
+      74: 4555491260428045186
+    second: box flap under back|box flap rAction
+  - first:
+      74: 2818752187027106795
+    second: box flap under back|box flap under backAction
+  - first:
+      74: -3407296034193081426
+    second: box flap under back|box flap under forwardAction
+  - first:
+      74: 9191929667031951965
+    second: box flap under forward|box flap lAction
+  - first:
+      74: -777889904487990990
+    second: box flap under forward|box flap rAction
+  - first:
+      74: 2644206760600436218
+    second: box flap under forward|box flap under backAction
+  - first:
+      74: -7650718553549154404
+    second: box flap under forward|box flap under forwardAction
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
