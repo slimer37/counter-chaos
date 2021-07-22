@@ -8,12 +8,12 @@ namespace UI.TitleScreen
     public class StylizedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public bool interactable = true;
-        [SerializeField] Vector2 expandBy;
+        [SerializeField] Vector2 expandBy = new Vector2(50, 0);
         [SerializeField] float animDuration = 0.5f;
         [SerializeField] float fadeDuration = 0.5f;
         [SerializeField] Ease ease = DOTween.defaultEaseType;
         [SerializeField] Graphic fadeBackground;
-        [SerializeField] Ease fadeEase;
+        [SerializeField] Ease fadeEase = Ease.OutSine;
 	
         RectTransform rectTransform;
         Vector2 originalSizeDelta;
