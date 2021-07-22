@@ -14,6 +14,7 @@ namespace UI.TitleScreen
         [SerializeField] Ease ease = DOTween.defaultEaseType;
         [SerializeField] Graphic fadeBackground;
         [SerializeField] Ease fadeEase = Ease.OutSine;
+        [SerializeField] bool ignoreTimeScale;
 	
         RectTransform rectTransform;
         Vector2 originalSizeDelta;
@@ -43,6 +44,7 @@ namespace UI.TitleScreen
             sequence.Insert(value ? 0 : animDuration - fadeDuration,
                 fadeBackground.DOFade(value ? 1 : 0, fadeDuration).SetEase(fadeEase));
 
+            sequence.SetUpdate(ignoreTimeScale);
             sequence.Play();
         }
     }
