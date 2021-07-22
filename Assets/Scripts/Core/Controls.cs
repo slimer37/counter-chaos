@@ -219,6 +219,33 @@ namespace Core
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""e3a93637-a32f-408f-839d-fd5fef7ce8e6"",
+            ""actions"": [
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""c000e25f-6bec-4f9a-be92-faa82ee8711d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""230136c3-347d-4efc-95d5-4a7842eb2c25"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -250,6 +277,9 @@ namespace Core
             m_Gameplay_Drop = m_Gameplay.FindAction("Drop", throwIfNotFound: true);
             m_Gameplay_Toss = m_Gameplay.FindAction("Toss", throwIfNotFound: true);
             m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
+            // Menu
+            m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+            m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -384,6 +414,39 @@ namespace Core
             }
         }
         public GameplayActions @Gameplay => new GameplayActions(this);
+
+        // Menu
+        private readonly InputActionMap m_Menu;
+        private IMenuActions m_MenuActionsCallbackInterface;
+        private readonly InputAction m_Menu_Exit;
+        public struct MenuActions
+        {
+            private @Controls m_Wrapper;
+            public MenuActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Exit => m_Wrapper.m_Menu_Exit;
+            public InputActionMap Get() { return m_Wrapper.m_Menu; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+            public void SetCallbacks(IMenuActions instance)
+            {
+                if (m_Wrapper.m_MenuActionsCallbackInterface != null)
+                {
+                    @Exit.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnExit;
+                    @Exit.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnExit;
+                    @Exit.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnExit;
+                }
+                m_Wrapper.m_MenuActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Exit.started += instance.OnExit;
+                    @Exit.performed += instance.OnExit;
+                    @Exit.canceled += instance.OnExit;
+                }
+            }
+        }
+        public MenuActions @Menu => new MenuActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -403,6 +466,10 @@ namespace Core
             void OnDrop(InputAction.CallbackContext context);
             void OnToss(InputAction.CallbackContext context);
             void OnRotate(InputAction.CallbackContext context);
+        }
+        public interface IMenuActions
+        {
+            void OnExit(InputAction.CallbackContext context);
         }
     }
 }
