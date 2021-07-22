@@ -15,9 +15,11 @@ namespace UI
             public string role;
             public string name;
         }
-
+        
+        [SerializeField] CanvasGroup fadeGroup;
         [SerializeField] TextMeshProUGUI creditsText;
         [SerializeField] float scrollTime;
+        [SerializeField] float fadeTime;
         [SerializeField] Ease ease;
         [SerializeField, Tooltip("{0-1}: Role, Name"), RequireSubstring("{0}", "{1}")] string creditFormat;
         [SerializeField] Credit[] creditList;
@@ -33,12 +35,21 @@ namespace UI
                 creditsText.text += string.Format(Regex.Unescape(creditFormat), credit.role, credit.name) + "\n";
         }
 
-        void Awake() => rectTransform = creditsText.GetComponent<RectTransform>();
+        void Awake()
+        {
+            rectTransform = creditsText.GetComponent<RectTransform>();
+            fadeGroup.alpha = 0;
+        }
 
-        void OnEnable()
+        public void ScrollCredits()
         {
             rectTransform.pivot = new Vector2(rectTransform.pivot.x, 1);
-            rectTransform.DOPivotY(-1, scrollTime).SetEase(ease);
+            var sequence = DOTween.Sequence();
+            fadeGroup.blocksRaycasts = true;
+            sequence.Append(fadeGroup.DOFade(1, fadeTime));
+            sequence.Append(rectTransform.DOPivotY(-1, scrollTime).SetEase(ease));
+            sequence.AppendCallback(() => fadeGroup.blocksRaycasts = false);
+            sequence.Append(fadeGroup.DOFade(0, fadeTime));
         }
     }
 }
