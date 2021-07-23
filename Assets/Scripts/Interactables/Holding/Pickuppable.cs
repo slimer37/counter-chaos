@@ -6,6 +6,7 @@ namespace Interactables.Holding
 {
     public class Pickuppable : MonoBehaviour, IInteractHandler
     {
+        [field: SerializeField] public bool Throwable { get; private set; } = true;
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
         [SerializeField] Renderer rend;

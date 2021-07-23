@@ -112,7 +112,7 @@ namespace Interactables.Holding
         
         void OnToss(InputValue value)
         {
-            if (!heldItem || isHoldingDrop) return;
+            if (!heldItem || !heldItem.Throwable || isHoldingDrop) return;
 
             holdIndicator.enabled = value.isPressed;
             
