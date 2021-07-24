@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Interactables.Base;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Interactables.Holding
 {
     public class ItemContainer : Pickuppable, ISecondaryInteractHandler
     {
+        public UnityEvent onOpen;
+        public UnityEvent onClose;
         [SerializeField] Vector3 overrideHoldingPosition;
-        [SerializeField] Animator animator;
         [SerializeField] List<Pickuppable> contents;
         
         bool open;
-        static readonly int OpenState = Animator.StringToHash("open");
-        static readonly int CloseState = Animator.StringToHash("close");
         
         public ReadOnlyCollection<Pickuppable> Contents => contents.AsReadOnly();
 
@@ -49,7 +49,10 @@ namespace Interactables.Holding
         void ToggleOpen()
         {
             open = !open;
-            animator.Play(open ? OpenState : CloseState);
+            if (open)
+                onOpen.Invoke();
+            else
+                onClose.Invoke();
         }
     }
 }
