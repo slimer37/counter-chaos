@@ -48,6 +48,8 @@ namespace Animation
             openSequence.Pause();
         }
 
+        void OnDestroy() => openSequence.Kill();
+
         public void Open() => Animate(true);
         public void Close() => Animate(false);
 
