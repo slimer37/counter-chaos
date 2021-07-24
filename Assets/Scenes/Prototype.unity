@@ -714,8 +714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 235475065}
-  walkSpeed: 8
-  sprintSpeed: 16
+  walkSpeed: 5
+  sprintSpeed: 8
   camera: {fileID: 1687258585}
   body: {fileID: 235475068}
   sensitivity: 80
@@ -4594,14 +4594,14 @@ MonoBehaviour:
     - {fileID: 873677915}
     openRotation: {x: 0, y: 0, z: -160}
     startTime: 0
-    duration: 0.8
+    duration: 0.5
     openRotationQuaternions: []
   - transforms:
     - {fileID: 2068438097}
     - {fileID: 1289345960}
     openRotation: {x: -160, y: 0, z: 0}
-    startTime: 0.5
-    duration: 0.8
+    startTime: 0.3
+    duration: 0.5
     openRotationQuaternions: []
 --- !u!54 &1915634762
 Rigidbody:
