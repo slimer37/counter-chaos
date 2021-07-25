@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 3629992183789312289}
   m_Layer: 6
   m_Name: Test
-  m_TagString: Untagged
+  m_TagString: Product
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Throwable>k__BackingField: 1
   hoverable: {fileID: 3629992183789312292}
   rb: {fileID: 3629992183789312294}
   rend: {fileID: 3629992183789312315}
