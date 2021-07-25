@@ -70,8 +70,10 @@ namespace Checkout
         {
             if (mode != Mode.Entry) return;
             
-            if (c == null && idInput.Length > 0) idInput = idInput.Remove(idInput.Length - 1);
-            else if (idInput.Length < ProductInfo.IDLength) idInput += c;
+            if (c == null && idInput.Length > 0)
+                idInput = idInput.Remove(idInput.Length - 1);
+            else if (idInput.Length < ProductInfo.IDLength)
+                idInput += c;
             
             FormatModeText();
         }
@@ -103,6 +105,7 @@ namespace Checkout
                 screenText.text += string.Format(idSuccessMessage, info.DisplayName);
                 transactionItems.Add(info);
             }
+            
             idInput = "";
         }
         
@@ -164,7 +167,8 @@ namespace Checkout
 
             if (mode == Mode.Transaction)
                 AppendTransactionText();
-            else if (mode == Mode.Entry) screenText.text += $"\n<size={inputSize}>" + idInput + "</size>\n\n" + inputInstructions + "\n";
+            else if (mode == Mode.Entry)
+                screenText.text += $"\n<size={inputSize}>" + idInput + "</size>\n\n" + inputInstructions + "\n";
         }
     }
 }
