@@ -57,6 +57,12 @@ namespace Interactables.Holding
         }
 
         public void Give(Pickuppable pickuppable) => Give(pickuppable, defaultHoldingPosition);
+        public Pickuppable TakeFrom()
+        {
+            var temp = heldItem;
+            Drop(false);
+            return temp;
+        }
 
         public void Give(Pickuppable pickuppable, Vector3 overridePosition)
         {
