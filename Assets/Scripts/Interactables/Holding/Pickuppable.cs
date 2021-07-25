@@ -63,6 +63,13 @@ namespace Interactables.Holding
         {
             Drop();
             rb.AddForce(direction * force, ForceMode.Impulse);
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        }
+
+        void OnCollisionEnter(Collision other)
+        {
+            if (rb.collisionDetectionMode == CollisionDetectionMode.Continuous)
+                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
 
         internal void Setup(Transform holder)
