@@ -718,7 +718,7 @@ MonoBehaviour:
   sprintSpeed: 8.5
   transitionTime: 0.5
   sprintFov: 70
-  transitionEase: 4
+  transitionEase: 1
   cam: {fileID: 1687258584}
   body: {fileID: 235475068}
   sensitivity: 80

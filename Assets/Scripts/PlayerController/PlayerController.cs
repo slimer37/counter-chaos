@@ -21,7 +21,8 @@ namespace PlayerController
         [SerializeField] float sensitivity;
         [SerializeField] float rotLimit;
 
-        Sequence sprintSpeedTransition;
+        Sequence sprintTransition;
+        bool isSprinting;
         float currentSpeed;
         
         Vector2 mouseDelta;
@@ -34,14 +35,7 @@ namespace PlayerController
             moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);
         }
 
-        void OnSprint(InputValue val)
-        {
-            if (val.isPressed)
-                sprintSpeedTransition.PlayForward();
-            else
-                sprintSpeedTransition.PlayBackwards();
-        }
-        
+        void OnSprint(InputValue val) => isSprinting = val.isPressed;
         void OnMoveMouse(InputValue val) => mouseDelta = sensitivity * val.Get<Vector2>();
 
         void Awake()
@@ -52,14 +46,14 @@ namespace PlayerController
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            sprintSpeedTransition = DOTween.Sequence();
-            sprintSpeedTransition.Append(DOTween.To(() => currentSpeed,
+            sprintTransition = DOTween.Sequence();
+            sprintTransition.Append(DOTween.To(() => currentSpeed,
                 newSpeed => currentSpeed = newSpeed, sprintSpeed, transitionTime));
-            sprintSpeedTransition.Join(cam.DOFieldOfView(sprintFov, transitionTime));
-            sprintSpeedTransition.SetEase(transitionEase).SetAutoKill(false).Pause();
+            sprintTransition.Join(cam.DOFieldOfView(sprintFov, transitionTime));
+            sprintTransition.SetEase(transitionEase).SetAutoKill(false).Pause();
         }
 
-        void OnDestroy() => sprintSpeedTransition.Kill();
+        void OnDestroy() => sprintTransition.Kill();
 
         void Update()
         {
@@ -71,6 +65,18 @@ namespace PlayerController
             camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y * Time.deltaTime, -rotLimit, rotLimit);
             body.localEulerAngles += mouseDelta.x * Time.deltaTime * Vector3.up;
             cam.transform.localEulerAngles = camRot;
+
+            if (moveVector.z > 0)
+            {
+                if (sprintTransition.IsPlaying() && isSprinting) return;
+            
+                if (isSprinting)
+                    sprintTransition.PlayForward();
+                else
+                    sprintTransition.PlayBackwards();
+            }
+            else if (!sprintTransition.isBackwards)
+                sprintTransition.PlayBackwards();
         }
     }
 }
