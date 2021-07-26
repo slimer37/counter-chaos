@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Interactables.Holding
 {
-    public class Pickuppable : MonoBehaviour, IInteractHandler
+    public sealed class Pickuppable : MonoBehaviour, IInteractHandler
     {
-        [field: SerializeField] public bool Throwable { get; private set; } = true;
+        [field: SerializeField] public bool Throwable { get; set; } = true;
+        [SerializeField] Vector3 overrideHoldingPosition;
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
         [SerializeField] Renderer rend;
@@ -23,6 +24,13 @@ namespace Interactables.Holding
                 Gizmos.DrawWireSphere(transform.position, BoundHalfDiagonal);
         }
 
+        void Reset()
+        {
+            TryGetComponent(out hoverable);
+            TryGetComponent(out rb);
+            TryGetComponent(out rend);
+        }
+
         void Awake()
         {
             meshBounds = rend.bounds;
@@ -36,9 +44,9 @@ namespace Interactables.Holding
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
 
-        public virtual void OnInteract(Transform sender) => OnPickup(sender, Vector3.zero);
+        public void OnInteract(Transform sender) => OnPickup(sender);
 
-        protected void OnPickup(Transform sender, Vector3 overridePosition)
+        void OnPickup(Transform sender)
         {
             var holder = sender.GetComponent<ItemHolder>();
             
@@ -48,8 +56,8 @@ namespace Interactables.Holding
             
             if (holder)
             {
-                if (overridePosition != Vector3.zero)
-                    holder.Give(this, overridePosition);
+                if (overrideHoldingPosition != Vector3.zero)
+                    holder.Give(this, overrideHoldingPosition);
                 else
                     holder.Give(this);
             }
