@@ -6,20 +6,24 @@ using UnityEngine.Events;
 
 namespace Interactables.Holding
 {
-    [RequireComponent(typeof(ContainerPositioner))]
-    public class ItemContainer : Pickuppable, ISecondaryInteractHandler
+    [RequireComponent(typeof(ContainerPositioner), typeof(Pickuppable))]
+    public class ItemContainer : MonoBehaviour, IInteractHandler, ISecondaryInteractHandler
     {
         public UnityEvent onOpen;
         public UnityEvent onClose;
-        [SerializeField] Vector3 overrideHoldingPosition;
         [SerializeField] List<Pickuppable> contents;
         [SerializeField] ContainerPositioner positioner;
+        [SerializeField] Pickuppable pickuppable;
         
         bool open;
         
         public ReadOnlyCollection<Pickuppable> Contents => contents.AsReadOnly();
 
-        void Reset() => TryGetComponent(out positioner);
+        void Reset()
+        {
+            TryGetComponent(out positioner);
+            TryGetComponent(out pickuppable);
+        }
 
         void Start() =>
             positioner.PlaceInPositions(contents.ConvertAll(p => p.transform).ToArray(), 0, false);
@@ -31,27 +35,23 @@ namespace Interactables.Holding
             contents.AddRange(toStore);
         }
         
-        public override void OnInteract(Transform sender)
+        public void OnInteract(Transform sender)
         {
-            if (!open)
-            {
-                OnPickup(sender, overrideHoldingPosition);
-                return;
-            }
-
             var holder = sender.GetComponent<ItemHolder>();
             if (!holder) return;
+            
+            if (!open) return;
 
             if (holder.IsHoldingItem)
-                AddItem(holder.TakeFrom());
+                AddItem(holder.TakeFrom(), true);
             else if (contents.Count > 0)
                 RemoveItem(holder);
         }
 
-        void AddItem(Pickuppable item)
+        void AddItem(Pickuppable item, bool wasInteraction)
         {
             if (contents.Count >= positioner.TotalPositions) return;
-            positioner.PlaceInPosition(item.transform, contents.Count);
+            positioner.PlaceInPosition(item.transform, contents.Count, true, wasInteraction);
             contents.Add(item);
         }
 
@@ -70,6 +70,7 @@ namespace Interactables.Holding
         void ToggleOpen()
         {
             open = !open;
+            pickuppable.enabled = !open;
             if (open)
                 onOpen.Invoke();
             else
@@ -82,7 +83,7 @@ namespace Interactables.Holding
             
             // Look for collisions coming down through the top of the container.
             if (other.GetContact(0).normal.y < -0.7f)
-                AddItem(other.transform.GetComponent<Pickuppable>());
+                AddItem(other.transform.GetComponent<Pickuppable>(), false);
         }
     }
 }

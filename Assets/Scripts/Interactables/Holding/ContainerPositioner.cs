@@ -11,6 +11,8 @@ namespace Interactables.Holding
         [SerializeField, Min(0)] Vector3 positionVariance;
         [SerializeField, Min(0)] Vector3 rotationVariance;
         [SerializeField] float placeTime = 0.2f;
+        [SerializeField] float tweenStartHeight = 1;
+        [SerializeField] float toStartTime = 0.2f;
 
         Vector3[] positions;
         
@@ -57,7 +59,7 @@ namespace Interactables.Holding
             return variance;
         }
 
-        public void PlaceInPosition(Transform item, int index, bool tween = true)
+        public void PlaceInPosition(Transform item, int index, bool tween = true, bool raiseItemFirst = false)
         {
             Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider);
             var rb = item.GetComponent<Rigidbody>();
@@ -69,8 +71,14 @@ namespace Interactables.Holding
 
             if (tween)
             {
-                item.DOLocalMove(localPos, placeTime);
-                item.DOLocalRotateQuaternion(localRot, placeTime);
+                var sequence = DOTween.Sequence();
+                if (raiseItemFirst)
+                {
+                    var tweenStartPos = new Vector3(localPos.x, tweenStartHeight, localPos.z);
+                    sequence.Append(item.DOLocalMove(tweenStartPos, toStartTime));
+                }
+                sequence.Append(item.DOLocalMove(localPos, placeTime));
+                sequence.Join(item.DOLocalRotateQuaternion(localRot, placeTime));
             }
             else
             {
