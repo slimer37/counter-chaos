@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Interactables.Base;
 using UnityEngine;
@@ -14,20 +15,31 @@ namespace Interactables
 
         Hoverable hoveredObject;
 
+        void CallOnEach<THandler>(Action<THandler> action)
+        {
+            if (!hoveredObject) return;
+            var handlers = hoveredObject.GetOnce<THandler>();
+            foreach (var handler in handlers)
+            {
+                if (!(handler as MonoBehaviour).enabled) continue;
+                action(handler);
+            }
+        }
+
         void OnInteract(InputValue value)
         {
             if (value.isPressed)
-                hoveredObject?.GetComponent<IInteractHandler>()?.OnInteract(transform);
+                CallOnEach<IInteractHandler>(handler => handler.OnInteract(transform));
             else
-                hoveredObject?.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
+                CallOnEach<IStopInteractHandler>(handler => handler.OnStopInteract(transform));
         }
 
         void OnSecondaryInteract(InputValue value)
         {
             if (value.isPressed)
-                hoveredObject?.GetComponent<ISecondaryInteractHandler>()?.OnSecondaryInteract(transform);
+                CallOnEach<ISecondaryInteractHandler>(handler => handler.OnSecondaryInteract(transform));
             else
-                hoveredObject?.GetComponent<IStopSecondaryInteractHandler>()?.OnStopSecondaryInteract(transform);
+                CallOnEach<IStopSecondaryInteractHandler>(handler => handler.OnStopSecondaryInteract(transform));
         }
 
         void Update()
@@ -53,7 +65,7 @@ namespace Interactables
                 
                 var hoverable = hit.transform.GetComponent<Hoverable>();
                 
-                if (hoverable)
+                if (hoverable && hoverable.enabled)
                     (hoveredObject = hoverable).OnHover(iconHandler, transform);
             }
             else
@@ -62,8 +74,8 @@ namespace Interactables
             void HoverOff()
             {
                 if (!hoveredObject) return;
-                hoveredObject.GetComponent<IStopInteractHandler>()?.OnStopInteract(transform);
-                hoveredObject.GetComponent<IStopSecondaryInteractHandler>()?.OnStopSecondaryInteract(transform);
+                CallOnEach<IStopInteractHandler>(handler => handler.OnStopInteract(transform));
+                CallOnEach<IStopSecondaryInteractHandler>(handler => handler.OnStopSecondaryInteract(transform));
                 hoveredObject.OnHoverExit();
                 hoveredObject = null;
             }

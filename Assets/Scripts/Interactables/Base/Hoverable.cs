@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Interactables.Base
 {
+    [DisallowMultipleComponent]
     public class Hoverable : MonoBehaviour
     {
         public InteractionIcon icon;
@@ -10,6 +12,18 @@ namespace Interactables.Base
         public Func<Transform, bool> OnAttemptHover;
         
         IconHandler tempIconHandler;
+        
+        readonly Dictionary<Type, object> cachedHandlers = new Dictionary<Type, object>();
+
+        public THandler[] GetOnce<THandler>()
+        {
+            var handler = typeof(THandler);
+            
+            if (!cachedHandlers.ContainsKey(handler))
+                cachedHandlers[handler] = GetComponents<THandler>();
+
+            return (THandler[])cachedHandlers[handler];
+        }
 
         void Reset()
         {
