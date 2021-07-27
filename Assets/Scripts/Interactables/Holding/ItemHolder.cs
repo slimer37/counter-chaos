@@ -114,7 +114,7 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
-                heldItem.transform.DOComplete();
+                heldItem.transform.DOKill();
             }
             // On release
             else if (isHoldingDrop)
@@ -208,7 +208,7 @@ namespace Interactables.Holding
             if (!heldItem) throw new NullReferenceException("Drop called without a held item.");
             
             // Finish tweens if still in progress.
-            heldItem.transform.DOComplete();
+            heldItem.transform.DOKill();
             
             heldItem.gameObject.layer = tempLayer;
             
