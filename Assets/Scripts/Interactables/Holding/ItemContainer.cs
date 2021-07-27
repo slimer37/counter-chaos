@@ -70,7 +70,7 @@ namespace Interactables.Holding
             var sequence = DOTween.Sequence();
             sequence.Append(
                 item.transform.DOMove(item.transform.position + Vector3.up * itemHeightBeforePickup, itemRaiseTime));
-            sequence.OnComplete(() => {
+            sequence.AppendCallback(() => {
                 positioner.RestoreCollision(item);
                 animating = false;
             });
