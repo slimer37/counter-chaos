@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c0b0f3407d5de14cab1d19292fae6d9, type: 2}
+  - {fileID: 2100000, guid: 79f64ed6f5d6d374d91c3a0af4070258, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Throwable>k__BackingField: 1
+  overrideHoldingPosition: {x: 0, y: 0, z: 0}
   hoverable: {fileID: 3629992183789312292}
   rb: {fileID: 3629992183789312294}
   rend: {fileID: 3629992183789312315}
