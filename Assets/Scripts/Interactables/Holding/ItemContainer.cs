@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using DG.Tweening;
 using Interactables.Base;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,8 +15,11 @@ namespace Interactables.Holding
         [SerializeField] List<Pickuppable> contents;
         [SerializeField] ContainerPositioner positioner;
         [SerializeField] Pickuppable pickuppable;
+        [SerializeField] float itemHeightBeforePickup;
+        [SerializeField] float itemRaiseTime;
         
         bool open;
+        bool animating;
         
         public ReadOnlyCollection<Pickuppable> Contents => contents.AsReadOnly();
 
@@ -38,9 +42,7 @@ namespace Interactables.Holding
         public void OnInteract(Transform sender)
         {
             var holder = sender.GetComponent<ItemHolder>();
-            if (!holder) return;
-            
-            if (!open) return;
+            if (!holder || !open || animating) return;
 
             if (holder.IsHoldingItem)
                 AddItem(holder.TakeFrom(), true);
@@ -51,7 +53,9 @@ namespace Interactables.Holding
         void AddItem(Pickuppable item, bool wasInteraction)
         {
             if (contents.Count >= positioner.TotalPositions) return;
-            positioner.PlaceInPosition(item.transform, contents.Count, true, wasInteraction);
+            animating = true;
+            positioner.PlaceInPosition(item.transform, contents.Count, true, wasInteraction,
+                () => animating = false);
             contents.Add(item);
         }
 
@@ -59,9 +63,18 @@ namespace Interactables.Holding
         {
             var i = contents.Count - 1;
             var item = contents[i];
-            positioner.RestoreCollision(item);
-            item.gameObject.SetActive(true);
-            holder.Give(item);
+
+            item.transform.DOKill();
+            animating = true;
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(
+                item.transform.DOMove(item.transform.position + Vector3.up * itemHeightBeforePickup, itemRaiseTime));
+            sequence.AppendCallback(() => positioner.RestoreCollision(item));
+            sequence.AppendCallback(() => animating = false);
+
+            holder.Give(item, sequence);
+            
             contents.RemoveAt(i);
         }
 

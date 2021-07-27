@@ -63,25 +63,37 @@ namespace Interactables.Holding
             return temp;
         }
         
-        public void Give(Pickuppable pickuppable) => Give(pickuppable, defaultHoldingPosition);
-        public void Give(Pickuppable pickuppable, Vector3 overridePosition)
+        public void Give(Pickuppable pickuppable, Tween prependTween = null) =>
+            Give(pickuppable, defaultHoldingPosition, prependTween);
+        
+        public void Give(Pickuppable pickuppable, Vector3 overridePosition, Tween prependTween = null)
         {
-            if (heldItem) return;
+            if (heldItem) throw new InvalidOperationException("Cannot give item while player is holding an item.");
 
             holdingPosition = overridePosition;
-            
             pickuppable.Setup(transform);
-            
             heldItem = pickuppable;
-
-            foreach (Transform child in heldItem.transform)
-                child.gameObject.layer = heldObjectLayer;
             
             var go = heldItem.gameObject;
             tempLayer = go.layer;
-            go.layer = heldObjectLayer;
             
-            MoveAndRotateHeldItem(holdingPosition, pickupTime);
+            if (prependTween != null)
+            {
+                if (prependTween.onComplete != null)
+                    throw new ArgumentException("Tween already has onComplete callback.", nameof(prependTween));
+                prependTween.OnComplete(DoPickup);
+            }
+            else
+                DoPickup();
+
+            void DoPickup()
+            {
+                go.layer = heldObjectLayer;
+                foreach (Transform child in heldItem.transform)
+                    child.gameObject.layer = heldObjectLayer;
+                
+                MoveAndRotateHeldItem(holdingPosition, pickupTime);
+            }
         }
 
         void OnRotate(InputValue value) => isRotating = value.isPressed;
@@ -89,7 +101,7 @@ namespace Interactables.Holding
         void MoveAndRotateHeldItem(Vector3 position, float time)
         {
             // Finish tweens if still in progress.
-            heldItem.transform.DOComplete();
+            heldItem.transform.DOKill();
             heldItem.transform.DOLocalMove(position, time);
             heldItem.transform.DOLocalRotateQuaternion(Quaternion.identity, time);
         }

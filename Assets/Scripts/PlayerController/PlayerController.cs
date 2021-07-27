@@ -17,6 +17,7 @@ namespace PlayerController
         
         [Header("Looking")]
         [SerializeField] Camera cam;
+        [SerializeField] Camera secondaryCam;
         [SerializeField] Transform body;
         [SerializeField] float sensitivity;
         [SerializeField] float rotLimit;
@@ -50,6 +51,7 @@ namespace PlayerController
             sprintTransition.Append(DOTween.To(() => currentSpeed,
                 newSpeed => currentSpeed = newSpeed, sprintSpeed, transitionTime));
             sprintTransition.Join(cam.DOFieldOfView(sprintFov, transitionTime));
+            sprintTransition.Join(secondaryCam.DOFieldOfView(sprintFov, transitionTime));
             sprintTransition.SetEase(transitionEase).SetAutoKill(false).Pause();
         }
 

@@ -720,6 +720,7 @@ MonoBehaviour:
   sprintFov: 70
   transitionEase: 1
   cam: {fileID: 1687258584}
+  secondaryCam: {fileID: 1859453136}
   body: {fileID: 235475068}
   sensitivity: 80
   rotLimit: 85
@@ -4594,6 +4595,8 @@ MonoBehaviour:
   - {fileID: 623576847}
   positioner: {fileID: 1915634755}
   pickuppable: {fileID: 1915634764}
+  itemHeightBeforePickup: 1
+  itemRaiseTime: 0.2
 --- !u!114 &1915634758
 MonoBehaviour:
   m_ObjectHideFlags: 0

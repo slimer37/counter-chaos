@@ -59,7 +59,7 @@ namespace Interactables.Holding
             return variance;
         }
 
-        public void PlaceInPosition(Transform item, int index, bool tween = true, bool raiseItemFirst = false)
+        public void PlaceInPosition(Transform item, int index, bool tween = true, bool raiseItemFirst = false, TweenCallback callback = null)
         {
             Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider);
             var rb = item.GetComponent<Rigidbody>();
@@ -71,6 +71,8 @@ namespace Interactables.Holding
 
             if (tween)
             {
+                item.DOKill();
+                
                 var sequence = DOTween.Sequence();
                 if (raiseItemFirst)
                 {
@@ -79,6 +81,7 @@ namespace Interactables.Holding
                 }
                 sequence.Append(item.DOLocalMove(localPos, placeTime));
                 sequence.Join(item.DOLocalRotateQuaternion(localRot, placeTime));
+                sequence.OnComplete(callback);
             }
             else
             {
