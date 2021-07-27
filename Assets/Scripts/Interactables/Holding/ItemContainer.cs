@@ -15,11 +15,8 @@ namespace Interactables.Holding
         [SerializeField] List<Pickuppable> contents;
         [SerializeField] ContainerPositioner positioner;
         [SerializeField] Pickuppable pickuppable;
-        [SerializeField] float itemHeightBeforePickup;
-        [SerializeField] float itemRaiseTime;
         
         bool open;
-        bool animating;
         
         public ReadOnlyCollection<Pickuppable> Contents => contents.AsReadOnly();
 
@@ -42,7 +39,7 @@ namespace Interactables.Holding
         public void OnInteract(Transform sender)
         {
             var holder = sender.GetComponent<ItemHolder>();
-            if (!holder || !open || animating) return;
+            if (!holder || !open) return;
 
             if (holder.IsHoldingItem)
                 AddItem(holder.TakeFrom(), true);
@@ -53,30 +50,21 @@ namespace Interactables.Holding
         void AddItem(Pickuppable item, bool wasInteraction)
         {
             if (contents.Count >= positioner.TotalPositions) return;
-            animating = true;
-            positioner.PlaceInPosition(item.transform, contents.Count, true, wasInteraction,
-                () => animating = false);
+            positioner.PlaceInPosition(item.transform, contents.Count, true, wasInteraction);
             contents.Add(item);
         }
 
         void RemoveItem(ItemHolder holder)
         {
+            if (positioner.IsAnimating) return;
+            
             var i = contents.Count - 1;
             var item = contents[i];
 
             item.transform.DOKill();
-            animating = true;
-
-            var sequence = DOTween.Sequence();
-            sequence.Append(
-                item.transform.DOMove(item.transform.position + Vector3.up * itemHeightBeforePickup, itemRaiseTime));
-            sequence.AppendCallback(() => {
-                positioner.RestoreCollision(item);
-                animating = false;
-            });
-
-            holder.Give(item, sequence);
+            positioner.RestoreCollision(item);
             
+            holder.Give(item);
             contents.RemoveAt(i);
         }
 

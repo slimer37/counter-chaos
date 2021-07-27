@@ -15,8 +15,10 @@ namespace Interactables.Holding
         [SerializeField] float toStartTime = 0.2f;
 
         Vector3[] positions;
+        Sequence currentSequence;
         
         public int TotalPositions => positions.Length;
+        public bool IsAnimating => currentSequence.IsActive() && currentSequence.IsPlaying();
 
         void Reset() => TryGetComponent(out disableCollider);
 
@@ -59,7 +61,7 @@ namespace Interactables.Holding
             return variance;
         }
 
-        public void PlaceInPosition(Transform item, int index, bool tween = true, bool raiseItemFirst = false, TweenCallback callback = null)
+        public void PlaceInPosition(Transform item, int index, bool tween = true, bool raiseItemFirst = false)
         {
             Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider);
             var rb = item.GetComponent<Rigidbody>();
@@ -73,15 +75,14 @@ namespace Interactables.Holding
             {
                 item.DOKill();
                 
-                var sequence = DOTween.Sequence();
+                currentSequence = DOTween.Sequence();
                 if (raiseItemFirst)
                 {
                     var tweenStartPos = new Vector3(localPos.x, tweenStartHeight, localPos.z);
-                    sequence.Append(item.DOLocalMove(tweenStartPos, toStartTime));
+                    currentSequence.Append(item.DOLocalMove(tweenStartPos, toStartTime));
                 }
-                sequence.Append(item.DOLocalMove(localPos, placeTime));
-                sequence.Join(item.DOLocalRotateQuaternion(localRot, placeTime));
-                sequence.OnComplete(callback);
+                currentSequence.Append(item.DOLocalMove(localPos, placeTime));
+                currentSequence.Join(item.DOLocalRotateQuaternion(localRot, placeTime));
             }
             else
             {
