@@ -4595,6 +4595,7 @@ MonoBehaviour:
   - {fileID: 623576847}
   positioner: {fileID: 1915634755}
   pickuppable: {fileID: 1915634764}
+  acceptanceDelay: 0.4
 --- !u!114 &1915634758
 MonoBehaviour:
   m_ObjectHideFlags: 0

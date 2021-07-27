@@ -15,7 +15,9 @@ namespace Interactables.Holding
         [SerializeField] List<Pickuppable> contents;
         [SerializeField] ContainerPositioner positioner;
         [SerializeField] Pickuppable pickuppable;
-        
+        [SerializeField] float acceptanceDelay;
+
+        List<Pickuppable> itemsWaiting = new List<Pickuppable>();
         bool open;
         
         public ReadOnlyCollection<Pickuppable> Contents => contents.AsReadOnly();
@@ -75,18 +77,44 @@ namespace Interactables.Holding
             open = !open;
             pickuppable.enabled = !open;
             if (open)
+            {
                 onOpen.Invoke();
+                Invoke(nameof(AcceptWaitingItems), acceptanceDelay);
+            }
             else
+            {
                 onClose.Invoke();
+                CancelInvoke();
+            }
+        }
+
+        void AcceptWaitingItems()
+        {
+            itemsWaiting.ForEach(p => AddItem(p, false));
+            itemsWaiting.Clear();
         }
 
         void OnCollisionEnter(Collision other)
         {
-            if (!open || !other.transform.CompareTag("Product")) return;
+            if (!other.transform.CompareTag("Product")) return;
             
             // Look for collisions coming down through the top of the container.
             if (other.GetContact(0).normal.y < -0.7f)
-                AddItem(other.transform.GetComponent<Pickuppable>(), false);
+            {
+                var p = other.transform.GetComponent<Pickuppable>();
+                if (open)
+                    AddItem(p, false);
+                else
+                    itemsWaiting.Add(p);
+            }
+        }
+
+        void OnCollisionExit(Collision other)
+        {
+            if (open || itemsWaiting.Count == 0 || !other.transform.CompareTag("Product")) return;
+
+            var p = other.transform.GetComponent<Pickuppable>();
+            itemsWaiting.Remove(p);
         }
     }
 }
