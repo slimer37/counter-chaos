@@ -56,14 +56,14 @@ namespace Interactables.Holding
             Gizmos.DrawCube(transform.TransformPoint(defaultHoldingPosition), Vector3.one * 0.25f);
         }
 
-        public void Give(Pickuppable pickuppable) => Give(pickuppable, defaultHoldingPosition);
         public Pickuppable TakeFrom()
         {
             var temp = heldItem;
             Drop(false);
             return temp;
         }
-
+        
+        public void Give(Pickuppable pickuppable) => Give(pickuppable, defaultHoldingPosition);
         public void Give(Pickuppable pickuppable, Vector3 overridePosition)
         {
             if (heldItem) return;
