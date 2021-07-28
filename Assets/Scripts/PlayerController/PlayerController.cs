@@ -15,6 +15,9 @@ namespace PlayerController
         [SerializeField] float sprintFov;
         [SerializeField] Ease transitionEase;
         
+        [Header("Jumping")]
+        [SerializeField] float maxJumpForce;
+        
         [Header("Looking")]
         [SerializeField] Camera cam;
         [SerializeField] Camera secondaryCam;
@@ -34,6 +37,19 @@ namespace PlayerController
         {
             var moveInput = val.Get<Vector2>();
             moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);
+        }
+        
+        void OnJump(InputValue val)
+        {
+            if (!characterController.isGrounded)
+            {
+                if (!val.isPressed && moveVector.y > 0)
+                    moveVector.y = 0;
+                return;
+            }
+            
+            if (val.isPressed)
+                moveVector.y = maxJumpForce;
         }
 
         void OnSprint(InputValue val) => isSprinting = val.isPressed;

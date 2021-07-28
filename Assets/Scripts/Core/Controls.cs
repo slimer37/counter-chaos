@@ -83,6 +83,14 @@ namespace Core
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Value"",
+                    ""id"": ""8851c95b-4599-4958-a6c3-4c04a3d70ac4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -217,6 +225,17 @@ namespace Core
                     ""action"": ""Secondary Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ca3a0fd6-db44-4556-982c-50aa3c084cc5"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -277,6 +296,7 @@ namespace Core
             m_Gameplay_Drop = m_Gameplay.FindAction("Drop", throwIfNotFound: true);
             m_Gameplay_Toss = m_Gameplay.FindAction("Toss", throwIfNotFound: true);
             m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
+            m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
             // Menu
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
@@ -337,6 +357,7 @@ namespace Core
         private readonly InputAction m_Gameplay_Drop;
         private readonly InputAction m_Gameplay_Toss;
         private readonly InputAction m_Gameplay_Rotate;
+        private readonly InputAction m_Gameplay_Jump;
         public struct GameplayActions
         {
             private @Controls m_Wrapper;
@@ -349,6 +370,7 @@ namespace Core
             public InputAction @Drop => m_Wrapper.m_Gameplay_Drop;
             public InputAction @Toss => m_Wrapper.m_Gameplay_Toss;
             public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
+            public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -382,6 +404,9 @@ namespace Core
                     @Rotate.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
                     @Rotate.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
                     @Rotate.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotate;
+                    @Jump.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                    @Jump.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                    @Jump.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -410,6 +435,9 @@ namespace Core
                     @Rotate.started += instance.OnRotate;
                     @Rotate.performed += instance.OnRotate;
                     @Rotate.canceled += instance.OnRotate;
+                    @Jump.started += instance.OnJump;
+                    @Jump.performed += instance.OnJump;
+                    @Jump.canceled += instance.OnJump;
                 }
             }
         }
@@ -466,6 +494,7 @@ namespace Core
             void OnDrop(InputAction.CallbackContext context);
             void OnToss(InputAction.CallbackContext context);
             void OnRotate(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
         }
         public interface IMenuActions
         {
