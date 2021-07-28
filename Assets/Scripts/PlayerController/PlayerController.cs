@@ -16,7 +16,9 @@ namespace PlayerController
         [SerializeField] Ease transitionEase;
         
         [Header("Jumping")]
-        [SerializeField] float maxJumpForce;
+        [SerializeField] float jumpForce;
+        [SerializeField] float maxJumpTime;
+        [SerializeField, Min(0)] float gravity = 9.81f;
         
         [Header("Looking")]
         [SerializeField] Camera cam;
@@ -28,6 +30,9 @@ namespace PlayerController
         Sequence sprintTransition;
         bool isSprinting;
         float currentSpeed;
+
+        float jumpTime;
+        bool isHoldingJump;
         
         Vector2 mouseDelta;
         Vector3 camRot;
@@ -38,18 +43,17 @@ namespace PlayerController
             var moveInput = val.Get<Vector2>();
             moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);
         }
-        
+
         void OnJump(InputValue val)
         {
-            if (!characterController.isGrounded)
+            if (val.isPressed && characterController.isGrounded)
             {
-                if (!val.isPressed && moveVector.y > 0)
-                    moveVector.y = 0;
-                return;
+                isHoldingJump = true;
+                moveVector.y = jumpForce;
+                jumpTime = maxJumpTime;
             }
-            
-            if (val.isPressed)
-                moveVector.y = maxJumpForce;
+            else if (!val.isPressed)
+                isHoldingJump = false;
         }
 
         void OnSprint(InputValue val) => isSprinting = val.isPressed;
@@ -62,7 +66,8 @@ namespace PlayerController
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-
+            
+            // Construct sprint transition.
             sprintTransition = DOTween.Sequence();
             sprintTransition.Append(DOTween.To(() => currentSpeed,
                 newSpeed => currentSpeed = newSpeed, sprintSpeed, transitionTime));
@@ -75,14 +80,22 @@ namespace PlayerController
 
         void Update()
         {
-            if (!characterController.isGrounded)
-                moveVector.y -= 9.81f * Time.deltaTime;
+            // Jumping & Gravity
+
+            if (isHoldingJump && jumpTime > 0)
+                jumpTime -= Time.deltaTime;
+            else if (!characterController.isGrounded)
+                moveVector.y -= gravity * Time.deltaTime;
+            
+            // Looking
             
             characterController.Move(currentSpeed * Time.deltaTime * body.TransformDirection(moveVector));
 
             camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y * Time.deltaTime, -rotLimit, rotLimit);
             body.localEulerAngles += mouseDelta.x * Time.deltaTime * Vector3.up;
             cam.transform.localEulerAngles = camRot;
+            
+            // Moving
 
             if (moveVector.z > 0)
             {
