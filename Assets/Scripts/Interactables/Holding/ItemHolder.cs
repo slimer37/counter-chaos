@@ -42,6 +42,7 @@ namespace Interactables.Holding
         
         Pickuppable heldItem;
         Vector3 holdingPosition;
+        Quaternion holdingRotation;
         int tempLayer;
         
         bool isHoldingToss;
@@ -64,12 +65,12 @@ namespace Interactables.Holding
             return temp;
         }
         
-        public void Give(Pickuppable pickuppable) => Give(pickuppable, defaultHoldingPosition);
-        public void Give(Pickuppable pickuppable, Vector3 overridePosition)
+        public void Give(Pickuppable pickuppable, Vector3? overridePosition = null, Vector3? overrideRotation = null)
         {
             if (heldItem) throw new InvalidOperationException("Cannot give item while player is holding an item.");
 
-            holdingPosition = overridePosition;
+            holdingPosition = overridePosition ?? defaultHoldingPosition;
+            holdingRotation = Quaternion.Euler(overrideRotation ?? defaultHoldingRotation);
             pickuppable.Setup(transform);
             heldItem = pickuppable;
             
@@ -90,7 +91,7 @@ namespace Interactables.Holding
             // Finish tweens if still in progress.
             heldItem.transform.DOKill();
             heldItem.transform.DOLocalMove(position, time);
-            heldItem.transform.DOLocalRotateQuaternion(Quaternion.Euler(defaultHoldingRotation), time);
+            heldItem.transform.DOLocalRotateQuaternion(holdingRotation, time);
         }
 
         void OnDrop(InputValue value)
