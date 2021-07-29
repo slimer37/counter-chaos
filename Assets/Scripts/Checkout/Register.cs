@@ -146,7 +146,7 @@ namespace Checkout
             }
             
             displayList.ForEach(item =>
-                screenText.text += string.Format(itemListFormat, item.DisplayName, item.Price.ToString("c")) + "\n");
+                screenText.text += string.Format(itemListFormat, item.CompactName, item.Price.ToString("c")) + "\n");
             
             var total = transactionItems.Sum(item => item.Price);
             bottomText.text = string.Format(totalInfoFormat, transactionItems.Count, total.ToString("c"));
