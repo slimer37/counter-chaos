@@ -7,7 +7,13 @@ namespace Interactables.Holding
     public sealed class Pickuppable : MonoBehaviour, IInteractHandler
     {
         [field: SerializeField] public bool Throwable { get; set; } = true;
+        
+        [Header("Overrides")]
         [SerializeField] Vector3 overrideHoldingPosition;
+        [SerializeField] bool useRotationIfZeroes;
+        [SerializeField] Vector3 overrideHoldingRotation;
+        
+        [Space(15)]
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
         [SerializeField] Renderer rend;
@@ -56,10 +62,11 @@ namespace Interactables.Holding
             
             if (holder)
             {
-                if (overrideHoldingPosition != Vector3.zero)
-                    holder.Give(this, overrideHoldingPosition);
-                else
-                    holder.Give(this);
+                var pos = UseIfNotZeroes(overrideHoldingPosition);
+                var rot = useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
+                holder.Give(this, pos, rot);
+
+                static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : (Vector3?)null;
             }
             else
                 Setup(sender);
