@@ -817,6 +817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 1687258584}
   defaultHoldingPosition: {x: 0.42, y: 0.25, z: 0.8}
+  defaultHoldingRotation: {x: 0, y: 210, z: 0}
   pickupTime: 0.4
   timeBetweenHoldPositions: 0.1
   heldObjectLayer: 7
@@ -833,7 +834,7 @@ MonoBehaviour:
     m_Bits: 329
   defaultDropPosition: {x: 0, y: 0, z: 1}
   dropReach: 3
-  extraDropHeight: 0.05
+  extraDropHeight: 0.01
   dropSurfaceMask:
     serializedVersion: 2
     m_Bits: 65

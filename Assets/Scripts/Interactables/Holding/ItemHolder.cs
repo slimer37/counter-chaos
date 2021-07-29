@@ -11,6 +11,7 @@ namespace Interactables.Holding
     {
         [SerializeField] new Camera camera;
         [SerializeField] Vector3 defaultHoldingPosition;
+        [SerializeField] Vector3 defaultHoldingRotation;
         [SerializeField] float pickupTime;
         [SerializeField] float timeBetweenHoldPositions;
         [SerializeField, Layer] int heldObjectLayer;
@@ -89,7 +90,7 @@ namespace Interactables.Holding
             // Finish tweens if still in progress.
             heldItem.transform.DOKill();
             heldItem.transform.DOLocalMove(position, time);
-            heldItem.transform.DOLocalRotateQuaternion(Quaternion.identity, time);
+            heldItem.transform.DOLocalRotateQuaternion(Quaternion.Euler(defaultHoldingRotation), time);
         }
 
         void OnDrop(InputValue value)
