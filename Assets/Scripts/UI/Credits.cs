@@ -18,13 +18,17 @@ namespace UI
         
         [SerializeField] CanvasGroup fadeGroup;
         [SerializeField] TextMeshProUGUI creditsText;
+        [SerializeField] RectTransform creditsParent;
         [SerializeField] float scrollTime;
         [SerializeField] float fadeTime;
+        [SerializeField] float startPivot;
+        [SerializeField] float endPivot;
         [SerializeField] Ease ease;
         [SerializeField, Tooltip("{0-1}: Role, Name"), RequireSubstring("{0}", "{1}")] string creditFormat;
         [SerializeField] Credit[] creditList;
-        
-        RectTransform rectTransform;
+
+        Controls controls;
+        Sequence scrollSequence;
 
         void OnValidate()
         {
@@ -37,19 +41,39 @@ namespace UI
 
         void Awake()
         {
-            rectTransform = creditsText.GetComponent<RectTransform>();
             fadeGroup.alpha = 0;
+            fadeGroup.blocksRaycasts = false;
+            controls = new Controls();
+            controls.Menu.Exit.performed += _ => Stop();
+            
+            // Construct scroll sequence.
+
+            scrollSequence = DOTween.Sequence();
+            scrollSequence.AppendCallback(() => {
+                creditsParent.pivot = new Vector2(creditsParent.pivot.x, startPivot);
+                fadeGroup.blocksRaycasts = true;
+            });
+            scrollSequence.Append(fadeGroup.DOFade(1, fadeTime));
+            scrollSequence.Append(creditsParent.DOPivotY(endPivot, scrollTime).SetEase(ease));
+            scrollSequence.AppendCallback(() => fadeGroup.blocksRaycasts = false);
+            scrollSequence.Append(fadeGroup.DOFade(0, fadeTime));
+            scrollSequence.SetAutoKill(false).Pause();
         }
 
-        public void ScrollCredits()
+        void OnEnable() => controls.Enable();
+        void OnDisable() => controls.Disable();
+        void OnDestroy()
         {
-            rectTransform.pivot = new Vector2(rectTransform.pivot.x, 1);
-            var sequence = DOTween.Sequence();
-            fadeGroup.blocksRaycasts = true;
-            sequence.Append(fadeGroup.DOFade(1, fadeTime));
-            sequence.Append(rectTransform.DOPivotY(-1, scrollTime).SetEase(ease));
-            sequence.AppendCallback(() => fadeGroup.blocksRaycasts = false);
-            sequence.Append(fadeGroup.DOFade(0, fadeTime));
+            scrollSequence.Kill();
+            controls.Dispose();
         }
+
+        void Stop()
+        {
+            if (scrollSequence.IsPlaying())
+                scrollSequence.Complete(true);
+        }
+
+        public void ScrollCredits() => scrollSequence.Restart();
     }
 }
