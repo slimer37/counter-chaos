@@ -27,6 +27,16 @@ namespace PlayerController
         [SerializeField] float sensitivity;
         [SerializeField] float rotLimit;
 
+        [Header("Bobbing")]
+        [SerializeField] float bobAmount;
+        [SerializeField] float bobTime;
+        [SerializeField] float bobResetSpeed;
+        [SerializeField] Ease bobEase;
+
+        float originalCamY;
+        Tween bobTween;
+        Tween returnTween;
+
         Sequence sprintTransition;
         bool isSprinting;
         float currentSpeed;
@@ -38,10 +48,37 @@ namespace PlayerController
         Vector3 camRot;
         Vector3 moveVector;
 
+        void OnDisable() => bobTween?.Kill();
+        void OnEnable() => UpdateBobbing();
+
         void OnMove(InputValue val)
         {
+            if (!enabled) return;
+            
             var moveInput = val.Get<Vector2>();
             moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);
+            
+            UpdateBobbing();
+        }
+
+        void UpdateBobbing()
+        {
+            var wasBobbing = bobTween != null && bobTween.active && bobTween.IsPlaying();
+            var isBobbing = moveVector.x + moveVector.z != 0;
+
+            if (wasBobbing == isBobbing) return;
+            
+            bobTween?.Kill();
+            returnTween?.Kill();
+            
+            var camT = cam.transform;
+            var resetDuration = (originalCamY - camT.localPosition.y) / bobResetSpeed;
+            
+            returnTween = camT.DOLocalMoveY(originalCamY, resetDuration);
+            
+            if (!isBobbing) return;
+            bobTween = cam.transform.DOLocalMoveY(originalCamY - bobAmount, bobTime)
+                .SetDelay(resetDuration).SetLoops(-1, LoopType.Yoyo).SetEase(bobEase);
         }
 
         void OnJump(InputValue val)
@@ -62,6 +99,7 @@ namespace PlayerController
         void Awake()
         {
             camRot = cam.transform.localEulerAngles;
+            originalCamY = cam.transform.localPosition.y;
             currentSpeed = walkSpeed;
             
             Cursor.visible = false;
