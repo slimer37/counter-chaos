@@ -60,6 +60,8 @@ namespace Interactables.Holding
 
         public Pickuppable TakeFrom()
         {
+            if (!heldItem) throw new NullReferenceException("TakeFrom called without a held item.");
+            
             var temp = heldItem;
             Drop(false);
             return temp;
