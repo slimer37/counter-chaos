@@ -19,6 +19,8 @@ namespace UI.TitleScreen
         RectTransform rectTransform;
         Vector2 originalSizeDelta;
 
+        void Reset() => TryGetComponent(out fadeBackground);
+
         void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
