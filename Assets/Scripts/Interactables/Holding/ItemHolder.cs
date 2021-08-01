@@ -39,6 +39,7 @@ namespace Interactables.Holding
         [SerializeField] Image holdIndicator;
 
         public bool IsHoldingItem => heldItem;
+        public Pickuppable HeldItem => heldItem;
         
         Pickuppable heldItem;
         Vector3 holdingPosition;
@@ -176,9 +177,9 @@ namespace Interactables.Holding
                 {
                     var distanceOffSurface = extraDropHeight;
                     
-                    // Only use bound diagonal if the surface is not horizontal (e.g. the ground).
+                    // Only use bound diagonal if the surface is not horizontal (e.g. the ground but not the ceiling).
                     var angle = Vector3.Angle(hit.normal, Vector3.up);
-                    distanceOffSurface += angle < flatSurfaceTolerance || 180 - angle < flatSurfaceTolerance
+                    distanceOffSurface += angle < flatSurfaceTolerance
                         ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
                     
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;

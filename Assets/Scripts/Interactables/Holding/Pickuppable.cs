@@ -7,6 +7,7 @@ namespace Interactables.Holding
     public sealed class Pickuppable : MonoBehaviour, IInteractHandler
     {
         [field: SerializeField] public bool Throwable { get; set; } = true;
+        [field: SerializeField] public bool CanBeHung { get; set; }
         
         [Header("Overrides")]
         [SerializeField] Vector3 overrideHoldingPosition;
@@ -22,7 +23,7 @@ namespace Interactables.Holding
         bool isHeld;
 
         public float BoundHalfDiagonal { get; private set; }
-        public float VerticalExtent => rend.bounds.extents.y;
+        public float VerticalExtent { get; private set; }
 
         void OnDrawGizmosSelected()
         {
@@ -41,6 +42,7 @@ namespace Interactables.Holding
         {
             meshBounds = rend.bounds;
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
+            VerticalExtent = transform.position.y - meshBounds.center.y + meshBounds.extents.y;
             hoverable.OnAttemptHover += OnAttemptHover;
         }
 
@@ -48,7 +50,7 @@ namespace Interactables.Holding
         bool OnAttemptHover(Transform sender) => !sender.GetComponent<ItemHolder>().IsHoldingItem;
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
-            Physics.OverlapBoxNonAlloc(transform.position, meshBounds.extents, results, transform.rotation, mask) > 0;
+            Physics.OverlapBoxNonAlloc(rend.bounds.center, meshBounds.extents, results, transform.rotation, mask) > 0;
 
         public void OnInteract(Transform sender) => OnPickup(sender);
 
