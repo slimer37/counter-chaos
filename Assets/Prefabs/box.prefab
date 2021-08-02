@@ -41,10 +41,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c15c3a42c1f184f95a58ed153c626e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  containmentBoxSize: {x: 3, y: 3, z: 3}
+  containmentBoxSize: {x: 2, y: 3, z: 2}
   unitSize: 0.28
   disableCollider: {fileID: 1915634756}
   positionVariance: {x: 0.01, y: 0.01, z: 0.01}
+  baseContentsRotation: {x: 270, y: 0, z: 0}
   rotationVariance: {x: 5, y: 180, z: 5}
   placeTime: 0.2
   tweenStartHeight: 1

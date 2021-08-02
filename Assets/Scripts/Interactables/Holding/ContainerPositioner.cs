@@ -9,6 +9,7 @@ namespace Interactables.Holding
         [SerializeField, Min(0.01f)] float unitSize = 0.25f;
         [SerializeField] Collider disableCollider;
         [SerializeField, Min(0)] Vector3 positionVariance;
+        [SerializeField, Min(0)] Vector3 baseContentsRotation;
         [SerializeField, Min(0)] Vector3 rotationVariance;
         [SerializeField] float placeTime = 0.2f;
         [SerializeField] float tweenStartHeight = 1;
@@ -49,7 +50,7 @@ namespace Interactables.Holding
             }
         }
 
-        Quaternion GenerateRotation() => Quaternion.Euler(GenerateVarianceVector(rotationVariance));
+        Quaternion GenerateRotation() => Quaternion.Euler(baseContentsRotation + GenerateVarianceVector(rotationVariance));
 
         Vector3 GenerateVarianceVector(Vector3 amount)
         {
