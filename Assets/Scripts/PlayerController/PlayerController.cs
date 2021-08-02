@@ -64,7 +64,7 @@ namespace PlayerController
         void UpdateBobbing()
         {
             var wasBobbing = bobTween != null && bobTween.active && bobTween.IsPlaying();
-            var isBobbing = moveVector.x + moveVector.z != 0;
+            var isBobbing = moveVector.x != 0 || moveVector.z != 0;
 
             if (wasBobbing == isBobbing) return;
             
