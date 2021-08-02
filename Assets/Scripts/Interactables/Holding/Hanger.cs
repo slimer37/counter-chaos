@@ -10,6 +10,7 @@ namespace Interactables.Holding
         [SerializeField] Collider disableCollider;
         
         Pickuppable hungItem;
+        Collider itemCollider;
 
         void Reset() => TryGetComponent(out disableCollider);
 
@@ -22,11 +23,14 @@ namespace Interactables.Holding
                 if (hungItem)
                 {
                     holder.Give(hungItem);
+                    itemCollider.enabled = true;
                     hungItem = null;
                 }
                 
                 return;
             }
+
+            if (hungItem) return;
             
             var item = holder.HeldItem;
         
@@ -39,8 +43,9 @@ namespace Interactables.Holding
             itemT.parent = transform;
             itemT.DOLocalMove(Vector3.zero, animTime);
             itemT.DOLocalRotateQuaternion(Quaternion.identity, animTime);
-            
-            Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider);
+
+            itemCollider = item.GetComponent<Collider>();
+            itemCollider.enabled = false;
             var rb = item.GetComponent<Rigidbody>();
             rb.isKinematic = true;
         }
