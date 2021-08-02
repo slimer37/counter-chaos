@@ -45,6 +45,8 @@ namespace Interactables.Holding
         Vector3 holdingPosition;
         Quaternion holdingRotation;
         readonly Quaternion dropOrThrowRotation = Quaternion.LookRotation(Vector3.back);
+
+        float rotationDelta;
         int tempLayer;
         
         bool isHoldingToss;
@@ -88,7 +90,11 @@ namespace Interactables.Holding
             MoveAndRotateHeldItem(holdingPosition, holdingRotation, pickupTime);
         }
 
-        void OnRotate(InputValue value) => isRotating = value.isPressed;
+        void OnRotate(InputValue value)
+        {
+            isRotating = value.isPressed;
+            SendMessage("EnableLook", !isRotating);
+        }
 
         void MoveAndRotateHeldItem(Vector3 position, Quaternion rotation, float time)
         {
@@ -115,6 +121,7 @@ namespace Interactables.Holding
             else if (isHoldingDrop)
             {
                 isHoldingDrop = false;
+                SendMessage("EnableLook", true);
 
                 if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
                     ReturnItemToHolding();
@@ -160,6 +167,12 @@ namespace Interactables.Holding
 
         Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
+        void OnMoveMouse(InputValue val)
+        {
+            if (!isHoldingDrop || !isRotating) return;
+            rotationDelta = val.Get<Vector2>().x * rotationSpeed;
+        }
+
         void Update()
         {
             if (isHoldingToss)
@@ -173,7 +186,7 @@ namespace Interactables.Holding
                 var itemTransform = heldItem.transform;
                 
                 if (isRotating)
-                    itemTransform.localEulerAngles += rotationSpeed * Time.deltaTime * Vector3.up;
+                    itemTransform.localEulerAngles += rotationDelta * Time.deltaTime * Vector3.up;
                 
                 if (Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask))
                 {

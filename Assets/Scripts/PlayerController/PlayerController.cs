@@ -48,8 +48,14 @@ namespace PlayerController
         Vector3 camRot;
         Vector3 moveVector;
 
+        bool canMove = true;
+        bool canLook = true;
+
         void OnDisable() => bobTween?.Kill();
         void OnEnable() => UpdateBobbing();
+
+        void EnableMovement(bool value) => canMove = value;
+        void EnableLook(bool value) => canLook = value;
 
         void OnMove(InputValue val)
         {
@@ -125,27 +131,36 @@ namespace PlayerController
             else if (!characterController.isGrounded)
                 moveVector.y -= gravity * Time.deltaTime;
             
-            // Looking
-            
-            characterController.Move(currentSpeed * Time.deltaTime * body.TransformDirection(moveVector));
-
-            camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y * Time.deltaTime, -rotLimit, rotLimit);
-            body.localEulerAngles += mouseDelta.x * Time.deltaTime * Vector3.up;
-            cam.transform.localEulerAngles = camRot;
-            
             // Moving
 
-            if (moveVector.z > 0)
-            {
-                if (sprintTransition.IsPlaying() && isSprinting) return;
+            if (canMove)
+                characterController.Move(currentSpeed * Time.deltaTime * body.TransformDirection(moveVector));
             
-                if (isSprinting)
-                    sprintTransition.PlayForward();
-                else
+            // Looking
+            
+            if (canLook)
+            {
+                camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y * Time.deltaTime, -rotLimit, rotLimit);
+                body.localEulerAngles += mouseDelta.x * Time.deltaTime * Vector3.up;
+                cam.transform.localEulerAngles = camRot;
+            }
+            
+            // Sprinting
+            
+            if (canMove)
+            {
+                if (moveVector.z > 0)
+                {
+                    if (sprintTransition.IsPlaying() && isSprinting) return;
+
+                    if (isSprinting)
+                        sprintTransition.PlayForward();
+                    else
+                        sprintTransition.PlayBackwards();
+                }
+                else if (!sprintTransition.isBackwards)
                     sprintTransition.PlayBackwards();
             }
-            else if (!sprintTransition.isBackwards)
-                sprintTransition.PlayBackwards();
         }
     }
 }
