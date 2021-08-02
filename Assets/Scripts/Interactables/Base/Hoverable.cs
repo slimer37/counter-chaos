@@ -25,7 +25,7 @@ namespace Interactables.Base
             return (THandler[])cachedHandlers[handler];
         }
 
-        void Reset()
+        void OnValidate()
         {
             if (gameObject.layer != LayerMask.NameToLayer("Interactable"))
                 Debug.LogWarning($"{name} is not on the Interactable layer.", gameObject);
