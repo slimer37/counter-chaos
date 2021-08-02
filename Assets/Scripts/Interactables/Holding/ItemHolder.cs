@@ -84,17 +84,17 @@ namespace Interactables.Holding
             foreach (Transform child in heldItem.transform)
                 child.gameObject.layer = heldObjectLayer;
             
-            MoveAndRotateHeldItem(holdingPosition, pickupTime);
+            MoveAndRotateHeldItem(holdingPosition, holdingRotation, pickupTime);
         }
 
         void OnRotate(InputValue value) => isRotating = value.isPressed;
 
-        void MoveAndRotateHeldItem(Vector3 position, float time)
+        void MoveAndRotateHeldItem(Vector3 position, Quaternion rotation, float time)
         {
             // Finish tweens if still in progress.
             heldItem.transform.DOKill();
             heldItem.transform.DOLocalMove(position, time);
-            heldItem.transform.DOLocalRotateQuaternion(holdingRotation, time);
+            heldItem.transform.DOLocalRotateQuaternion(rotation, time);
         }
 
         void OnDrop(InputValue value)
@@ -105,6 +105,7 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
+                heldItem.transform.localRotation = Quaternion.identity;
                 heldItem.transform.DOKill();
             }
             // On release
@@ -113,7 +114,7 @@ namespace Interactables.Holding
                 isHoldingDrop = false;
                 
                 if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
-                    MoveAndRotateHeldItem(holdingPosition, timeBetweenHoldPositions);
+                    MoveAndRotateHeldItem(holdingPosition, holdingRotation, timeBetweenHoldPositions);
                 else
                     Drop(false);
             }
@@ -130,7 +131,7 @@ namespace Interactables.Holding
             {
                 holdTime = 0;
                 isHoldingToss = true;
-                ParentAndPosition(camera.transform, tossFromPosition);
+                ParentAndPosition(camera.transform, tossFromPosition, Quaternion.identity);
             }
             // On release
             else if (isHoldingToss)
@@ -139,15 +140,15 @@ namespace Interactables.Holding
                 
                 // Return the item to the holding position if an obstacle is detected.
                 if (CheckForTossObstacles())
-                    ParentAndPosition(transform, holdingPosition);
+                    ParentAndPosition(transform, holdingPosition, holdingRotation);
                 else
                     Drop(true);
             }
             
-            void ParentAndPosition(Transform newParent, Vector3 position)
+            void ParentAndPosition(Transform newParent, Vector3 position, Quaternion rotation)
             {
                 heldItem.transform.parent = newParent;
-                MoveAndRotateHeldItem(position, timeBetweenHoldPositions);
+                MoveAndRotateHeldItem(position, rotation, timeBetweenHoldPositions);
             }
 
             bool CheckForTossObstacles() =>
