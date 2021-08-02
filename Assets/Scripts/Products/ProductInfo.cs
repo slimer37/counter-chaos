@@ -42,14 +42,16 @@ namespace Products
 
             Random.state = tempState;
 
-            CompactName = DisplayName.Replace(' ', '_').ToUpper();
-
-            for (var i = 1; i < CompactName.Length - 1; i++)
+            var rawName = DisplayName.Replace(' ', '_').ToUpper();
+            CompactName = rawName[0].ToString();
+            for (var i = 1; i < rawName.Length - 1; i++)
             {
-                // Delete vowels if they do not precede or succeed a space (replaced by underscores).
-                if (Vowels.Contains(CompactName[i]) && CompactName[i - 1] != '_' && CompactName[i + 1] != '_')
-                    CompactName = CompactName.Remove(i, 1);
+                // Only add vowels if they precede or succeed a space, i.e. start or end a word.
+                if (Vowels.Contains(rawName[i]) && rawName[i - 1] != '_' && rawName[i + 1] != '_') continue;
+
+                CompactName += rawName[i];
             }
+            CompactName += rawName[rawName.Length - 1];
         }
 
         public static ProductInfo LookUp(int id) => IDTable.ContainsKey(id) ? IDTable[id] : null;
