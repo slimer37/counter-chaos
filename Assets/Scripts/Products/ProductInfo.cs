@@ -28,6 +28,16 @@ namespace Products
             var tempState = Random.state;
             Random.InitState(seed);
             
+            GenerateID();
+            Barcode = Products.Barcode.Generate();
+            
+            Random.state = tempState;
+
+            GenerateCompactName();
+        }
+
+        void GenerateID()
+        {
             string idString;
             do
             {
@@ -38,10 +48,10 @@ namespace Products
             
             ID = Convert.ToInt32(idString);
             IDTable[ID] = this;
-            Barcode = Products.Barcode.Generate();
+        }
 
-            Random.state = tempState;
-
+        void GenerateCompactName()
+        {
             var rawName = DisplayName.Replace(' ', '_').ToUpper();
             CompactName = rawName[0].ToString();
             for (var i = 1; i < rawName.Length - 1; i++)
