@@ -54,6 +54,7 @@ namespace Checkout.RegisterInput
 
         public void OnStopInteract(Transform sender)
         {
+            if (!tempController) return;
             enteringID = false;
             tempController.Suspend(false);
         }

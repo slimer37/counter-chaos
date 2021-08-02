@@ -49,6 +49,7 @@ namespace Interactables.Inspection
 
         public void OnStopInteract(Transform sender)
         {
+            if (!tempController) return;
             tempController.Suspend(false);
             itemBeingInspected = false;
             hoverable.enabled = true;
