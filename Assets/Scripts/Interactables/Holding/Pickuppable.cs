@@ -24,6 +24,10 @@ namespace Interactables.Holding
 
         public float BoundHalfDiagonal { get; private set; }
         public float VerticalExtent { get; private set; }
+        public Vector3? OverridePosition => UseIfNotZeroes(overrideHoldingPosition);
+        public Vector3? OverrideRotation => useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
+        
+        static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : (Vector3?)null;
 
         void OnDrawGizmosSelected()
         {
@@ -63,13 +67,7 @@ namespace Interactables.Holding
             if (isHeld || holder && holder.IsHoldingItem) return;
             
             if (holder)
-            {
-                var pos = UseIfNotZeroes(overrideHoldingPosition);
-                var rot = useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
-                holder.Give(this, pos, rot);
-
-                static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : (Vector3?)null;
-            }
+                holder.Give(this);
             else
                 Setup(sender);
         }

@@ -68,12 +68,12 @@ namespace Interactables.Holding
             return temp;
         }
         
-        public void Give(Pickuppable pickuppable, Vector3? overridePosition = null, Vector3? overrideRotation = null)
+        public void Give(Pickuppable pickuppable)
         {
             if (heldItem) throw new InvalidOperationException("Cannot give item while player is holding an item.");
 
-            holdingPosition = overridePosition ?? defaultHoldingPosition;
-            holdingRotation = Quaternion.Euler(overrideRotation ?? defaultHoldingRotation);
+            holdingPosition = pickuppable.OverridePosition ?? defaultHoldingPosition;
+            holdingRotation = Quaternion.Euler(pickuppable.OverrideRotation ?? defaultHoldingRotation);
             pickuppable.Setup(transform);
             heldItem = pickuppable;
             
