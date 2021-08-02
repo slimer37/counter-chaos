@@ -16,6 +16,8 @@ namespace Interactables.Inspection
 
         Vector3 originalPosition;
         Quaternion originalRotation;
+
+        PlayerController tempController;
     
         void Awake()
         {
@@ -35,8 +37,8 @@ namespace Interactables.Inspection
         public void OnInteract(Transform sender)
         {
             if (!CanInteract()) return;
-            
-            sender.SendMessage("EnableController", false);
+
+            (tempController = sender.GetComponent<PlayerController>()).Suspend();
             itemBeingInspected = true;
             hoverable.enabled = false;
 
@@ -47,7 +49,7 @@ namespace Interactables.Inspection
 
         public void OnStopInteract(Transform sender)
         {
-            sender.SendMessage("EnableController", true);
+            tempController.Suspend(false);
             itemBeingInspected = false;
             hoverable.enabled = true;
             transform.DOMove(originalPosition, animTime);

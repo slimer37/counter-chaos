@@ -64,10 +64,10 @@ public class PlayerController : MonoBehaviour
     
     public void EnableLook(bool value) => canLook = value;
     
-    public void EnableController(bool value)
+    public void Suspend(bool value = true)
     {
-        EnableMovement(value);
-        EnableLook(value);
+        EnableMovement(!value);
+        EnableLook(!value);
     }
 
     void OnMove(InputValue val)
