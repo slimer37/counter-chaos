@@ -17,7 +17,7 @@ namespace Interactables.Laptop
         Transform mainCamera;
         Vector3 tempCameraPos;
         Quaternion tempCameraRot;
-        PlayerController.PlayerController tempController;
+        GameObject tempPlayer;
 
         bool animating;
 
@@ -46,7 +46,7 @@ namespace Interactables.Laptop
             
             AnimateCamera(tempCameraPos, tempCameraRot, () => {
                 controls.Disable();
-                tempController.enabled = true;
+                tempPlayer.SendMessage("EnableController", true);
                 hoverable.enabled = true;
             });
         }
@@ -56,9 +56,10 @@ namespace Interactables.Laptop
             if (animating || !hoverable.enabled) return;
 
             hoverable.enabled = false;
+
+            tempPlayer = sender.gameObject;
+            tempPlayer.SendMessage("EnableController", false);
             
-            tempController = sender.GetComponent<PlayerController.PlayerController>();
-            tempController.enabled = false;
             AnimateCamera(transform.TransformPoint(cameraPosition), Quaternion.LookRotation(-transform.forward),
                 () => {
                     controls.Enable();

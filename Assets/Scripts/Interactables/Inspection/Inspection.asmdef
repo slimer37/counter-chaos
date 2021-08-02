@@ -2,8 +2,7 @@
     "name": "Inspection",
     "rootNamespace": "",
     "references": [
-        "GUID:11f3352786a03014da4f46f23c9d7b7f",
-        "GUID:3dd278bd875114e4ba257569963e2e15"
+        "GUID:11f3352786a03014da4f46f23c9d7b7f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

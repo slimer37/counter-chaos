@@ -49,15 +49,30 @@ public class PlayerController : MonoBehaviour
     bool canMove = true;
     bool canLook = true;
 
-    void OnDisable() => bobTween?.Kill();
-    void OnEnable() => UpdateBobbing();
-
-    void EnableMovement(bool value) => canMove = value;
-    void EnableLook(bool value) => canLook = value;
+    public void EnableMovement(bool value)
+    {
+        canMove = value;
+        if (canMove)
+            UpdateBobbing();
+        else
+        {
+            bobTween?.Kill();
+            if (isSprinting)
+                sprintTransition.PlayBackwards();
+        }
+    }
+    
+    public void EnableLook(bool value) => canLook = value;
+    
+    public void EnableController(bool value)
+    {
+        EnableMovement(value);
+        EnableLook(value);
+    }
 
     void OnMove(InputValue val)
     {
-        if (!enabled) return;
+        if (!enabled || !canMove) return;
         
         var moveInput = val.Get<Vector2>();
         moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);

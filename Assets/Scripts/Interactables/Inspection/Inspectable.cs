@@ -36,7 +36,7 @@ namespace Interactables.Inspection
         {
             if (!CanInteract()) return;
             
-            sender.GetComponent<PlayerController.PlayerController>().enabled = false;
+            sender.SendMessage("EnableController", false);
             itemBeingInspected = true;
             hoverable.enabled = false;
 
@@ -47,7 +47,7 @@ namespace Interactables.Inspection
 
         public void OnStopInteract(Transform sender)
         {
-            sender.GetComponent<PlayerController.PlayerController>().enabled = true;
+            sender.SendMessage("EnableController", true);
             itemBeingInspected = false;
             hoverable.enabled = true;
             transform.DOMove(originalPosition, animTime);

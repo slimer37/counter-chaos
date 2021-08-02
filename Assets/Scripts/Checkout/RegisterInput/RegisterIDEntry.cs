@@ -12,7 +12,6 @@ namespace Checkout.RegisterInput
         [SerializeField] UnityEvent onSubmitInput;
 
         bool enteringID;
-        PlayerController.PlayerController playerController;
 
         void InputID(char c)
         {
@@ -46,22 +45,13 @@ namespace Checkout.RegisterInput
             hoverable.enabled = false;
         }
 
-        public void OnInteract(Transform sender)
+        public void OnInteract(Transform sender) => SetEntering(sender, true);
+        public void OnStopInteract(Transform sender) => SetEntering(sender, false);
+
+        void SetEntering(Transform sender, bool value)
         {
-            enteringID = true;
-        
-            playerController = sender.GetComponent<PlayerController.PlayerController>();
-            playerController.enabled = false;
-        }
-    
-        public void OnStopInteract(Transform sender)
-        {
-            if (!playerController) return;
-        
-            enteringID = false;
-        
-            playerController.enabled = true;
-            playerController = null;
+            enteringID = value;
+            sender.SendMessage("EnableController", !value);
         }
     }
 }
