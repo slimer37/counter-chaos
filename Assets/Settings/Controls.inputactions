@@ -76,6 +76,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Slow",
+                    "type": "Value",
+                    "id": "d95a6736-77a5-4669-affb-04037761138d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -219,6 +227,17 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ddba0cc3-c592-4920-8ee4-6f5b78dfc7b3",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Slow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -805,6 +805,7 @@ MonoBehaviour:
   characterController: {fileID: 235475065}
   walkSpeed: 5
   sprintSpeed: 8.5
+  slowSpeed: 0.5
   transitionTime: 0.5
   sprintFov: 70
   transitionEase: 1

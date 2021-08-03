@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
+    [SerializeField] float slowSpeed;
     [SerializeField] float transitionTime;
     [SerializeField] float sprintFov;
     [SerializeField] Ease transitionEase;
@@ -32,11 +33,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Ease bobEase;
 
     float originalCamY;
+    float originalFov;
     Tween bobTween;
     Tween returnTween;
+    Tween fovTween;
 
     Sequence sprintTransition;
     bool isSprinting;
+    bool isSlow;
     float currentSpeed;
 
     float jumpTime;
@@ -84,6 +88,7 @@ public class PlayerController : MonoBehaviour
     {
         var wasBobbing = bobTween != null && bobTween.active && bobTween.IsPlaying();
         var isBobbing = moveVector.x != 0 || moveVector.z != 0;
+        if (isSlow) isBobbing = false;
 
         if (wasBobbing == isBobbing) return;
         
@@ -119,6 +124,7 @@ public class PlayerController : MonoBehaviour
     {
         camRot = cam.transform.localEulerAngles;
         originalCamY = cam.transform.localPosition.y;
+        originalFov = cam.fieldOfView;
         currentSpeed = walkSpeed;
         
         Cursor.visible = false;
@@ -134,6 +140,18 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnDestroy() => sprintTransition.Kill();
+
+    void OnSlow(InputValue val)
+    {
+        isSlow = val.isPressed;
+        currentSpeed = isSlow ? slowSpeed : walkSpeed;
+        UpdateBobbing();
+
+        if (isSlow && isSprinting)
+            fovTween = cam.DOFieldOfView(originalFov, transitionTime);
+        else if (!isSlow)
+            fovTween?.Kill();
+    }
 
     void Update()
     {
@@ -160,7 +178,7 @@ public class PlayerController : MonoBehaviour
         
         // Sprinting
         
-        if (canMove)
+        if (canMove && !isSlow)
         {
             if (moveVector.z > 0)
             {

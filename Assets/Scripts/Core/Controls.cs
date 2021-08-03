@@ -91,6 +91,14 @@ namespace Core
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Slow"",
+                    ""type"": ""Value"",
+                    ""id"": ""d95a6736-77a5-4669-affb-04037761138d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -236,6 +244,17 @@ namespace Core
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddba0cc3-c592-4920-8ee4-6f5b78dfc7b3"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Slow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -297,6 +316,7 @@ namespace Core
             m_Gameplay_Toss = m_Gameplay.FindAction("Toss", throwIfNotFound: true);
             m_Gameplay_Rotate = m_Gameplay.FindAction("Rotate", throwIfNotFound: true);
             m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
+            m_Gameplay_Slow = m_Gameplay.FindAction("Slow", throwIfNotFound: true);
             // Menu
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
@@ -358,6 +378,7 @@ namespace Core
         private readonly InputAction m_Gameplay_Toss;
         private readonly InputAction m_Gameplay_Rotate;
         private readonly InputAction m_Gameplay_Jump;
+        private readonly InputAction m_Gameplay_Slow;
         public struct GameplayActions
         {
             private @Controls m_Wrapper;
@@ -371,6 +392,7 @@ namespace Core
             public InputAction @Toss => m_Wrapper.m_Gameplay_Toss;
             public InputAction @Rotate => m_Wrapper.m_Gameplay_Rotate;
             public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
+            public InputAction @Slow => m_Wrapper.m_Gameplay_Slow;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -407,6 +429,9 @@ namespace Core
                     @Jump.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
                     @Jump.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
                     @Jump.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                    @Slow.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlow;
+                    @Slow.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlow;
+                    @Slow.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlow;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -438,6 +463,9 @@ namespace Core
                     @Jump.started += instance.OnJump;
                     @Jump.performed += instance.OnJump;
                     @Jump.canceled += instance.OnJump;
+                    @Slow.started += instance.OnSlow;
+                    @Slow.performed += instance.OnSlow;
+                    @Slow.canceled += instance.OnSlow;
                 }
             }
         }
@@ -495,6 +523,7 @@ namespace Core
             void OnToss(InputAction.CallbackContext context);
             void OnRotate(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnSlow(InputAction.CallbackContext context);
         }
         public interface IMenuActions
         {
