@@ -9,6 +9,9 @@ namespace Products
 
         BarcodeDisplay currentBarcodeDisplay;
 
+        void OnEnable() => ProductManager.RegisterProduct(this);
+        void OnDisable() => ProductManager.DeregisterProduct(this);
+
         void Awake()
         {
             if (!CompareTag("Product"))

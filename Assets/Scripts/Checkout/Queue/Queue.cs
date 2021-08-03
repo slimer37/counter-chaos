@@ -8,8 +8,10 @@ namespace Checkout
     {
         [SerializeField, Min(1)] int limit = 1;
         [SerializeField] Transform itemDropTransform;
+        [SerializeField] Transform itemDropStandPosTransform;
 
         public Vector3 ItemDropZone => itemDropTransform.position;
+        public Vector3 ItemDropStandPos => itemDropStandPosTransform.position;
         
         public int NumCustomersInLine { get; private set; }
 
