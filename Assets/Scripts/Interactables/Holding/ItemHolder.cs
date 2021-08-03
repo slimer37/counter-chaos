@@ -40,6 +40,8 @@ namespace Interactables.Holding
 
         public bool IsHoldingItem => heldItem;
         public Pickuppable HeldItem => heldItem;
+
+        PlayerController controller;
         
         Pickuppable heldItem;
         bool isHoldingProduct;
@@ -65,6 +67,8 @@ namespace Interactables.Holding
             Gizmos.DrawCube(transform.TransformPoint(defaultHoldingPosition), Vector3.one * 0.25f);
         }
 
+        void Awake() => controller = GetComponent<PlayerController>();
+        
         public Pickuppable TakeFrom()
         {
             if (!heldItem) throw new NullReferenceException("TakeFrom called without a held item.");
@@ -101,7 +105,8 @@ namespace Interactables.Holding
         void OnRotate(InputValue value)
         {
             isRotating = value.isPressed;
-            SendMessage("EnableLook", !isRotating);
+            if (!isHoldingDrop) return;
+            controller.EnableLook(!isRotating);
         }
 
         void MoveAndRotateHeldItem(Vector3 position, Quaternion rotation, float time)
@@ -131,7 +136,8 @@ namespace Interactables.Holding
             {
                 isHoldingDrop = false;
                 SetProductTag(false);
-                SendMessage("EnableLook", true);
+                
+                controller.EnableLook(true);
 
                 if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
                     ReturnItemToHolding();
