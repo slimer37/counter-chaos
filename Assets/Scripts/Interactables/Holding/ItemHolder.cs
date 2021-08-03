@@ -122,6 +122,7 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
+                SetProductTag(true);
                 heldItem.transform.localRotation = dropOrThrowRotation;
                 heldItem.transform.DOKill();
             }
@@ -129,6 +130,7 @@ namespace Interactables.Holding
             else if (isHoldingDrop)
             {
                 isHoldingDrop = false;
+                SetProductTag(false);
                 SendMessage("EnableLook", true);
 
                 if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
@@ -136,8 +138,6 @@ namespace Interactables.Holding
                 else
                     Drop(false);
             }
-
-            SetProductTag(isHoldingDrop);
         }
         
         void OnToss(InputValue value)
