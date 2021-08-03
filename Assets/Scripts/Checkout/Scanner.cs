@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Products;
 
@@ -9,6 +10,11 @@ namespace Checkout
         [SerializeField] LayerMask raycastMask;
         [SerializeField] Vector3 laserDirection = Vector3.up;
         [SerializeField] float maxDistance = 0.5f;
+        
+        [Header("Flash")]
+        [SerializeField] Light scanLight;
+        [SerializeField] float scanIntensityAdd;
+        [SerializeField, Min(0.01f)] float blinkTime = 0.1f;
 
         public event Action<ProductIdentifier> OnScan;
 
@@ -28,6 +34,16 @@ namespace Checkout
             lastScanned = scanned;
             if (scanned.TryGetComponent(out ProductIdentifier productIdentifier))
                 OnScan?.Invoke(productIdentifier);
+            
+            StopAllCoroutines();
+            StartCoroutine(BlinkLight());
+        }
+
+        IEnumerator BlinkLight()
+        {
+            scanLight.intensity += scanIntensityAdd;
+            yield return new WaitForSeconds(blinkTime);
+            scanLight.intensity -= scanIntensityAdd;
         }
 
         void FixedUpdate()

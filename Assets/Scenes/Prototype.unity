@@ -4838,6 +4838,9 @@ MonoBehaviour:
     m_Bits: 192
   laserDirection: {x: 0, y: 1, z: 0}
   maxDistance: 0.2
+  scanLight: {fileID: 1633417213}
+  scanIntensityAdd: -0.9
+  blinkTime: 0.1
 --- !u!1 &1773647516 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 92b559cb0fbfa1f4182ff4c6fe1fd3f5, type: 3}
