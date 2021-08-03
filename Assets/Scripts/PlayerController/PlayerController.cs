@@ -76,10 +76,12 @@ public class PlayerController : MonoBehaviour
 
     void OnMove(InputValue val)
     {
-        if (!enabled || !canMove) return;
+        if (!enabled) return;
         
         var moveInput = val.Get<Vector2>();
         moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);
+
+        if (!canMove) return;
         
         UpdateBobbing();
     }
@@ -164,8 +166,9 @@ public class PlayerController : MonoBehaviour
         
         // Moving
 
-        if (canMove)
-            characterController.Move(currentSpeed * Time.deltaTime * body.TransformDirection(moveVector));
+        var moveAmount = canMove ? body.TransformDirection(moveVector) : moveVector.y * Vector3.up;
+        moveAmount.y /= currentSpeed;
+        characterController.Move(currentSpeed * Time.deltaTime * moveAmount);
         
         // Looking
         

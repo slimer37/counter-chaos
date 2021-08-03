@@ -859,9 +859,9 @@ MonoBehaviour:
   transitionTime: 0.5
   sprintFov: 70
   transitionEase: 1
-  jumpForce: 1.5
+  jumpForce: 7.5
   maxJumpTime: 0.1
-  gravity: 9.81
+  gravity: 49.05
   cam: {fileID: 1687258584}
   secondaryCam: {fileID: 1859453136}
   body: {fileID: 235475068}
