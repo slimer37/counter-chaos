@@ -15,6 +15,7 @@ namespace Checkout
         [SerializeField] TextMeshPro screenText;
         [SerializeField] TextMeshPro bottomText;
         [SerializeField] Scanner scanner;
+        [SerializeField] Queue queue;
         [SerializeField] float headerSize;
 
         [Header("Transaction Mode")]
@@ -111,6 +112,12 @@ namespace Checkout
         
         public void ToggleInquireMode() => ActivateMode(Mode.Inquiry);
         public void ToggleEntryMode() => ActivateMode(Mode.Entry);
+
+        public void TotalOrder()
+        {
+            ClearTransaction();
+            queue.ServeCustomer();
+        }
         
         void ActivateMode(Mode newMode)
         {

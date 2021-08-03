@@ -4,7 +4,8 @@
     "references": [
         "Products",
         "Unity.TextMeshPro",
-        "Core"
+        "Core",
+        "Queue"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
