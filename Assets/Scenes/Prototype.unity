@@ -4042,7 +4042,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967041
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
@@ -13489,6 +13489,7 @@ MonoBehaviour:
   holdingPosition: {x: 0.18, y: 0.88, z: 0.28}
   holdAnimDuration: 1
   dropSpeed: 1
+  dropHeight: 0.5
 --- !u!136 &4078748919487337762
 CapsuleCollider:
   m_ObjectHideFlags: 0
