@@ -21,6 +21,7 @@ namespace Customers
         ProductInfo requestedProduct;
         
         static Transform[] finishPoints;
+        static readonly int Speed = Animator.StringToHash("speed");
 
         [RuntimeInitializeOnLoadMethod]
         static void InitFinishPoints()
@@ -33,7 +34,7 @@ namespace Customers
 
         Vector3 PickFinish() => finishPoints[Random.Range(0, finishPoints.Length)].position;
 
-        void Update() => animator.speed = agent.velocity.magnitude / dampenSpeed;
+        void Update() => animator.SetFloat(Speed, agent.velocity.magnitude / dampenSpeed);
 
         IEnumerator Start()
         {
