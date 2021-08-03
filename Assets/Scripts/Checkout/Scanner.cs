@@ -34,7 +34,7 @@ namespace Checkout
         {
             if (Physics.Raycast(scanRay, out var hit, maxDistance, raycastMask))
             {
-                if (lastScanned == hit.transform) return;
+                if (!hit.transform.CompareTag("Product") || lastScanned == hit.transform) return;
                 Scan(hit.transform);
             }
             else

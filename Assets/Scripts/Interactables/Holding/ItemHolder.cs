@@ -42,6 +42,7 @@ namespace Interactables.Holding
         public Pickuppable HeldItem => heldItem;
         
         Pickuppable heldItem;
+        bool isHoldingProduct;
         Vector3 holdingPosition;
         Quaternion holdingRotation;
         readonly Quaternion dropOrThrowRotation = Quaternion.LookRotation(Vector3.back);
@@ -55,6 +56,8 @@ namespace Interactables.Holding
         float holdTime;
 
         readonly Collider[] obstacleResults = new Collider[1];
+        const string HeldObjectTag = "Untagged";
+        const string ProductTag = "Product";
 
         void OnDrawGizmosSelected()
         {
@@ -79,6 +82,11 @@ namespace Interactables.Holding
             holdingRotation = Quaternion.Euler(pickuppable.OverrideRotation ?? defaultHoldingRotation);
             pickuppable.Setup(transform);
             heldItem = pickuppable;
+
+            isHoldingProduct = heldItem.CompareTag("Product");
+
+            if (isHoldingProduct)
+                heldItem.tag = HeldObjectTag;
             
             var go = heldItem.gameObject;
             tempLayer = go.layer;
@@ -128,6 +136,8 @@ namespace Interactables.Holding
                 else
                     Drop(false);
             }
+
+            SetProductTag(isHoldingDrop);
         }
         
         void OnToss(InputValue value)
@@ -163,6 +173,12 @@ namespace Interactables.Holding
                 heldItem.IsIntersecting(tossObstacleMask, obstacleResults)
                 || Physics.Raycast(GetCameraRay(), out var hit, tossFromPosition.magnitude, cameraBlockRaycastMask)
                 && hit.transform != heldItem.transform;
+        }
+
+        void SetProductTag(bool condition)
+        {
+            if (!isHoldingProduct) return;
+            heldItem.tag = condition ? ProductTag : HeldObjectTag;
         }
 
         Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -217,6 +233,7 @@ namespace Interactables.Holding
             heldItem.transform.DOKill();
             
             heldItem.gameObject.layer = tempLayer;
+            SetProductTag(true);
             
             foreach (Transform child in heldItem.transform)
                 child.gameObject.layer = tempLayer;
