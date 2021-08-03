@@ -115,6 +115,7 @@ namespace Checkout
 
         public void TotalOrder()
         {
+            if (queue.NumCustomersInLine == 0) return;
             ClearTransaction();
             queue.ServeCustomer();
         }

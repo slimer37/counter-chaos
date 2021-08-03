@@ -49,6 +49,7 @@ namespace Checkout
 
         public void ServeCustomer()
         {
+            if (NumCustomersInLine == 0) throw new InvalidOperationException("ServeCustomer called with no customers in queue.");
             OnCustomerServed?.Invoke();
             NumCustomersInLine--;
         }
