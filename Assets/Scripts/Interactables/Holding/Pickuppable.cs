@@ -72,7 +72,7 @@ namespace Interactables.Holding
                 Setup(sender);
         }
 
-        internal void Drop() => Setup(null);
+        public void Drop() => Setup(null);
 
         internal void Toss(Vector3 direction, float force)
         {

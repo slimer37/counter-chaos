@@ -2,7 +2,8 @@
     "name": "Customers",
     "rootNamespace": "",
     "references": [
-        "GUID:6f504e33be78198458fb2d6c40b8862a"
+        "GUID:6f504e33be78198458fb2d6c40b8862a",
+        "GUID:0e7c2fd333406e9458aa93ad427be318"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

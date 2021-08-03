@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Interactables.Holding;
 using UnityEngine;
@@ -8,6 +9,9 @@ namespace Customers
     {
         [SerializeField] Vector3 holdingPosition;
         [SerializeField] float holdAnimDuration;
+        [SerializeField, Min(0.01f)] float dropSpeed = 1;
+
+        Pickuppable heldItem;
         
         void OnDrawGizmosSelected()
         {
@@ -17,8 +21,17 @@ namespace Customers
 
         internal YieldInstruction Pickup(Pickuppable pickuppable)
         {
-            pickuppable.OnInteract(transform);
+            (heldItem = pickuppable).OnInteract(transform);
             return pickuppable.transform.DOLocalMove(holdingPosition, holdAnimDuration).WaitForCompletion();
+        }
+
+        internal YieldInstruction Drop(Vector3 position)
+        {
+            if (!heldItem) throw new Exception("Drop called with no held item.");
+            var temp = heldItem;
+            position.y += heldItem.VerticalExtent;
+            heldItem = null;
+            return temp.transform.DOMove(position, dropSpeed).SetSpeedBased().OnComplete(temp.Drop).WaitForCompletion();
         }
     }
 }
