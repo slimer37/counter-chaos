@@ -469,6 +469,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  setChildMaterial: 0
+  shineOffset: 0.5
+  shineSpeed: 16
+  shineWidth: 1.5
 --- !u!64 &187696982
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1360,6 +1364,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  setChildMaterial: 1
+  shineOffset: 0
+  shineSpeed: 0
+  shineWidth: 0
 --- !u!65 &363460330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1645,6 +1653,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  setChildMaterial: 1
+  shineOffset: 0
+  shineSpeed: 0
+  shineWidth: 0
 --- !u!114 &416887236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4380,6 +4392,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  setChildMaterial: 1
+  shineOffset: 0
+  shineSpeed: 0
+  shineWidth: 0
 --- !u!114 &1348471117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5882,6 +5898,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  setChildMaterial: 1
+  shineOffset: 0
+  shineSpeed: 0
+  shineWidth: 0
 --- !u!1 &1859453135
 GameObject:
   m_ObjectHideFlags: 0

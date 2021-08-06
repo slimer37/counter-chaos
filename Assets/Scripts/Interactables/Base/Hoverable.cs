@@ -12,13 +12,20 @@ namespace Interactables.Base
 
         public Func<Transform, bool> OnAttemptHover;
         
+        [SerializeField] bool setChildMaterial = true;
+        [SerializeField] float shineOffset;
+        [SerializeField, Min(0)] float shineSpeed;
+        [SerializeField, Min(0)] float shineWidth;
         IconHandler tempIconHandler;
         Renderer[] renderers;
         bool hoverMaterialIsSet;
         
         readonly Dictionary<Type, object> cachedHandlers = new Dictionary<Type, object>();
         static Material hoveredMaterial;
+        
         static readonly int StartTime = Shader.PropertyToID("_StartTime");
+        static readonly int Speed = Shader.PropertyToID("_Speed");
+        static readonly int Width = Shader.PropertyToID("_Width");
 
         [RuntimeInitializeOnLoadMethod]
         static void Init()
@@ -28,7 +35,8 @@ namespace Interactables.Base
                 throw new Exception("Couldn't find a hovered material in Resources/Materials. (Looked for Hovered.mat)");
         }
 
-        void Awake() => renderers = GetComponentsInChildren<Renderer>();
+        void Awake() => renderers = setChildMaterial ? GetComponentsInChildren<Renderer>()
+            : new [] { GetComponent<Renderer>() };
 
         public THandler[] GetOnce<THandler>()
         {
@@ -83,13 +91,17 @@ namespace Interactables.Base
             foreach (var rend in renderers)
             {
                 var matList = rend.materials.ToList();
-                if (value)
-                {
-                    hoveredMaterial.SetFloat(StartTime, Time.time);
-                    matList.Add(hoveredMaterial);
-                }
+                if (value) matList.Add(hoveredMaterial);
                 else matList.RemoveAt(matList.Count - 1);
                 rend.materials = matList.ToArray();
+                
+                if (value)
+                {
+                    var instance = rend.materials[rend.materials.Length - 1];
+                    instance.SetFloat(StartTime, Time.time + shineOffset);
+                    if (shineSpeed > 0) instance.SetFloat(Speed, shineSpeed);
+                    if (shineWidth > 0) instance.SetFloat(Width, shineWidth);
+                }
             }
         }
     }
