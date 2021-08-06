@@ -18,6 +18,7 @@ namespace Interactables.Base
         
         readonly Dictionary<Type, object> cachedHandlers = new Dictionary<Type, object>();
         static Material hoveredMaterial;
+        static readonly int StartTime = Shader.PropertyToID("_StartTime");
 
         [RuntimeInitializeOnLoadMethod]
         static void Init()
@@ -81,10 +82,14 @@ namespace Interactables.Base
             hoverMaterialIsSet = value;
             foreach (var rend in renderers)
             {
-                var matList = rend.sharedMaterials.ToList();
-                if (value) matList.Add(hoveredMaterial);
+                var matList = rend.materials.ToList();
+                if (value)
+                {
+                    hoveredMaterial.SetFloat(StartTime, Time.time);
+                    matList.Add(hoveredMaterial);
+                }
                 else matList.RemoveAt(matList.Count - 1);
-                rend.sharedMaterials = matList.ToArray();
+                rend.materials = matList.ToArray();
             }
         }
     }
