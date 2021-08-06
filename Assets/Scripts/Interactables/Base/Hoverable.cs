@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Interactables.Base
@@ -12,8 +13,21 @@ namespace Interactables.Base
         public Func<Transform, bool> OnAttemptHover;
         
         IconHandler tempIconHandler;
+        Renderer[] renderers;
+        bool hoverMaterialIsSet;
         
         readonly Dictionary<Type, object> cachedHandlers = new Dictionary<Type, object>();
+        static Material hoveredMaterial;
+
+        [RuntimeInitializeOnLoadMethod]
+        static void Init()
+        {
+            hoveredMaterial = Resources.Load<Material>("Materials/Hovered");
+            if (!hoveredMaterial)
+                throw new Exception("Couldn't find a hovered material in Resources/Materials. (Looked for Hovered.mat)");
+        }
+
+        void Awake() => renderers = GetComponentsInChildren<Renderer>();
 
         public THandler[] GetOnce<THandler>()
         {
@@ -39,6 +53,7 @@ namespace Interactables.Base
             {
                 tempIconHandler = iconHandler;
                 iconHandler.ShowIcon(icon);
+                SetHoveredMaterial(true);
             }
             else
                 HideIcon();
@@ -57,6 +72,20 @@ namespace Interactables.Base
             if (!tempIconHandler) return;
             tempIconHandler.HideIcon();
             tempIconHandler = null;
+            SetHoveredMaterial(false);
+        }
+
+        void SetHoveredMaterial(bool value)
+        {
+            if (hoverMaterialIsSet == value) return;
+            hoverMaterialIsSet = value;
+            foreach (var rend in renderers)
+            {
+                var matList = rend.sharedMaterials.ToList();
+                if (value) matList.Add(hoveredMaterial);
+                else matList.RemoveAt(matList.Count - 1);
+                rend.sharedMaterials = matList.ToArray();
+            }
         }
     }
 }
