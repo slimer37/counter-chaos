@@ -13,7 +13,7 @@ namespace UI
         struct Credit
         {
             public string role;
-            public string name;
+            [TextArea] public string name;
         }
         
         [SerializeField] CanvasGroup fadeGroup;
