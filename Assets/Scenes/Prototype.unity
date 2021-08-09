@@ -469,10 +469,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
-  setChildMaterial: 0
-  shineOffset: 0.5
-  shineSpeed: 16
-  shineWidth: 1.5
 --- !u!64 &187696982
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -635,7 +631,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_TargetDisplay: 0
 --- !u!224 &220197183
 RectTransform:
@@ -1364,10 +1360,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
-  setChildMaterial: 1
-  shineOffset: 0
-  shineSpeed: 0
-  shineWidth: 0
 --- !u!65 &363460330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1417,7 +1409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &374575474
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1497,7 +1489,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!225 &374575478
 CanvasGroup:
@@ -1653,10 +1645,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
-  setChildMaterial: 1
-  shineOffset: 0
-  shineSpeed: 0
-  shineWidth: 0
 --- !u!114 &416887236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2704,7 +2692,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30058
+  m_Name: pb_Mesh37804
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4392,10 +4380,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
-  setChildMaterial: 1
-  shineOffset: 0
-  shineSpeed: 0
-  shineWidth: 0
 --- !u!114 &1348471117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5089,7 +5073,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &1518535234
 RectTransform:
@@ -5898,10 +5882,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
-  setChildMaterial: 1
-  shineOffset: 0
-  shineSpeed: 0
-  shineWidth: 0
 --- !u!1 &1859453135
 GameObject:
   m_ObjectHideFlags: 0
