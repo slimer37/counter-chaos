@@ -872,7 +872,8 @@ MonoBehaviour:
   sensitivity: 80
   rotLimit: 85
   bobAmount: 0.08
-  bobTime: 0.15
+  bobTime: 0.2
+  sprintBobTimeScale: 1.35
   bobResetSpeed: 1
   bobEase: 4
 --- !u!114 &235475064

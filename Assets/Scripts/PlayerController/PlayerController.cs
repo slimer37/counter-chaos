@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [Header("Bobbing")]
     [SerializeField] float bobAmount;
     [SerializeField] float bobTime;
+    [SerializeField] float sprintBobTimeScale;
     [SerializeField] float bobResetSpeed;
     [SerializeField] Ease bobEase;
 
@@ -105,6 +106,7 @@ public class PlayerController : MonoBehaviour
         if (!isBobbing) return;
         bobTween = cam.transform.DOLocalMoveY(originalCamY - bobAmount, bobTime)
             .SetDelay(resetDuration).SetLoops(-1, LoopType.Yoyo).SetEase(bobEase);
+        if (isSprinting) bobTween.timeScale = sprintBobTimeScale;
     }
 
     void OnJump(InputValue val)
@@ -186,6 +188,8 @@ public class PlayerController : MonoBehaviour
             if (moveVector.z > 0)
             {
                 if (sprintTransition.IsPlaying() && isSprinting) return;
+
+                if (bobTween.IsActive()) bobTween.timeScale = isSprinting ? sprintBobTimeScale : 1;
 
                 if (isSprinting)
                     sprintTransition.PlayForward();
