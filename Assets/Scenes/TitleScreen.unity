@@ -1258,13 +1258,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Counter Chaos - Qty: 1</b>
+  m_text: '<size=120%><b>Counter Chaos - Qty: 1</b></size>
+
+    ---------------
 
 
 
 
-    <size=80%><b>Idea | Programming
-    | Modeling</b></size>
+    <size=80%><i>Concept
+    | Programming | Modeling</i></size>
+
 
     Alfred
 
@@ -1272,28 +1275,47 @@ MonoBehaviour:
 
 
 
-    <size=80%><b>Texturing</b></size>
-
-    Alfred
-    and Adrian
+    <size=80%><i>Concept</i></size>
 
 
-
-
-
-    <size=80%><b>Testing</b></size>
-
-    Julian and Tatem
+    Adrian
 
 
 
 
 
-    <b>Thanks
-    for playing!</b>'
+    <size=80%><i>Testing</i></size>
+
+
+    Julian
+    and Tatem
+
+
+
+
+
+    <size=80%><i>Outside Assets</i></size>
+
+
+    <size=80%>Quick
+    Outline:</size> Chris Nolet
+
+    <size=80%>DOTween:</size> Daniele Giardini
+
+
+
+
+
+    <size=70%><i>Made
+    with Unity and Blender</i></size>
+
+
+
+
+    <size=120%><b>Thanks for playing!</b>'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 578b7932ee203b74faf05896fdfd0bad, type: 2}
+  m_sharedMaterial: {fileID: -8726224954557764152, guid: 578b7932ee203b74faf05896fdfd0bad, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1942,21 +1964,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeGroup: {fileID: 1615607793}
   creditsText: {fileID: 1106549048}
-  scrollTime: 15
+  scrollTime: 30
   fadeTime: 1
   ease: 1
-  creditFormat: <size=80%><b>{0}</b></size>\n{1}\n\n\n\n
-  beginningText: '<b>Counter Chaos - Qty: 1</b>
+  creditFormat: <size=80%><i>{0}</i></size>\n\n{1}\n\n\n\n
+  beginningText: '<size=120%><b>Counter Chaos - Qty: 1</b></size>
+
+    ---------------
 
     \n\n'
   creditList:
-  - role: Idea | Programming | Modeling
+  - role: Concept | Programming | Modeling
     name: Alfred
-  - role: Texturing
-    name: Alfred and Adrian
+  - role: Concept
+    name: Adrian
   - role: Testing
     name: Julian and Tatem
-  endingText: <b>Thanks for playing!</b>
+  - role: Outside Assets
+    name: '<size=80%>Quick Outline:</size> Chris Nolet
+
+      <size=80%>DOTween:</size>
+      Daniele Giardini'
+  endingText: '<size=70%><i>Made with Unity and Blender</i></size>\n\n\n
+
+    <size=120%><b>Thanks
+    for playing!</b>'
 --- !u!225 &1615607793
 CanvasGroup:
   m_ObjectHideFlags: 0
