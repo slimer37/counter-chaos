@@ -13,6 +13,7 @@ namespace Products
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0) return;
             productInstances = new List<ProductIdentifier>();
             currentProductCollection = FindObjectOfType<ProductManager>().allProducts;
         }
