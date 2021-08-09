@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Plugins;
 using UnityEngine;
 
 namespace Interactables.Base
@@ -12,31 +12,23 @@ namespace Interactables.Base
 
         public Func<Transform, bool> OnAttemptHover;
         
-        [SerializeField] bool setChildMaterial = true;
-        [SerializeField] float shineOffset;
-        [SerializeField, Min(0)] float shineSpeed;
-        [SerializeField, Min(0)] float shineWidth;
         IconHandler tempIconHandler;
-        Renderer[] renderers;
-        bool hoverMaterialIsSet;
+        Outline outline;
         
         readonly Dictionary<Type, object> cachedHandlers = new Dictionary<Type, object>();
-        static Material hoveredMaterial;
+
+        float startHoverTime;
         
-        static readonly int StartTime = Shader.PropertyToID("_StartTime");
-        static readonly int Speed = Shader.PropertyToID("_Speed");
-        static readonly int Width = Shader.PropertyToID("_Width");
+        const float FlashSpeed = 1.5f;
 
-        [RuntimeInitializeOnLoadMethod]
-        static void Init()
+        void Awake()
         {
-            hoveredMaterial = Resources.Load<Material>("Materials/Hovered");
-            if (!hoveredMaterial)
-                throw new Exception("Couldn't find a hovered material in Resources/Materials. (Looked for Hovered.mat)");
+            outline = gameObject.AddComponent<Outline>();
+            outline.OutlineColor = Color.yellow;
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineWidth = 10;
+            outline.enabled = false;
         }
-
-        void Awake() => renderers = setChildMaterial ? GetComponentsInChildren<Renderer>()
-            : new [] { GetComponent<Renderer>() };
 
         public THandler[] GetOnce<THandler>()
         {
@@ -62,7 +54,13 @@ namespace Interactables.Base
             {
                 tempIconHandler = iconHandler;
                 iconHandler.ShowIcon(icon);
-                SetHoveredMaterial(true);
+                
+                if (!outline.enabled)
+                {
+                    startHoverTime = Time.time;
+                    SetOutlineAlpha(0);
+                    outline.enabled = true;
+                }
             }
             else
                 HideIcon();
@@ -81,28 +79,23 @@ namespace Interactables.Base
             if (!tempIconHandler) return;
             tempIconHandler.HideIcon();
             tempIconHandler = null;
-            SetHoveredMaterial(false);
+            outline.enabled = false;
         }
 
-        void SetHoveredMaterial(bool value)
+        void SetOutlineAlpha(float a)
         {
-            if (hoverMaterialIsSet == value) return;
-            hoverMaterialIsSet = value;
-            foreach (var rend in renderers)
-            {
-                var matList = rend.materials.ToList();
-                if (value) matList.Add(hoveredMaterial);
-                else matList.RemoveAt(matList.Count - 1);
-                rend.materials = matList.ToArray();
-                
-                if (value)
-                {
-                    var instance = rend.materials[rend.materials.Length - 1];
-                    instance.SetFloat(StartTime, Time.time + shineOffset);
-                    if (shineSpeed > 0) instance.SetFloat(Speed, shineSpeed);
-                    if (shineWidth > 0) instance.SetFloat(Width, shineWidth);
-                }
-            }
+            var color = outline.OutlineColor;
+            color.a = a;
+            outline.OutlineColor = color;
+        }
+
+        void Update()
+        {
+            if (!outline.enabled) return;
+
+            var t = (Time.time - startHoverTime) * FlashSpeed;
+            var a = -Mathf.Cos(t * 2 * Mathf.PI) / 2 + 0.5f;
+            SetOutlineAlpha(a);
         }
     }
 }
