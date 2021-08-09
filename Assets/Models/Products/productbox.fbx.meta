@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: 92b559cb0fbfa1f4182ff4c6fe1fd3f5
+guid: f914a226082eb4343b5f7fbde2e5aa0d
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Keyboard
-    second: {fileID: 2100000, guid: 1f815cb00f9d98b4e850af40b2cef84d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Laptop
-    second: {fileID: 2100000, guid: 1f815cb00f9d98b4e850af40b2cef84d, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -41,7 +31,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
