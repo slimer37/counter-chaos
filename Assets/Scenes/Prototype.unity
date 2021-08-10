@@ -1014,6 +1014,7 @@ MonoBehaviour:
   pickupTime: 0.4
   timeBetweenHoldPositions: 0.1
   heldObjectLayer: 7
+  droppingObjectLayer: 8
   rotationSpeed: 45
   flatSurfaceTolerance: 5
   tossObstacleMask:
@@ -1024,7 +1025,7 @@ MonoBehaviour:
     m_Bits: 193
   dropObstacleMask:
     serializedVersion: 2
-    m_Bits: 329
+    m_Bits: 73
   defaultDropPosition: {x: 0, y: 0, z: 1}
   dropReach: 3
   extraDropHeight: 0.01
@@ -5638,7 +5639,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5856,7 +5857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 320
   laserDirection: {x: 0, y: 1, z: 0}
   maxDistance: 0.2
   scanLight: {fileID: 1633417213}

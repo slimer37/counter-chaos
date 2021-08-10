@@ -15,6 +15,7 @@ namespace Interactables.Holding
         [SerializeField] float pickupTime;
         [SerializeField] float timeBetweenHoldPositions;
         [SerializeField, Layer] int heldObjectLayer;
+        [SerializeField, Layer] int droppingObjectLayer;
 
         [Header("Item Manipulation")]
         [SerializeField] float rotationSpeed;
@@ -44,7 +45,6 @@ namespace Interactables.Holding
         PlayerController controller;
         
         Pickuppable heldItem;
-        bool isHoldingProduct;
         Vector3 holdingPosition;
         Quaternion holdingRotation;
         readonly Quaternion dropOrThrowRotation = Quaternion.LookRotation(Vector3.back);
@@ -58,8 +58,6 @@ namespace Interactables.Holding
         float holdTime;
 
         readonly Collider[] obstacleResults = new Collider[1];
-        const string HeldObjectTag = "Untagged";
-        const string ProductTag = "Product";
 
         void OnDrawGizmosSelected()
         {
@@ -86,11 +84,6 @@ namespace Interactables.Holding
             holdingRotation = Quaternion.Euler(pickuppable.OverrideRotation ?? defaultHoldingRotation);
             pickuppable.Setup(transform);
             heldItem = pickuppable;
-
-            isHoldingProduct = heldItem.CompareTag("Product");
-
-            if (isHoldingProduct)
-                heldItem.tag = HeldObjectTag;
             
             var go = heldItem.gameObject;
             tempLayer = go.layer;
@@ -127,7 +120,7 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
-                SetProductTag(true);
+                heldItem.gameObject.layer = droppingObjectLayer;
                 heldItem.transform.localRotation = dropOrThrowRotation;
                 heldItem.transform.DOKill();
             }
@@ -135,8 +128,8 @@ namespace Interactables.Holding
             else if (isHoldingDrop)
             {
                 isHoldingDrop = false;
-                SetProductTag(false);
-                
+                heldItem.gameObject.layer = heldObjectLayer;
+
                 controller.EnableLook(true);
 
                 if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
@@ -179,12 +172,6 @@ namespace Interactables.Holding
                 heldItem.IsIntersecting(tossObstacleMask, obstacleResults)
                 || Physics.Raycast(GetCameraRay(), out var hit, tossFromPosition.magnitude, cameraBlockRaycastMask)
                 && hit.transform != heldItem.transform;
-        }
-
-        void SetProductTag(bool condition)
-        {
-            if (!isHoldingProduct) return;
-            heldItem.tag = condition ? ProductTag : HeldObjectTag;
         }
 
         Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -239,7 +226,6 @@ namespace Interactables.Holding
             heldItem.transform.DOKill();
             
             heldItem.gameObject.layer = tempLayer;
-            SetProductTag(true);
             
             foreach (Transform child in heldItem.transform)
                 child.gameObject.layer = tempLayer;
