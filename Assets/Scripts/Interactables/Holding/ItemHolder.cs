@@ -120,7 +120,7 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
-                heldItem.gameObject.layer = droppingObjectLayer;
+                SetHeldObjectLayers(droppingObjectLayer);
                 heldItem.transform.localRotation = dropOrThrowRotation;
                 heldItem.transform.DOKill();
             }
@@ -128,7 +128,7 @@ namespace Interactables.Holding
             else if (isHoldingDrop)
             {
                 isHoldingDrop = false;
-                heldItem.gameObject.layer = heldObjectLayer;
+                SetHeldObjectLayers(heldObjectLayer);
 
                 controller.EnableLook(true);
 
@@ -136,6 +136,13 @@ namespace Interactables.Holding
                     ReturnItemToHolding();
                 else
                     Drop(false);
+            }
+
+            void SetHeldObjectLayers(int layer)
+            {
+                heldItem.gameObject.layer = layer;
+                foreach (Transform child in heldItem.transform)
+                    child.gameObject.layer = layer;
             }
         }
         
