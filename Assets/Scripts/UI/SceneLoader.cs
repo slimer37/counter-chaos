@@ -35,13 +35,13 @@ namespace UI
 
         public static void Load(int i)
         {
-            DOTween.KillAll();
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             
             if (instance) instance.StartCoroutine(instance.LoadAsync(i));
             else
             {
+                DOTween.KillAll();
                 Debug.LogWarning("Couldn't find a SceneLoader instance. Loading normally...");
                 SceneManager.LoadScene(i);
             }
@@ -52,6 +52,7 @@ namespace UI
             Time.timeScale = 0;
             canvasGroup.blocksRaycasts = true;
             yield return canvasGroup.DOFade(1, fadeDuration).SetUpdate(true).WaitForCompletion();
+            DOTween.KillAll();
             
             var op = SceneManager.LoadSceneAsync(index);
             while (!op.isDone)
