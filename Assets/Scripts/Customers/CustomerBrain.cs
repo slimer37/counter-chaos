@@ -20,21 +20,9 @@ namespace Customers
         bool finishedTransaction;
         ProductInfo requestedProduct;
         
-        static Transform[] finishPoints;
         static readonly int Speed = Animator.StringToHash("speed");
 
-        [RuntimeInitializeOnLoadMethod]
-        static void InitFinishPoints()
-        {
-            var finishGOs = GameObject.FindGameObjectsWithTag("Finish");
-            finishPoints = new Transform[finishGOs.Length];
-            for (var i = 0; i < finishGOs.Length; i++)
-                finishPoints[i] = finishGOs[i].transform;
-        }
-
         void OnDestroy() => StopAllCoroutines();
-
-        Vector3 PickFinish() => finishPoints[Random.Range(0, finishPoints.Length)].position;
 
         void Update() => animator.SetFloat(Speed, agent.velocity.magnitude / dampenSpeed);
 
@@ -66,7 +54,7 @@ namespace Customers
             finishedTransaction = true;
             queue.OnCustomerServed -= OnServed;
             yield return new WaitUntil(() => holder.IsHoldingItem);
-            yield return MoveToward(PickFinish());
+            yield return MoveToward(Level.GetFinishPoint());
             Destroy(gameObject);
         }
 
