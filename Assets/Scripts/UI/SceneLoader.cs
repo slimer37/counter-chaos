@@ -35,19 +35,20 @@ namespace UI
 
         public static void Load(int i)
         {
+            DOTween.KillAll();
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            
             if (instance) instance.StartCoroutine(instance.LoadAsync(i));
             else
             {
                 Debug.LogWarning("Couldn't find a SceneLoader instance. Loading normally...");
-                DOTween.KillAll();
                 SceneManager.LoadScene(i);
             }
         }
 
         IEnumerator LoadAsync(int index)
         {
-            DOTween.KillAll();
-            
             canvasGroup.blocksRaycasts = true;
             yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
             
