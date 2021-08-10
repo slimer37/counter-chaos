@@ -49,6 +49,7 @@ namespace UI
 
         IEnumerator LoadAsync(int index)
         {
+            loadingBar.value = 0;
             Time.timeScale = 0;
             canvasGroup.blocksRaycasts = true;
             yield return canvasGroup.DOFade(1, fadeDuration).SetUpdate(true).WaitForCompletion();
