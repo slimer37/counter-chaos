@@ -39,6 +39,7 @@ namespace UI
             else
             {
                 Debug.LogWarning("Couldn't find a SceneLoader instance. Loading normally...");
+                DOTween.KillAll();
                 SceneManager.LoadScene(i);
             }
         }
