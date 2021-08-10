@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Camera cam;
     [SerializeField] Camera secondaryCam;
     [SerializeField] Transform body;
-    [SerializeField] float sensitivity;
+    public float sensitivity;
     [SerializeField] float rotLimit;
 
     [Header("Bobbing")]
