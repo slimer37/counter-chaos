@@ -17,21 +17,19 @@ namespace Checkout
 
         public event Action OnCustomerServed;
 
-        static List<Queue> allQueues;
+        static readonly List<Queue> AllQueues = new List<Queue>();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void InitQueueList() => allQueues = new List<Queue>();
-
-        void Awake() => allQueues.Add(this);
+        void OnEnable() => AllQueues.Add(this);
+        void OnDisable() => AllQueues.Remove(this);
 
         public static Queue FindClosestQueue(Vector3 closeTo)
         {
-            if (allQueues.Count == 0) throw new Exception("No queues found.");
+            if (AllQueues.Count == 0) throw new Exception("No queues found.");
             
-            var closestDist = SqrDistance(allQueues[0]);
-            var closestQueue = allQueues[0];
+            var closestDist = SqrDistance(AllQueues[0]);
+            var closestQueue = AllQueues[0];
             
-            foreach (var queue in allQueues)
+            foreach (var queue in AllQueues)
                 if (SqrDistance(queue) < closestDist)
                     closestQueue = queue;
 
