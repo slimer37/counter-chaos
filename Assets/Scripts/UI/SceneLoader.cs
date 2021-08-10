@@ -20,6 +20,12 @@ namespace UI
 
         void Awake()
         {
+            if (instance)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             instance = this;
             canvasGroup.gameObject.SetActive(true);
             canvasGroup.blocksRaycasts = false;
