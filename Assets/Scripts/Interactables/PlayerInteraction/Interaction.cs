@@ -10,6 +10,7 @@ namespace Interactables
     {
         [SerializeField] float reach;
         [SerializeField, Layer] int interactablesLayer;
+        [SerializeField] LayerMask inclusionMask;
         [SerializeField] new Camera camera;
         [SerializeField] IconHandler iconHandler;
 
@@ -44,7 +45,7 @@ namespace Interactables
 
         void Update()
         {
-            if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, reach))
+            if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, reach, inclusionMask))
             {
                 if (hit.transform.gameObject.layer != interactablesLayer)
                 {
