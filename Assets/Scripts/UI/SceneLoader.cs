@@ -49,8 +49,9 @@ namespace UI
 
         IEnumerator LoadAsync(int index)
         {
+            Time.timeScale = 0;
             canvasGroup.blocksRaycasts = true;
-            yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
+            yield return canvasGroup.DOFade(1, fadeDuration).SetUpdate(true).WaitForCompletion();
             
             var op = SceneManager.LoadSceneAsync(index);
             while (!op.isDone)
@@ -63,6 +64,7 @@ namespace UI
                 yield return null;
             }
             
+            Time.timeScale = 1;
             canvasGroup.blocksRaycasts = false;
             yield return canvasGroup.DOFade(0, fadeDuration).WaitForCompletion();
         }
