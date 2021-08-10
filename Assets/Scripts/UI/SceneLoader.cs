@@ -68,7 +68,7 @@ namespace UI
             
             Time.timeScale = 1;
             canvasGroup.blocksRaycasts = false;
-            yield return canvasGroup.DOFade(0, fadeDuration).WaitForCompletion();
+            yield return canvasGroup.DOFade(0, fadeDuration).SetUpdate(true).WaitForCompletion();
         }
     }
 }
