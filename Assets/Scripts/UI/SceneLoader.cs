@@ -49,7 +49,10 @@ namespace UI
 
         IEnumerator LoadAsync(int index)
         {
+            captionText.text = "";
+            percentageText.text = "0%";
             loadingBar.value = 0;
+            
             Time.timeScale = 0;
             canvasGroup.blocksRaycasts = true;
             yield return canvasGroup.DOFade(1, fadeDuration).SetUpdate(true).WaitForCompletion();
