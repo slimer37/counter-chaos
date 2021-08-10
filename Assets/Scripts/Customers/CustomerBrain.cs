@@ -32,6 +32,8 @@ namespace Customers
                 finishPoints[i] = finishGOs[i].transform;
         }
 
+        void OnDestroy() => StopAllCoroutines();
+
         Vector3 PickFinish() => finishPoints[Random.Range(0, finishPoints.Length)].position;
 
         void Update() => animator.SetFloat(Speed, agent.velocity.magnitude / dampenSpeed);
