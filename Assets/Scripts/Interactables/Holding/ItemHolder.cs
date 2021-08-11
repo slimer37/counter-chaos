@@ -85,13 +85,9 @@ namespace Interactables.Holding
             pickuppable.Setup(transform);
             heldItem = pickuppable;
             
-            var go = heldItem.gameObject;
-            tempLayer = go.layer;
+            tempLayer = heldItem.gameObject.layer;
             
-            go.layer = heldObjectLayer;
-            foreach (Transform child in heldItem.transform)
-                child.gameObject.layer = heldObjectLayer;
-            
+            SetHeldObjectLayers(heldObjectLayer);
             MoveAndRotateHeldItem(holdingPosition, holdingRotation, pickupTime);
         }
 
@@ -120,7 +116,6 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
-                SetHeldObjectLayers(droppingObjectLayer);
                 heldItem.transform.localRotation = dropOrThrowRotation;
                 heldItem.transform.DOKill();
             }
@@ -128,7 +123,6 @@ namespace Interactables.Holding
             else if (isHoldingDrop)
             {
                 isHoldingDrop = false;
-                SetHeldObjectLayers(heldObjectLayer);
 
                 controller.EnableLook(true);
 
@@ -137,13 +131,14 @@ namespace Interactables.Holding
                 else
                     Drop(false);
             }
-
-            void SetHeldObjectLayers(int layer)
-            {
-                heldItem.gameObject.layer = layer;
-                foreach (Transform child in heldItem.transform)
-                    child.gameObject.layer = layer;
-            }
+        }
+        
+        void SetHeldObjectLayers(int layer)
+        {
+            if (heldItem.gameObject.layer == layer) return;
+            heldItem.gameObject.layer = layer;
+            foreach (Transform child in heldItem.transform)
+                child.gameObject.layer = layer;
         }
         
         void OnToss(InputValue value)
@@ -203,6 +198,8 @@ namespace Interactables.Holding
                 
                 if (isRotating)
                     itemTransform.localEulerAngles += rotationDelta * Time.deltaTime * Vector3.up;
+
+                var onFreeSpot = false;
                 
                 if (Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask))
                 {
@@ -214,14 +211,15 @@ namespace Interactables.Holding
                         ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
                     
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
-                    
-                    if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
-                        SetDefaultDropPosition();
+
+                    if (!heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                        onFreeSpot = true;
                 }
-                else
-                    SetDefaultDropPosition();
                 
-                void SetDefaultDropPosition() => itemTransform.position = transform.TransformPoint(defaultDropPosition);
+                if (!onFreeSpot)
+                    itemTransform.position = transform.TransformPoint(defaultDropPosition);
+                
+                SetHeldObjectLayers(onFreeSpot ? droppingObjectLayer : heldObjectLayer);
             }
         }
 
@@ -232,10 +230,7 @@ namespace Interactables.Holding
             // Finish tweens if still in progress.
             heldItem.transform.DOKill();
             
-            heldItem.gameObject.layer = tempLayer;
-            
-            foreach (Transform child in heldItem.transform)
-                child.gameObject.layer = tempLayer;
+            SetHeldObjectLayers(tempLayer);
             
             if (addForce)
             {
