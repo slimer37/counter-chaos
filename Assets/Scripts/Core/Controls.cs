@@ -193,7 +193,7 @@ namespace Core
                 {
                     ""name"": """",
                     ""id"": ""21f76599-e0c7-4bb9-b9c1-b52ce0746fc8"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
@@ -215,7 +215,7 @@ namespace Core
                 {
                     ""name"": """",
                     ""id"": ""810094d7-7b87-4c95-952b-8c91f7f15f73"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
