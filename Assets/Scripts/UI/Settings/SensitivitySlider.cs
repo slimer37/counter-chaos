@@ -20,7 +20,5 @@ namespace UI.Settings
             PlayerPrefs.SetFloat("Sensitivity", value);
             controller.sensitivity = value;
         }
-
-        void OnDestroy() => PlayerPrefs.Save();
     }
 }
