@@ -186,6 +186,8 @@ namespace Interactables.Holding
 
         void Update()
         {
+            if (!heldItem) return;
+            
             if (isHoldingToss)
             {
                 holdTime += Time.deltaTime;
@@ -239,6 +241,9 @@ namespace Interactables.Holding
             }
             else
                 heldItem.Drop();
+            
+            isHoldingToss = false;
+            isHoldingDrop = false;
 
             heldItem = null;
         }
