@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] CharacterController characterController;
+
+    [Header("Animation")]
+    [SerializeField] Animator meshAnimator;
     
     [Header("Movement")]
     [SerializeField] float walkSpeed;
@@ -53,6 +56,8 @@ public class PlayerController : MonoBehaviour
 
     bool canMove = true;
     bool canLook = true;
+    
+    static readonly int Speed = Animator.StringToHash("speed");
 
     public void EnableMovement(bool value)
     {
@@ -171,6 +176,9 @@ public class PlayerController : MonoBehaviour
         var moveAmount = canMove ? body.TransformDirection(moveVector) : moveVector.y * Vector3.up;
         moveAmount.y /= currentSpeed;
         characterController.Move(currentSpeed * Time.deltaTime * moveAmount);
+        
+        moveAmount.y = 0;
+        meshAnimator.SetFloat(Speed, moveAmount.sqrMagnitude);
         
         // Looking
         
