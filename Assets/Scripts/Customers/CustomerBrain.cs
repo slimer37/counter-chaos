@@ -11,7 +11,6 @@ namespace Customers
     public class CustomerBrain : MonoBehaviour
     {
         [SerializeField] NavMeshAgent agent;
-        [SerializeField] float dampenSpeed;
         [SerializeField] float rotationSpeed;
         [SerializeField] Animator animator;
         [SerializeField] CustomerHold holder;
@@ -24,7 +23,7 @@ namespace Customers
 
         void OnDestroy() => StopAllCoroutines();
 
-        void Update() => animator.SetFloat(Speed, agent.velocity.magnitude / dampenSpeed);
+        void Update() => animator.SetFloat(Speed, agent.velocity.sqrMagnitude);
 
         IEnumerator Start()
         {
