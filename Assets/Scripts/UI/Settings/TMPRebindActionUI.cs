@@ -262,6 +262,8 @@ namespace UI.Settings
                 m_RebindOperation?.Dispose();
                 m_RebindOperation = null;
             }
+            
+            action.Disable();
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
@@ -278,6 +280,7 @@ namespace UI.Settings
                     {
                         m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
+                        action.Enable();
                         UpdateBindingDisplay();
                         CleanUp();
 
