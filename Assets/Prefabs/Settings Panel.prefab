@@ -1002,6 +1002,7 @@ GameObject:
   - component: {fileID: 1334423426500198640}
   - component: {fileID: 1334423426500198641}
   - component: {fileID: 1334423426500198654}
+  - component: {fileID: 2723367136731396805}
   m_Layer: 5
   m_Name: Save Button
   m_TagString: Untagged
@@ -1111,8 +1112,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334423425370538754}
-        m_TargetAssemblyTypeName: UI.Settings.ResolutionSetting, Settings
+      - m_Target: {fileID: 2723367136731396805}
+        m_TargetAssemblyTypeName: UI.Settings.PrefSaver, Settings
         m_MethodName: Save
         m_Mode: 1
         m_Arguments:
@@ -1123,6 +1124,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2723367136731396805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334423426500198652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca93ac6d30884e4ca389d474d6ac510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1334423426500893084
 GameObject:
   m_ObjectHideFlags: 0
