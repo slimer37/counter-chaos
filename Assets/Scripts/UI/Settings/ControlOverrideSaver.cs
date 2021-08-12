@@ -39,18 +39,12 @@ namespace UI.Settings
 		
             PlayerPrefs.SetString("Controls", JsonUtility.ToJson(bindingList));
         }
-
-        [RuntimeInitializeOnLoadMethod]
-        static void InitControlsAsset()
-        {
-            var controls = new Controls();
-            asset = controls.asset;
-            controls.Dispose();
-        }
         
         [RuntimeInitializeOnLoadMethod]
         static void Load()
         {
+            asset = Resources.Load<InputActionAsset>("Controls");
+            
             if (!PlayerPrefs.HasKey("Controls")) return;
 
             var bindingList = JsonUtility.FromJson<BindingList>(PlayerPrefs.GetString("Controls"));
