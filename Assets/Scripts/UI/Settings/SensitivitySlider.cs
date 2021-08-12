@@ -6,18 +6,24 @@ namespace UI.Settings
     public class SensitivitySlider : MonoBehaviour
     {
         [SerializeField] Slider slider;
-        [SerializeField] PlayerController controller;
+        
+        PlayerController controller;
         
         void Awake()
         {
-            controller.sensitivity = PlayerPrefs.GetFloat("Sensitivity", controller.sensitivity);
-            slider.value = controller.sensitivity;
+            var sensitivitySetting = PlayerPrefs.GetFloat("Sensitivity", 80);
             slider.onValueChanged.AddListener(ChangeSensitivity);
+            slider.value = sensitivitySetting;
+            
+            controller = FindObjectOfType<PlayerController>();
+            if (!controller) return;
+            controller.sensitivity = sensitivitySetting;
         }
 
         void ChangeSensitivity(float value)
         {
             PlayerPrefs.SetFloat("Sensitivity", value);
+            if (!controller) return;
             controller.sensitivity = value;
         }
     }
