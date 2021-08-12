@@ -523,7 +523,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 445558098504910250}
         m_TargetAssemblyTypeName: UI.Settings.TMPRebindActionUI, Settings
         m_MethodName: StartInteractiveRebind
         m_Mode: 1
