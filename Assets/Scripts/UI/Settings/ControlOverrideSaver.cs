@@ -27,7 +27,7 @@ namespace UI.Settings
             PlayerPrefs.DeleteKey("Controls");
         }
 
-        public static void Save()
+        public static void SetPref()
         {
             var bindingList = new BindingList { bindings = new List<BindingSerializable>() };
 		
@@ -38,7 +38,6 @@ namespace UI.Settings
                         {id = binding.id.ToString(), path = binding.overridePath});
 		
             PlayerPrefs.SetString("Controls", JsonUtility.ToJson(bindingList));
-            PlayerPrefs.Save();
         }
 
         [RuntimeInitializeOnLoadMethod]

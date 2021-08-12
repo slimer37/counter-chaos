@@ -62,12 +62,6 @@ namespace UI.Settings
             lastResIndex = dropdown.value;
         }
 
-        public void Save()
-        {
-            PlayerPrefs.Save();
-            ControlOverrideSaver.Save();
-        }
-
         void OnResolutionSelected(int index)
         {
             if (index == lastResIndex) return;
