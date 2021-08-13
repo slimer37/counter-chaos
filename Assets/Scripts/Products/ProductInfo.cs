@@ -73,6 +73,8 @@ namespace Products
             return lhs.ID == rhs.ID;
         }
         
+        public override bool Equals(object other) => other is ProductInfo productInfo && productInfo.ID == ID;
         public static bool operator !=(ProductInfo lhs, ProductInfo rhs) => !(lhs == rhs);
+        public override int GetHashCode() => ID;
     }
 }
