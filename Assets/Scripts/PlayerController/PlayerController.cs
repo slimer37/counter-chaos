@@ -157,7 +157,9 @@ public class PlayerController : MonoBehaviour
         UpdateBobbing();
 
         if (isSlow && isSprinting)
-            fovTween = cam.DOFieldOfView(originalFov, transitionTime);
+            fovTween = DOTween.Sequence()
+                .Append(cam.DOFieldOfView(originalFov, transitionTime))
+                .Join(secondaryCam.DOFieldOfView(originalFov, transitionTime));
         else if (!isSlow)
             fovTween?.Kill();
     }
