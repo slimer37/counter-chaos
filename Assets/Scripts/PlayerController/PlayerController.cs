@@ -126,7 +126,12 @@ public class PlayerController : MonoBehaviour
             isHoldingJump = false;
     }
 
-    void OnSprint(InputValue val) => isSprinting = val.isPressed;
+    void OnSprint(InputValue val)
+    {
+        if (isSlow) return;
+        isSprinting = val.isPressed;
+    }
+    
     void OnMoveMouse(InputValue val) => mouseDelta = sensitivity * val.Get<Vector2>();
 
     void Awake()
@@ -152,6 +157,8 @@ public class PlayerController : MonoBehaviour
 
     void OnSlow(InputValue val)
     {
+        if (!canMove || isSprinting || sprintTransition.IsPlaying()) return;
+        
         isSlow = val.isPressed;
         currentSpeed = isSlow ? slowSpeed : walkSpeed;
         UpdateBobbing();
