@@ -7,12 +7,17 @@ namespace Interactables.Holding
     public class Hanger : MonoBehaviour, IInteractHandler
     {
         [SerializeField] float animTime;
-        [SerializeField] Collider disableCollider;
+        [SerializeField] Hoverable hoverable;
         
         Pickuppable hungItem;
         Collider itemCollider;
 
-        void Reset() => TryGetComponent(out disableCollider);
+        void Reset() => TryGetComponent(out hoverable);
+
+        void Awake() => hoverable.OnAttemptHover += sender => {
+            var holder = sender.GetComponent<ItemHolder>();
+            return holder.IsHoldingItem && holder.HeldItem.CanBeHung;
+        };
 
         public void OnInteract(Transform sender)
         {
