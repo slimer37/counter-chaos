@@ -18,6 +18,8 @@ namespace Customers
         Queue queue;
         bool finishedTransaction;
         ProductInfo requestedProduct;
+
+        int index;
         
         static readonly int Speed = Animator.StringToHash("speed");
 
@@ -33,20 +35,29 @@ namespace Customers
             yield return holder.Pickup(target.GetComponent<Pickuppable>());
             
             queue = Queue.FindClosestQueue(transform.position);
-            if (!queue.TryLineUp()) yield break;
-            yield return MoveToward(queue.transform.position);
+            if (!queue.TryLineUp(out var linePos)) yield break;
+            index = queue.NumCustomersInLine - 1;
+            yield return MoveToward(linePos);
             
             holder.PrepareToDrop(queue.ItemDropZone);
             yield return MoveToward(queue.ItemDropStandPos);
             yield return Rotate(queue.transform.rotation);
             holder.Drop(queue.ItemDropZone);
-            yield return MoveToward(queue.transform.position);
+            yield return MoveToward(linePos);
             yield return Rotate(queue.transform.rotation);
             
             queue.OnCustomerServed += OnServed;
         }
 
-        void OnServed() => StartCoroutine(Finish());
+        void OnServed()
+        {
+            if (index == 0) StartCoroutine(Finish());
+            else
+            {
+                index--;
+                StartCoroutine(MoveToward(queue.GetSpotInLine(index)));
+            }
+        }
 
         IEnumerator Finish()
         {

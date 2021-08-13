@@ -9,6 +9,7 @@ namespace Checkout
         [SerializeField, Min(1)] int limit = 1;
         [SerializeField] Transform itemDropTransform;
         [SerializeField] Transform itemDropStandPosTransform;
+        [SerializeField] float spotSpacing;
 
         public Vector3 ItemDropZone => itemDropTransform.position;
         public Vector3 ItemDropStandPos => itemDropStandPosTransform.position;
@@ -38,9 +39,13 @@ namespace Checkout
             float SqrDistance(Queue queue) => (queue.transform.position - closeTo).sqrMagnitude;
         }
 
-        public bool TryLineUp()
+        public Vector3 GetSpotInLine(int index) => transform.position - transform.forward * spotSpacing * index;
+
+        public bool TryLineUp(out Vector3 spotInline)
         {
+            spotInline = Vector3.zero;
             if (NumCustomersInLine >= limit) return false;
+            spotInline = GetSpotInLine(NumCustomersInLine);
             NumCustomersInLine++;
             return true;
         }
