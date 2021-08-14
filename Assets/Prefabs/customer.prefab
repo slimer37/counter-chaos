@@ -84,7 +84,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 791546055}
-  dampenSpeed: 3
   rotationSpeed: 360
   animator: {fileID: 791546058}
   holder: {fileID: 791546056}
