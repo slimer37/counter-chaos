@@ -39,7 +39,7 @@ namespace Checkout
             float SqrDistance(Queue queue) => (queue.transform.position - closeTo).sqrMagnitude;
         }
 
-        public Vector3 GetSpotInLine(int index) => transform.position - transform.forward * spotSpacing * index;
+        public Vector3 GetSpotInLine(int index) => transform.position - spotSpacing * index * transform.forward;
 
         public bool TryLineUp(out Vector3 spotInline)
         {
