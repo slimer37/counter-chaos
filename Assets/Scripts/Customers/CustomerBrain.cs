@@ -38,24 +38,40 @@ namespace Customers
             if (!queue.TryLineUp(out var linePos)) yield break;
             index = queue.NumCustomersInLine - 1;
             yield return MoveToward(linePos);
+
+            queue.MoveLine += MoveLine;
+
+            yield return new WaitUntil(() => index == 0);
             
             holder.PrepareToDrop(queue.ItemDropZone);
             yield return MoveToward(queue.ItemDropStandPos);
             yield return Rotate(queue.transform.rotation);
             holder.Drop(queue.ItemDropZone);
-            yield return MoveToward(linePos);
+            yield return MoveToward(queue.GetSpotInLine(0));
             yield return Rotate(queue.transform.rotation);
-            
+
+            queue.MoveLine -= MoveLine;
             queue.OnCustomerServed += OnServed;
+        }
+
+        void MoveLine(object sender, Queue.LineMoveEventArgs update)
+        {
+            if (index > update.IndexMoved)
+                StartCoroutine(MoveUpInLine());
+        }
+
+        IEnumerator MoveUpInLine()
+        {
+            yield return MoveToward(queue.GetSpotInLine(index - 1));
+            index--;
         }
 
         void OnServed()
         {
-            if (index == 0) StartCoroutine(Finish());
-            else
+            if (index == 0)
             {
-                index--;
-                StartCoroutine(MoveToward(queue.GetSpotInLine(index)));
+                StopAllCoroutines();
+                StartCoroutine(Finish());
             }
         }
 
@@ -64,6 +80,7 @@ namespace Customers
             finishedTransaction = true;
             queue.OnCustomerServed -= OnServed;
             yield return new WaitUntil(() => holder.IsHoldingItem);
+            queue.CustomerLeave(index);
             yield return MoveToward(Level.GetFinishPoint());
             Destroy(gameObject);
         }

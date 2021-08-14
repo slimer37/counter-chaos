@@ -17,8 +17,16 @@ namespace Checkout
         public int NumCustomersInLine { get; private set; }
 
         public event Action OnCustomerServed;
+        public event EventHandler<LineMoveEventArgs> MoveLine;
 
         static readonly List<Queue> AllQueues = new List<Queue>();
+
+        public class LineMoveEventArgs : EventArgs
+        {
+            public int IndexMoved { get; }
+
+            public LineMoveEventArgs(int indexMoved) => IndexMoved = indexMoved;
+        }
 
         void OnEnable() => AllQueues.Add(this);
         void OnDisable() => AllQueues.Remove(this);
@@ -50,11 +58,16 @@ namespace Checkout
             return true;
         }
 
+        public void CustomerLeave(int index)
+        {
+            MoveLine?.Invoke(this, new LineMoveEventArgs(index));
+            NumCustomersInLine--;
+        }
+
         public void ServeCustomer()
         {
             if (NumCustomersInLine == 0) throw new InvalidOperationException("ServeCustomer called with no customers in queue.");
             OnCustomerServed?.Invoke();
-            NumCustomersInLine--;
         }
     }
 }
