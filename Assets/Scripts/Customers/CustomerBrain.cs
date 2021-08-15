@@ -47,7 +47,7 @@ namespace Customers
             yield return MoveToward(queue.ItemDropStandPos);
             yield return Rotate(queue.transform.rotation);
             holder.Drop(queue.ItemDropZone);
-            yield return MoveToward(queue.GetSpotInLine(0));
+            yield return MoveToward(queue.LineSpots[0]);
             yield return Rotate(queue.transform.rotation);
 
             queue.MoveLine -= MoveLine;
@@ -62,7 +62,7 @@ namespace Customers
 
         IEnumerator MoveUpInLine()
         {
-            yield return MoveToward(queue.GetSpotInLine(index - 1));
+            yield return MoveToward(queue.LineSpots[index - 1]);
             index--;
         }
 

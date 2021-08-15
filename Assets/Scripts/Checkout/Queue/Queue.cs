@@ -11,6 +11,8 @@ namespace Checkout
         [SerializeField] Transform itemDropStandPosTransform;
         [SerializeField] float spotSpacing;
 
+        public Vector3[] LineSpots { get; private set; }
+
         public Vector3 ItemDropZone => itemDropTransform.position;
         public Vector3 ItemDropStandPos => itemDropStandPosTransform.position;
         
@@ -31,6 +33,8 @@ namespace Checkout
         void OnEnable() => AllQueues.Add(this);
         void OnDisable() => AllQueues.Remove(this);
 
+        void Awake() => LineSpots = QueuePositioning.GenerateQueue(transform.position, transform.forward, spotSpacing, limit);
+
         public static Queue FindClosestQueue(Vector3 closeTo)
         {
             if (AllQueues.Count == 0) throw new Exception("No queues found.");
@@ -47,13 +51,11 @@ namespace Checkout
             float SqrDistance(Queue queue) => (queue.transform.position - closeTo).sqrMagnitude;
         }
 
-        public Vector3 GetSpotInLine(int index) => transform.position - spotSpacing * index * transform.forward;
-
         public bool TryLineUp(out Vector3 spotInline)
         {
             spotInline = Vector3.zero;
             if (NumCustomersInLine >= limit) return false;
-            spotInline = GetSpotInLine(NumCustomersInLine);
+            spotInline = LineSpots[NumCustomersInLine];
             NumCustomersInLine++;
             return true;
         }

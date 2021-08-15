@@ -8370,7 +8370,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30240
+  m_Name: pb_Mesh170960
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9918,7 +9918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66282c34b374c914bbd78266ceae745b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  limit: 2
+  limit: 4
   itemDropTransform: {fileID: 1804939021}
   itemDropStandPosTransform: {fileID: 1688504097}
   spotSpacing: 1
