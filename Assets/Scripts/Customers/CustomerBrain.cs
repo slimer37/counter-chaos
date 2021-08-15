@@ -38,13 +38,15 @@ namespace Customers
             if (!queue.TryLineUp(out var linePos)) yield break;
             index = queue.NumCustomersInLine - 1;
             yield return MoveToward(linePos);
+            
+            if (index > 0)
+                yield return Rotate(Quaternion.LookRotation(queue.LineSpots[index - 1] - linePos));
 
             queue.MoveLine += MoveLine;
 
             yield return new WaitUntil(() => index == 0);
             
             holder.PrepareToDrop(queue.ItemDropZone);
-            yield return MoveToward(queue.ItemDropStandPos);
             yield return Rotate(queue.transform.rotation);
             holder.Drop(queue.ItemDropZone);
             yield return MoveToward(queue.LineSpots[0]);
