@@ -8,6 +8,9 @@ namespace Checkout
         const int CheckInterval = 1;
 
         const float CheckRadius = 0.5f;
+        const float CheckHeightOffset = 0.5f;
+
+        static readonly int ObstacleMask = ~LayerMask.GetMask("Player", "Customer", "Ground");
 
         static float currentSpacing;
 
@@ -53,7 +56,7 @@ namespace Checkout
                         if (!Application.isPlaying)
                         {
                             Gizmos.color = Color.red;   
-                            Gizmos.DrawWireSphere(pos, CheckRadius);
+                            Gizmos.DrawWireSphere(pos + Vector3.up * CheckHeightOffset, CheckRadius);
                         }
 #endif
                         Debug.LogWarning($"Couldn't find a suitable queue position at index {i}.");
@@ -70,13 +73,16 @@ namespace Checkout
         static bool OverlapSphere(Vector3 pos)
         {
             var collided = new Collider[1];
-            return Physics.OverlapSphereNonAlloc(pos, CheckRadius, collided, ~LayerMask.GetMask("Player")) > 0;
+            pos += Vector3.up * CheckHeightOffset;
+            return Physics.OverlapSphereNonAlloc(pos, CheckRadius, collided, ObstacleMask) > 0;
         }
 
         static bool IsPathObstructed(Vector3 from, Vector3 to)
         {
+            from += Vector3.up * CheckHeightOffset;
+            to += Vector3.up * CheckHeightOffset;
             var delta = (to - from).normalized;
-            return Physics.Raycast(from, delta, currentSpacing, ~LayerMask.GetMask("Player"));
+            return Physics.Raycast(from, delta, currentSpacing, ObstacleMask);
         }
 
         static Vector3 FindPositionAround(Vector3 lastPosition, Vector3 position)
