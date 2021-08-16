@@ -1149,7 +1149,7 @@ MonoBehaviour:
   flatSurfaceTolerance: 5
   tossObstacleMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 73
   cameraBlockRaycastMask:
     serializedVersion: 2
     m_Bits: 193
