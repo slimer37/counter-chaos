@@ -4,6 +4,8 @@
     <attachedFolders />
     <explicitIncludes>
       <Path>Library/PackageCache/com.unity.ai.navigation.components@0fc6f532e4</Path>
+      <Path>Library/PackageCache/com.unity.animation.rigging@1.0.3</Path>
+      <Path>Library/PackageCache/com.unity.burst@1.5.4</Path>
       <Path>Library/PackageCache/com.unity.collab-proxy@1.5.7</Path>
       <Path>Library/PackageCache/com.unity.ext.nunit@1.0.6</Path>
       <Path>Library/PackageCache/com.unity.ide.rider@3.0.6</Path>
