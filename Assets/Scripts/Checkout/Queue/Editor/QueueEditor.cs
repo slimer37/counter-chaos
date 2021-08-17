@@ -12,7 +12,7 @@ namespace Checkout.Editor
         [InitializeOnLoadMethod]
         static void Init() =>
             humanMesh = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Models/human.fbx").GetChild(1)
-                .GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh;
+                .GetComponent<SkinnedMeshRenderer>().sharedMesh;
 
         [DrawGizmo(GizmoType.Active | GizmoType.Selected)]
         static void DrawGizmos(Queue queue, GizmoType type)
