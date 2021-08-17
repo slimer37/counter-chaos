@@ -3,7 +3,12 @@ guid: aec79441dc302f548b682c7e05ee942d
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chip bag
+    second: {fileID: 2100000, guid: f120239f6ac78ea43b5b08d85ee1bf28, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
