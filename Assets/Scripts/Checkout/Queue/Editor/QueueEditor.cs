@@ -9,14 +9,12 @@ namespace Checkout.Editor
         static Mesh humanMesh;
         static Vector3[] positions;
         
-        [InitializeOnLoadMethod]
-        static void Init() =>
-            humanMesh = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Models/human.fbx").GetChild(1)
-                .GetComponent<SkinnedMeshRenderer>().sharedMesh;
-
         [DrawGizmo(GizmoType.Active | GizmoType.Selected)]
         static void DrawGizmos(Queue queue, GizmoType type)
         {
+            humanMesh ??= AssetDatabase.LoadAssetAtPath<Transform>("Assets/Models/human.fbx").GetChild(1)
+                .GetComponent<SkinnedMeshRenderer>().sharedMesh;
+            
             var so = new SerializedObject(queue);
             if (!Application.isPlaying)
             {
