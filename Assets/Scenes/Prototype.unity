@@ -1125,19 +1125,19 @@ MonoBehaviour:
   flatSurfaceTolerance: 5
   tossObstacleMask:
     serializedVersion: 2
-    m_Bits: 73
+    m_Bits: 1097
   cameraBlockRaycastMask:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 1217
   dropObstacleMask:
     serializedVersion: 2
-    m_Bits: 73
+    m_Bits: 1097
   defaultDropPosition: {x: 0, y: 0, z: 1}
   dropReach: 3
   extraDropHeight: 0.01
   dropSurfaceMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 1089
   tossFromPosition: {x: 0, y: 0, z: 1}
   minTossForce: 3
   maxTossForce: 15
