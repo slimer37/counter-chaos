@@ -7,6 +7,7 @@ namespace Interactables.Holding
     public sealed class Pickuppable : MonoBehaviour, IInteractHandler
     {
         [field: SerializeField] public bool Throwable { get; set; } = true;
+        [field: SerializeField] public bool Droppable { get; set; } = true;
         [field: SerializeField] public bool CanBeHung { get; set; }
         
         [Header("Overrides")]
@@ -17,6 +18,7 @@ namespace Interactables.Holding
         [Space(15)]
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
+        [SerializeField] bool dontChangeKinematic;
         [SerializeField] Renderer rend;
 
         Bounds meshBounds;
@@ -93,7 +95,7 @@ namespace Interactables.Holding
 
             var pickingUp = (bool)holder;
             isHeld = pickingUp;
-            rb.isKinematic = pickingUp;
+            if (!dontChangeKinematic) rb.isKinematic = pickingUp;
             hoverable.enabled = !pickingUp;
         }
     }
