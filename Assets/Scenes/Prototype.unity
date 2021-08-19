@@ -12206,8 +12206,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a787f6768eb905740bbfaa4b31a8bada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxShelves: 3
+  mainCollider: {fileID: 1833660208}
+  attachDistance: 3
+  maxShelves: 9
   shelfOffset: {x: 0, y: 0, z: 0.55}
+  minShelfHeight: 0.499
   shelfSnapInterval: 0.215
   style: 0
 --- !u!114 &1833660204

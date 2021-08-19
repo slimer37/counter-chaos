@@ -4,12 +4,17 @@ using UnityEngine;
 
 namespace Furniture
 {
-    public class ShelfBase : MonoBehaviour, IInteractHandler, IStopInteractHandler
+    public class ShelfBase : MonoBehaviour, IInteractHandler
     {
+        [SerializeField] Collider mainCollider;
+        [SerializeField] float attachDistance;
         [SerializeField] int maxShelves;
         [SerializeField] Vector3 shelfOffset;
+        [SerializeField] float minShelfHeight;
         [SerializeField] float shelfSnapInterval;
         [SerializeField] Shelf.Style style;
+
+        Hoverable hoverable;
         
         Shelf[] shelves;
 
@@ -18,22 +23,26 @@ namespace Furniture
         
         Shelf shelf;
         bool shelfIsBeingAttached;
-        int tempLayer;
+        Vector3 shelfAttachPos;
         
         int shelfIndex;
 
-        int ignoreRaycastLayer;
-
         void Awake()
         {
-            ignoreRaycastLayer = LayerMask.GetMask("Ignore Raycast");
+            hoverable = GetComponent<Hoverable>();
             shelves = new Shelf[maxShelves];
             GetComponent<Hoverable>().OnAttemptHover =
-                sender=> sender.GetComponent<ItemHolder>()?.HeldItem?.GetComponent<Shelf>() ?? false;
+                sender => sender.GetComponent<ItemHolder>()?.HeldItem?.GetComponent<Shelf>() ?? false;
         }
 
         public void OnInteract(Transform sender)
         {
+            if (shelfIsBeingAttached)
+            {
+                Attach();
+                return;
+            }
+
             var holder = sender.GetComponent<ItemHolder>();
             if (!holder || !holder.IsHoldingItem || !holder.HeldItem.TryGetComponent<Shelf>(out var heldShelf)) return;
             if (heldShelf.ShelfStyle != style) return;
@@ -45,9 +54,9 @@ namespace Furniture
             currentInteractor = holder;
             currentInteractor.TakeFrom();
             
+            shelf.Disable();
+            hoverable.enabled = false;
             shelf.transform.parent = transform;
-            tempLayer = shelf.gameObject.layer;
-            shelf.gameObject.layer = ignoreRaycastLayer;
             shelf.transform.rotation = Quaternion.identity;
         }
 
@@ -55,30 +64,27 @@ namespace Furniture
         {
             if (!shelfIsBeingAttached) return;
             
-            var shelfPos = transform.TransformPoint(shelfOffset);
-
-            if (Physics.Raycast(playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit))
+            if (mainCollider.Raycast(playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, attachDistance))
             {
-                if (hit.transform != transform && hit.transform != shelf.transform)
-                {
-                    OnStopInteract(null);
-                    return;
-                }
-                
-                shelfPos.y = Mathf.RoundToInt((hit.point.y - transform.position.y) / shelfSnapInterval) * shelfSnapInterval;
+                shelfAttachPos = transform.TransformPoint(shelfOffset);
+                var height = hit.point.y - transform.position.y - minShelfHeight;
+                var snappedHeight = Mathf.Clamp(Mathf.RoundToInt(height / shelfSnapInterval), 0, maxShelves - 1) * shelfSnapInterval;
+                shelfAttachPos.y = minShelfHeight + snappedHeight;
             }
+            else Attach();
 
-            shelf.transform.position = shelfPos;
+            shelf.transform.position = shelfAttachPos;
         }
 
-        public void OnStopInteract(Transform sender)
+        void Attach()
         {
             if (!shelfIsBeingAttached) return;
             
             shelves[shelfIndex] = shelf;
+            shelf.Enable();
+            hoverable.enabled = true;
+
             shelfIsBeingAttached = false;
-            currentInteractor = null;
-            shelf.gameObject.layer = tempLayer;
         }
     }
 }

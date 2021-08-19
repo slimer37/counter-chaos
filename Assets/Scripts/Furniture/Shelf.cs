@@ -1,4 +1,5 @@
 using Interactables.Holding;
+using Interactables.Base;
 using UnityEngine;
 
 namespace Furniture
@@ -9,5 +10,12 @@ namespace Furniture
         public enum Style { Gondola }
         
         [field: SerializeField] internal Style ShelfStyle { get; private set; }
+
+        Hoverable hoverable;
+
+        void Awake() => hoverable = GetComponent<Hoverable>();
+
+        internal void Disable() => hoverable.enabled = false;
+        internal void Enable() => hoverable.enabled = true;
     }
 }
