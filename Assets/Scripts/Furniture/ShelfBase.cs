@@ -29,11 +29,9 @@ namespace Furniture
         Vector3 shelfAttachPos;
         
         int shelfIndex;
-        Plane placementPlane;
 
         void Awake()
         {
-            placementPlane = new Plane(transform.forward, transform.position);
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnReleaseInteract;
             
