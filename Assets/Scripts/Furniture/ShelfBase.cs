@@ -1,6 +1,8 @@
+using Core;
 using Interactables.Base;
 using Interactables.Holding;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Furniture
 {
@@ -20,20 +22,28 @@ namespace Furniture
 
         ItemHolder currentInteractor;
         Camera playerCamera;
+        Controls controls;
         
         Shelf shelf;
         bool shelfIsBeingAttached;
         Vector3 shelfAttachPos;
         
         int shelfIndex;
+        Plane placementPlane;
 
         void Awake()
         {
+            placementPlane = new Plane(transform.forward, transform.position);
+            controls = new Controls();
+            controls.Gameplay.Interact.canceled += OnReleaseInteract;
+            
             hoverable = GetComponent<Hoverable>();
             shelves = new Shelf[maxShelves];
             GetComponent<Hoverable>().OnAttemptHover =
                 sender => sender.GetComponent<ItemHolder>()?.HeldItem?.GetComponent<Shelf>() ?? false;
         }
+
+        void OnDestroy() => controls.Dispose();
 
         public void OnInteract(Transform sender)
         {
@@ -58,6 +68,10 @@ namespace Furniture
             hoverable.enabled = false;
             shelf.transform.parent = transform;
             shelf.transform.rotation = Quaternion.identity;
+            shelfAttachPos = transform.TransformPoint(shelfOffset);
+            shelfAttachPos.y = minShelfHeight;
+
+            controls.Enable();
         }
 
         void Update()
@@ -76,6 +90,8 @@ namespace Furniture
             shelf.transform.position = shelfAttachPos;
         }
 
+        void OnReleaseInteract(InputAction.CallbackContext ctx) => Attach();
+
         void Attach()
         {
             if (!shelfIsBeingAttached) return;
@@ -85,6 +101,8 @@ namespace Furniture
             hoverable.enabled = true;
 
             shelfIsBeingAttached = false;
+            
+            controls.Disable();
         }
     }
 }
