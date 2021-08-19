@@ -8567,7 +8567,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh136018
+  m_Name: pb_Mesh37778
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12210,8 +12210,8 @@ MonoBehaviour:
   attachDistance: 3
   maxShelves: 9
   shelfOffset: {x: 0, y: 0, z: 0.55}
-  minShelfHeight: 0.499
-  shelfSnapInterval: 0.215
+  minShelfHeight: 0.486
+  shelfSnapInterval: 0.226
   style: 0
 --- !u!114 &1833660204
 MonoBehaviour:
