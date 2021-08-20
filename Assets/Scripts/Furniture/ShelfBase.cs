@@ -43,6 +43,12 @@ namespace Furniture
         Vector3 shelfAttachPos;
         
         int shelfIndex;
+        int tempLayer;
+
+        static int ignoreCollisionLayer;
+
+        [RuntimeInitializeOnLoadMethod]
+        static void Init() => ignoreCollisionLayer = LayerMask.NameToLayer("Ignore Collision");
         
         void Awake()
         {
@@ -110,6 +116,8 @@ namespace Furniture
             shelfT.parent = transform;
             shelfT.localRotation = Quaternion.identity;
             shelfT.localPosition = Vector3.forward * shelfPreviewOffset + Vector3.up * (minShelfHeight + shelfIndex * shelfSnapInterval);
+            tempLayer = shelfToAttach.gameObject.layer;
+            shelfToAttach.gameObject.layer = ignoreCollisionLayer;
             
             shelfToAttach.Disable();
             shelfIsBeingAttached = true;
@@ -162,6 +170,7 @@ namespace Furniture
             shelves[shelfIndex] = shelfToAttach;
             shelfToAttach.AttachTo(this, shelfIndex);
             shelfToAttach.Enable();
+            shelfToAttach.gameObject.layer = tempLayer;
             hoverable.enabled = true;
 
             shelfIsBeingAttached = false;
