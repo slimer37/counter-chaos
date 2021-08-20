@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fea56e559ce624cba6c8082f712f40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fractureVelocity: 6
+  fractureVelocity: 12
   fracturedPrefab: {fileID: 1382580302298207967, guid: 7bc28438105485a4eac34754404dc42d, type: 3}
   destroyFracturedDelay: 5
   explosionForce: 200
