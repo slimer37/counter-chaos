@@ -16,13 +16,13 @@ public class Fracture : MonoBehaviour
     void OnCollisionEnter(Collision other)
     {
         if (other.relativeVelocity.sqrMagnitude > fractureVelocity * fractureVelocity)
-            SpawnFractured();
+            SpawnFractured(other.GetContact(0).point);
     }
 
-    void SpawnFractured()
+    void SpawnFractured(Vector3 collidePoint)
     {
         var clone = Instantiate(fracturedPrefab, transform.position, transform.rotation).GetComponent<FracturedObject>();
-        clone.Explode(explosionForce, destroyFracturedDelay);
+        clone.Explode(collidePoint, explosionForce, destroyFracturedDelay);
         Destroy(gameObject);
     }
 }

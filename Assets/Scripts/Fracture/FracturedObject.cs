@@ -20,10 +20,10 @@ public class FracturedObject : MonoBehaviour
 
     void Reset() => rigidbodies = GetComponentsInChildren<Rigidbody>();
 
-    internal void Explode(float force, float destroyDelay)
+    internal void Explode(Vector3 collidePoint, float force, float destroyDelay)
     {
         foreach (var rb in rigidbodies)
-            rb.AddExplosionForce(force, transform.position, 0);
+            rb.AddExplosionForce(force, collidePoint, 0);
         
         delay = destroyDelay;
         StartCoroutine(DelayedOut());
