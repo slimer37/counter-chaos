@@ -131,7 +131,7 @@ MonoBehaviour:
   fractureVelocity: 12
   fracturedPrefab: {fileID: 1382580302298207967, guid: 7bc28438105485a4eac34754404dc42d, type: 3}
   destroyFracturedDelay: 5
-  explosionForce: 200
+  explosionForce: 100
 --- !u!1 &5111344917331153667
 GameObject:
   m_ObjectHideFlags: 0
