@@ -642,6 +642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!65 &187696982
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1790,6 +1791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!65 &363460330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2075,6 +2077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!114 &416887236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8558,7 +8561,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37778
+  m_Name: pb_Mesh30894
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10461,6 +10464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!114 &1348471117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10999,6 +11003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!114 &1449533440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11492,6 +11497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!114 &1609195775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11669,6 +11675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!114 &1640820269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12021,6 +12028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!114 &1707954883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12222,6 +12230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 1
 --- !u!1 &1859453135
 GameObject:
   m_ObjectHideFlags: 0

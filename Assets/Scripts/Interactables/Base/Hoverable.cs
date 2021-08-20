@@ -10,6 +10,8 @@ namespace Interactables.Base
     {
         public InteractionIcon icon;
 
+        [SerializeField] bool useOutline = true;
+
         public Func<Transform, bool> OnAttemptHover;
         
         IconHandler tempIconHandler;
@@ -23,6 +25,7 @@ namespace Interactables.Base
 
         void Awake()
         {
+            if (!useOutline) return;
             outline = gameObject.AddComponent<Outline>();
             outline.OutlineColor = Color.yellow;
             outline.OutlineMode = Outline.Mode.OutlineVisible;
@@ -54,13 +57,11 @@ namespace Interactables.Base
             {
                 tempIconHandler = iconHandler;
                 iconHandler.ShowIcon(icon);
-                
-                if (!outline.enabled)
-                {
-                    startHoverTime = Time.time;
-                    SetOutlineAlpha(0);
-                    outline.enabled = true;
-                }
+
+                if (!useOutline || outline.enabled) return;
+                startHoverTime = Time.time;
+                SetOutlineAlpha(0);
+                outline.enabled = true;
             }
             else
                 HideIcon();
@@ -79,6 +80,8 @@ namespace Interactables.Base
             if (!tempIconHandler) return;
             tempIconHandler.HideIcon();
             tempIconHandler = null;
+
+            if (!useOutline) return;
             outline.enabled = false;
         }
 
@@ -91,7 +94,7 @@ namespace Interactables.Base
 
         void Update()
         {
-            if (!outline.enabled) return;
+            if (!useOutline || !outline.enabled) return;
 
             var t = (Time.time - startHoverTime) * FlashSpeed;
             var a = -Mathf.Cos(t * 2 * Mathf.PI) / 2 + 0.5f;
