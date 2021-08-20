@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: 1
+  useOutline: 0
 --- !u!114 &3627542172714210705
 MonoBehaviour:
   m_ObjectHideFlags: 0
