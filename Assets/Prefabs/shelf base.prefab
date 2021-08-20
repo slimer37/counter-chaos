@@ -125,12 +125,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCollider: {fileID: 2706323337443795866}
+  style: 0
   attachDistance: 4
   maxShelves: 9
-  shelfOffset: {x: 0, y: 0, z: 0.55}
+  shelfForwardOffset: 0.55
   minShelfHeight: 0.486
   shelfSnapInterval: 0.226
-  style: 0
+  shelfPreviewOffset: 0.8
+  shelfInDuration: 0.15
+  shelfAnimUp: 0.1
+  beforeDownInterval: 0.05
+  shelfDownDuration: 0.05
 --- !u!114 &1370974058057310039
 MonoBehaviour:
   m_ObjectHideFlags: 0
