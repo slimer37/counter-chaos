@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ public class FracturedObject : MonoBehaviour
 {
     [SerializeField] Rigidbody[] rigidbodies;
     float delay;
+
+    Vector3[] originalRbPositions;
+    Quaternion[] originalRbRotations;
 
     void OnValidate()
     {
@@ -20,18 +24,38 @@ public class FracturedObject : MonoBehaviour
 
     void Reset() => rigidbodies = GetComponentsInChildren<Rigidbody>();
 
-    internal void Explode(Vector3 collidePoint, float force, float destroyDelay)
+    void Awake()
     {
-        foreach (var rb in rigidbodies)
-            rb.AddExplosionForce(force, collidePoint, 0);
-        
-        delay = destroyDelay;
-        StartCoroutine(DelayedOut());
+        originalRbPositions = new Vector3[rigidbodies.Length];
+        originalRbRotations = new Quaternion[rigidbodies.Length];
+        for (var i = 0; i < rigidbodies.Length; i++)
+        {
+            originalRbPositions[i] = rigidbodies[i].transform.localPosition;
+            originalRbRotations[i] = rigidbodies[i].transform.localRotation;
+        }
     }
 
-    IEnumerator DelayedOut()
+    internal void Explode(float force, float destroyDelay, Action<FracturedObject> disableCallback)
+    {
+        foreach (var rb in rigidbodies)
+            rb.AddExplosionForce(force, transform.position, 0);
+        
+        delay = destroyDelay;
+        StartCoroutine(DelayedOut(disableCallback));
+    }
+
+    IEnumerator DelayedOut(Action<FracturedObject> disableCallback)
     {
         yield return new WaitForSeconds(delay);
-        Destroy(gameObject);
+        for (var i = 0; i < rigidbodies.Length; i++)
+        {
+            var rbT = rigidbodies[i].transform;
+            rbT.localPosition = originalRbPositions[i];
+            rbT.localRotation = originalRbRotations[i];
+            rigidbodies[i].velocity = Vector3.zero;
+        }
+        
+        gameObject.SetActive(false);
+        disableCallback(this);
     }
 }

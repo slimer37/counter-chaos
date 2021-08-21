@@ -1,11 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Fracture : MonoBehaviour
 {
+    [SerializeField] string id;
     [SerializeField] float fractureVelocity;
     [SerializeField] GameObject fracturedPrefab;
     [SerializeField] float destroyFracturedDelay;
     [SerializeField] float explosionForce;
+
+    static readonly Dictionary<string, ObjectPool<FracturedObject>> Pools = new Dictionary<string, ObjectPool<FracturedObject>>();
 
     void OnValidate()
     {
@@ -13,16 +18,26 @@ public class Fracture : MonoBehaviour
             Debug.LogError("Fractured prefab has no FracturedObject component.");
     }
 
+    void Awake()
+    {
+        if (!Pools.ContainsKey(id))
+            Pools[id] = new ObjectPool<FracturedObject>(
+                () => Instantiate(fracturedPrefab).GetComponent<FracturedObject>(),
+                instance => instance.gameObject.SetActive(true));
+    }
+
     void OnCollisionEnter(Collision other)
     {
         if (other.relativeVelocity.sqrMagnitude > fractureVelocity * fractureVelocity)
-            SpawnFractured(other.GetContact(0).point);
+            SpawnFractured();
     }
 
-    void SpawnFractured(Vector3 collidePoint)
+    void SpawnFractured()
     {
-        var clone = Instantiate(fracturedPrefab, transform.position, transform.rotation).GetComponent<FracturedObject>();
-        clone.Explode(collidePoint, explosionForce, destroyFracturedDelay);
+        var clone = Pools[id].Get();
+        clone.transform.position = transform.position;
+        clone.transform.rotation = transform.rotation;
+        clone.Explode(explosionForce, destroyFracturedDelay, Pools[id].Release);
         Destroy(gameObject);
     }
 }
