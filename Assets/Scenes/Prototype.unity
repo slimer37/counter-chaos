@@ -1100,7 +1100,7 @@ MonoBehaviour:
   interactablesLayer: 6
   inclusionMask:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 375
   camera: {fileID: 1687258584}
   iconHandler: {fileID: 4393141}
 --- !u!114 &235475067
