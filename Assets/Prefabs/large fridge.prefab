@@ -52,6 +52,7 @@ MonoBehaviour:
   maxShelves: 18
   shelfForwardOffset: 0.17
   minShelfHeight: 0.888
+  scaleX: 1
   shelfSnapInterval: 0.0979
   shelfPreviewOffset: 0.2
   shelfInDuration: 0.15
@@ -266,6 +267,7 @@ MonoBehaviour:
   maxShelves: 18
   shelfForwardOffset: 0.17
   minShelfHeight: 0.888
+  scaleX: 1
   shelfSnapInterval: 0.0979
   shelfPreviewOffset: 0.2
   shelfInDuration: 0.15
@@ -529,6 +531,7 @@ MonoBehaviour:
   maxShelves: 18
   shelfForwardOffset: 0.17
   minShelfHeight: 0.888
+  scaleX: 1.125
   shelfSnapInterval: 0.0979
   shelfPreviewOffset: 0.2
   shelfInDuration: 0.15

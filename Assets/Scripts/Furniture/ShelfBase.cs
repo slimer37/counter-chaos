@@ -20,6 +20,7 @@ namespace Furniture
         [SerializeField] float minShelfHeight;
         
         [Header("Attachment")]
+        [SerializeField] float scaleX = 1;
         [SerializeField] float shelfSnapInterval;
         [SerializeField] float shelfPreviewOffset;
         
@@ -163,6 +164,7 @@ namespace Furniture
             var attachmentSequence = DOTween.Sequence();
             attachmentSequence.Append(shelfToAttach.transform.DOLocalMoveZ(shelfForwardOffset, shelfInDuration));
             attachmentSequence.Join(shelfToAttach.transform.DOLocalMoveY(height + shelfAnimUp, shelfInDuration));
+            attachmentSequence.Join(shelfToAttach.transform.DOScaleX(scaleX / transform.localScale.x, shelfInDuration));
             attachmentSequence.AppendInterval(beforeDownInterval);
             attachmentSequence.Append(shelfToAttach.transform.DOLocalMoveY(height, shelfDownDuration));
             attachmentSequence.SetId(shelfIndex | GetInstanceID());
@@ -182,6 +184,7 @@ namespace Furniture
         internal void Detach(int index)
         {
             DOTween.Kill(index | GetInstanceID());
+            shelves[index].transform.localScale = Vector3.one;
             shelves[index] = null;
             availableSlots++;
         }
