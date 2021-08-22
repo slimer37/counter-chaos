@@ -16,6 +16,20 @@ namespace Furniture
         
         Hoverable hoverable;
 
+        int numColliding;
+
+        void OnCollisionEnter(Collision other)
+        {
+            if (numColliding == 0) hoverable.enabled = false;
+            numColliding++;
+        }
+        
+        void OnCollisionExit(Collision other)
+        {
+            numColliding--;
+            if (numColliding == 0) hoverable.enabled = true;
+        }
+
         void Awake() => hoverable = GetComponent<Hoverable>();
 
         internal void Disable() => hoverable.enabled = false;
