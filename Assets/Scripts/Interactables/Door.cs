@@ -15,17 +15,25 @@ namespace Interactables
 
         void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.blue;
-            var multiplier = rotationAmount < 0 ? -1 : 1;
-            for (var i = 0; i < Mathf.Abs(rotationAmount); i++)
-                Gizmos.DrawRay(transform.position, Quaternion.AngleAxis(multiplier * i, rotationAxis) * transform.forward);
+            var col = Color.blue;
+            col.a = 0.5f;
+            Gizmos.color = col;
             
-            Gizmos.DrawRay(transform.position, Quaternion.AngleAxis(rotationAmount, rotationAxis) * transform.forward);
+            var position = transform.position;
+            var rotation = Quaternion.Euler(transform.eulerAngles + rotationAxis * rotationAmount);
+            var meshFilter = GetComponent<MeshFilter>();
+            if (!meshFilter)
+            {
+                meshFilter = GetComponentInChildren<MeshFilter>();
+                position = transform.TransformPoint(rotation * meshFilter.transform.localPosition);
+            }
+            
+            Gizmos.DrawMesh(meshFilter.sharedMesh, position, rotation, meshFilter.transform.lossyScale);
         }
 
         void Awake()
         {
-            openTween = transform.DOLocalRotateQuaternion(Quaternion.AngleAxis(rotationAmount, rotationAxis), rotationTime);
+            openTween = transform.DOLocalRotate(transform.localEulerAngles + rotationAxis * rotationAmount, rotationTime);
             openTween.Pause();
             openTween.SetAutoKill(false);
         }
