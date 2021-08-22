@@ -64,6 +64,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -6284647499250282229, guid: 244f0da6324bd744fb20ccb803f67975, type: 3}
+  - {fileID: 2100000, guid: 7a32430e134d1404590ac839e48cc2b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -251,6 +252,7 @@ MonoBehaviour:
   maxShelves: 18
   shelfForwardOffset: 0.17
   minShelfHeight: 0.888
+  scaleX: 1
   shelfSnapInterval: 0.0979
   shelfPreviewOffset: 0.2
   shelfInDuration: 0.15
@@ -451,6 +453,7 @@ MonoBehaviour:
   maxShelves: 18
   shelfForwardOffset: 0.17
   minShelfHeight: 0.888
+  scaleX: 1
   shelfSnapInterval: 0.0979
   shelfPreviewOffset: 0.2
   shelfInDuration: 0.15
@@ -654,6 +657,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -6284647499250282229, guid: 244f0da6324bd744fb20ccb803f67975, type: 3}
+  - {fileID: 2100000, guid: 7a32430e134d1404590ac839e48cc2b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
