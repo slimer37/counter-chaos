@@ -18,7 +18,7 @@ namespace Interactables.Holding
         [Space(15)]
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
-        [SerializeField] bool dontChangeKinematic;
+        [SerializeField] bool nonPhysics;
         [SerializeField] Renderer rend;
 
         Bounds meshBounds;
@@ -87,6 +87,9 @@ namespace Interactables.Holding
 
         internal void Toss(Vector3 direction, float force)
         {
+            if (nonPhysics || !Throwable)
+                throw new Exception("Don't call Toss on non-physics or non-throwable objects.");
+            
             Drop();
             rb.AddForce(direction * force, ForceMode.Impulse);
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
@@ -94,6 +97,7 @@ namespace Interactables.Holding
 
         void OnCollisionEnter(Collision other)
         {
+            if (nonPhysics) return;
             if (rb.collisionDetectionMode == CollisionDetectionMode.Continuous)
                 rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
@@ -104,7 +108,7 @@ namespace Interactables.Holding
 
             var pickingUp = (bool)holder;
             isHeld = pickingUp;
-            if (!dontChangeKinematic) rb.isKinematic = pickingUp;
+            if (!nonPhysics) rb.isKinematic = pickingUp;
             hoverable.enabled = !pickingUp;
         }
     }
