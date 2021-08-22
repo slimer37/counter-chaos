@@ -37,6 +37,15 @@ namespace Interactables.Holding
                 Gizmos.DrawWireSphere(transform.position, BoundHalfDiagonal);
         }
 
+        void OnValidate()
+        {
+            if (!Droppable && Throwable)
+            {
+                Debug.LogWarning("Cannot be throwable if not droppable.", gameObject);
+                Throwable = false;
+            }
+        }
+
         void Reset()
         {
             TryGetComponent(out hoverable);
