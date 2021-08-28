@@ -1,55 +1,77 @@
+using Core;
 using DG.Tweening;
 using Interactables.Base;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Interactables
 {
     public class Door : MonoBehaviour, IInteractHandler
     {
-        [SerializeField] float rotationAmount;
-        [SerializeField] float rotationTime;
-        [SerializeField, Min(0)] Vector3 rotationAxis = Vector3.up;
+        [Header("Pulling")]
+        [SerializeField] float pullDistance = 1;
+        [SerializeField] float rotationSpeed = 50;
+        [Space]
+        [SerializeField, Range(-180, 0)] float rotationMin = -180;
+        [SerializeField, Range(0, 180)] float rotationMax = 180;
+        [SerializeField] float stopTime = 0.5f;
 
-        bool open;
-        Tween openTween;
+        Tween resetTween;
+        Transform playerCamera;
 
-        void OnDrawGizmosSelected()
+        Vector3 center;
+        float delta;
+        bool isInteracting;
+
+        Controls controls;
+
+        void OnValidate()
         {
-            var col = Color.blue;
-            col.a = 0.5f;
-            Gizmos.color = col;
-            
-            var position = transform.position;
-            var rotation = Quaternion.Euler(transform.eulerAngles + rotationAxis * rotationAmount);
-            var meshFilter = GetComponent<MeshFilter>();
-            if (!meshFilter)
-            {
-                meshFilter = GetComponentInChildren<MeshFilter>();
-                position = transform.TransformPoint(rotation * meshFilter.transform.localPosition);
-            }
-            
-            Gizmos.DrawMesh(meshFilter.sharedMesh, position, rotation, meshFilter.transform.lossyScale);
+            for (var i = 0; i < 3; i++)
+                if (transform.lossyScale[i] < 0)
+                    Debug.LogWarning("Door does not rotate correctly with negative scales.", gameObject);
         }
 
         void Awake()
         {
-            openTween = transform.DOLocalRotate(transform.localEulerAngles + rotationAxis * rotationAmount, rotationTime);
-            openTween.Pause();
-            openTween.SetAutoKill(false);
+            controls = new Controls();
+            controls.Gameplay.Interact.canceled += OnRelease;
+            
+            playerCamera = Camera.main.transform;
         }
 
-        void OnDestroy() => openTween.Kill();
+        void OnDestroy() => controls.Dispose();
 
-        public void OnInteract(Transform sender) => ToggleOpen();
-
-        void ToggleOpen()
+        public void OnInteract(Transform sender)
         {
-            open = !open;
-            
-            if (open)
-                openTween.PlayForward();
-            else
-                openTween.PlayBackwards();
+            Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward), out var hit);
+            center = transform.InverseTransformPoint(hit.point);
+            isInteracting = true;
+            if (resetTween.IsActive())
+                resetTween.Kill();
+            controls.Enable();
+        }
+
+        void Update()
+        {
+            if (isInteracting)
+            {
+                var a = playerCamera.TransformPoint(Vector3.forward * pullDistance);
+                var b = Quaternion.Inverse(transform.rotation) * (a - transform.TransformPoint(center));
+                delta = b.z * rotationSpeed;
+            }
+            var rot = transform.localEulerAngles;
+            if (rot.y > 180) rot.y -= 360;
+            rot.y = Mathf.Clamp(rot.y + delta * Time.deltaTime, rotationMin, rotationMax);
+            transform.localEulerAngles = rot;
+        }
+
+        public void OnRelease(InputAction.CallbackContext ctx)
+        {
+            if (!isInteracting) return;
+            isInteracting = false;
+            controls.Disable();
+            resetTween = DOTween.To(() => delta, a => delta = a, 0, stopTime);
         }
     }
 }
