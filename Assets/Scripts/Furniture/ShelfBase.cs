@@ -36,7 +36,6 @@ namespace Furniture
         int availableSlots;
 
         ItemHolder currentInteractor;
-        Camera playerCamera;
         Controls controls;
         
         Shelf shelfToAttach;
@@ -61,7 +60,7 @@ namespace Furniture
             
             GetComponent<Hoverable>().OnAttemptHover =
                 sender => Vector3.Dot(transform.forward, sender.forward) < 0
-                    && (sender.GetComponent<ItemHolder>()?.HeldItem?.GetComponent<Shelf>() ?? false);
+                    && (ItemHolder.Main.HeldItem?.GetComponent<Shelf>() ?? false);
 
             availableSlots = maxShelves;
             foreach (var shelf in GetComponentsInChildren<Shelf>())
@@ -87,9 +86,11 @@ namespace Furniture
         public void OnInteract(Transform sender)
         {
             if (availableSlots == 0) return;
+
+            if (!sender.CompareTag("Player")) return;
             
-            var holder = sender.GetComponent<ItemHolder>();
-            if (!holder || !holder.IsHoldingItem || !holder.HeldItem.TryGetComponent<Shelf>(out var heldShelf)) return;
+            var holder = ItemHolder.Main;
+            if (!holder.IsHoldingItem || !holder.HeldItem.TryGetComponent<Shelf>(out var heldShelf)) return;
             if (heldShelf.ShelfStyle != style) return;
             
             shelfToAttach = heldShelf;
@@ -109,7 +110,6 @@ namespace Furniture
 
             if (shelfIndex == -1) throw new Exception("No empty indices found.");
             
-            playerCamera = holder.PlayerCam;
             currentInteractor = holder;
             currentInteractor.TakeFrom();
             
@@ -135,6 +135,7 @@ namespace Furniture
 
             var requestedShelfIndex = 0;
             
+            var playerCamera = Player.Camera;
             if (Vector3.Dot(transform.forward, playerCamera.transform.forward) < 0
                 && mainCollider.Raycast(playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, attachDistance))
             {

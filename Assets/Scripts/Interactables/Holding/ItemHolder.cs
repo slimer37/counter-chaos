@@ -43,6 +43,8 @@ namespace Interactables.Holding
         public bool IsHoldingItem => heldItem;
         public Pickuppable HeldItem => heldItem;
 
+        public static ItemHolder Main;
+
         PlayerController controller;
         
         Pickuppable heldItem;
@@ -66,8 +68,12 @@ namespace Interactables.Holding
             Gizmos.DrawCube(transform.TransformPoint(defaultHoldingPosition), Vector3.one * 0.25f);
         }
 
-        void Awake() => controller = GetComponent<PlayerController>();
-        
+        void Awake()
+        {
+            Main = this;
+            controller = GetComponent<PlayerController>();
+        }
+
         public Pickuppable TakeFrom()
         {
             if (!heldItem) throw new NullReferenceException("TakeFrom called without a held item.");

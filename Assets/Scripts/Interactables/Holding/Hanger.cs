@@ -14,14 +14,14 @@ namespace Interactables.Holding
 
         void Reset() => TryGetComponent(out hoverable);
 
-        void Awake() => hoverable.OnAttemptHover += sender => {
-            var holder = sender.GetComponent<ItemHolder>();
-            return holder.IsHoldingItem && holder.HeldItem.CanBeHung;
-        };
+        void Awake() => hoverable.OnAttemptHover +=
+            sender => ItemHolder.Main.IsHoldingItem && ItemHolder.Main.HeldItem.CanBeHung;
 
         public void OnInteract(Transform sender)
         {
-            if (!sender.TryGetComponent(out ItemHolder holder)) return;
+            if (!sender.CompareTag("Player")) return;
+
+            var holder = ItemHolder.Main;
 
             if (!holder.IsHoldingItem)
             {

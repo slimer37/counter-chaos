@@ -40,8 +40,11 @@ namespace Interactables.Holding
         
         public void OnInteract(Transform sender)
         {
-            var holder = sender.GetComponent<ItemHolder>();
-            if (!holder || !open) return;
+            if (!sender.CompareTag("Player")) return;
+            
+            var holder = ItemHolder.Main;
+            
+            if (!open) return;
 
             if (holder.IsHoldingItem)
                 AddItem(holder.TakeFrom(), true);

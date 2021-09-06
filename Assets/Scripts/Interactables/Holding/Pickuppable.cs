@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Interactables.Base;
 using UnityEngine;
 
@@ -62,7 +63,7 @@ namespace Interactables.Holding
         }
 
         // Can hover if the sender is not holding anything.
-        bool OnAttemptHover(Transform sender) => !sender.GetComponent<ItemHolder>().IsHoldingItem;
+        bool OnAttemptHover(Transform sender) => !ItemHolder.Main.IsHoldingItem;
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             Physics.OverlapBoxNonAlloc(rend.bounds.center, meshBounds.extents, results, transform.rotation, mask) > 0;
@@ -71,13 +72,15 @@ namespace Interactables.Holding
 
         void OnPickup(Transform sender)
         {
-            var holder = sender.GetComponent<ItemHolder>();
+            var isPlayer = sender.CompareTag("Player");
+            if (!isPlayer && isHeld)
+                throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
             
-            if (!holder && isHeld) throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
+            var holder = ItemHolder.Main;
             
-            if (isHeld || holder && holder.IsHoldingItem) return;
+            if (isHeld || isPlayer && holder.IsHoldingItem) return;
             
-            if (holder)
+            if (isPlayer)
                 holder.Give(this);
             else
                 Setup(sender);
