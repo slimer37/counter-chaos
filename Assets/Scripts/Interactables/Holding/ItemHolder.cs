@@ -42,7 +42,7 @@ namespace Interactables.Holding
         public bool IsHoldingItem => heldItem;
         public Pickuppable HeldItem => heldItem;
 
-        public static ItemHolder Main;
+        public static ItemHolder Main { get; private set; }
 
         PlayerController controller;
         
