@@ -17,7 +17,6 @@ namespace Interactables
         [SerializeField] float stopTime = 0.5f;
 
         Tween resetTween;
-        Transform playerCamera;
 
         Vector3 center;
         float delta;
@@ -36,15 +35,14 @@ namespace Interactables
         {
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnRelease;
-            
-            playerCamera = Camera.main.transform;
         }
 
         void OnDestroy() => controls.Dispose();
 
         public void OnInteract(Transform sender)
         {
-            Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward), out var hit);
+            var cam = Player.Camera.transform;
+            Physics.Raycast(new Ray(cam.position, cam.forward), out var hit);
             center = transform.InverseTransformPoint(hit.point);
             isInteracting = true;
             if (resetTween.IsActive())
@@ -56,7 +54,7 @@ namespace Interactables
         {
             if (isInteracting)
             {
-                var a = playerCamera.TransformPoint(Vector3.forward * pullDistance);
+                var a = Player.Camera.transform.TransformPoint(Vector3.forward * pullDistance);
                 var b = Quaternion.Inverse(transform.rotation) * (a - transform.TransformPoint(center));
                 delta = b.z * rotationSpeed;
             }

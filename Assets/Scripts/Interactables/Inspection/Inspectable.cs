@@ -1,3 +1,4 @@
+using Core;
 using DG.Tweening;
 using Interactables.Base;
 using UnityEngine;
@@ -15,7 +16,6 @@ namespace Interactables.Inspection
         [SerializeField, Min(0)] float angleAllowance = 180;
         [SerializeField] float animTime;
         
-        static Transform playerCamera;
         static bool itemBeingInspected;
 
         Vector3 originalPosition;
@@ -38,19 +38,20 @@ namespace Interactables.Inspection
         {
             // Can hover if no item is being inspected.
             hoverable.OnAttemptHover += _ => CanInteract();
-            if (!playerCamera)
-                playerCamera = Camera.main.transform;
 
             originalPosition = transform.position;
             originalRotation = transform.rotation;
             angleCheckVector = transform.TransformDirection(-forwardDirection);
         }
 
-        bool CanInteract() =>
-            !itemBeingInspected
-            && (playerCamera.position - transform.position).sqrMagnitude > minInteractDist * minInteractDist
-            && (transform.position - originalPosition).sqrMagnitude < maxDistFromOriginalPos * maxDistFromOriginalPos
-            && Vector3.Dot(playerCamera.forward, angleCheckVector) >= (180 - angleAllowance) / 180;
+        bool CanInteract()
+        {
+            var playerCamera = Player.Camera.transform;
+            return !itemBeingInspected
+                   && (playerCamera.position - transform.position).sqrMagnitude > minInteractDist * minInteractDist
+                   && (transform.position - originalPosition).sqrMagnitude < maxDistFromOriginalPos * maxDistFromOriginalPos
+                   && Vector3.Dot(playerCamera.forward, angleCheckVector) >= (180 - angleAllowance) / 180;
+        }
 
         public void OnInteract(Transform sender)
         {
@@ -61,7 +62,8 @@ namespace Interactables.Inspection
             hoverable.enabled = false;
 
             transform.DOKill();
-
+            
+            var playerCamera = Player.Camera.transform;
             transform.DOMove(playerCamera.position + playerCamera.forward * distanceFromCamera, animTime);
             var rot = Quaternion.LookRotation(-playerCamera.forward, playerCamera.up).eulerAngles + offsetRotation;
             transform.DORotateQuaternion(Quaternion.Euler(rot), animTime);

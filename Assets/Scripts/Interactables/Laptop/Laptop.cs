@@ -14,7 +14,6 @@ namespace Interactables.Laptop
         [SerializeField] float fadeTime = 0.5f;
 
         Controls controls;
-        Transform mainCamera;
         Vector3 tempCameraPos;
         Quaternion tempCameraRot;
         PlayerController tempController;
@@ -25,7 +24,6 @@ namespace Interactables.Laptop
         {
             controls = new Controls();
             controls.Gameplay.SecondaryInteract.performed += _ => OnExit();
-            mainCamera = Camera.main.transform;
             uiGroup.gameObject.SetActive(true);
             uiGroup.alpha = 0;
             uiGroup.interactable = false;
@@ -64,16 +62,19 @@ namespace Interactables.Laptop
                     controls.Enable();
                     ShowUI(true);
                 });
-            tempCameraPos = mainCamera.position;
-            tempCameraRot = mainCamera.rotation;
+            
+            var cam = Player.Camera.transform;
+            tempCameraPos = cam.position;
+            tempCameraRot = cam.rotation;
             
         }
 
         void AnimateCamera(Vector3 pos, Quaternion rot, TweenCallback onComplete)
         {
             animating = true;
-            mainCamera.DOMove(pos, animTime).OnComplete(onComplete);
-            mainCamera.DORotateQuaternion(rot, animTime).OnComplete(() => animating = false);
+            var cam = Player.Camera.transform;
+            cam.DOMove(pos, animTime).OnComplete(onComplete);
+            cam.DORotateQuaternion(rot, animTime).OnComplete(() => animating = false);
         }
 
         void ShowUI(bool show)
