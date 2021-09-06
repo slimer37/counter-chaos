@@ -2,60 +2,63 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class FracturedObject : MonoBehaviour
+namespace Fracture
 {
-    [SerializeField] Rigidbody[] rigidbodies;
-    float delay;
-
-    Vector3[] originalRbPositions;
-    Quaternion[] originalRbRotations;
-
-    void OnValidate()
+    public class FracturedObject : MonoBehaviour
     {
-        foreach (Transform child in transform)
+        [SerializeField] Rigidbody[] rigidbodies;
+        float delay;
+
+        Vector3[] originalRbPositions;
+        Quaternion[] originalRbRotations;
+
+        void OnValidate()
         {
-            if (child.gameObject.layer != LayerMask.NameToLayer("Fracture Piece"))
+            foreach (Transform child in transform)
             {
-                Debug.LogWarning($"All children of {name} must be on the Fracture Piece layer.");
-                return;
+                if (child.gameObject.layer != LayerMask.NameToLayer("Fracture Piece"))
+                {
+                    Debug.LogWarning($"All children of {name} must be on the Fracture Piece layer.");
+                    return;
+                }
             }
         }
-    }
 
-    void Reset() => rigidbodies = GetComponentsInChildren<Rigidbody>();
+        void Reset() => rigidbodies = GetComponentsInChildren<Rigidbody>();
 
-    void Awake()
-    {
-        originalRbPositions = new Vector3[rigidbodies.Length];
-        originalRbRotations = new Quaternion[rigidbodies.Length];
-        for (var i = 0; i < rigidbodies.Length; i++)
+        void Awake()
         {
-            originalRbPositions[i] = rigidbodies[i].transform.localPosition;
-            originalRbRotations[i] = rigidbodies[i].transform.localRotation;
+            originalRbPositions = new Vector3[rigidbodies.Length];
+            originalRbRotations = new Quaternion[rigidbodies.Length];
+            for (var i = 0; i < rigidbodies.Length; i++)
+            {
+                originalRbPositions[i] = rigidbodies[i].transform.localPosition;
+                originalRbRotations[i] = rigidbodies[i].transform.localRotation;
+            }
         }
-    }
 
-    internal void Explode(float force, float destroyDelay, Action<FracturedObject> disableCallback)
-    {
-        foreach (var rb in rigidbodies)
-            rb.AddExplosionForce(force, transform.position, 0);
-        
-        delay = destroyDelay;
-        StartCoroutine(DelayedOut(disableCallback));
-    }
-
-    IEnumerator DelayedOut(Action<FracturedObject> disableCallback)
-    {
-        yield return new WaitForSeconds(delay);
-        for (var i = 0; i < rigidbodies.Length; i++)
+        internal void Explode(float force, float destroyDelay, Action<FracturedObject> disableCallback)
         {
-            var rbT = rigidbodies[i].transform;
-            rbT.localPosition = originalRbPositions[i];
-            rbT.localRotation = originalRbRotations[i];
-            rigidbodies[i].velocity = Vector3.zero;
-        }
+            foreach (var rb in rigidbodies)
+                rb.AddExplosionForce(force, transform.position, 0);
         
-        gameObject.SetActive(false);
-        disableCallback(this);
+            delay = destroyDelay;
+            StartCoroutine(DelayedOut(disableCallback));
+        }
+
+        IEnumerator DelayedOut(Action<FracturedObject> disableCallback)
+        {
+            yield return new WaitForSeconds(delay);
+            for (var i = 0; i < rigidbodies.Length; i++)
+            {
+                var rbT = rigidbodies[i].transform;
+                rbT.localPosition = originalRbPositions[i];
+                rbT.localRotation = originalRbRotations[i];
+                rigidbodies[i].velocity = Vector3.zero;
+            }
+        
+            gameObject.SetActive(false);
+            disableCallback(this);
+        }
     }
 }
