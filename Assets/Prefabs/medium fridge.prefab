@@ -181,8 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953e553a9aafc7b458ed97cabd8ce6ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullDistance: 2
-  rotationSpeed: 50
+  invert: 0
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
@@ -727,8 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953e553a9aafc7b458ed97cabd8ce6ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullDistance: 2
-  rotationSpeed: -50
+  invert: 1
   rotationMin: -90
   rotationMax: 0
   stopTime: 0.5
