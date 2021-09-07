@@ -37,6 +37,11 @@ namespace Interactables.Holding
             contents = new List<Pickuppable>();
             contents.AddRange(toStore);
         }
+
+        bool IsContainable(Component obj) =>
+            contents.Count < positioner.TotalPositions
+            && obj.CompareTag("Product")
+            && !obj.TryGetComponent<ItemContainer>(out _);
         
         public void OnInteract(Transform sender)
         {
@@ -47,14 +52,16 @@ namespace Interactables.Holding
             if (!open) return;
 
             if (holder.IsHoldingItem)
+            {
+                if (!IsContainable(holder.HeldItem)) return;
                 AddItem(holder.TakeFrom(), true);
+            }
             else if (contents.Count > 0)
                 RemoveItem(holder);
         }
 
         void AddItem(Pickuppable item, bool wasInteraction)
         {
-            if (contents.Count >= positioner.TotalPositions) return;
             positioner.PlaceInPosition(item.transform, contents.Count, true, wasInteraction);
             contents.Add(item);
         }
@@ -99,7 +106,7 @@ namespace Interactables.Holding
 
         void OnCollisionEnter(Collision other)
         {
-            if (!other.transform.CompareTag("Product")) return;
+            if (!IsContainable(other.transform)) return;
             
             // Look for collisions coming down through the top of the container.
             if (other.GetContact(0).normal.y < -0.7f)
@@ -114,7 +121,7 @@ namespace Interactables.Holding
 
         void OnCollisionExit(Collision other)
         {
-            if (open || itemsWaiting.Count == 0 || !other.transform.CompareTag("Product")) return;
+            if (itemsWaiting.Count == 0 || !other.transform.CompareTag("Product")) return;
 
             var p = other.transform.GetComponent<Pickuppable>();
             itemsWaiting.Remove(p);
