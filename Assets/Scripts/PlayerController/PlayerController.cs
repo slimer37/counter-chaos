@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     
     [Header("Jumping")]
     [SerializeField] float jumpForce;
-    [SerializeField] float maxJumpTime;
     [SerializeField, Min(0)] float gravity = 9.81f;
     
     [Header("Looking")]
@@ -46,9 +45,6 @@ public class PlayerController : MonoBehaviour
     bool isSprinting;
     bool isSlow;
     float currentSpeed;
-
-    float jumpTime;
-    bool isHoldingJump;
     
     Vector2 mouseDelta;
     Vector3 camRot;
@@ -116,14 +112,11 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue val)
     {
-        if (val.isPressed && characterController.isGrounded)
+        if (val.isPressed)
         {
-            isHoldingJump = true;
-            moveVector.y = jumpForce;
-            jumpTime = maxJumpTime;
+            if (characterController.isGrounded)
+                moveVector.y = jumpForce;
         }
-        else if (!val.isPressed)
-            isHoldingJump = false;
     }
 
     void OnSprint(InputValue val)
@@ -173,11 +166,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Jumping & Gravity
-
-        if (isHoldingJump && jumpTime > 0)
-            jumpTime -= Time.deltaTime;
-        else if (!characterController.isGrounded)
+        // Gravity
+        
+        if (!characterController.isGrounded)
             moveVector.y -= gravity * Time.deltaTime;
         
         // Moving

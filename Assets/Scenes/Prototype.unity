@@ -1074,7 +1074,6 @@ MonoBehaviour:
   sprintFov: 70
   transitionEase: 1
   jumpForce: 7.5
-  maxJumpTime: 0.1
   gravity: 49.05
   cam: {fileID: 1687258584}
   secondaryCam: {fileID: 1859453136}
@@ -9000,7 +8999,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30964
+  m_Name: pb_Mesh30962
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
