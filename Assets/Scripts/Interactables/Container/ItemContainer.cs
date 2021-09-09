@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DG.Tweening;
 using Interactables.Base;
+using Interactables.Holding;
+using Products;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Interactables.Holding
+namespace Interactables.Container
 {
     [RequireComponent(typeof(ContainerPositioner), typeof(Pickuppable))]
     public class ItemContainer : MonoBehaviour, IInteractHandler, ISecondaryInteractHandler
@@ -16,6 +18,7 @@ namespace Interactables.Holding
         [SerializeField] ContainerPositioner positioner;
         [SerializeField] Pickuppable pickuppable;
         [SerializeField] float acceptanceDelay;
+        [SerializeField] ProductInfo filterProduct;
 
         List<Pickuppable> itemsWaiting = new List<Pickuppable>();
         bool open;
@@ -41,6 +44,7 @@ namespace Interactables.Holding
         bool IsContainable(Component obj) =>
             contents.Count < positioner.TotalPositions
             && obj.CompareTag("Product")
+            && (!filterProduct || obj.GetComponent<ProductIdentifier>().productInfo == filterProduct)
             && !obj.TryGetComponent<ItemContainer>(out _);
         
         public void OnInteract(Transform sender)
@@ -106,14 +110,15 @@ namespace Interactables.Holding
 
         void OnCollisionEnter(Collision other)
         {
-            if (!IsContainable(other.transform)) return;
-            
             // Look for collisions coming down through the top of the container.
             if (other.GetContact(0).normal.y < -0.7f)
             {
                 var p = other.transform.GetComponent<Pickuppable>();
                 if (open)
-                    AddItem(p, false);
+                {
+                    if (IsContainable(other.transform))
+                        AddItem(p, false);
+                }
                 else
                     itemsWaiting.Add(p);
             }

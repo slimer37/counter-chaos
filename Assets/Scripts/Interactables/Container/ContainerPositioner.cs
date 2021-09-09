@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Interactables.Holding
+namespace Interactables.Container
 {
     public class ContainerPositioner : MonoBehaviour
     {
