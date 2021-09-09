@@ -8,6 +8,7 @@ namespace Interactables.Container
         [SerializeField, Min(1)] Vector3Int containmentBoxSize = Vector3Int.one;
         [SerializeField, Min(0.01f)] float unitSize = 0.25f;
         [SerializeField] Collider disableCollider;
+        [SerializeField] Vector3 baseContentsOffset;
         [SerializeField, Min(0)] Vector3 positionVariance;
         [SerializeField, Min(0)] Vector3 baseContentsRotation;
         [SerializeField, Min(0)] Vector3 rotationVariance;
@@ -44,7 +45,7 @@ namespace Interactables.Container
             Gizmos.color = new Color(1, 0.4f, 0);
             foreach (var p in positions)
             {
-                var pos = transform.TransformPoint(p);
+                var pos = transform.TransformPoint(p + baseContentsOffset);
                 Gizmos.DrawSphere(pos, 0.05f);
                 Gizmos.DrawWireCube(pos, positionVariance * 2);
             }
@@ -69,7 +70,7 @@ namespace Interactables.Container
             rb.isKinematic = true;
             item.parent = transform;
 
-            var localPos = positions[index] + GenerateVarianceVector(positionVariance);
+            var localPos = positions[index] + baseContentsOffset + GenerateVarianceVector(positionVariance);
             var localRot = GenerateRotation();
 
             if (tween)
