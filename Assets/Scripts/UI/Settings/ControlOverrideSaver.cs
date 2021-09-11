@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace UI.Settings
 {
-    public class ControlOverrideSaver : MonoBehaviour
+    public static class ControlOverrideSaver
     {
         [Serializable]
         struct BindingList { public List<BindingSerializable> bindings; }
