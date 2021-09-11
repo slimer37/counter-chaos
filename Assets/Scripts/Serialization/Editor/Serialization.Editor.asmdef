@@ -1,0 +1,18 @@
+{
+    "name": "Serialization.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:33f3158628d38c34598ada24849d2996"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
