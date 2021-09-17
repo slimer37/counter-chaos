@@ -67,6 +67,8 @@ namespace Furniture
             {
                 if (!shelf.gameObject.activeSelf) continue;
 
+                if (shelf.ShelfStyle != style) throw new Exception($"Shelf style of {shelf} does not match {name}.");
+
                 var shelfT = shelf.transform;
                 var localPos = shelfT.localPosition;
                 var index = GetShelfIndex(localPos.y);
