@@ -10,6 +10,9 @@ namespace Interactables.Holding
         [field: SerializeField] public bool Throwable { get; set; } = true;
         [field: SerializeField] public bool Droppable { get; set; } = true;
         [field: SerializeField] public bool CanBeHung { get; set; }
+
+        [Header("Bounds")]
+        [SerializeField] bool useColliderBounds;
         
         [Header("Overrides")]
         [SerializeField] Vector3 overrideHoldingPosition;
@@ -56,7 +59,15 @@ namespace Interactables.Holding
 
         void Awake()
         {
-            meshBounds = rend.bounds;
+            if (useColliderBounds)
+            {
+                if (!TryGetComponent(out Collider col))
+                    throw new Exception("Tried to fetch collider bounds but no collider was found.");
+                meshBounds = col.bounds;
+            }
+            else
+                meshBounds = rend.bounds;
+            
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
             VerticalExtent = transform.position.y - meshBounds.center.y + meshBounds.extents.y;
             hoverable.OnAttemptHover += OnAttemptHover;
