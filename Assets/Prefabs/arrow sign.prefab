@@ -43,9 +43,10 @@ MonoBehaviour:
   <Droppable>k__BackingField: 1
   <CanBeHung>k__BackingField: 0
   useColliderBounds: 1
+  neverIntersects: 0
   overrideHoldingPosition: {x: 0, y: -0.8, z: 0.7}
   useRotationIfZeroes: 0
-  overrideHoldingRotation: {x: 0, y: 0, z: 0}
+  overrideHoldingRotation: {x: 0, y: 180, z: 0}
   hoverable: {fileID: 1554281110}
   rb: {fileID: 0}
   nonPhysics: 1
