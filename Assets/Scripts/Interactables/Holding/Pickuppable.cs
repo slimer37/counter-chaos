@@ -13,6 +13,7 @@ namespace Interactables.Holding
 
         [Header("Bounds")]
         [SerializeField] bool useColliderBounds;
+        [SerializeField] bool neverIntersects;
         
         [Header("Overrides")]
         [SerializeField] Vector3 overrideHoldingPosition;
@@ -77,7 +78,8 @@ namespace Interactables.Holding
         bool OnAttemptHover(Transform sender) => !ItemHolder.Main.IsHoldingItem;
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
-            Physics.OverlapBoxNonAlloc(rend.bounds.center, meshBounds.extents, results, transform.rotation, mask) > 0;
+            !neverIntersects
+            && Physics.OverlapBoxNonAlloc(rend.bounds.center, meshBounds.extents, results, transform.rotation, mask) > 0;
 
         public void OnInteract(Transform sender) => OnPickup(sender);
 
