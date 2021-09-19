@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Interactables
 {
-    public class TextEntry : MonoBehaviour, IInteractHandler
+    public class TextEntry : MonoBehaviour, ISecondaryInteractHandler
     {
         [SerializeField] TextMeshPro text;
         [SerializeField, Min(1)] int charLimit = 1;
@@ -62,7 +62,7 @@ namespace Interactables
             GUILayout.EndArea();
         }
 
-        public void OnInteract(Transform sender)
+        public void OnSecondaryInteract(Transform sender)
         {
             if (enteringText) return;
             enteringText = true;
