@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using TMPro;
@@ -17,6 +18,25 @@ namespace UI
         [SerializeField] string[] captions;
 
         static SceneLoader instance;
+        static int baseSceneIndex;
+
+        [RuntimeInitializeOnLoadMethod]
+        static void InitBaseScene()
+        {
+            for (var i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+            {
+                var scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+                var sceneNameStart = scenePath.LastIndexOf("/", StringComparison.Ordinal) + 1;
+                var sceneNameEnd = scenePath.LastIndexOf(".", StringComparison.Ordinal);
+                var sceneNameLength = sceneNameEnd - sceneNameStart;
+                
+                if (scenePath.Substring(sceneNameStart, sceneNameLength) == "Base")
+                {
+                    baseSceneIndex = i;
+                    return;
+                }
+            }
+        }
 
         void Awake()
         {
@@ -35,19 +55,26 @@ namespace UI
 
         public static void Load(int i)
         {
+            if (i == baseSceneIndex)
+                throw new ArgumentException("You cannot load the base scene directly.", nameof(i));
+            
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+
+            var shouldLoadBase = i != 0;
             
-            if (instance) instance.StartCoroutine(instance.LoadAsync(i));
+            if (instance) instance.StartCoroutine(instance.LoadAsync(i, shouldLoadBase));
             else
             {
                 DOTween.KillAll();
                 Debug.LogWarning("Couldn't find a SceneLoader instance. Loading normally...");
-                SceneManager.LoadScene(i);
+                if (shouldLoadBase)
+                    SceneManager.LoadScene(baseSceneIndex);
+                SceneManager.LoadScene(i, shouldLoadBase ? LoadSceneMode.Additive : LoadSceneMode.Single);
             }
         }
 
-        IEnumerator LoadAsync(int index)
+        IEnumerator LoadAsync(int index, bool withBase)
         {
             captionText.text = "";
             percentageText.text = "0%";
@@ -58,7 +85,10 @@ namespace UI
             yield return canvasGroup.DOFade(1, fadeDuration).SetUpdate(true).WaitForCompletion();
             DOTween.KillAll();
             
-            var op = SceneManager.LoadSceneAsync(index);
+            if (withBase)
+                SceneManager.LoadScene(baseSceneIndex);
+            
+            var op = SceneManager.LoadSceneAsync(index, withBase ? LoadSceneMode.Additive : LoadSceneMode.Single);
             while (!op.isDone)
             {
                 var progress = Mathf.Clamp01(op.progress / 0.9f);
@@ -68,6 +98,9 @@ namespace UI
                 captionText.text = captions[Mathf.RoundToInt(captions.Length * progress - 0.5f)];
                 yield return null;
             }
+
+            if (withBase)
+                SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
             
             Time.timeScale = 1;
             canvasGroup.blocksRaycasts = false;
