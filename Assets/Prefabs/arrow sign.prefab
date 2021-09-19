@@ -199,7 +199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b105cbc6db6fa740a657d159b677571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverable: {fileID: 1956183232}
   text: {fileID: 1956183235}
   charLimit: 36
 --- !u!114 &1956183232
@@ -258,6 +257,7 @@ MonoBehaviour:
   <Throwable>k__BackingField: 0
   <Droppable>k__BackingField: 1
   <CanBeHung>k__BackingField: 0
+  <GroundPlacementOnly>k__BackingField: 1
   useColliderBounds: 1
   neverIntersects: 0
   overrideHoldingPosition: {x: 0, y: -0.8, z: 0.7}

@@ -59,6 +59,8 @@ namespace Interactables.Holding
         bool isRotating;
         float holdTime;
 
+        bool onFlatSurface;
+
         readonly Collider[] obstacleResults = new Collider[1];
 
         void OnDrawGizmosSelected()
@@ -132,7 +134,7 @@ namespace Interactables.Holding
 
                 controller.EnableLook(true);
 
-                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults) || heldItem.GroundPlacementOnly && !onFlatSurface)
                     ReturnItemToHolding();
                 else
                     Drop(false);
@@ -208,21 +210,23 @@ namespace Interactables.Holding
                     itemTransform.localEulerAngles += rotationDelta * Time.deltaTime * Vector3.up;
 
                 var onFreeSpot = false;
-                
+
                 if (Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask))
                 {
                     var distanceOffSurface = extraDropHeight;
-                    
+
                     // Only use bound diagonal if the surface is not horizontal (e.g. the ground but not the ceiling).
                     var angle = Vector3.Angle(hit.normal, Vector3.up);
-                    distanceOffSurface += angle < flatSurfaceTolerance
-                        ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
-                    
+                    onFlatSurface = angle < flatSurfaceTolerance;
+                    distanceOffSurface += onFlatSurface ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
+
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
 
                     if (!heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
                         onFreeSpot = true;
                 }
+                else
+                    onFlatSurface = false;
                 
                 if (!onFreeSpot)
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);

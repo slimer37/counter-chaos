@@ -1,5 +1,4 @@
 using System;
-using Core;
 using Interactables.Base;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ namespace Interactables.Holding
         [field: SerializeField] public bool Throwable { get; set; } = true;
         [field: SerializeField] public bool Droppable { get; set; } = true;
         [field: SerializeField] public bool CanBeHung { get; set; }
+        [field: SerializeField] public bool GroundPlacementOnly { get; set; }
 
         [Header("Bounds")]
         [SerializeField] bool useColliderBounds;
