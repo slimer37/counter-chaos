@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue val)
     {
+        if (!canMove) return;
         if (val.isPressed)
         {
             if (characterController.isGrounded)
