@@ -12,7 +12,13 @@ namespace Interactables.Base
 
         [SerializeField] bool useOutline = true;
 
-        public Func<Transform, bool> OnAttemptHover;
+        public event Func<Transform, bool> OnAttemptHover
+        {
+            add => hoverChecks.Add(value);
+            remove => hoverChecks.Remove(value);
+        }
+
+        readonly List<Func<Transform, bool>> hoverChecks = new List<Func<Transform, bool>>();
         
         IconHandler tempIconHandler;
         Outline outline;
@@ -22,6 +28,11 @@ namespace Interactables.Base
         float startHoverTime;
         
         const float FlashSpeed = 1.5f;
+
+        public bool LastCheckSuccessful { get; private set; }
+        
+        // No direct disabling!
+        new public bool enabled => base.enabled;
 
         void Awake()
         {
@@ -49,11 +60,19 @@ namespace Interactables.Base
                 Debug.LogWarning($"{name} is not on the Interactable layer.", gameObject);
         }
 
+        bool CanHover(Transform sender)
+        {
+            foreach (var check in hoverChecks)
+            { if (!check(sender)) return false; }
+            return true;
+        }
+
         public void OnHover(IconHandler iconHandler, Transform sender)
         {
             if (!enabled) return;
-            
-            if (OnAttemptHover == null || OnAttemptHover(sender))
+
+            LastCheckSuccessful = CanHover(sender);
+            if (LastCheckSuccessful)
             {
                 tempIconHandler = iconHandler;
                 iconHandler.ShowIcon(icon);

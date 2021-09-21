@@ -37,14 +37,14 @@ namespace Interactables.Inspection
         void Awake()
         {
             // Can hover if no item is being inspected.
-            hoverable.OnAttemptHover += _ => CanInteract();
+            hoverable.OnAttemptHover += CanInteract;
 
             originalPosition = transform.position;
             originalRotation = transform.rotation;
             angleCheckVector = transform.TransformDirection(-forwardDirection);
         }
 
-        bool CanInteract()
+        bool CanInteract(Transform s)
         {
             var playerCamera = Player.Camera.transform;
             return !itemBeingInspected
@@ -55,11 +55,10 @@ namespace Interactables.Inspection
 
         public void OnInteract(Transform sender)
         {
-            if (!CanInteract()) return;
+            if (!CanInteract(sender)) return;
 
             (tempController = sender.GetComponent<PlayerController>()).Suspend();
             itemBeingInspected = true;
-            hoverable.enabled = false;
 
             transform.DOKill();
             
@@ -74,7 +73,6 @@ namespace Interactables.Inspection
             if (!tempController) return;
             tempController.Suspend(false);
             itemBeingInspected = false;
-            hoverable.enabled = true;
             
             transform.DOMove(originalPosition, animTime);
             transform.DORotateQuaternion(originalRotation, animTime);

@@ -29,8 +29,6 @@ namespace Furniture
         [SerializeField] float shelfAnimUp;
         [SerializeField] float beforeDownInterval;
         [SerializeField] float shelfDownDuration;
-
-        Hoverable hoverable;
         
         Shelf[] shelves;
         int availableSlots;
@@ -55,11 +53,10 @@ namespace Furniture
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnReleaseInteract;
             
-            hoverable = GetComponent<Hoverable>();
             shelves = new Shelf[maxShelves];
             
-            GetComponent<Hoverable>().OnAttemptHover =
-                sender => Vector3.Dot(transform.forward, sender.forward) < 0
+            GetComponent<Hoverable>().OnAttemptHover +=
+                sender => !shelfIsBeingAttached && Vector3.Dot(transform.forward, sender.forward) < 0
                     && (ItemHolder.Main.HeldItem?.GetComponent<Shelf>() ?? false);
 
             availableSlots = maxShelves;
@@ -124,7 +121,6 @@ namespace Furniture
             
             shelfToAttach.Disable();
             shelfIsBeingAttached = true;
-            hoverable.enabled = false;
             controls.Enable();
         }
 
@@ -176,7 +172,6 @@ namespace Furniture
             shelfToAttach.AttachTo(this, shelfIndex);
             shelfToAttach.Enable();
             shelfToAttach.gameObject.layer = tempLayer;
-            hoverable.enabled = true;
 
             shelfIsBeingAttached = false;
             

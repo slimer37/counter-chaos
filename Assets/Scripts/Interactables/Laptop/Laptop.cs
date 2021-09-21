@@ -19,6 +19,7 @@ namespace Interactables.Laptop
         PlayerController tempController;
 
         bool animating;
+        bool open;
 
         void Awake()
         {
@@ -28,11 +29,12 @@ namespace Interactables.Laptop
             uiGroup.alpha = 0;
             uiGroup.interactable = false;
             
-            hoverable.OnAttemptHover = CheckPlayerFacing;
+            hoverable.OnAttemptHover += CanInteract;
         }
         
-        bool CheckPlayerFacing(Transform player)
+        bool CanInteract(Transform player)
         {
+            if (open) return false;
             var inFront = Vector3.Dot(transform.forward, player.forward) < 0;
             enabled = inFront;
             return inFront;
@@ -45,7 +47,7 @@ namespace Interactables.Laptop
             AnimateCamera(tempCameraPos, tempCameraRot, () => {
                 controls.Disable();
                 tempController.Suspend(false);
-                hoverable.enabled = true;
+                open = true;
             });
         }
 
@@ -53,7 +55,7 @@ namespace Interactables.Laptop
         {
             if (animating || !hoverable.enabled) return;
 
-            hoverable.enabled = false;
+            open = true;
 
             (tempController = sender.GetComponent<PlayerController>()).Suspend();
             

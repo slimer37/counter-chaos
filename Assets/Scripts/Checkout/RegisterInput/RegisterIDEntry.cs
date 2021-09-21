@@ -34,17 +34,8 @@ namespace Checkout.RegisterInput
                 
         }
 
-        void OnEnable()
-        {
-            Keyboard.current.onTextInput += InputID;
-            hoverable.enabled = true;
-        }
-    
-        void OnDisable()
-        {
-            Keyboard.current.onTextInput -= InputID;
-            hoverable.enabled = false;
-        }
+        void OnEnable() => Keyboard.current.onTextInput += InputID;
+        void OnDisable() => Keyboard.current.onTextInput -= InputID;
 
         public void OnInteract(Transform sender)
         {

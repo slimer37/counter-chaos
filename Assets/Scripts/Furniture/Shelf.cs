@@ -13,27 +13,23 @@ namespace Furniture
 
         ShelfBase attachedBase;
         int attachmentIndex;
-        
-        Hoverable hoverable;
-
         int numColliding;
+        bool interactable = true;
 
-        void OnCollisionEnter(Collision other)
+        void OnCollisionEnter(Collision other) => numColliding++;
+
+        void OnCollisionExit(Collision other) => numColliding--;
+
+        void Awake() => GetComponent<Hoverable>().OnAttemptHover += CanInteract;
+
+        bool CanInteract(Transform s)
         {
-            if (numColliding == 0) hoverable.enabled = false;
-            numColliding++;
-        }
-        
-        void OnCollisionExit(Collision other)
-        {
-            numColliding--;
-            if (numColliding == 0) hoverable.enabled = true;
+            if (!interactable) return false;
+            return numColliding == 0;
         }
 
-        void Awake() => hoverable = GetComponent<Hoverable>();
-
-        internal void Disable() => hoverable.enabled = false;
-        internal void Enable() => hoverable.enabled = true;
+        internal void Disable() => interactable = false;
+        internal void Enable() => interactable = true;
 
         internal void AttachTo(ShelfBase shelfBase, int atIndex)
         {

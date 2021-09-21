@@ -75,7 +75,7 @@ namespace Interactables.Holding
         }
 
         // Can hover if the sender is not holding anything.
-        bool OnAttemptHover(Transform sender) => !ItemHolder.Main.IsHoldingItem;
+        bool OnAttemptHover(Transform sender) => !isHeld && !ItemHolder.Main.IsHoldingItem;
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             !neverIntersects
@@ -125,7 +125,6 @@ namespace Interactables.Holding
             var pickingUp = (bool)holder;
             isHeld = pickingUp;
             if (!nonPhysics) rb.isKinematic = pickingUp;
-            hoverable.enabled = !pickingUp;
         }
     }
 }

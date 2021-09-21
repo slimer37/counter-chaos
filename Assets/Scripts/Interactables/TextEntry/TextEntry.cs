@@ -13,6 +13,8 @@ namespace Interactables
         bool initGui;
         PlayerController tempController;
 
+        void Awake() => GetComponent<Hoverable>().OnAttemptHover += _ => !enteringText;
+
         void OnGUI()
         {
             if (!enteringText) return;
