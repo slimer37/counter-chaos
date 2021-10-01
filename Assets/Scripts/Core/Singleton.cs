@@ -35,6 +35,5 @@ namespace Core
         }
 
         void OnApplicationQuit() => shuttingDown = true;
-        void OnDestroy() => shuttingDown = true;
     }
 }
