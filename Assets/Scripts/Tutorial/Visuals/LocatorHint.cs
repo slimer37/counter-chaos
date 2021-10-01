@@ -3,7 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace Visuals
+namespace Tutorial.Visuals
 {
     public class LocatorHint : Singleton<LocatorHint>
     {
