@@ -54,16 +54,18 @@ namespace Tutorial.Visuals
         void PositionAt(Vector3 pos)
         {
             var cam = Player.Camera;
+
+            var point = cam.WorldToScreenPoint(pos);
             
             // If the object is out of view, hide the hint.
-            if (Vector3.Dot(cam.transform.forward, followTarget.position - cam.transform.position) < 0)
+            if (point.z < 0)
             {
                 canvasGroup.alpha = 0;
                 return;
             }
             
             canvasGroup.alpha = 1;
-            rootContainer.position = cam.WorldToScreenPoint(pos) + Vector3.up * yOffset;
+            rootContainer.position = point + Vector3.up * yOffset;
         }
         
         void Update()
