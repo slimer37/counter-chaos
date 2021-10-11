@@ -10,23 +10,16 @@ namespace UI.TitleScreen
         public bool interactable = true;
         [SerializeField] Vector2 expandBy = new Vector2(50, 0);
         [SerializeField] float animDuration = 0.5f;
-        [SerializeField] float fadeDuration = 0.5f;
         [SerializeField] Ease ease = DOTween.defaultEaseType;
-        [SerializeField] Graphic fadeBackground;
-        [SerializeField] Ease fadeEase = Ease.OutSine;
         [SerializeField] bool ignoreTimeScale;
 	
         RectTransform rectTransform;
         Vector2 originalSizeDelta;
 
-        void Reset() => TryGetComponent(out fadeBackground);
-
         void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
             originalSizeDelta = rectTransform.sizeDelta;
-            if (interactable)
-                fadeBackground.DOFade(0, 0);
         }
 
         public void OnPointerEnter(PointerEventData eventData) => Expand(true);
@@ -37,17 +30,9 @@ namespace UI.TitleScreen
             if (!interactable) return;
 		
             rectTransform.DOKill();
-            fadeBackground.DOKill();
 
-            var sequence = DOTween.Sequence();
-
-            sequence.Join(rectTransform.DOSizeDelta(originalSizeDelta + (value ? expandBy : Vector2.zero), animDuration)
-                .SetEase(ease));
-            sequence.Insert(value ? 0 : animDuration - fadeDuration,
-                fadeBackground.DOFade(value ? 1 : 0, fadeDuration).SetEase(fadeEase));
-
-            sequence.SetUpdate(ignoreTimeScale);
-            sequence.Play();
+            rectTransform.DOSizeDelta(originalSizeDelta + (value ? expandBy : Vector2.zero), animDuration)
+                .SetEase(ease).SetUpdate(ignoreTimeScale);
         }
     }
 }
