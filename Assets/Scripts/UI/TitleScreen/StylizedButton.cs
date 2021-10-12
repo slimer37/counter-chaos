@@ -7,7 +7,6 @@ namespace UI.TitleScreen
 {
     public class StylizedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        public bool interactable = true;
         [SerializeField] Vector2 expandBy = new Vector2(50, 0);
         [SerializeField] float animDuration = 0.5f;
         [SerializeField] Ease ease = DOTween.defaultEaseType;
@@ -15,11 +14,13 @@ namespace UI.TitleScreen
 	
         RectTransform rectTransform;
         Vector2 originalSizeDelta;
+        Button button;
 
         void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
             originalSizeDelta = rectTransform.sizeDelta;
+            button = GetComponent<Button>();
         }
 
         public void OnPointerEnter(PointerEventData eventData) => Expand(true);
@@ -27,7 +28,7 @@ namespace UI.TitleScreen
 
         void Expand(bool value)
         {
-            if (!interactable) return;
+            if (!button.interactable) return;
 		
             rectTransform.DOKill();
 
