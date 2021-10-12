@@ -35,7 +35,7 @@ namespace UI
             var invCulture = StringComparison.InvariantCulture;
             var start = contents.IndexOf(beginTag, invCulture) + beginTag.Length;
             var end = contents.IndexOf(endTag, start, invCulture);
-            text.text = contents.Substring(start, end - start);
+            text.text = contents.Substring(start, end - start).Trim('\n');
         }
     }
 }
