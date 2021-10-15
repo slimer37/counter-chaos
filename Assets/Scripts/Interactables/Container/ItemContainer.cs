@@ -31,6 +31,8 @@ namespace Interactables.Container
             TryGetComponent(out pickuppable);
         }
 
+        void Awake() => GetComponent<Hoverable>().ClearUnderPriority(1);
+
         void Start() =>
             positioner.PlaceInPositions(contents.ConvertAll(p => p.transform).ToArray(), 0, false);
 

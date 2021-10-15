@@ -34,6 +34,8 @@ namespace Interactables.Base
         // No direct disabling!
         new public bool enabled => base.enabled;
 
+        int highestCallbackPriority;
+
         void Awake()
         {
             if (!useOutline) return;
@@ -42,6 +44,27 @@ namespace Interactables.Base
             outline.OutlineMode = Outline.Mode.OutlineVisible;
             outline.OutlineWidth = 10;
             outline.enabled = false;
+        }
+
+        public void ClearUnderPriority(int priority)
+        {
+            if (highestCallbackPriority >= priority) return;
+            highestCallbackPriority = priority;
+            hoverChecks.Clear();
+        }
+
+        public void RegisterPriorityCheck(Func<Transform, bool> callback, int priority = 0, bool remove = false)
+        {
+            if (remove)
+            {
+                hoverChecks.Remove(callback);
+                return;
+            }
+            
+            if (highestCallbackPriority == priority)
+                hoverChecks.Add(callback);
+            
+            ClearUnderPriority(priority);
         }
 
         public THandler[] GetOnce<THandler>()
