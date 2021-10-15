@@ -8,6 +8,7 @@ namespace UI.TitleScreen
         [SerializeField] Transform end;
         [SerializeField] Ease ease;
         [SerializeField] float duration;
+        [SerializeField] bool ignoreTimeScale;
 
         Sequence pan;
 
@@ -16,7 +17,7 @@ namespace UI.TitleScreen
             pan = DOTween.Sequence();
             pan.Append(transform.DOMove(end.position, duration).SetEase(ease));
             pan.Join(transform.DORotate(end.eulerAngles, duration).SetEase(ease));
-            pan.SetLoops(-1, LoopType.Yoyo);
+            pan.SetLoops(-1, LoopType.Yoyo).SetUpdate(ignoreTimeScale);
         }
     }
 }
