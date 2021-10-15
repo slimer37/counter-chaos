@@ -4789,8 +4789,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 250, y: 0}
-  m_SizeDelta: {x: 500, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &590123833
 MonoBehaviour:
@@ -5901,7 +5901,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0001546056}
+  m_AnchoredPosition: {x: 0, y: -0.000002861023}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &754780328
@@ -6043,7 +6043,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1227286956}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9919888
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11424,7 +11424,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1212331389}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1212331391}
+        m_TargetAssemblyTypeName: Tutorial.TutorialPrompt, Tutorial
+        m_MethodName: BeginPrompt
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1212331389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11472,10 +11484,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1212331385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0e73a09fef9466fab96b0a2cd2f7c9b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ee48e6cdf5d4a5c90014aee6bd4ba94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 2
+  promptTitle: Tutorial
+  promptMessage: It looks like you haven't done the tutorial. Would you like to do
+    that now?
+  promptColor: {r: 0.27058825, g: 0.7411765, b: 0.19607845, a: 1}
+  tutorialSceneIndex: 3
+  defaultSceneIndex: 2
 --- !u!1 &1227286955
 GameObject:
   m_ObjectHideFlags: 0
@@ -12294,8 +12311,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 262.375, y: 0}
-  m_SizeDelta: {x: 494.75, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1304149428
 MonoBehaviour:
