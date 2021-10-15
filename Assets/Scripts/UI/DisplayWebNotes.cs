@@ -12,10 +12,18 @@ namespace UI
         [SerializeField, TextArea] string endTag;
         [SerializeField] TextMeshProUGUI text;
 
+        UnityWebRequest webRequest;
+
+        public void Refresh()
+        {
+            webRequest?.Dispose();
+            Start();
+        }
+
         void Start()
         {
-            var webRequest = UnityWebRequest.Get(sourceLink);
-            text.text = "Loading content...";
+            webRequest = UnityWebRequest.Get(sourceLink);
+            text.text = "<i>Loading content...</i>";
             
             webRequest.SendWebRequest().completed += _ => {
                 if (webRequest.result == UnityWebRequest.Result.Success)
@@ -24,6 +32,7 @@ namespace UI
                     text.text = $"<color=red>{webRequest.error}</color>";
                 
                 webRequest.Dispose();
+                webRequest = null;
             };
         }
 
