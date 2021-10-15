@@ -402,14 +402,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee07a62718263c478d8ea292c4711e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   expandBy: {x: 50, y: 0}
   animDuration: 0.5
-  fadeDuration: 0.5
   ease: 6
-  fadeBackground: {fileID: 169048427}
-  fadeEase: 3
   ignoreTimeScale: 1
+  textToFade: {fileID: 324897615}
+  textStartColor: {r: 1, g: 1, b: 1, a: 1}
+  fadeTime: 0.1
 --- !u!114 &169048426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1237,14 +1236,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee07a62718263c478d8ea292c4711e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   expandBy: {x: 50, y: 0}
   animDuration: 0.5
-  fadeDuration: 0.5
   ease: 6
-  fadeBackground: {fileID: 335010672}
-  fadeEase: 3
   ignoreTimeScale: 1
+  textToFade: {fileID: 764654059}
+  textStartColor: {r: 1, g: 1, b: 1, a: 1}
+  fadeTime: 0.1
 --- !u!114 &335010671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4418,14 +4416,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee07a62718263c478d8ea292c4711e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   expandBy: {x: 50, y: 0}
   animDuration: 0.5
-  fadeDuration: 0.5
   ease: 6
-  fadeBackground: {fileID: 1306337877}
-  fadeEase: 3
   ignoreTimeScale: 1
+  textToFade: {fileID: 1351582088}
+  textStartColor: {r: 1, g: 1, b: 1, a: 1}
+  fadeTime: 0.1
 --- !u!114 &1306337876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5379,14 +5376,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee07a62718263c478d8ea292c4711e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: 1
   expandBy: {x: 50, y: 0}
   animDuration: 0.5
-  fadeDuration: 0.5
   ease: 6
-  fadeBackground: {fileID: 2018592970}
-  fadeEase: 3
   ignoreTimeScale: 1
+  textToFade: {fileID: 1298045855}
+  textStartColor: {r: 1, g: 1, b: 1, a: 1}
+  fadeTime: 0.1
 --- !u!114 &2018592969
 MonoBehaviour:
   m_ObjectHideFlags: 0
