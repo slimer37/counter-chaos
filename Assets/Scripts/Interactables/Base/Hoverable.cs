@@ -61,10 +61,11 @@ namespace Interactables.Base
                 return;
             }
             
+            ClearUnderPriority(priority);
+            
+            // If previous priority was less or equal, it is set equal while clearing.
             if (highestCallbackPriority == priority)
                 hoverChecks.Add(callback);
-            
-            ClearUnderPriority(priority);
         }
 
         public THandler[] GetOnce<THandler>()
