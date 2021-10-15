@@ -1,5 +1,5 @@
 using TMPro;
-using UI;
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
