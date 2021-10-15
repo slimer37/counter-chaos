@@ -53,14 +53,8 @@ namespace Interactables.Base
             hoverChecks.Clear();
         }
 
-        public void RegisterPriorityCheck(Func<Transform, bool> callback, int priority = 0, bool remove = false)
+        public void RegisterPriorityCheck(Func<Transform, bool> callback, int priority = 0)
         {
-            if (remove)
-            {
-                hoverChecks.Remove(callback);
-                return;
-            }
-            
             ClearUnderPriority(priority);
             
             // If previous priority was less or equal, it is set equal while clearing.
