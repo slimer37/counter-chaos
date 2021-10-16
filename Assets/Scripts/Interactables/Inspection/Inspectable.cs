@@ -47,8 +47,8 @@ namespace Interactables.Inspection
         bool CanInteract(Transform s)
         {
             var playerCamera = Player.Camera.transform;
-            return !itemBeingInspected
-                   && (playerCamera.position - transform.position).sqrMagnitude > minInteractDist * minInteractDist
+            return itemBeingInspected
+                   || (playerCamera.position - transform.position).sqrMagnitude > minInteractDist * minInteractDist
                    && (transform.position - originalPosition).sqrMagnitude < maxDistFromOriginalPos * maxDistFromOriginalPos
                    && Vector3.Dot(playerCamera.forward, angleCheckVector) >= (180 - angleAllowance) / 180;
         }
@@ -58,7 +58,9 @@ namespace Interactables.Inspection
             if (!CanInteract(sender)) return;
 
             (tempController = sender.GetComponent<PlayerController>()).Suspend();
+            
             itemBeingInspected = true;
+            hoverable.SetIconAlpha(0);
 
             transform.DOKill();
             
@@ -72,7 +74,9 @@ namespace Interactables.Inspection
         {
             if (!tempController) return;
             tempController.Suspend(false);
+            
             itemBeingInspected = false;
+            hoverable.SetIconAlpha(1);
             
             transform.DOMove(originalPosition, animTime);
             transform.DORotateQuaternion(originalRotation, animTime);

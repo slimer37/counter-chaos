@@ -110,6 +110,8 @@ namespace Interactables.Base
             HideIcon();
         }
 
+        public void SetIconAlpha(float a) => tempIconHandler?.TempSetAlpha(a);
+
         void OnDisable() => HideIcon();
 
         void HideIcon()
