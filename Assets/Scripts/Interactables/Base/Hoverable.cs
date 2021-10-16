@@ -14,7 +14,7 @@ namespace Interactables.Base
 
         public event Func<Transform, bool> OnAttemptHover
         {
-            add => hoverChecks.Add(value);
+            add => RegisterPriorityCheck(value, 0);
             remove => hoverChecks.Remove(value);
         }
 
@@ -53,7 +53,7 @@ namespace Interactables.Base
             hoverChecks.Clear();
         }
 
-        public void RegisterPriorityCheck(Func<Transform, bool> callback, int priority = 0)
+        public void RegisterPriorityCheck(Func<Transform, bool> callback, int priority)
         {
             ClearUnderPriority(priority);
             
