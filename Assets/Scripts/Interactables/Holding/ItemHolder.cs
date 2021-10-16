@@ -31,6 +31,7 @@ namespace Interactables.Holding
         [SerializeField] float dropReach;
         [SerializeField] float extraDropHeight;
         [SerializeField] LayerMask dropSurfaceMask;
+        [SerializeField] Ghost ghost;
 
         [Header("Tossing")]
         [SerializeField] Vector3 tossFromPosition;
@@ -93,6 +94,8 @@ namespace Interactables.Holding
             pickuppable.Setup(transform);
             heldItem = pickuppable;
             
+            ghost.SetMesh(pickuppable.transform);
+            
             tempLayer = heldItem.gameObject.layer;
             
             SetHeldObjectLayers(heldObjectLayer);
@@ -114,7 +117,11 @@ namespace Interactables.Holding
             heldItem.transform.DOLocalRotateQuaternion(rotation, time);
         }
 
-        void ReturnItemToHolding() => MoveAndRotateHeldItem(holdingPosition, holdingRotation, timeBetweenHoldPositions);
+        void ReturnItemToHolding()
+        {
+            MoveAndRotateHeldItem(holdingPosition, holdingRotation, timeBetweenHoldPositions);
+            ghost.Hide();
+        }
 
         void OnDrop(InputValue value)
         {
@@ -228,8 +235,13 @@ namespace Interactables.Holding
                 else
                     onFlatSurface = false;
                 
-                if (!onFreeSpot)
+                if (onFreeSpot)
+                    ghost.Hide();
+                else
+                {
+                    ghost.ShowAt(itemTransform.position, itemTransform.rotation);
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);
+                }
                 
                 SetHeldObjectLayers(onFreeSpot ? droppingObjectLayer : heldObjectLayer);
             }
@@ -256,6 +268,7 @@ namespace Interactables.Holding
             isHoldingDrop = false;
 
             heldItem = null;
+            ghost.Hide();
         }
     }
 }
