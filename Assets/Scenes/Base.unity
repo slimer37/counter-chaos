@@ -5407,7 +5407,7 @@ MonoBehaviour:
   slotTemplate: {fileID: 970571018}
   activeImage: {fileID: 1843872801}
   invertScrollDirection: 1
-  hideWhenInactive: 1
+  autoHide: 1
   hideDelay: 2
   moveOffDuration: 0.5
   timeScaleGoingUp: 2.5
