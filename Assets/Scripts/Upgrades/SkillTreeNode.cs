@@ -69,7 +69,11 @@ namespace Upgrades
             }
         }
 
-        void DependencyUnlock() => dependencyLine.color = dependency.button.colors.normalColor;
+        void DependencyUnlock()
+        {
+            var colorBlock = dependency.button.colors;
+            dependencyLine.DOColor(colorBlock.normalColor, colorBlock.fadeDuration);
+        }
 
         void Unlock()
         {
@@ -105,6 +109,7 @@ namespace Upgrades
             dependencyLineRect = dependencyLine.GetComponent<RectTransform>();
             dependencyLineRect.SetParent(transform.parent, false);
             dependencyLineRect.SetAsFirstSibling();
+            dependencyLine.color = button.colors.disabledColor;
             
             CalculateLinePos();
         }

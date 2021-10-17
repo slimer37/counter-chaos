@@ -83,6 +83,8 @@ namespace Interactables.Laptop
         {
             uiGroup.interactable = show;
             uiGroup.DOFade(show ? 1 : 0, fadeTime);
+            Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = show;
         }
     }
 }
