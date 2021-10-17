@@ -211,8 +211,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Info>k__BackingField:
-    CanBeDropped: 1
-    CanBeThrown: 0
+    canBeDropped: 1
+    canBeThrown: 0
     canBeHung: 0
     groundPlacementOnly: 1
   useColliderBounds: 1

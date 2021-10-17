@@ -5,8 +5,8 @@ namespace Interactables.Holding
     [Serializable]
     public struct HoldableInfo
     {
-        public bool CanBeDropped;
-        public bool CanBeThrown;
+        public bool canBeDropped;
+        public bool canBeThrown;
         
         public bool canBeHung;
         public bool groundPlacementOnly;

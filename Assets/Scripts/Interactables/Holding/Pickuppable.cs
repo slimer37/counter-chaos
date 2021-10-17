@@ -41,12 +41,12 @@ namespace Interactables.Holding
 
         void OnValidate()
         {
-            if (!Info.CanBeDropped && Info.CanBeThrown)
+            if (!Info.canBeDropped && Info.canBeThrown)
             {
                 Debug.LogWarning("Cannot be throwable if not droppable.", gameObject);
                 
                 var temp = Info;
-                temp.CanBeThrown = false;
+                temp.canBeThrown = false;
                 Info = temp;
             }
         }
@@ -55,7 +55,7 @@ namespace Interactables.Holding
         {
             // Enable dropping/throwing by default.
             var info = Info;
-            info.CanBeDropped = info.CanBeThrown = true;
+            info.canBeDropped = info.canBeThrown = true;
             Info = info;
             
             TryGetComponent(out hoverable);
@@ -108,7 +108,7 @@ namespace Interactables.Holding
 
         internal void Toss(Vector3 direction, float force)
         {
-            if (nonPhysics || !Info.CanBeThrown)
+            if (nonPhysics || !Info.canBeThrown)
                 throw new Exception("Don't call Toss on non-physics or non-throwable objects.");
             
             Drop();
