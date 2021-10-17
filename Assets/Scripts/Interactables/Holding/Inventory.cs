@@ -1,7 +1,6 @@
 ﻿using System;
 using Core;
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -19,37 +18,49 @@ namespace Interactables.Holding
                 {
                     if (value == null) throw new Exception("Use Clear() to empty a slot.");
                     if (content != null) throw new Exception("Attempted to assign occupied slot.");
+                    
                     content = value;
-                    label.text = content.name;
-                    icon.enabled = true;
+                    
+                    var outline = value.GetComponent<Plugins.Outline>();
+                    if (outline) outline.enabled = false;
+
+                    previewTex = RuntimePreviewGenerator.GenerateModelPreview(value.transform, dim.x, dim.y);
+
+                    if (outline) outline.enabled = true;
+
+                    thumbnail.texture = previewTex;
+                    thumbnail.enabled = true;
                 }
             }
             
             Pickuppable content;
+            Texture2D previewTex;
 
-            readonly TextMeshProUGUI label;
-            readonly Image icon;
+            readonly RawImage thumbnail;
+            readonly Vector2Int dim;
 
             public bool IsFilled => content != null;
             public readonly Transform transform;
 
-            public Slot(GameObject obj)
+            public Slot(GameObject obj, Vector2Int dimensions)
             {
+                dim = dimensions;
                 transform = obj.transform;
-                icon = transform.GetChild(0).GetComponent<Image>()
-                       ?? throw new Exception("Slot template's first child is not an image.");
-                icon.enabled = false;
-                label = obj.GetComponentInChildren<TextMeshProUGUI>()
-                        ?? throw new Exception("Slot template does not contain text.");
-                label.text = "";
+                
+                thumbnail = transform.GetChild(0).GetComponent<RawImage>()
+                       ?? throw new Exception("Slot template's first child is not a raw image.");
+                thumbnail.enabled = false;
+                
                 content = null;
+                
+                previewTex = null;
             }
 
             public void Clear()
             {
                 content = null;
-                label.text = "";
-                icon.enabled = false;
+                thumbnail.enabled = false;
+                Destroy(previewTex);
             }
         }
         
@@ -63,6 +74,10 @@ namespace Interactables.Holding
         [SerializeField, Min(0)] float hideDelay = 1.5f;
         [SerializeField, Min(0)] float moveOffDuration = 0.1f;
         [SerializeField, Min(0)] float timeScaleGoingUp = 2;
+
+        [Header("Thumbnails")]
+        [SerializeField, Min(1)] Vector2Int previewDimensions = new Vector2Int(64, 64);
+        [SerializeField] bool orthographic;
         
         [field: SerializeField] public ItemHolder Holder { get; private set; }
 
@@ -86,6 +101,10 @@ namespace Interactables.Holding
 
         void Awake()
         {
+            RuntimePreviewGenerator.MarkTextureNonReadable = true;
+            RuntimePreviewGenerator.BackgroundColor = Color.clear;
+            RuntimePreviewGenerator.OrthographicMode = orthographic;
+            
             var rect = GetComponent<RectTransform>();
             moveOffScreen = DOTween.Sequence();
             moveOffScreen.Append(rect.DOPivotY(1, moveOffDuration).SetAutoKill(false));
@@ -95,10 +114,10 @@ namespace Interactables.Holding
             Main = this;
             
             slots = new Slot[numSlots];
-            slots[0] = new Slot(slotTemplate);
+            slots[0] = new Slot(slotTemplate, previewDimensions);
             
             for (var i = 1; i < numSlots; i++)
-                slots[i] = new Slot(Instantiate(slotTemplate, transform));
+                slots[i] = new Slot(Instantiate(slotTemplate, transform), previewDimensions);
 
             Keyboard.current.onTextInput += c => {
                 if (CanSwitch && int.TryParse(c.ToString(), out var i) && i > 0 && i <= numSlots)
