@@ -9,7 +9,6 @@ namespace Interactables.Holding
 {
     public class Inventory : MonoBehaviour
     {
-        [Serializable]
         struct Slot
         {
             public Pickuppable Content
