@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -55,11 +56,20 @@ namespace Interactables.Holding
         [SerializeField] GameObject slotTemplate;
         [SerializeField] Transform activeImage;
         [SerializeField] bool invertScrollDirection;
+
+        [Header("Hiding Animation")]
+        [SerializeField] bool autoHide = true;
+        [SerializeField, Min(0)] float hideDelay = 1.5f;
+        [SerializeField, Min(0)] float moveOffDuration = 0.1f;
+        [SerializeField, Min(0)] float timeScaleGoingUp = 2;
         
         [field: SerializeField] public ItemHolder Holder { get; private set; }
 
         Slot[] slots;
         int numItems;
+        
+        Sequence moveOffScreen;
+        float inactiveTime;
         
         public static Inventory Main { get; private set; }
         
@@ -75,6 +85,12 @@ namespace Interactables.Holding
 
         void Awake()
         {
+            var rect = GetComponent<RectTransform>();
+            moveOffScreen = DOTween.Sequence();
+            moveOffScreen.Append(rect.DOPivotY(1, moveOffDuration).SetAutoKill(false));
+            moveOffScreen.Join(rect.DOMoveY(0, moveOffDuration).SetAutoKill(false));
+            moveOffScreen.SetAutoKill(false);
+            
             Main = this;
             
             slots = new Slot[numSlots];
@@ -105,12 +121,29 @@ namespace Interactables.Holding
 
         void OnDestroy() => controls.Dispose();
 
+        void Update()
+        {
+            if (!autoHide) return;
+            
+            inactiveTime += Time.deltaTime;
+
+            var goDown = inactiveTime > hideDelay;
+            if (goDown != moveOffScreen.isBackwards) return;
+
+            moveOffScreen.timeScale = goDown ? 1 : timeScaleGoingUp;
+            
+            if (goDown) moveOffScreen.PlayForward();
+            else moveOffScreen.PlayBackwards();
+        }
+
         void SetActiveSlot(int index, bool newPickup)
         {
             if (index < 0 || index >= numSlots) throw new IndexOutOfRangeException($"Slot {index} does not exist.");
             
             ActiveSlotIndex = index;
             activeImage.transform.position = slots[ActiveSlotIndex].Transform.position;
+
+            inactiveTime = 0;
             
             if (Holder.IsHoldingItem)
                 Holder.StopHolding().gameObject.SetActive(false);
@@ -133,6 +166,7 @@ namespace Interactables.Holding
 
         public Pickuppable ClearSlot(int index)
         {
+            inactiveTime = 0;
             numItems--;
             
             var temp = slots[index].Content;
