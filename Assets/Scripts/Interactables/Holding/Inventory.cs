@@ -95,7 +95,7 @@ namespace Interactables.Holding
 
         Controls controls;
         
-        bool CanSwitch => !interactHeld && !secInteractHeld;
+        bool CanSwitch => Time.timeScale != 0 && !interactHeld && !secInteractHeld;
         bool interactHeld;
         bool secInteractHeld;
 
@@ -110,6 +110,8 @@ namespace Interactables.Holding
             moveOffScreen.Append(rect.DOPivotY(1, moveOffDuration).SetAutoKill(false));
             moveOffScreen.Join(rect.DOMoveY(0, moveOffDuration).SetAutoKill(false));
             moveOffScreen.SetAutoKill(false);
+            moveOffScreen.Complete();
+            inactiveTime = hideDelay + 1;
             
             Main = this;
             
