@@ -24,13 +24,14 @@ namespace Interactables.Holding
                     icon.enabled = true;
                 }
             }
+            
+            Pickuppable content;
+
+            readonly TextMeshProUGUI label;
+            readonly Image icon;
 
             public bool IsFilled => content != null;
             public Transform Transform { get; private set; }
-            
-            TextMeshProUGUI label;
-            Pickuppable content;
-            Image icon;
 
             public Slot(GameObject obj)
             {
