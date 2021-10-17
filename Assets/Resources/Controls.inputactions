@@ -84,6 +84,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "4167f777-1167-4f61-bd59-db10fa31f0a5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -238,6 +246,17 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Slow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b3cf0928-e104-4841-ad86-2455f5405a58",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

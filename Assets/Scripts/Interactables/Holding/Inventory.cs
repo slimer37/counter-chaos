@@ -55,6 +55,7 @@ namespace Interactables.Holding
         [SerializeField, Min(0)] int numSlots;
         [SerializeField] GameObject slotTemplate;
         [SerializeField] Transform activeImage;
+        [SerializeField] bool invertScrollDirection;
         
         [field: SerializeField] public ItemHolder Holder { get; private set; }
 
@@ -94,12 +95,21 @@ namespace Interactables.Holding
             controls.Gameplay.Interact.canceled += _ => interactHeld = false;
             controls.Gameplay.SecondaryInteract.performed += _ => secInteractHeld = true;
             controls.Gameplay.SecondaryInteract.canceled += _ => secInteractHeld = false;
+
+            controls.Gameplay.Scroll.performed += ctx => {
+                if (!CanSwitch) return;
+                var delta = (invertScrollDirection ? -1 : 1) * (ctx.ReadValue<float>() > 0 ? 1 : -1);
+                var newIndex = (ActiveSlotIndex + delta + numSlots) % numSlots;
+                SetActiveSlot(newIndex, false);
+            };
         }
 
         void OnDestroy() => controls.Dispose();
 
         void SetActiveSlot(int index, bool newPickup)
         {
+            if (index < 0 || index >= numSlots) throw new IndexOutOfRangeException($"Slot {index} does not exist.");
+            
             ActiveSlotIndex = index;
             activeImage.transform.position = slots[ActiveSlotIndex].Transform.position;
             
@@ -127,7 +137,7 @@ namespace Interactables.Holding
             numItems--;
             
             var temp = slots[index].Content;
-            if (temp) Holder.StopHolding();
+            if (index == ActiveSlotIndex && Holder.IsHoldingItem) Holder.StopHolding();
             slots[index].Clear();
             return temp;
         }
@@ -137,15 +147,21 @@ namespace Interactables.Holding
         public bool TryGive(Pickuppable item)
         {
             if (IsFull) return false;
+
+            var success = false;
             
-            var i = 0;
-            for (; i < slots.Length; i++)
+            var i = ActiveSlotIndex;
+            for (var j = 0; j < slots.Length; j++)
             {
-                if (slots[i].IsFilled) continue;
-                slots[i].Content = item;
+                var index = (i + j) % numSlots;
+                if (slots[index].IsFilled) continue;
+                slots[index].Content = item;
+                success = true;
                 break;
             }
-
+            
+            if (!success) return false;
+            
             SetActiveSlot(i, true);
             return true;
         }
