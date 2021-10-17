@@ -33,7 +33,6 @@ namespace Furniture
         Shelf[] shelves;
         int availableSlots;
 
-        ItemHolder currentInteractor;
         Controls controls;
         
         Shelf shelfToAttach;
@@ -57,7 +56,7 @@ namespace Furniture
             
             GetComponent<Hoverable>().OnAttemptHover +=
                 sender => !shelfIsBeingAttached && Vector3.Dot(transform.forward, sender.forward) < 0
-                    && (ItemHolder.Main.HeldItem?.GetComponent<Shelf>() ?? false);
+                    && (Inventory.Main.Holder.HeldItem?.GetComponent<Shelf>() ?? false);
 
             availableSlots = maxShelves;
             foreach (var shelf in GetComponentsInChildren<Shelf>())
@@ -87,8 +86,9 @@ namespace Furniture
             if (availableSlots == 0) return;
 
             if (!sender.CompareTag("Player")) return;
-            
-            var holder = ItemHolder.Main;
+
+            var inventory = Inventory.Main;
+            var holder = inventory.Holder;
             if (!holder.IsHoldingItem || !holder.HeldItem.TryGetComponent<Shelf>(out var heldShelf)) return;
             if (heldShelf.ShelfStyle != style) return;
             
@@ -109,8 +109,7 @@ namespace Furniture
 
             if (shelfIndex == -1) throw new Exception("No empty indices found.");
             
-            currentInteractor = holder;
-            currentInteractor.TakeFrom();
+            inventory.ClearActiveSlot();
             
             // Set transform stuff after TakeFrom so shelf parent isn't reset.
             shelfT.parent = transform;

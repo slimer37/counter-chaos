@@ -43,8 +43,6 @@ namespace Interactables.Holding
         public bool IsHoldingItem => heldItem;
         public Pickuppable HeldItem => heldItem;
 
-        public static ItemHolder Main { get; private set; }
-
         PlayerController controller;
         
         Pickuppable heldItem;
@@ -61,6 +59,8 @@ namespace Interactables.Holding
         float holdTime;
 
         bool onFlatSurface;
+        
+        Inventory inv;
 
         readonly Collider[] obstacleResults = new Collider[1];
 
@@ -72,22 +72,22 @@ namespace Interactables.Holding
 
         void Awake()
         {
-            Main = this;
             controller = GetComponent<PlayerController>();
         }
 
-        public Pickuppable TakeFrom()
+        internal Pickuppable StopHolding()
         {
-            if (!heldItem) throw new NullReferenceException("TakeFrom called without a held item.");
+            if (!heldItem) throw new NullReferenceException($"{nameof(StopHolding)} called without a held item.");
             
             var temp = heldItem;
-            Drop(false);
+            Drop(false, false);
             return temp;
         }
         
-        public void Give(Pickuppable pickuppable)
+        internal void Hold(Pickuppable pickuppable, Inventory inv)
         {
             if (heldItem) throw new InvalidOperationException("Cannot give item while player is holding an item.");
+            this.inv = inv;
 
             holdingPosition = pickuppable.OverridePosition ?? defaultHoldingPosition;
             holdingRotation = Quaternion.Euler(pickuppable.OverrideRotation ?? defaultHoldingRotation);
@@ -248,7 +248,7 @@ namespace Interactables.Holding
             }
         }
 
-        void Drop(bool addForce)
+        void Drop(bool addForce, bool clearSlot = true)
         {
             if (!heldItem) throw new NullReferenceException("Drop called without a held item.");
             
@@ -270,6 +270,8 @@ namespace Interactables.Holding
 
             heldItem = null;
             ghost.Hide();
+
+            if (clearSlot) inv.ClearActiveSlot();
         }
     }
 }

@@ -15,19 +15,19 @@ namespace Interactables.Holding
         void Reset() => TryGetComponent(out hoverable);
 
         void Awake() => hoverable.OnAttemptHover +=
-            sender => ItemHolder.Main.IsHoldingItem && ItemHolder.Main.HeldItem.Info.canBeHung;
+            sender => Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.Info.canBeHung;
 
         public void OnInteract(Transform sender)
         {
             if (!sender.CompareTag("Player")) return;
 
-            var holder = ItemHolder.Main;
+            var inventory = Inventory.Main;
 
-            if (!holder.IsHoldingItem)
+            if (!inventory.Holder.IsHoldingItem)
             {
                 if (hungItem)
                 {
-                    holder.Give(hungItem);
+                    if (!inventory.TryGive(hungItem)) return;
                     itemCollider.enabled = true;
                     hungItem = null;
                 }
@@ -37,11 +37,11 @@ namespace Interactables.Holding
 
             if (hungItem) return;
             
-            var item = holder.HeldItem;
+            var item = inventory.Holder.HeldItem;
         
             if (!item.Info.canBeHung) return;
 
-            holder.TakeFrom();
+            inventory.ClearActiveSlot();
 
             hungItem = item;
             var itemT = item.transform;

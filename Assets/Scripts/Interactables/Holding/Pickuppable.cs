@@ -80,7 +80,7 @@ namespace Interactables.Holding
         }
 
         // Can hover if the sender is not holding anything.
-        bool OnAttemptHover(Transform sender) => !isHeld && !ItemHolder.Main.IsHoldingItem;
+        bool OnAttemptHover(Transform sender) => !isHeld && !Inventory.Main.Holder.IsHoldingItem;
 
         public bool IsIntersecting(LayerMask mask, Collider[] results) =>
             !neverIntersects
@@ -94,12 +94,12 @@ namespace Interactables.Holding
             if (!isPlayer && isHeld)
                 throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
             
-            var holder = ItemHolder.Main;
+            var inventory = Inventory.Main;
             
-            if (isHeld || isPlayer && holder.IsHoldingItem) return;
+            if (isHeld || isPlayer && inventory.Holder.IsHoldingItem) return;
             
             if (isPlayer)
-                holder.Give(this);
+                inventory.TryGive(this);
             else
                 Setup(sender);
         }

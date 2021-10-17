@@ -53,17 +53,17 @@ namespace Interactables.Container
         {
             if (!sender.CompareTag("Player")) return;
             
-            var holder = ItemHolder.Main;
+            var inventory = Inventory.Main;
             
             if (!open) return;
 
-            if (holder.IsHoldingItem)
+            if (inventory.Holder.IsHoldingItem)
             {
-                if (!IsContainable(holder.HeldItem)) return;
-                AddItem(holder.TakeFrom(), true);
+                if (!IsContainable(inventory.Holder.HeldItem)) return;
+                AddItem(inventory.ClearActiveSlot(), true);
             }
             else if (contents.Count > 0)
-                RemoveItem(holder);
+                RemoveItem(inventory);
         }
 
         void AddItem(Pickuppable item, bool wasInteraction)
@@ -72,9 +72,9 @@ namespace Interactables.Container
             contents.Add(item);
         }
 
-        void RemoveItem(ItemHolder holder)
+        void RemoveItem(Inventory inventory)
         {
-            if (positioner.IsAnimating) return;
+            if (positioner.IsAnimating || inventory.IsFull) return;
             
             var i = contents.Count - 1;
             var item = contents[i];
@@ -82,7 +82,7 @@ namespace Interactables.Container
             item.transform.DOKill();
             positioner.RestoreCollision(item);
             
-            holder.Give(item);
+            inventory.TryGive(item);
             contents.RemoveAt(i);
         }
 
