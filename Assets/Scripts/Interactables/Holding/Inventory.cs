@@ -31,12 +31,12 @@ namespace Interactables.Holding
             readonly Image icon;
 
             public bool IsFilled => content != null;
-            public Transform Transform { get; private set; }
+            public readonly Transform transform;
 
             public Slot(GameObject obj)
             {
-                Transform = obj.transform;
-                icon = Transform.GetChild(0).GetComponent<Image>()
+                transform = obj.transform;
+                icon = transform.GetChild(0).GetComponent<Image>()
                        ?? throw new Exception("Slot template's first child is not an image.");
                 icon.enabled = false;
                 label = obj.GetComponentInChildren<TextMeshProUGUI>()
@@ -142,7 +142,7 @@ namespace Interactables.Holding
             if (index < 0 || index >= numSlots) throw new IndexOutOfRangeException($"Slot {index} does not exist.");
             
             ActiveSlotIndex = index;
-            activeImage.transform.position = slots[ActiveSlotIndex].Transform.position;
+            activeImage.transform.position = slots[ActiveSlotIndex].transform.position;
 
             inactiveTime = 0;
             
