@@ -94,7 +94,8 @@ namespace Interactables.Holding
             pickuppable.Setup(transform);
             heldItem = pickuppable;
             
-            ghost.SetMesh(pickuppable.transform);
+            if (pickuppable.Info.CanBeDropped)
+                ghost.SetMesh(pickuppable.transform);
             
             tempLayer = heldItem.gameObject.layer;
             
@@ -125,7 +126,7 @@ namespace Interactables.Holding
 
         void OnDrop(InputValue value)
         {
-            if (!heldItem || !heldItem.Droppable || isHoldingToss) return;
+            if (!heldItem || !heldItem.Info.CanBeDropped || isHoldingToss) return;
             
             // On hold
             if (value.isPressed)
@@ -141,7 +142,7 @@ namespace Interactables.Holding
 
                 controller.EnableLook(true);
 
-                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults) || heldItem.GroundPlacementOnly && !onFlatSurface)
+                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults) || heldItem.Info.groundPlacementOnly && !onFlatSurface)
                     ReturnItemToHolding();
                 else
                     Drop(false);
@@ -158,7 +159,7 @@ namespace Interactables.Holding
         
         void OnToss(InputValue value)
         {
-            if (!heldItem || !heldItem.Throwable || !heldItem.Droppable || isHoldingDrop) return;
+            if (!heldItem || !heldItem.Info.CanBeThrown || !heldItem.Info.CanBeDropped || isHoldingDrop) return;
 
             holdIndicator.enabled = value.isPressed;
             

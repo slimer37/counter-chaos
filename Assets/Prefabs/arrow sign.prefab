@@ -210,10 +210,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Throwable>k__BackingField: 0
-  <Droppable>k__BackingField: 1
-  <CanBeHung>k__BackingField: 0
-  <GroundPlacementOnly>k__BackingField: 1
+  <Info>k__BackingField:
+    CanBeDropped: 1
+    CanBeThrown: 0
+    canBeHung: 0
+    groundPlacementOnly: 1
   useColliderBounds: 1
   neverIntersects: 0
   overrideHoldingPosition: {x: 0, y: -0.8, z: 0.7}

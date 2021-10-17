@@ -15,7 +15,7 @@ namespace Interactables.Holding
         void Reset() => TryGetComponent(out hoverable);
 
         void Awake() => hoverable.OnAttemptHover +=
-            sender => ItemHolder.Main.IsHoldingItem && ItemHolder.Main.HeldItem.CanBeHung;
+            sender => ItemHolder.Main.IsHoldingItem && ItemHolder.Main.HeldItem.Info.canBeHung;
 
         public void OnInteract(Transform sender)
         {
@@ -39,7 +39,7 @@ namespace Interactables.Holding
             
             var item = holder.HeldItem;
         
-            if (!item.CanBeHung) return;
+            if (!item.Info.canBeHung) return;
 
             holder.TakeFrom();
 

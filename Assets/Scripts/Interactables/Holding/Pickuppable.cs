@@ -6,10 +6,7 @@ namespace Interactables.Holding
 {
     public sealed class Pickuppable : MonoBehaviour, IInteractHandler
     {
-        [field: SerializeField] public bool Throwable { get; set; } = true;
-        [field: SerializeField] public bool Droppable { get; set; } = true;
-        [field: SerializeField] public bool CanBeHung { get; set; }
-        [field: SerializeField] public bool GroundPlacementOnly { get; set; }
+        [field: SerializeField] public HoldableInfo Info { get; private set; }
 
         [Header("Bounds")]
         [SerializeField] bool useColliderBounds;
@@ -44,15 +41,23 @@ namespace Interactables.Holding
 
         void OnValidate()
         {
-            if (!Droppable && Throwable)
+            if (!Info.CanBeDropped && Info.CanBeThrown)
             {
                 Debug.LogWarning("Cannot be throwable if not droppable.", gameObject);
-                Throwable = false;
+                
+                var temp = Info;
+                temp.CanBeThrown = false;
+                Info = temp;
             }
         }
 
         void Reset()
         {
+            // Enable dropping/throwing by default.
+            var info = Info;
+            info.CanBeDropped = info.CanBeThrown = true;
+            Info = info;
+            
             TryGetComponent(out hoverable);
             TryGetComponent(out rb);
             TryGetComponent(out rend);
@@ -103,7 +108,7 @@ namespace Interactables.Holding
 
         internal void Toss(Vector3 direction, float force)
         {
-            if (nonPhysics || !Throwable)
+            if (nonPhysics || !Info.CanBeThrown)
                 throw new Exception("Don't call Toss on non-physics or non-throwable objects.");
             
             Drop();

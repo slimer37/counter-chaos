@@ -207,6 +207,7 @@ MonoBehaviour:
   containmentBoxSize: {x: 6, y: 1, z: 2}
   unitSize: 0.13
   disableCollider: {fileID: 3421850991272926978}
+  baseContentsOffset: {x: 0, y: 0, z: 0}
   positionVariance: {x: 0, y: 0, z: 0}
   baseContentsRotation: {x: 0, y: 0, z: 0}
   rotationVariance: {x: 0, y: 0, z: 0}
@@ -272,9 +273,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Throwable>k__BackingField: 1
-  <Droppable>k__BackingField: 1
-  <CanBeHung>k__BackingField: 0
+  <Info>k__BackingField:
+    CanBeDropped: 1
+    CanBeThrown: 1
+    canBeHung: 0
+    groundPlacementOnly: 0
+  useColliderBounds: 0
+  neverIntersects: 0
   overrideHoldingPosition: {x: 0, y: 0, z: 0}
   useRotationIfZeroes: 0
   overrideHoldingRotation: {x: 0, y: 0, z: 0}
