@@ -14,23 +14,33 @@ namespace Upgrades
         
         [field: Header("Info")]
         [field: SerializeField] public string DisplayName { get; private set; }
-        [field: SerializeField] public string ID { get; private set; }
         
         [Header("UI")]
         [SerializeField] Button button;
         [SerializeField] Image background;
         [SerializeField] TextMeshProUGUI label;
 
-        bool isUnlocked;
-        bool isActive;
+        public string ID { get; private set; }
+        
         Action onActivate;
         Action onUnlock;
         
-        public static IReadOnlyList<SkillTreeNode> AllNodes => allNodes.AsReadOnly();
-        static List<SkillTreeNode> allNodes = new List<SkillTreeNode>();
-
         Image dependencyLine;
         RectTransform dependencyLineRect;
+
+        public static readonly List<SkillTreeNode> AllNodes = new List<SkillTreeNode>();
+        
+        public enum NodeState
+        {
+            Locked = 0,
+            Unlocked = 1,
+            Active = 2
+        }
+
+        public NodeState State { get; private set; }
+
+        public bool IsUnlocked => (int)State > 0;
+        public bool IsActive => State == NodeState.Active;
 
         void Reset()
         {
@@ -51,9 +61,11 @@ namespace Upgrades
 
         void Awake()
         {
-            allNodes.Add(this);
+            ID = DisplayName.ToLower().Replace(" ", "");
+            AllNodes.Add(this);
 
-            isUnlocked = button.interactable = startsUnlocked;
+            button.interactable = startsUnlocked;
+            if (startsUnlocked) State = NodeState.Unlocked;
             
             button.onClick.AddListener(Activate);
             
@@ -78,9 +90,10 @@ namespace Upgrades
         void Unlock()
         {
             if (startsUnlocked) throw new Exception("Called Unlock on a node that starts unlocked.");
-            if (isUnlocked) return;
+            if (IsUnlocked) return;
             
-            isUnlocked = button.interactable = true;
+            button.interactable = true;
+            State = NodeState.Unlocked;
             onUnlock?.Invoke();
 
             if (dependencyLine)
@@ -92,8 +105,8 @@ namespace Upgrades
 
         void Activate()
         {
-            if (isActive) return;
-            isActive = true;
+            if (IsActive) return;
+            State = NodeState.Active;
             background.color = button.colors.pressedColor;
             button.enabled = false;
             onActivate?.Invoke();

@@ -473,7 +473,6 @@ MonoBehaviour:
   dependency: {fileID: 0}
   startsUnlocked: 1
   <DisplayName>k__BackingField: Base
-  <ID>k__BackingField: 
   button: {fileID: 124654207}
   background: {fileID: 124654206}
   label: {fileID: 1079506945}
@@ -895,7 +894,6 @@ MonoBehaviour:
   dependency: {fileID: 828836146}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Centering
-  <ID>k__BackingField: 
   button: {fileID: 209097722}
   background: {fileID: 209097723}
   label: {fileID: 1163561004}
@@ -1148,7 +1146,6 @@ MonoBehaviour:
   dependency: {fileID: 1855787000}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Leftest
-  <ID>k__BackingField: 
   button: {fileID: 252180514}
   background: {fileID: 252180515}
   label: {fileID: 406215973}
@@ -6285,7 +6282,6 @@ MonoBehaviour:
   dependency: {fileID: 1619675405}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Left 2
-  <ID>k__BackingField: 
   button: {fileID: 825879532}
   background: {fileID: 825879533}
   label: {fileID: 299639907}
@@ -6406,7 +6402,6 @@ MonoBehaviour:
   dependency: {fileID: 124654205}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Right
-  <ID>k__BackingField: 
   button: {fileID: 828836148}
   background: {fileID: 828836147}
   label: {fileID: 2060801156}
@@ -8380,7 +8375,6 @@ MonoBehaviour:
   dependency: {fileID: 828836146}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Righter
-  <ID>k__BackingField: 
   button: {fileID: 1203641364}
   background: {fileID: 1203641363}
   label: {fileID: 1930285117}
@@ -9296,7 +9290,6 @@ MonoBehaviour:
   dependency: {fileID: 1203641362}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Rightest
-  <ID>k__BackingField: 
   button: {fileID: 1413702377}
   background: {fileID: 1413702378}
   label: {fileID: 1747325899}
@@ -10150,7 +10143,6 @@ MonoBehaviour:
   dependency: {fileID: 124654205}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Left
-  <ID>k__BackingField: 
   button: {fileID: 1619675407}
   background: {fileID: 1619675406}
   label: {fileID: 1713370670}
@@ -11376,7 +11368,6 @@ MonoBehaviour:
   dependency: {fileID: 1619675405}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Lefter
-  <ID>k__BackingField: 
   button: {fileID: 1855787002}
   background: {fileID: 1855787001}
   label: {fileID: 535033738}
