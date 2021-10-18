@@ -139,11 +139,11 @@ namespace Serialization.Editor
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
 
-            if (!EditorApplication.isPlaying || SaveSystem.loadedSave == null) return;
+            if (!EditorApplication.isPlaying || SaveSystem.LoadedSave == null) return;
 		
             EditorGUILayout.LabelField("Loaded Save", EditorStyles.boldLabel);
-            ListInfo("Properties", typeof(SaveData).GetProperties(), info => info.GetValue(SaveSystem.loadedSave));
-            ListInfo("Fields", typeof(SaveData).GetFields(), info => info.GetValue(SaveSystem.loadedSave));
+            ListInfo("Properties", typeof(SaveData).GetProperties(), info => info.GetValue(SaveSystem.LoadedSave));
+            ListInfo("Fields", typeof(SaveData).GetFields(), info => info.GetValue(SaveSystem.LoadedSave));
         }
     }
 }

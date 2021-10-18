@@ -35,7 +35,7 @@ namespace Serialization
 
         void LoadAndPlay()
         {
-            SaveSystem.loadedSave = focused;
+            SaveSystem.LoadedSave = focused;
             SceneLoader.Load(gameStartScene);
         }
 	

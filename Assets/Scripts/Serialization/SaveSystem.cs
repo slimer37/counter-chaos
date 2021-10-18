@@ -7,7 +7,7 @@ namespace Serialization
 {
     public static class SaveSystem
     {
-        public static SaveData loadedSave;
+        public static SaveData LoadedSave { get; internal set; }
         
         const string SaveFolderName = "saves";
         public const string SaveFileEnding = ".store";

@@ -58,7 +58,7 @@ namespace Serialization
         {
             var newData = new SaveData(saveNameField.text, playerNameField.text);
             newData.Save();
-            SaveSystem.loadedSave = newData;
+            SaveSystem.LoadedSave = newData;
             SceneLoader.Load(gameStartScene);
         }
     }
