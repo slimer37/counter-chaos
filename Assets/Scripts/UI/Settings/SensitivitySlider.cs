@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Settings
@@ -7,17 +8,24 @@ namespace UI.Settings
     {
         [SerializeField] Slider slider;
         
-        PlayerController controller;
+        static PlayerController controller;
+
+        const float DefaultSensitivity = 80;
+
+        [RuntimeInitializeOnLoadMethod]
+        static void Init()
+        {
+            SceneManager.sceneLoaded += (scene, mode) => {
+                controller = FindObjectOfType<PlayerController>();
+                if (!controller) return;
+                controller.sensitivity = PlayerPrefs.GetFloat("Sensitivity", DefaultSensitivity);
+            };
+        }
         
         void Awake()
         {
-            var sensitivitySetting = PlayerPrefs.GetFloat("Sensitivity", 80);
+            slider.value = PlayerPrefs.GetFloat("Sensitivity", DefaultSensitivity);
             slider.onValueChanged.AddListener(ChangeSensitivity);
-            slider.value = sensitivitySetting;
-            
-            controller = FindObjectOfType<PlayerController>();
-            if (!controller) return;
-            controller.sensitivity = sensitivitySetting;
         }
 
         void ChangeSensitivity(float value)
