@@ -9,9 +9,12 @@ namespace Serialization
         public float money;
         public string saveName;
         public string playerName;
+        public string upgrades;
         public readonly DateTime creationDate;
 	
-        [ExcludeFromWrite] public string baseFileName;
+        [ExcludeFromWrite] public readonly string baseFileName;
+
+        public static readonly SaveData TemporarySave = new SaveData("Temporary", "Me");
 	
         public string AccessPath => Path.Combine(SaveSystem.SaveFolderLocation, FileName);
         public string FileName => baseFileName + SaveSystem.SaveFileEnding;

@@ -7,7 +7,21 @@ namespace Serialization
 {
     public static class SaveSystem
     {
-        public static SaveData LoadedSave { get; internal set; }
+        public static SaveData LoadedSave
+        {
+            get
+            {
+                if (!loadedSave)
+                {
+                    Debug.LogWarning("No save is loaded; using temporary save file.");
+                    loadedSave = SaveData.TemporarySave;
+                }
+                return loadedSave;
+            }
+            internal set => loadedSave = value;
+        }
+
+        static SaveData loadedSave;
         
         const string SaveFolderName = "saves";
         public const string SaveFileEnding = ".store";
