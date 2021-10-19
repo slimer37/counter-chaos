@@ -158,7 +158,6 @@ MonoBehaviour:
   dependency: {fileID: 243512162}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Lefter
-  <ID>k__BackingField: 
   button: {fileID: 15187531}
   background: {fileID: 15187532}
   label: {fileID: 1161940510}
@@ -453,7 +452,6 @@ MonoBehaviour:
   dependency: {fileID: 1845096307}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Right
-  <ID>k__BackingField: 
   button: {fileID: 35208671}
   background: {fileID: 35208672}
   label: {fileID: 834929629}
@@ -702,7 +700,6 @@ MonoBehaviour:
   dependency: {fileID: 243512162}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Left 2
-  <ID>k__BackingField: 
   button: {fileID: 232437184}
   background: {fileID: 232437185}
   label: {fileID: 1433783280}
@@ -843,7 +840,6 @@ MonoBehaviour:
   dependency: {fileID: 1845096307}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Left
-  <ID>k__BackingField: 
   button: {fileID: 243512163}
   background: {fileID: 243512164}
   label: {fileID: 610508377}
@@ -1118,7 +1114,6 @@ MonoBehaviour:
   dependency: {fileID: 710700699}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Rightest
-  <ID>k__BackingField: 
   button: {fileID: 554688471}
   background: {fileID: 554688472}
   label: {fileID: 506114277}
@@ -1507,7 +1502,6 @@ MonoBehaviour:
   dependency: {fileID: 35208670}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Righter
-  <ID>k__BackingField: 
   button: {fileID: 710700700}
   background: {fileID: 710700701}
   label: {fileID: 2035476699}
@@ -1802,7 +1796,6 @@ MonoBehaviour:
   dependency: {fileID: 35208670}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Centering
-  <ID>k__BackingField: 
   button: {fileID: 910498375}
   background: {fileID: 910498376}
   label: {fileID: 635227017}
@@ -2441,7 +2434,6 @@ MonoBehaviour:
   dependency: {fileID: 0}
   startsUnlocked: 1
   <DisplayName>k__BackingField: Base
-  <ID>k__BackingField: 
   button: {fileID: 1845096308}
   background: {fileID: 1845096309}
   label: {fileID: 24642659}
@@ -2810,7 +2802,6 @@ MonoBehaviour:
   dependency: {fileID: 15187530}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Leftest
-  <ID>k__BackingField: 
   button: {fileID: 2052911925}
   background: {fileID: 2052911926}
   label: {fileID: 1373202757}
