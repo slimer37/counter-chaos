@@ -1,18 +1,17 @@
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace Serialization
 {
     public class SaveData
     {
-        public float money;
-        public string saveName;
-        public string playerName;
-        public string upgrades;
-        public readonly DateTime creationDate;
+        [Savable] public float money;
+        [Savable] public string saveName;
+        [Savable] public string playerName;
+        [Savable] public string upgrades;
+        [Savable] public readonly DateTime creationDate;
 	
-        [ExcludeFromWrite] public readonly string baseFileName;
+        public readonly string baseFileName;
 
         public static readonly SaveData TemporarySave = new SaveData("Temporary", "Me");
 	
@@ -39,8 +38,12 @@ namespace Serialization
             var fieldInfos = typeof(SaveData).GetFields();
             for (var i = 0; i < fieldInfos.Length; i++)
             {
-                if (fieldInfos[i].GetCustomAttribute<ExcludeFromWrite>() != null) continue;
-                fieldInfos[i].SetValue(this, data[i]);
+                if (!BinaryReaderWriter.IsSavable(fieldInfos[i])) continue;
+                
+                try
+                { fieldInfos[i].SetValue(this, data[i]); }
+                catch (Exception e)
+                { throw new Exception($"While setting value {fieldInfos[i].Name}: {e.Message}"); }
             }
         }
 

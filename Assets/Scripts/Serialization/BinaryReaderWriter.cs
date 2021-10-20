@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using UnityEngine;
 
 namespace Serialization
 {
@@ -18,41 +19,59 @@ namespace Serialization
 	
         public void Write(Type dataType, object obj, BinaryWriter writer)
         {
-            var fieldInfos = dataType.GetFields();
-            foreach (var fieldInfo in fieldInfos)
-            {
-                if (fieldInfo.GetCustomAttribute<ExcludeFromWrite>() != null) continue;
-                foreach (var rule in readWriteRules)
-                {
-                    if (rule.DataType == fieldInfo.FieldType)
-                        rule.Write(writer, fieldInfo.GetValue(obj));
-                }
-            }
+            RWEachField(dataType,
+                (rule, info) => rule.Write(writer, info.GetValue(obj)), 
+                (info, e) => throw new Exception($"While writing value '{info.Name}': {e.Message}"));
         }
 
         public object[] Read(Type dataType, BinaryReader reader)
         {
-            var fieldInfos = dataType.GetFields();
-		
             var dataList = new List<object>();
-		
-            foreach (var fieldInfo in fieldInfos)
-            {
-                if (fieldInfo.GetCustomAttribute<ExcludeFromWrite>() != null) continue;
-			
-                foreach (var rule in readWriteRules)
-                {
-                    if (rule.DataType == fieldInfo.FieldType)
-                        dataList.Add(rule.Read(reader));
-                }
-            }
+            
+            RWEachField(dataType,
+                (rule, _) => dataList.Add(rule.Read(reader)), 
+                (info, e) => throw new Exception($"While reading value '{info.Name}': {e.Message}"));
 
             return dataList.ToArray();
+        }
+
+        void RWEachField(Type dataType, Action<IReadWriteRule, FieldInfo> rw, Action<FieldInfo, Exception> onException)
+        {
+            var fieldInfos = dataType.GetFields();
+
+            foreach (var fieldInfo in fieldInfos)
+            {
+                if (!IsSavable(fieldInfo)) return;
+                var success = false;
+                
+                foreach (var rule in readWriteRules)
+                {
+                    try
+                    {
+                        if (rule.DataType == fieldInfo.FieldType)
+                        {
+                            rw.Invoke(rule, fieldInfo);
+                            success = true;
+                        }
+                    }
+                    catch (Exception e)
+                    { onException.Invoke(fieldInfo, e); }
+                }
+                
+                if (!success) Debug.LogWarning($"RW Rule not found for {fieldInfo.FieldType}. Skipping...");
+            }
+        }
+
+        internal static bool IsSavable(FieldInfo i)
+        {
+            if (i.GetCustomAttribute<SavableAttribute>() == null) return false;
+            if (i.IsStatic) throw new Exception($"Value '{i.Name}' is static and Savable.");
+            return true;
         }
     }
 
     [AttributeUsage(AttributeTargets.Field)]
-    public class ExcludeFromWrite : Attribute { }
+    internal class SavableAttribute : Attribute { }
 
     public interface IReadWriteRule
     {
@@ -64,7 +83,7 @@ namespace Serialization
     public class StringRule : IReadWriteRule
     {
         public Type DataType => typeof(string);
-        public void Write(BinaryWriter writer, object value) => writer.Write((string)value);
+        public void Write(BinaryWriter writer, object value) => writer.Write((string)value ?? "");
         public object Read(BinaryReader reader) => reader.ReadString();
     }
     public class IntRule : IReadWriteRule
