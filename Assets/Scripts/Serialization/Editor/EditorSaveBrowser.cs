@@ -61,6 +61,7 @@ namespace Serialization.Editor
 
         void OnGUI()
         {
+            EditorStyles.label.wordWrap = true;
             showSaveCreator = EditorGUILayout.BeginFoldoutHeaderGroup(showSaveCreator, "Save Creator");
             if (showSaveCreator)
             {
