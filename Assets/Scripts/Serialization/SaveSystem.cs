@@ -51,6 +51,12 @@ namespace Serialization
         {
             if (!saveData) throw new ArgumentNullException(nameof(saveData), "Got null data.");
 
+            if (saveData == SaveData.TemporarySave)
+            {
+                Debug.LogWarning($"{nameof(Save)}() called on temporary save file. File will not be written.");
+                return;
+            }
+
             using var writer = new BinaryWriter(File.Open(saveData.AccessPath, FileMode.Create));
             var readerWriter = new BinaryReaderWriter();
             readerWriter.Write(typeof(SaveData), saveData, writer);
