@@ -36,7 +36,7 @@ namespace Serialization.Editor
             {
                 if (!itemConditionChecker?.Invoke(info) ?? false) continue;
                 var value = valueRetriever(info);
-                EditorGUILayout.LabelField(info.Name + ':', value.ToString());
+                EditorGUILayout.LabelField(info.Name + ':', value == null ? "Null" : value.ToString());
             }
         }
 
@@ -130,8 +130,7 @@ namespace Serialization.Editor
                     $"'{viewedSave.saveName}' ({viewedSave.FileName}) Properties");
                 if (showProperties)
                 {
-                    ListInfo("Properties", typeof(SaveData).GetProperties(), info => info.GetValue(viewedSave));
-                    ListInfo("Fields", typeof(SaveData).GetFields(), info => info.GetValue(viewedSave));
+                    ListAllInfo(viewedSave);
 
                     if (GUILayout.Button("Refresh"))
                         SaveSystem.LoadFromPath(viewedSave.AccessPath, out viewedSave);
@@ -142,8 +141,17 @@ namespace Serialization.Editor
             if (!EditorApplication.isPlaying || SaveSystem.LoadedSave == null) return;
 		
             EditorGUILayout.LabelField("Loaded Save", EditorStyles.boldLabel);
-            ListInfo("Properties", typeof(SaveData).GetProperties(), info => info.GetValue(SaveSystem.LoadedSave));
-            ListInfo("Fields", typeof(SaveData).GetFields(), info => info.GetValue(SaveSystem.LoadedSave));
+            ListAllInfo(SaveSystem.LoadedSave);
+        }
+
+        static void ListAllInfo(SaveData data)
+        {
+            ListInfo("Properties", typeof(SaveData).GetProperties(),
+                info => info.GetValue(data),
+                info => !info.GetMethod.IsStatic);
+            ListInfo("Fields", typeof(SaveData).GetFields(),
+                info => info.GetValue(data),
+                info => !info.IsStatic);
         }
     }
 }
