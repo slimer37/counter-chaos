@@ -47,7 +47,7 @@ namespace Interactables.Laptop
             AnimateCamera(tempCameraPos, tempCameraRot, () => {
                 controls.Disable();
                 tempController.Suspend(false);
-                open = true;
+                open = false;
             });
         }
 
