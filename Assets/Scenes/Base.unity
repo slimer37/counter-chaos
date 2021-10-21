@@ -1021,8 +1021,8 @@ MonoBehaviour:
   droppingObjectLayer: 8
   rotationSpeed: 45
   flatSurfaceTolerance: 5
-  correctionAmount: 0.025
-  correctionLimit: 20
+  correctionAmount: 0.01
+  correctionLimit: 30
   tossObstacleMask:
     serializedVersion: 2
     m_Bits: 1097
