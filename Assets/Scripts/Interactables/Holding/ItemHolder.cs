@@ -20,6 +20,8 @@ namespace Interactables.Holding
         [Header("Item Manipulation")]
         [SerializeField] float rotationSpeed;
         [SerializeField] float flatSurfaceTolerance;
+        [SerializeField] float correctionAmount = 0.01f;
+        [SerializeField] int correctionLimit = 10;
         
         [Header("Obstacle Detection")]
         [SerializeField] LayerMask tossObstacleMask;
@@ -231,8 +233,49 @@ namespace Interactables.Holding
 
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
 
-                    if (!heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                    if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                    {
+                        for (var i = 0; i < correctionLimit; i++)
+                        {
+                            itemTransform.position += Vector3.up * correctionAmount;
+                            if (AttemptOffset(-transform.forward)
+                                || AttemptOffset(-hit.normal)
+                                || AttemptOffset(-transform.right)
+                                || AttemptOffset(transform.right))
+                            {
+                                onFreeSpot = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
                         onFreeSpot = true;
+                    
+                    // Only try moving item forward if surface is a wall (within 10 degrees of freedom).
+                    if (Math.Abs(angle - 90) < 10)
+                        AttemptOffset(-hit.normal, true);
+
+                    bool AttemptOffset(Vector3 direction, bool useFarthest = false)
+                    {
+                        direction *= correctionAmount;
+                        var temp = itemTransform.position;
+                        var limits = Mathf.Min(correctionLimit, heldItem.BoundHalfDiagonal / correctionAmount);
+                        for (var i = 0; i <= limits; i++)
+                        {
+                            itemTransform.position += direction;
+                            if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                            {
+                                if (useFarthest)
+                                {
+                                    itemTransform.position -= direction;
+                                    break;
+                                }
+                            }
+                            else if (!useFarthest) return true;
+                        }
+                        if (!useFarthest) itemTransform.position = temp;
+                        return false;
+                    }
                 }
                 else
                     onFlatSurface = false;
