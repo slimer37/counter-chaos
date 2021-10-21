@@ -218,8 +218,9 @@ namespace Interactables.Holding
                     itemTransform.localEulerAngles += rotationDelta * Time.deltaTime * Vector3.up;
 
                 var onFreeSpot = false;
+                var rayHit = Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask);
 
-                if (Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask))
+                if (rayHit)
                 {
                     var distanceOffSurface = extraDropHeight;
 
@@ -235,12 +236,14 @@ namespace Interactables.Holding
                 }
                 else
                     onFlatSurface = false;
+
+                onFlatSurface &= onFreeSpot;
                 
                 if (onFreeSpot)
                     ghost.Hide();
                 else
                 {
-                    ghost.ShowAt(itemTransform.position, itemTransform.rotation);
+                    if (rayHit) ghost.ShowAt(itemTransform.position, itemTransform.rotation);
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);
                 }
                 
