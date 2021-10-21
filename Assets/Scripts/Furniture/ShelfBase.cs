@@ -54,9 +54,11 @@ namespace Furniture
             
             shelves = new Shelf[maxShelves];
             
+            // Only interactable if no shelf is currently being attached and the player is in front, holding a compatible shelf.
             GetComponent<Hoverable>().OnAttemptHover +=
                 sender => !shelfIsBeingAttached && Vector3.Dot(transform.forward, sender.forward) < 0
-                    && (Inventory.Main.Holder.HeldItem?.GetComponent<Shelf>() ?? false);
+                    && Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.TryGetComponent(out Shelf shelf)
+                    && shelf.ShelfStyle == style;
 
             availableSlots = maxShelves;
             foreach (var shelf in GetComponentsInChildren<Shelf>())
