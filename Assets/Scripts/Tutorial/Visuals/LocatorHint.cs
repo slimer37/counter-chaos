@@ -20,12 +20,8 @@ namespace Tutorial.Visuals
         Transform followTarget;
         bool showing;
 
-        public LocatorHint Instance { get; private set; }
-
         void Awake()
         {
-            Instance = this;
-            
             canvasGroup = GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
             contentParent.DOLocalMoveY(bounceY, bounceDuration).SetEase(ease).SetLoops(-1, LoopType.Yoyo);

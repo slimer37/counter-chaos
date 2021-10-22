@@ -7,42 +7,38 @@ using UnityEngine;
 
 namespace Tutorial.Visuals
 {
-    public class TextBox : MonoBehaviour
+    public class TextBox : Singleton<TextBox>
     {
-        [SerializeField, TextArea] string[] test;
         [SerializeField] TextMeshProUGUI textMesh;
         [SerializeField, Min(1)] float charsPerSec = 30;
         [SerializeField] CanvasGroup canvasGroup;
         [SerializeField, Min(0)] float fadeDuration;
 
-        public static TextBox Instance { get; private set; }
-
         Controls controls;
         bool skipPressed;
         bool isDisplaying;
-
-        public void Display(params string[] text)
-        {
-            if (isDisplaying) throw new InvalidOperationException("Text box is already being used.");
-            StartCoroutine(DisplayText(text));
-        }
 
         void Awake()
         {
             canvasGroup.alpha = 0;
             controls = new Controls();
             controls.Gameplay.Jump.performed += _ => skipPressed = true;
-            
-            Instance = this;
-            Display(test);
         }
 
         void OnEnable() => controls.Enable();
         void OnDisable() => controls.Disable();
         void OnDestroy() => controls.Dispose();
 
-        IEnumerator DisplayText(string[] text)
+        public void Display(params string[] text) => Display(text, false);
+        
+        public void Display(string[] text, bool autoClose) =>
+            StartCoroutine(DisplayText(text, autoClose));
+
+        public IEnumerator DisplayText(params string[] text) => DisplayText(text, false);
+
+        public IEnumerator DisplayText(string[] text, bool autoClose)
         {
+            if (isDisplaying) throw new InvalidOperationException("Text box is already being used.");
             isDisplaying = true;
             yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
             
@@ -62,12 +58,22 @@ namespace Tutorial.Visuals
                         break;
                     }
                 }
+
+                if (!autoClose && snippet == text[text.Length - 1]) break;
                 
                 yield return new WaitUntil(() => skipPressed);
                 skipPressed = false;
             }
-            
-            yield return canvasGroup.DOFade(0, fadeDuration).WaitForCompletion();
+
+            if (!autoClose) yield break;
+            StopDisplaying();
+        }
+
+        public void StopDisplaying()
+        {
+            if (!isDisplaying) return;
+            StopAllCoroutines();
+            canvasGroup.DOFade(0, fadeDuration);
             isDisplaying = false;
         }
     }
