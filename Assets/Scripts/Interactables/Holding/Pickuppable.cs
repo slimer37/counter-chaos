@@ -26,6 +26,8 @@ namespace Interactables.Holding
         Bounds meshBounds;
         bool isHeld;
 
+        public bool IsHeld => isHeld;
+
         public float BoundHalfDiagonal { get; private set; }
         public float VerticalExtent { get; private set; }
         public Vector3? OverridePosition => UseIfNotZeroes(overrideHoldingPosition);
