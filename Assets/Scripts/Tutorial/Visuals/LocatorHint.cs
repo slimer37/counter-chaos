@@ -20,8 +20,12 @@ namespace Tutorial.Visuals
         Transform followTarget;
         bool showing;
 
+        public LocatorHint Instance { get; private set; }
+
         void Awake()
         {
+            Instance = this;
+            
             canvasGroup = GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
             contentParent.DOLocalMoveY(bounceY, bounceDuration).SetEase(ease).SetLoops(-1, LoopType.Yoyo);
@@ -57,12 +61,16 @@ namespace Tutorial.Visuals
 
             var point = cam.WorldToScreenPoint(pos);
             
-            // If the object is out of view, hide the hint.
+            // If the object is more than 90 degrees out of view, move locator to left or right edge of screen.
             if (point.z < 0)
             {
-                canvasGroup.alpha = 0;
-                return;
+                point -= new Vector3(Screen.width, Screen.height);
+                point.x = point.x < 0 ? Screen.width : 0;
+                point.y *= -1;
             }
+
+            point.x = Mathf.Clamp(point.x, 0, Screen.width);
+            point.y = Mathf.Clamp(point.y, 0, Screen.height - yOffset);
             
             canvasGroup.alpha = 1;
             rootContainer.position = point + Vector3.up * yOffset;
