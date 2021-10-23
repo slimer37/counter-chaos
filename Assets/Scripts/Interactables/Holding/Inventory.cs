@@ -91,6 +91,7 @@ namespace Interactables.Holding
         
         public int ActiveSlotIndex { get; private set; }
         public int AvailableSlots => numSlots - numItems;
+        public int TotalSlots => numSlots;
         public bool IsFull => AvailableSlots == 0;
 
         Controls controls;
@@ -187,18 +188,30 @@ namespace Interactables.Holding
             }
         }
 
-        public Pickuppable ClearSlot(int index)
+        public Pickuppable GetSlotContent(int index) => slots[index].Content;
+
+        public Pickuppable ClearSlot(int index, bool destroy = false)
         {
+            if (index > numSlots) throw new ArgumentOutOfRangeException(nameof(index));
+            if (!slots[index].Content) return null;
+            
             inactiveTime = 0;
             numItems--;
             
             var temp = slots[index].Content;
             if (index == ActiveSlotIndex && Holder.IsHoldingItem) Holder.StopHolding();
+            if (destroy) Destroy(slots[index].Content.gameObject);
             slots[index].Clear();
             return temp;
         }
 
-        public Pickuppable ClearActiveSlot() => ClearSlot(ActiveSlotIndex);
+        public Pickuppable ClearActiveSlot(bool destroy = false) => ClearSlot(ActiveSlotIndex, destroy);
+
+        public void ClearAll(bool destroy = false)
+        {
+            for (var i = 0; i < numSlots; i++)
+                ClearSlot(i, destroy);
+        }
 
         public bool TryGive(Pickuppable item)
         {
