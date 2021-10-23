@@ -31,16 +31,20 @@ namespace Tutorial.Visuals
 
         public void Display(params string[] text) => Display(text, false);
         
-        public void Display(string[] text, bool autoClose) =>
-            StartCoroutine(DisplayText(text, autoClose));
+        public void Display(string[] text, bool autoClose) => StartCoroutine(WaitForDisplay(text, autoClose));
 
-        public IEnumerator DisplayText(params string[] text) => DisplayText(text, false);
+        public IEnumerator WaitForDisplay(params string[] text) => WaitForDisplay(text, false);
 
-        public IEnumerator DisplayText(string[] text, bool autoClose)
+        IEnumerator WaitForDisplay(string[] text, bool autoClose)
         {
             if (isDisplaying) throw new InvalidOperationException("Text box is already being used.");
             isDisplaying = true;
-            yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
+            
+            canvasGroup.DOKill();
+            if (canvasGroup.alpha == 0)
+                canvasGroup.alpha = 1;
+            else if (canvasGroup.alpha < 1)
+                yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
             
             foreach (var snippet in text)
             {
