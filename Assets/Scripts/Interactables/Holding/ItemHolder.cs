@@ -83,6 +83,7 @@ namespace Interactables.Holding
             
             var temp = heldItem;
             Drop(false, false);
+            controller.EnableLook(true);
             return temp;
         }
         
