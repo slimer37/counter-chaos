@@ -24,7 +24,7 @@ namespace Tutorial.Visuals
             canvasGroup.alpha = 0;
             controls = new Controls();
             controls.Gameplay.Jump.performed += _ => skipPressed = true;
-            skipIndicator.text = controls.Gameplay.Jump.bindings[0].FormatDisplayString() + " to skip.";
+            skipIndicator.text = controls.Gameplay.Jump.FormatDisplayString() + " to skip.";
         }
 
         void OnEnable() => controls.Enable();
