@@ -73,10 +73,10 @@ namespace Tutorial.Visuals
             }
 
             if (!closable) yield break;
-            StopDisplaying();
+            Clear();
         }
 
-        public void StopDisplaying()
+        public void Clear()
         {
             if (!isDisplaying) return;
             StopAllCoroutines();
