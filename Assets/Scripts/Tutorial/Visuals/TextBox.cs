@@ -13,6 +13,7 @@ namespace Tutorial.Visuals
         [SerializeField, Min(1)] float charsPerSec = 30;
         [SerializeField] CanvasGroup canvasGroup;
         [SerializeField, Min(0)] float fadeDuration;
+        [SerializeField] TextMeshProUGUI skipIndicator;
 
         Controls controls;
         bool skipPressed;
@@ -23,22 +24,22 @@ namespace Tutorial.Visuals
             canvasGroup.alpha = 0;
             controls = new Controls();
             controls.Gameplay.Jump.performed += _ => skipPressed = true;
+            skipIndicator.text = controls.Gameplay.Jump.bindings[0].FormatDisplayString() + " to skip.";
         }
 
         void OnEnable() => controls.Enable();
         void OnDisable() => controls.Disable();
         void OnDestroy() => controls.Dispose();
 
-        public void Display(params string[] text) => Display(text, false);
-        
-        public void Display(string[] text, bool autoClose) => StartCoroutine(WaitForDisplay(text, autoClose));
+        public void Display(params string[] text) => Display(false, text);
+        public void Display(bool closable, params string[] text) => StartCoroutine(WaitForDisplay(closable, text));
+        public IEnumerator WaitForDisplay(params string[] text) => WaitForDisplay(false, text);
 
-        public IEnumerator WaitForDisplay(params string[] text) => WaitForDisplay(text, false);
-
-        IEnumerator WaitForDisplay(string[] text, bool autoClose)
+        public IEnumerator WaitForDisplay(bool closable, params string[] text)
         {
             if (isDisplaying) throw new InvalidOperationException("Text box is already being used.");
             isDisplaying = true;
+            skipIndicator.gameObject.SetActive(false);
             
             canvasGroup.DOKill();
             if (canvasGroup.alpha == 0)
@@ -48,6 +49,8 @@ namespace Tutorial.Visuals
             
             foreach (var snippet in text)
             {
+                skipIndicator.gameObject.SetActive(false);
+                
                 textMesh.text = snippet;
                 textMesh.maxVisibleCharacters = 1;
                 for (var i = 1; i <= snippet.Length; i++)
@@ -63,13 +66,14 @@ namespace Tutorial.Visuals
                     }
                 }
 
-                if (!autoClose && snippet == text[text.Length - 1]) break;
+                if (!closable && snippet == text[text.Length - 1]) break;
                 
+                skipIndicator.gameObject.SetActive(true);
                 yield return new WaitUntil(() => skipPressed);
                 skipPressed = false;
             }
 
-            if (!autoClose) yield break;
+            if (!closable) yield break;
             StopDisplaying();
         }
 
