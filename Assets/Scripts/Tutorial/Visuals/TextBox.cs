@@ -31,11 +31,10 @@ namespace Tutorial.Visuals
         void OnDisable() => controls.Disable();
         void OnDestroy() => controls.Dispose();
 
-        public void Display(params string[] text) => Display(false, text);
-        public void Display(bool closable, params string[] text) => StartCoroutine(WaitForDisplay(closable, text));
-        public IEnumerator WaitForDisplay(params string[] text) => WaitForDisplay(false, text);
+        public YieldInstruction Display(params string[] text) => Display(false, text);
+        public YieldInstruction Display(bool closable, params string[] text) => StartCoroutine(WaitForDisplay(closable, text));
 
-        public IEnumerator WaitForDisplay(bool closable, params string[] text)
+        IEnumerator WaitForDisplay(bool closable, params string[] text)
         {
             if (isDisplaying) throw new InvalidOperationException("Text box is already being used.");
             isDisplaying = true;
