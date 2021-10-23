@@ -161,6 +161,7 @@ namespace Interactables.Holding
         void SetActiveSlot(int index, bool newPickup)
         {
             if (index < 0 || index >= numSlots) throw new IndexOutOfRangeException($"Slot {index} does not exist.");
+            if (!newPickup && index == ActiveSlotIndex) return;
             
             ActiveSlotIndex = index;
             activeImage.transform.position = slots[ActiveSlotIndex].transform.position;
