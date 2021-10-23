@@ -82,6 +82,7 @@ namespace Tutorial.Visuals
             StopAllCoroutines();
             canvasGroup.DOFade(0, fadeDuration);
             isDisplaying = false;
+            skipPressed = false;
         }
     }
 }
