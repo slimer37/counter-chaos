@@ -122,10 +122,7 @@ namespace Interactables.Holding
             for (var i = 1; i < numSlots; i++)
                 slots[i] = new Slot(Instantiate(slotTemplate, transform), previewDimensions);
 
-            Keyboard.current.onTextInput += c => {
-                if (CanSwitch && int.TryParse(c.ToString(), out var i) && i > 0 && i <= numSlots)
-                    SetActiveSlot(i - 1, false);
-            };
+            Keyboard.current.onTextInput += OnTextInput;
 
             controls = new Controls();
             controls.Enable();
@@ -141,8 +138,18 @@ namespace Interactables.Holding
                 SetActiveSlot(newIndex, false);
             };
         }
+        
+        void OnTextInput(char c)
+        {
+            if (CanSwitch && int.TryParse(c.ToString(), out var i) && i > 0 && i <= numSlots)
+                SetActiveSlot(i - 1, false);
+        }
 
-        void OnDestroy() => controls.Dispose();
+        void OnDestroy()
+        {
+            controls.Dispose();
+            Keyboard.current.onTextInput -= OnTextInput;
+        }
 
         void Update()
         {
