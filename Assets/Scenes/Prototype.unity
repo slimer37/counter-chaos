@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.65080994, g: 0.666729, b: 0.7075472, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.05
+  m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -474,7 +474,6 @@ MonoBehaviour:
   startsUnlocked: 1
   <DisplayName>k__BackingField: Base
   button: {fileID: 124654207}
-  background: {fileID: 124654206}
   label: {fileID: 1079506945}
 --- !u!114 &124654206
 MonoBehaviour:
@@ -895,7 +894,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Centering
   button: {fileID: 209097722}
-  background: {fileID: 209097723}
   label: {fileID: 1163561004}
 --- !u!114 &209097722
 MonoBehaviour:
@@ -1147,7 +1145,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Leftest
   button: {fileID: 252180514}
-  background: {fileID: 252180515}
   label: {fileID: 406215973}
 --- !u!114 &252180514
 MonoBehaviour:
@@ -6283,7 +6280,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Left 2
   button: {fileID: 825879532}
-  background: {fileID: 825879533}
   label: {fileID: 299639907}
 --- !u!114 &825879532
 MonoBehaviour:
@@ -6403,7 +6399,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Right
   button: {fileID: 828836148}
-  background: {fileID: 828836147}
   label: {fileID: 2060801156}
 --- !u!114 &828836147
 MonoBehaviour:
@@ -6807,7 +6802,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh117040
+  m_Name: pb_Mesh27218
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8376,7 +8371,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Righter
   button: {fileID: 1203641364}
-  background: {fileID: 1203641363}
   label: {fileID: 1930285117}
 --- !u!114 &1203641363
 MonoBehaviour:
@@ -9291,7 +9285,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Rightest
   button: {fileID: 1413702377}
-  background: {fileID: 1413702378}
   label: {fileID: 1747325899}
 --- !u!114 &1413702377
 MonoBehaviour:
@@ -10144,7 +10137,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Left
   button: {fileID: 1619675407}
-  background: {fileID: 1619675406}
   label: {fileID: 1713370670}
 --- !u!114 &1619675406
 MonoBehaviour:
@@ -11369,7 +11361,6 @@ MonoBehaviour:
   startsUnlocked: 0
   <DisplayName>k__BackingField: Lefter
   button: {fileID: 1855787002}
-  background: {fileID: 1855787001}
   label: {fileID: 535033738}
 --- !u!114 &1855787001
 MonoBehaviour:
