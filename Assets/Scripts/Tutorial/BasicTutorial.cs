@@ -169,7 +169,7 @@ namespace Tutorial
             yield return goalGhostGroup.DOMove(destination, 1).WaitForCompletion();
 
             yield return textBox.Display(
-                "A bunch of objects have spawned. Place them in the colored spaces." +
+                "A bunch of objects have spawned. Place them in the colored spaces. " +
                 "Hint: If you're having trouble with the second-to-last cube, aim between the top two cubes of the tower.");
             yield return new WaitUntil(ItemsArePlaced);
             yield return new WaitForSeconds(1);
