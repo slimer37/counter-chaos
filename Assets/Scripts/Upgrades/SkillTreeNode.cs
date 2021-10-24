@@ -17,7 +17,6 @@ namespace Upgrades
         
         [Header("UI")]
         [SerializeField] Button button;
-        [SerializeField] Image background;
         [SerializeField] TextMeshProUGUI label;
 
         public string ID { get; private set; }
@@ -45,7 +44,6 @@ namespace Upgrades
         void Reset()
         {
             label = GetComponentInChildren<TextMeshProUGUI>();
-            TryGetComponent(out background);
             TryGetComponent(out button);
         }
 
@@ -107,8 +105,10 @@ namespace Upgrades
         {
             if (IsActive) return;
             State = NodeState.Active;
-            background.color = button.colors.pressedColor;
-            button.enabled = false;
+            var colors = button.colors;
+            colors.disabledColor = colors.pressedColor;
+            button.colors = colors;
+            button.interactable = false;
             onActivate?.Invoke();
         }
 
