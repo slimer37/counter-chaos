@@ -165,7 +165,7 @@ namespace Tutorial
             foreach (var col in shelfColliders) col.enabled = false;
 
             shelfGroup.DOLocalMoveZ(0.5f, 1).SetRelative();
-            shelfGroup.DOMoveY(10, 2).SetDelay(1).SetEase(Ease.InBack);
+            shelfGroup.DOMoveY(10, 2).SetDelay(1);
             yield return goalGhostGroup.DOMove(destination, 1).WaitForCompletion();
 
             yield return textBox.Display(
@@ -175,7 +175,9 @@ namespace Tutorial
             yield return new WaitForSeconds(1);
             
             textBox.Clear();
-            yield return textBox.Display("You're ready!");
+            yield return textBox.Display(
+                "You're ready! " +
+                $"Press {Controls.Menu.Exit.FormatDisplayString()} and head to the title screen.");
         }
     }
 }
