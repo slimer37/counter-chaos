@@ -15,7 +15,8 @@ namespace Interactables.Holding
         void Reset() => TryGetComponent(out hoverable);
 
         void Awake() => hoverable.OnAttemptHover +=
-            sender => Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.Info.canBeHung;
+            sender => Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.Info.canBeHung
+            || !Inventory.Main.Holder.IsHoldingItem && hungItem;
 
         public void OnInteract(Transform sender)
         {
