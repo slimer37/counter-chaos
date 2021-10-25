@@ -30,9 +30,6 @@ namespace Interactables.Base
         const float FlashSpeed = 1.5f;
 
         public bool LastCheckSuccessful { get; private set; }
-        
-        // No direct disabling!
-        new public bool enabled => base.enabled;
 
         int highestCallbackPriority;
 
@@ -116,12 +113,14 @@ namespace Interactables.Base
 
         void HideIcon()
         {
-            if (!tempIconHandler) return;
-            tempIconHandler.HideIcon();
-            tempIconHandler = null;
+            if (tempIconHandler)
+            {
+                tempIconHandler.HideIcon();
+                tempIconHandler = null;
+            }
 
-            if (!useOutline) return;
-            outline.enabled = false;
+            if (useOutline)
+                outline.enabled = false;
         }
 
         void SetOutlineAlpha(float a)
