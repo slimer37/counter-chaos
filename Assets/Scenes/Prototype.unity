@@ -3420,10 +3420,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: customer (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 4645798425924900037, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4655996969335915135, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -0.000014051407
@@ -8851,9 +8847,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 1.287, y: 0, z: -0.479}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1804939021}
   m_Father: {fileID: 6320322049908461030}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1279015597
 MonoBehaviour:
@@ -8868,8 +8865,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   limit: 4
-  itemDropTransform: {fileID: 1804939021}
   spotSpacing: 2
+  itemAreaCorner: {fileID: 1804939021}
+  itemAreaDimensions: {x: 9, y: 28}
 --- !u!1 &1348471113
 GameObject:
   m_ObjectHideFlags: 0
@@ -11209,7 +11207,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1804939021}
   m_Layer: 0
-  m_Name: drop
+  m_Name: area corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11222,12 +11220,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804939020}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0089998245, y: 0.841, z: 2.5040007}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: 1.695, y: 0.841, z: -0.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6320322049908461030}
-  m_RootOrder: 6
+  m_Father: {fileID: 1279015596}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1813856548
 PrefabInstance:
@@ -13771,10 +13769,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: customer
       objectReference: {fileID: 0}
-    - target: {fileID: 4645798425924900037, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5418641384659930751, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -14025,7 +14019,6 @@ Transform:
   - {fileID: 6847225902101868487}
   - {fileID: 7122630499368306954}
   - {fileID: 1739586381}
-  - {fileID: 1804939021}
   - {fileID: 1279015596}
   m_Father: {fileID: 606113292}
   m_RootOrder: 3

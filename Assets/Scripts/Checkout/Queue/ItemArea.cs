@@ -30,8 +30,10 @@ namespace Checkout
                 else Debug.LogWarning("Last failed.");
             } while (working);
         }
+
+        public bool this[int x, int y] => occupied[x, y];
     	
-    	public bool TryOccupy(int sizeX, int sizeY, out Vector2 position)
+    	public bool TryOccupy(int sizeX, int sizeY, out Vector3 position)
         {
             if (sizeX <= 0 || sizeY <= 0) throw new ArgumentOutOfRangeException();
 
@@ -59,7 +61,7 @@ namespace Checkout
                 
     		}, width - sizeX + 1, length - sizeY + 1);
 
-            position = pos * UnitSize;
+            position = (pos + new Vector2(sizeX, sizeY) / 2) * UnitSize;
             return successful;
         }
     

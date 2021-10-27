@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda09bb2081baeb42b4b6cd500fa5067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Size>k__BackingField: {x: 8, y: 6}
   productInfo: {fileID: 11400000, guid: 88725fc3f6cc3a34e943e404bb949cc0, type: 2}
 --- !u!114 &3330275938927832460
 MonoBehaviour:

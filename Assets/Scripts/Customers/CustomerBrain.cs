@@ -45,10 +45,17 @@ namespace Customers
             queue.MoveLine += MoveLine;
 
             yield return new WaitUntil(() => index == 0);
+
+            Vector3 position;
+
+            while (true)
+            {
+                yield return new WaitForSeconds(1);
+                if (queue.Area.TryOccupy(target.Size.x, target.Size.y, out position))
+                    break;
+            }
             
-            holder.PrepareToDrop(queue.ItemDropZone);
-            yield return Rotate(queue.transform.rotation);
-            holder.Drop(queue.ItemDropZone);
+            holder.Drop(queue.AreaCorner + position);
             yield return MoveToward(queue.LineSpots[0]);
             yield return Rotate(queue.transform.rotation);
 

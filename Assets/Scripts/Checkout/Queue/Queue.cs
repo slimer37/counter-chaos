@@ -7,13 +7,15 @@ namespace Checkout
     public class Queue : MonoBehaviour
     {
         [SerializeField, Min(1)] int limit = 1;
-        [SerializeField] Transform itemDropTransform;
         [SerializeField] float spotSpacing;
+        [SerializeField] Transform itemAreaCorner;
+        [SerializeField] Vector2Int itemAreaDimensions;
+
+        public ItemArea Area { get; private set; }
+        public Vector3 AreaCorner => itemAreaCorner.position;
 
         public Vector3[] LineSpots { get; private set; }
 
-        public Vector3 ItemDropZone => itemDropTransform.position;
-        
         public int NumCustomersInLine { get; private set; }
 
         public event Action OnCustomerServed;
@@ -31,7 +33,11 @@ namespace Checkout
         void OnEnable() => AllQueues.Add(this);
         void OnDisable() => AllQueues.Remove(this);
 
-        void Awake() => LineSpots = QueuePositioning.GenerateQueue(transform.position, transform.forward, spotSpacing, limit);
+        void Awake()
+        {
+            LineSpots = QueuePositioning.GenerateQueue(transform.position, transform.forward, spotSpacing, limit);
+            Area = new ItemArea(itemAreaDimensions.x, itemAreaDimensions.y);
+        }
 
         public static Queue FindClosestQueue(Vector3 closeTo)
         {
