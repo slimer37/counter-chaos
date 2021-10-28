@@ -55,7 +55,7 @@ namespace Customers
                     break;
             }
             
-            holder.Drop(queue.AreaCorner + position);
+            holder.Drop(position);
             yield return MoveToward(queue.LineSpots[0]);
             yield return Rotate(queue.transform.rotation);
 

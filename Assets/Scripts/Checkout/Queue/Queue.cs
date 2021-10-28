@@ -8,11 +8,7 @@ namespace Checkout
     {
         [SerializeField, Min(1)] int limit = 1;
         [SerializeField] float spotSpacing;
-        [SerializeField] Transform itemAreaCorner;
-        [SerializeField] Vector2Int itemAreaDimensions;
-
-        public ItemArea Area { get; private set; }
-        public Vector3 AreaCorner => itemAreaCorner.position;
+        [field: SerializeField] public ItemArea Area { get; private set; }
 
         public Vector3[] LineSpots { get; private set; }
 
@@ -33,11 +29,7 @@ namespace Checkout
         void OnEnable() => AllQueues.Add(this);
         void OnDisable() => AllQueues.Remove(this);
 
-        void Awake()
-        {
-            LineSpots = QueuePositioning.GenerateQueue(transform.position, transform.forward, spotSpacing, limit);
-            Area = new ItemArea(itemAreaDimensions.x, itemAreaDimensions.y);
-        }
+        void Awake() => LineSpots = QueuePositioning.GenerateQueue(transform.position, transform.forward, spotSpacing, limit);
 
         public static Queue FindClosestQueue(Vector3 closeTo)
         {

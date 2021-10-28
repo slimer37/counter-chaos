@@ -1,13 +1,10 @@
 {
-    "name": "Queue.Editor",
+    "name": "ItemArea.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:0e7c2fd333406e9458aa93ad427be318",
         "GUID:899aaeeaa1ddc6f428b6e33bcd49fd2e"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

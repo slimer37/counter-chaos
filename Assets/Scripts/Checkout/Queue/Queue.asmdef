@@ -1,3 +1,16 @@
 {
-	"name": "Queue"
+    "name": "Queue",
+    "rootNamespace": "",
+    "references": [
+        "GUID:899aaeeaa1ddc6f428b6e33bcd49fd2e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

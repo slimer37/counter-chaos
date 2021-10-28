@@ -1,36 +1,18 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Checkout
 {
-    public class ItemArea
+    public class ItemArea : MonoBehaviour
     {
+        [field: SerializeField] public int Width { get; private set; }
+        [field: SerializeField] public int Length { get; private set; }
+        
+        bool[,] occupied;
+        
         public const float UnitSize = 0.1f;
-        readonly bool[,] occupied;
-    	readonly int width, length;
-
-        [MenuItem("Tools/Test Item Area")]
-        static void Test()
-        {
-            var area = new ItemArea(5, 5);
-
-            bool working;
-            do
-            {
-                var x = Random.Range(1, 4);
-                var y = Random.Range(1, 4);
-                Debug.Log("adding: " + x + " x " + y);
-                
-                var col = ColorUtility.ToHtmlStringRGB(Random.ColorHSV(0, 1, 0, 1, 1, 1));
-                working = area.TryOccupy(x, y, out _);
-                
-                if (working) area.PrintContents();
-                else Debug.LogWarning("Last failed.");
-            } while (working);
-        }
-
+        
+        void Awake() => occupied = new bool[Width, Length];
         public bool this[int x, int y] => occupied[x, y];
     	
     	public bool TryOccupy(int sizeX, int sizeY, out Vector3 position)
@@ -38,7 +20,7 @@ namespace Checkout
             if (sizeX <= 0 || sizeY <= 0) throw new ArgumentOutOfRangeException();
 
             var successful = false;
-            var pos = new Vector2(-1, -1);
+            var pos = -Vector3.one;
 
             EnumerateSpaces((regionX, regionY) => {
                 if (successful) return;
@@ -53,15 +35,15 @@ namespace Checkout
                 if (!fail)
                 {
                     successful = true;
-                    pos = new Vector2(regionX, regionY);
+                    pos = new Vector3(regionX, 0, regionY);
                     EnumerateSpaces((x, y) => {
                         occupied[regionX + x, regionY + y] = true;
                     }, sizeX, sizeY);
                 }
                 
-    		}, width - sizeX + 1, length - sizeY + 1);
+    		}, Width - sizeX + 1, Length - sizeY + 1);
 
-            position = (pos + new Vector2(sizeX, sizeY) / 2) * UnitSize;
+            position = transform.position + (pos + new Vector3(sizeX, 0, sizeY) / 2) * UnitSize;
             return successful;
         }
     
@@ -72,7 +54,7 @@ namespace Checkout
             Debug.Log(str);
         }
     	
-    	void EnumerateSpaces(Action<int, int> examine, Action<int> passRow = null) => EnumerateSpaces(examine, width, length, passRow);
+    	void EnumerateSpaces(Action<int, int> examine, Action<int> passRow = null) => EnumerateSpaces(examine, Width, Length, passRow);
     
     	void EnumerateSpaces(Action<int, int> examine, int xLimit, int yLimit, Action<int> passRow = null)
     	{
@@ -82,13 +64,6 @@ namespace Checkout
     				examine?.Invoke(x, y);
     			passRow?.Invoke(y);
     		}
-    	}
-    
-    	public ItemArea(int width, int length)
-    	{
-    		this.width = width;
-    		this.length = length;
-    		occupied = new bool[width, length];
     	}
     }
 }
