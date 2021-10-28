@@ -9,7 +9,7 @@ namespace Checkout.Editor
         static Mesh humanMesh;
         static Vector3[] positions;
         
-        [DrawGizmo(GizmoType.Active | GizmoType.Selected)]
+        [DrawGizmo(GizmoType.Active | GizmoType.Selected | GizmoType.InSelectionHierarchy)]
         static void DrawGizmos(Queue queue, GizmoType type)
         {
             humanMesh ??= AssetDatabase.LoadAssetAtPath<Transform>("Assets/Models/human.fbx").GetChild(2)
