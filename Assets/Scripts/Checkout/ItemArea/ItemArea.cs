@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Checkout
 {
@@ -15,7 +16,36 @@ namespace Checkout
         void Awake() => occupied = new bool[Width, Length];
         public bool this[int x, int y] => occupied[x, y];
     	
-    	public bool TryOccupy(int sizeX, int sizeY, out Vector3 position)
+    	public bool TryOccupy(int sizeX, int sizeY, out Vector3 position, out Vector3 rotation)
+        {
+            var alternate = Random.value > 0.5f;
+            if (alternate)
+                if (UseAlternate(out position, out rotation))
+                    return true;
+            
+            if (TryOccupy(sizeX, sizeY, out position))
+            {
+                rotation = transform.eulerAngles;
+                return true;
+            }
+
+            if (!alternate)
+                if (UseAlternate(out position, out rotation))
+                    return true;
+
+            rotation = -Vector3.one;
+
+            return false;
+
+            bool UseAlternate(out Vector3 pos, out Vector3 rot)
+            {
+                var success = TryOccupy(sizeY, sizeX, out pos);
+                rot = transform.eulerAngles + Vector3.up * 90;
+                return success;
+            }
+        }
+
+        bool TryOccupy(int sizeX, int sizeY, out Vector3 position)
         {
             if (sizeX <= 0 || sizeY <= 0) throw new ArgumentOutOfRangeException();
 
@@ -25,10 +55,10 @@ namespace Checkout
             EnumerateSpaces((regionX, regionY) => {
                 if (successful) return;
                 
-    			var fail = false;
+                var fail = false;
                 
-    			EnumerateSpaces((x, y) => {
-    				if (fail) return;
+                EnumerateSpaces((x, y) => {
+                    if (fail) return;
                     if (occupied[regionX + x, regionY + y]) fail = true;
                 }, sizeX, sizeY);
 
@@ -41,7 +71,7 @@ namespace Checkout
                     }, sizeX, sizeY);
                 }
                 
-    		}, Width - sizeX + 1, Length - sizeY + 1);
+            }, Width - sizeX + 1, Length - sizeY + 1);
 
             var localGridSpace = pos + new Vector3(sizeX - 1, 0, sizeY - 1) / 2;
             position = transform.position + transform.rotation * localGridSpace * UnitSize;
