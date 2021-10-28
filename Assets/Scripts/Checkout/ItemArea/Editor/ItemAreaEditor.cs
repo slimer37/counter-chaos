@@ -15,7 +15,7 @@ namespace Checkout
             for (var x = 0; x < area.Width; x++)
             for (var y = 0; y < area.Length; y++)
             {
-                var center = area.transform.position + new Vector3(x, 0, y) * ItemArea.UnitSize;
+                var center = area.transform.position + area.transform.rotation * new Vector3(x, 0, y) * ItemArea.UnitSize;
                 var filled = displayFilled && area[x, y];
                 Gizmos.color = filled ? Color.yellow : Color.green;
                 if (filled)

@@ -43,7 +43,8 @@ namespace Checkout
                 
     		}, Width - sizeX + 1, Length - sizeY + 1);
 
-            position = transform.position + (pos + new Vector3(sizeX, 0, sizeY) / 2) * UnitSize;
+            var localGridSpace = pos + new Vector3(sizeX - 1, 0, sizeY - 1) / 2;
+            position = transform.position + transform.rotation * localGridSpace * UnitSize;
             return successful;
         }
     
@@ -58,9 +59,9 @@ namespace Checkout
     
     	void EnumerateSpaces(Action<int, int> examine, int xLimit, int yLimit, Action<int> passRow = null)
     	{
-    		for (var y = 0; y < xLimit; y++)
+    		for (var y = 0; y < yLimit; y++)
     		{
-    			for (var x = 0; x < yLimit; x++)
+    			for (var x = 0; x < xLimit; x++)
     				examine?.Invoke(x, y);
     			passRow?.Invoke(y);
     		}
