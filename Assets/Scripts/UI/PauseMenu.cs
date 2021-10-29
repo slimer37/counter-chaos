@@ -1,6 +1,7 @@
 using Core;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace UI
 {
@@ -8,6 +9,8 @@ namespace UI
     {
         [SerializeField] CanvasGroup fadeGroup;
         [SerializeField] float fadeTime;
+        [SerializeField] UnityEvent onPause;
+        [SerializeField] UnityEvent onUnpause;
     
         Controls controls;
 
@@ -41,7 +44,9 @@ namespace UI
             {
                 tempLockMode = Cursor.lockState;
                 tempCursorVisibility = Cursor.visible;
+                onPause?.Invoke();
             }
+            else onUnpause?.Invoke();
         
             Cursor.lockState = paused ? CursorLockMode.None : tempLockMode;
             Cursor.visible = paused || tempCursorVisibility;
