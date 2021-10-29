@@ -47,15 +47,18 @@ namespace Customers
             yield return new WaitUntil(() => index == 0);
 
             Vector3 position;
+            Vector3 rotation;
 
             while (true)
             {
                 yield return new WaitForSeconds(1);
-                if (queue.Area.TryOccupy(target.Size.x, target.Size.y, out position))
+                if (queue.Area.TryOccupy(target.Size.x, target.Size.y, out position, out rotation))
                     break;
             }
+
+            yield return holder.PrepareToDrop(position);
             
-            holder.Drop(position);
+            holder.Drop(position, rotation);
             yield return MoveToward(queue.LineSpots[0]);
             yield return Rotate(queue.transform.rotation);
 

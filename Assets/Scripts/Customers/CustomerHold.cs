@@ -32,14 +32,17 @@ namespace Customers
             => heldItem.transform.DOMoveY(position.y + heldItem.VerticalExtent + dropHeight, dropSpeed)
                 .SetSpeedBased().WaitForCompletion();
 
-        internal YieldInstruction Drop(Vector3 position)
+        internal YieldInstruction Drop(Vector3 position, Vector3 rotation)
         {
             if (!heldItem) throw new Exception("Drop called with no held item.");
             var temp = heldItem;
             position.y += heldItem.VerticalExtent;
             heldItem = null;
             
-            return temp.transform.DOMove(position, dropSpeed).SetSpeedBased().OnComplete(temp.Drop).WaitForCompletion();
+            var duration =
+                temp.transform.DOMove(position, dropSpeed).SetSpeedBased().OnComplete(temp.Drop).Duration();
+            
+            return temp.transform.DORotate(rotation, duration).WaitForCompletion();
         }
     }
 }
