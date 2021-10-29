@@ -10,7 +10,13 @@ namespace UI.Settings
         
         static PlayerController controller;
 
+        #if UNITY_EDITOR
+        // Editor sensitivity
         const float DefaultSensitivity = 80;
+        #else
+        // Release sensitivity
+        const float DefaultSensitivity = 40;
+        #endif
 
         [RuntimeInitializeOnLoadMethod]
         static void Init()
