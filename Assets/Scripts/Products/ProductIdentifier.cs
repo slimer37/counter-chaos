@@ -13,6 +13,7 @@ namespace Products
 
         void OnDrawGizmosSelected()
         {
+            Gizmos.color = Color.cyan;
             var unit = ItemArea.UnitSize;
             var center = transform.position + new Vector3((Size.x + 1) % 2, 0, (Size.y + 1) % 2) / 2 * unit;
             for (var x = 0; x < Size.x; x++)
