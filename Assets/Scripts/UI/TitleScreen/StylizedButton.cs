@@ -8,7 +8,7 @@ namespace UI.TitleScreen
 {
     public class StylizedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] Vector2 expandBy = new Vector2(50, 0);
+        [SerializeField] Vector2 expandBy = new(50, 0);
         [SerializeField] float animDuration = 0.5f;
         [SerializeField] Ease ease = DOTween.defaultEaseType;
         [SerializeField] bool ignoreTimeScale;

@@ -18,12 +18,12 @@ namespace Interactables.Base
             remove => hoverChecks.Remove(value);
         }
 
-        readonly List<Func<Transform, bool>> hoverChecks = new List<Func<Transform, bool>>();
+        readonly List<Func<Transform, bool>> hoverChecks = new();
         
         IconHandler tempIconHandler;
         Outline outline;
         
-        readonly Dictionary<Type, object> cachedHandlers = new Dictionary<Type, object>();
+        readonly Dictionary<Type, object> cachedHandlers = new();
 
         float startHoverTime;
         

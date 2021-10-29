@@ -13,7 +13,7 @@ namespace Serialization
 	
         public readonly string baseFileName;
 
-        public static readonly SaveData TemporarySave = new SaveData("Temporary", "Me");
+        public static readonly SaveData TemporarySave = new("Temporary", "Me");
 	
         public string AccessPath => Path.Combine(SaveSystem.SaveFolderLocation, FileName);
         public string FileName => baseFileName + SaveSystem.SaveFileEnding;

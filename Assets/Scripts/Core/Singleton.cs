@@ -6,7 +6,7 @@ namespace Core
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         static bool shuttingDown;
-        static object lockObj = new object();
+        static object lockObj = new();
         static T instance;
 
         public static T Instance

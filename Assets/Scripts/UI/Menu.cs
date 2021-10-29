@@ -8,7 +8,7 @@ namespace UI
     public sealed class Menu : MonoBehaviour
     {
         Controls controls;
-        static readonly List<Menu> OpenMenus = new List<Menu>();
+        static readonly List<Menu> OpenMenus = new();
 
         void Awake()
         {

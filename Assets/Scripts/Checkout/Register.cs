@@ -39,7 +39,7 @@ namespace Checkout
         [SerializeField, Tooltip("{0-2}: Name, Price, Description"),
          RequireSubstring(true, 4, "{0}", "{1}", "{2}")] string productInquiryFormat;
 
-        readonly List<ProductInfo> transactionItems = new List<ProductInfo>();
+        readonly List<ProductInfo> transactionItems = new();
 
         Mode mode = Mode.Transaction;
         string idInput;

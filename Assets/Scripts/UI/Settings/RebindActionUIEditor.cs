@@ -164,17 +164,17 @@ namespace UI.Settings
         private SerializedProperty m_UpdateBindingUIEventProperty;
         private SerializedProperty m_DisplayStringOptionsProperty;
 
-        private GUIContent m_BindingLabel = new GUIContent("Binding");
-        private GUIContent m_DisplayOptionsLabel = new GUIContent("Display Options");
-        private GUIContent m_UILabel = new GUIContent("UI");
-        private GUIContent m_EventsLabel = new GUIContent("Events");
+        private GUIContent m_BindingLabel = new("Binding");
+        private GUIContent m_DisplayOptionsLabel = new("Display Options");
+        private GUIContent m_UILabel = new("UI");
+        private GUIContent m_EventsLabel = new("Events");
         private GUIContent[] m_BindingOptions;
         private string[] m_BindingOptionValues;
         private int m_SelectedBindingOption;
 
         private static class Styles
         {
-            public static GUIStyle boldLabel = new GUIStyle("MiniBoldLabel");
+            public static GUIStyle boldLabel = new("MiniBoldLabel");
         }
     }
 }

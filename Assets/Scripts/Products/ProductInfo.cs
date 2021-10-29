@@ -17,7 +17,7 @@ namespace Products
         public string CompactName { get; private set; }
         public Texture2D Barcode { get; private set; }
 
-        static readonly Dictionary<int, ProductInfo> IDTable = new Dictionary<int, ProductInfo>();
+        static readonly Dictionary<int, ProductInfo> IDTable = new();
         
         public const int IDLength = 5;
         

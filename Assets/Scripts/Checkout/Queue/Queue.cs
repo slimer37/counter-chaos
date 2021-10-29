@@ -17,7 +17,7 @@ namespace Checkout
         public event Action OnCustomerServed;
         public event EventHandler<LineMoveEventArgs> MoveLine;
 
-        static readonly List<Queue> AllQueues = new List<Queue>();
+        static readonly List<Queue> AllQueues = new();
 
         public class LineMoveEventArgs : EventArgs
         {

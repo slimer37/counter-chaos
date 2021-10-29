@@ -20,7 +20,7 @@ namespace Interactables.Container
         [SerializeField] float acceptanceDelay;
         [SerializeField] ProductInfo filterProduct;
 
-        List<Pickuppable> itemsWaiting = new List<Pickuppable>();
+        List<Pickuppable> itemsWaiting = new();
         bool open;
         
         public ReadOnlyCollection<Pickuppable> Contents => contents.AsReadOnly();

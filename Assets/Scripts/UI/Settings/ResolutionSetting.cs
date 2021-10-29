@@ -22,7 +22,7 @@ namespace UI.Settings
 
         static bool Fullscreen => PlayerPrefs.GetInt("Fullscreen", 1) == 1;
 
-        static Resolution GetResolutionPref() => new Resolution
+        static Resolution GetResolutionPref() => new()
         {
             width = PlayerPrefs.GetInt("Res X", Screen.currentResolution.width),
             height = PlayerPrefs.GetInt("Res Y", Screen.currentResolution.height),

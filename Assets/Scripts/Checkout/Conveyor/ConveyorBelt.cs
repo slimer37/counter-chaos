@@ -12,7 +12,7 @@ namespace Checkout.Conveyor
         [SerializeField] Renderer rend;
         [SerializeField] Vector2 scrollDirection = Vector2.up * 0.3f;
 
-        List<CharacterController> collidingControllers = new List<CharacterController>();
+        List<CharacterController> collidingControllers = new();
 
         void Reset()
         {

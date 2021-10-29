@@ -17,8 +17,8 @@ namespace Tutorial
         [SerializeField] float okPosError;
         [SerializeField] Vector3 okRotError;
 
-        readonly List<Transform> goals = new List<Transform>();
-        readonly List<Pickuppable> items = new List<Pickuppable>();
+        readonly List<Transform> goals = new();
+        readonly List<Pickuppable> items = new();
 
         Collider[] shelfColliders;
 

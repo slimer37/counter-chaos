@@ -76,7 +76,7 @@ namespace Interactables.Holding
         [SerializeField, Min(0)] float timeScaleGoingUp = 2;
 
         [Header("Thumbnails")]
-        [SerializeField, Min(1)] Vector2Int previewDimensions = new Vector2Int(64, 64);
+        [SerializeField, Min(1)] Vector2Int previewDimensions = new(64, 64);
         [SerializeField] bool orthographic;
         
         [field: SerializeField] public ItemHolder Holder { get; private set; }

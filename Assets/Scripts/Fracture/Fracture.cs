@@ -12,7 +12,7 @@ namespace Fracture
         [SerializeField] float destroyFracturedDelay;
         [SerializeField] float explosionForce;
 
-        static readonly Dictionary<string, ObjectPool<FracturedObject>> Pools = new Dictionary<string, ObjectPool<FracturedObject>>();
+        static readonly Dictionary<string, ObjectPool<FracturedObject>> Pools = new();
 
         void OnValidate()
         {
