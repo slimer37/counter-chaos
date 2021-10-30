@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,8 +7,14 @@ namespace Checkout
 {
     public class ItemArea : MonoBehaviour
     {
-        [field: SerializeField] public int Width { get; private set; }
-        [field: SerializeField] public int Length { get; private set; }
+        [field: Header("Size")]
+        [field: SerializeField, Min(1)] public int Width { get; private set; } = 1;
+        [field: SerializeField, Min(1)] public int Length { get; private set; } = 1;
+        
+        [Header("Updating")]
+        [SerializeField, Min(0)] float refreshTime;
+        [SerializeField, Min(0)] float boxcastDist;
+        [SerializeField] LayerMask detectMask;
         
         bool[,] occupied;
         
@@ -15,6 +22,30 @@ namespace Checkout
         
         void Awake() => occupied = new bool[Width, Length];
         public bool this[int x, int y] => occupied[x, y];
+
+        void OnDestroy() => StopAllCoroutines();
+
+        IEnumerator Start()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(refreshTime);
+                RecheckOccupiedSpaces();
+            }
+        }
+
+        public void StartPlacing() => StopAllCoroutines();
+        public void EndPlacing() => StartCoroutine(Start());
+
+        void RecheckOccupiedSpaces()
+        {
+            var results = new RaycastHit[1];
+            EnumerateSpaces((x, y) => {
+                occupied[x, y] = Physics.BoxCastNonAlloc(GridToWorld(x, y),
+                    Vector3.one * UnitSize / 2, Vector3.up, results, transform.rotation, 
+                    boxcastDist, detectMask) > 0;
+            });
+        }
     	
     	public bool TryOccupy(int sizeX, int sizeY, out Vector3 position, out Vector3 rotation)
         {
@@ -50,7 +81,7 @@ namespace Checkout
             if (sizeX <= 0 || sizeY <= 0) throw new ArgumentOutOfRangeException();
 
             var successful = false;
-            var pos = -Vector3.one;
+            var pos = -Vector2Int.one;
 
             EnumerateSpaces((regionX, regionY) => {
                 if (successful) return;
@@ -65,20 +96,24 @@ namespace Checkout
                 if (!fail)
                 {
                     successful = true;
-                    pos = new Vector3(regionX, 0, regionY);
+                    pos = new Vector2Int(regionX, regionY);
                     EnumerateSpaces((x, y) => {
                         occupied[regionX + x, regionY + y] = true;
                     }, sizeX, sizeY);
                 }
                 
             }, Width - sizeX + 1, Length - sizeY + 1);
-
-            var localGridSpace = pos + new Vector3(sizeX - 1, 0, sizeY - 1) / 2;
-            position = transform.position + transform.rotation * localGridSpace * UnitSize;
+            
+            // Use Vector2 so half-spaces can be calculated.
+            var localGridSpace = pos + new Vector2(sizeX - 1, sizeY - 1) / 2;
+            position = GridToWorld(localGridSpace.x, localGridSpace.y);
             return successful;
         }
-    
-    	public void PrintContents()
+
+        Vector3 GridToWorld(float x, float y) =>
+            transform.position + transform.rotation * new Vector3(x, 0, y) * UnitSize;
+
+        public void PrintContents()
         {
             var str = "";
     		EnumerateSpaces((x, y) => str += occupied[y, x] ? "[X]" : "[  ]", _ => str += "\n");

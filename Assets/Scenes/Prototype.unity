@@ -6814,7 +6814,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh59796
+  m_Name: pb_Mesh305332
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11304,6 +11304,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Width>k__BackingField: 9
   <Length>k__BackingField: 28
+  refreshTime: 1
+  boxcastDist: 0.1
+  detectMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &1813856548
 PrefabInstance:
   m_ObjectHideFlags: 0
