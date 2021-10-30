@@ -5834,7 +5834,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0004800953}
+  m_AnchoredPosition: {x: 0, y: 0.0005210517}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &754780328
@@ -5889,9 +5889,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bc1c116f65c11e4f9770e98583c1d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sourceLink: https://slimer37.github.io/cc/gamenotes.txt
-  beginTag: '##STARTCC##'
-  endTag: '##ENDCC##'
+  rssFeedSource: https://slimer37.itch.io/store-game/devlog.rss
+  loadingMessage: <color=#fbc531><i>Loading...</i></color>
+  beginTitleTag: <section class="post_header"><h1>
+  endTitleTag: </h1>
+  titleFormat: <color=#fbc531><size=125%><font=Staatliches SDF><b>{0}</b></font></size></color>\n
+  beginTag: <section class="object_text_widget_widget user_formatted post_body">
+  endTag: </section>
+  splitter: \n\n
   text: {fileID: 1304149428}
 --- !u!1 &778302200
 GameObject:
@@ -5977,7 +5982,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1227286956}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999117
+  m_Size: 0.99587744
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6156,7 +6161,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Update Notes
+  m_text: Devlogs
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7264,7 +7269,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: via slimer37.github.io
+  m_text: via the itch.io page
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12565,14 +12570,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>Sample Update</b>
+  m_text: '<size=125%><font=Staatliches SDF><b>Sample Update</b></font></size>
 
 
-    This update bla bla bla, bla bla bla.
+    This
+    update bla bla bla, bla bla bla.
 
 
-    -
-    Note
+    - Note
 
     - Note
 
