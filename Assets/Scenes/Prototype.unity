@@ -14056,7 +14056,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 684d36c648c0c6746a1f24baec3e97c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  idleAfterSeconds: 10
+  speed: 0.5
   rb: {fileID: 6074769868850394495}
   rend: {fileID: 5714249283478049960}
   scrollDirection: {x: 0, y: 0.3}

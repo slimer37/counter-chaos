@@ -5,6 +5,7 @@ namespace Checkout.Conveyor
 {
     internal class ConveyorBelt : MonoBehaviour
     {
+        [SerializeField] float idleAfterSeconds;
         [SerializeField] float speed = 1;
         [SerializeField] Rigidbody rb;
         
@@ -13,6 +14,8 @@ namespace Checkout.Conveyor
         [SerializeField] Vector2 scrollDirection = Vector2.up * 0.3f;
 
         List<CharacterController> collidingControllers = new();
+
+        float idleTimer;
 
         void Reset()
         {
@@ -32,10 +35,15 @@ namespace Checkout.Conveyor
             collidingControllers.Remove(other.GetComponent<CharacterController>());
         }
 
+        void OnCollisionStay(Collision other) => idleTimer = 0;
+
         void Awake() => scrollDirection *= rend.material.mainTextureScale;
 
         void FixedUpdate()
         {
+            idleTimer += Time.fixedDeltaTime;
+            if (idleTimer > idleAfterSeconds) return;
+            
             var delta = speed * Time.fixedDeltaTime * transform.forward;
             rb.position -= delta;
             rb.MovePosition(rb.position + delta);
