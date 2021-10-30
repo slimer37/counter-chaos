@@ -1045,6 +1045,9 @@ MonoBehaviour:
   dropSurfaceMask:
     serializedVersion: 2
     m_Bits: 1089
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 1025
   ghost: {fileID: 179719212}
   tossFromPosition: {x: 0, y: 0, z: 1}
   minTossForce: 3

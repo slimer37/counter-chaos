@@ -33,6 +33,7 @@ namespace Interactables.Holding
         [SerializeField] float dropReach;
         [SerializeField] float extraDropHeight;
         [SerializeField] LayerMask dropSurfaceMask;
+        [SerializeField] LayerMask groundLayerMask;
         [SerializeField] Ghost ghost;
 
         [Header("Tossing")]
@@ -281,8 +282,9 @@ namespace Interactables.Holding
                 }
                 else
                     onFlatSurface = false;
-
-                onFlatSurface &= onFreeSpot;
+                
+                if (onFlatSurface)
+                    onFlatSurface &= onFreeSpot && hit.transform.gameObject.IsInLayerMask(groundLayerMask);
                 
                 if (onFreeSpot)
                     ghost.Hide();
