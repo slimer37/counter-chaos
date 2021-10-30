@@ -19,7 +19,8 @@ namespace UI
         [Header("Title")]
         [SerializeField] string beginTitleTag;
         [SerializeField] string endTitleTag;
-        [SerializeField, RequireSubstring("{0}")] string titleFormat;
+        [SerializeField, RequireSubstring(true, "{0}", "{1}")] string headerFormat;
+        [SerializeField] string dateFormatSpecifier;
         [Header("Content Tags")]
         [SerializeField] string beginTag;
         [SerializeField] string endTag;
@@ -30,7 +31,7 @@ namespace UI
         void Awake()
         {
             splitter = Regex.Unescape(splitter);
-            titleFormat = Regex.Unescape(titleFormat);
+            headerFormat = Regex.Unescape(headerFormat);
         }
 
         public void Refresh() => Start();
@@ -49,6 +50,7 @@ namespace UI
             text.text = loadingMessage;
             
             var links = new List<string>();
+            var dates = new List<DateTime>();
 
             var feed = UnityWebRequest.Get(rssFeedSource);
             yield return feed.SendWebRequest();
@@ -59,7 +61,9 @@ namespace UI
                 var settings = new XmlReaderSettings {Async = true};
                 var reader = XmlReader.Create(strReader, settings);
                 var foundItem = false;
+                
                 var onLink = false;
+                var onDate = false;
 
                 var readTask = reader.ReadAsync();
                 yield return new WaitUntil(() => readTask.IsCompleted);
@@ -71,12 +75,18 @@ namespace UI
                         case XmlNodeType.Element:
                             if (!foundItem && reader.Name == "item") foundItem = true;
                             if (foundItem && reader.Name == "link") onLink = true;
+                            if (foundItem && reader.Name == "pubDate") onDate = true;
                             break;
                         case XmlNodeType.Text:
                             if (onLink)
                             {
                                 links.Add(reader.Value);
                                 onLink = false;
+                            }
+                            else if (onDate)
+                            {
+                                dates.Add(DateTime.Parse(reader.Value));
+                                onDate = false;
                             }
                             break;
                     }
@@ -87,9 +97,10 @@ namespace UI
             }
             
             var content = "";
-            
-            foreach (var link in links)
+
+            for (var i = 0; i < links.Count; i++)
             {
+                var link = links[i];
                 var request = UnityWebRequest.Get(link);
 
                 yield return request.SendWebRequest();
@@ -98,20 +109,23 @@ namespace UI
                 var pageContent = request.downloadHandler.text;
                 var title = RetrieveBetween(pageContent, beginTitleTag, endTitleTag);
                 var post = RetrieveBetween(pageContent, beginTag, endTag);
-			
+
                 foreach (var key in TagConversions.Keys)
                 {
                     var conversion = TagConversions[key];
                     post = key.StartsWith("r:")
                         ? Regex.Replace(post, key.Substring(2), conversion)
                         : post.Replace(key, conversion);
-                    
+
                     yield return null;
                 }
 
-                content += WebUtility.HtmlDecode(string.Format(titleFormat, title) + post).Trim('\n') + splitter;
+                content +=
+                    WebUtility.HtmlDecode(
+                        string.Format(headerFormat, title, dates[i].ToString(dateFormatSpecifier)) + post).Trim('\n') 
+                    + splitter;
             }
-            
+
             text.text = content;
 
             static string RetrieveBetween(string text, string beginTag, string endTag)
