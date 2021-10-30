@@ -7,6 +7,7 @@ namespace Fracture
     public class FracturedObject : MonoBehaviour
     {
         [SerializeField] Rigidbody[] rigidbodies;
+        [SerializeField] ParticleSystem particles;
         float delay;
 
         Vector3[] originalRbPositions;
@@ -43,6 +44,7 @@ namespace Fracture
                 rb.AddExplosionForce(force, transform.position, 0);
         
             delay = destroyDelay;
+            particles.Play();
             StartCoroutine(DelayedOut(disableCallback));
         }
 
