@@ -286,11 +286,12 @@ namespace Interactables.Holding
                 if (onFlatSurface)
                     onFlatSurface &= onFreeSpot && hit.transform.gameObject.IsInLayerMask(groundLayerMask);
                 
-                if (onFreeSpot)
+                if (onFreeSpot && (!heldItem.Info.groundPlacementOnly || onFlatSurface))
                     ghost.Hide();
                 else
                 {
                     if (rayHit) ghost.ShowAt(itemTransform.position, itemTransform.rotation);
+                    else ghost.Hide();
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);
                 }
                 
