@@ -37,7 +37,7 @@ namespace Tutorial
             else
                 DeclineTutorial();
             
-            PlayerPrefs.SetInt(Key, 1);
+            PlayerPrefs.SetString(Key, Application.version);
             PlayerPrefs.Save();
         }
     }
