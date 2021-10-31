@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Interactables.Holding;
 using Products;
@@ -12,12 +13,15 @@ namespace Customers
     {
         [SerializeField] NavMeshAgent agent;
         [SerializeField] float rotationSpeed;
+        [SerializeField, Min(0.01f)] float conveyorPlaceAttemptInterval = 1;
         [SerializeField] Animator animator;
         [SerializeField] CustomerHold holder;
+        [SerializeField, Min(0)] int minProducts = 3;
+        [SerializeField, Min(1)] int maxProducts = 5;
 
         Queue queue;
         bool finishedTransaction;
-        ProductInfo requestedProduct;
+        List<ProductIdentifier> requestedProducts = new();
 
         int index;
         
@@ -29,10 +33,22 @@ namespace Customers
 
         IEnumerator Start()
         {
-            var target = ProductManager.GetRandomProductInstance();
-            requestedProduct = target.productInfo;
-            yield return MoveToward(target.transform.position);
-            yield return holder.Pickup(target.GetComponent<Pickuppable>());
+            for (var i = 0; i < Random.Range(minProducts, maxProducts); i++)
+            {
+                var newProduct = ProductManager.GetRandomProductInstance();
+                
+                while (newProduct.GetComponent<Pickuppable>().IsHeld || requestedProducts.Contains(newProduct))
+                    newProduct = ProductManager.GetRandomProductInstance();
+                
+                if (requestedProducts.Count <= i) requestedProducts.Add(newProduct);
+                else requestedProducts[i] = newProduct;
+                
+                yield return MoveToward(newProduct.transform.position);
+
+                var pickuppable = newProduct.GetComponent<Pickuppable>();
+                if (pickuppable.IsHeld) continue;
+                yield return holder.Pickup(pickuppable);
+            }
             
             queue = Queue.FindClosestQueue(transform.position);
             if (!queue.TryLineUp(out var linePos)) yield break;
@@ -43,26 +59,28 @@ namespace Customers
                 yield return Rotate(Quaternion.LookRotation(queue.LineSpots[index - 1] - linePos));
 
             queue.MoveLine += MoveLine;
-
             yield return new WaitUntil(() => index == 0);
-
-            Vector3 position;
-            Vector3 rotation;
-
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
-                if (queue.Area.TryOccupy(target.Size.x, target.Size.y, out position, out rotation))
-                    break;
-            }
-
-            yield return holder.PrepareToDrop(position);
-            
-            holder.Drop(position, rotation);
-            yield return MoveToward(queue.LineSpots[0]);
-            yield return Rotate(queue.transform.rotation);
-
             queue.MoveLine -= MoveLine;
+
+            foreach (var t in requestedProducts)
+            {
+                Vector3 position;
+                Vector3 rotation;
+
+                while (true)
+                {
+                    yield return new WaitForSeconds(conveyorPlaceAttemptInterval);
+                    if (queue.Area.TryOccupy(t.Size.x, t.Size.y, out position, out rotation))
+                        break;
+                }
+                
+                queue.Area.StartPlacing();
+                yield return holder.Drop(position, rotation);
+                queue.Area.EndPlacing();
+            }
+            
+            yield return Rotate(queue.transform.rotation);
+            
             queue.OnCustomerServed += OnServed;
         }
 
@@ -80,11 +98,8 @@ namespace Customers
 
         void OnServed()
         {
-            if (index == 0)
-            {
-                StopAllCoroutines();
-                StartCoroutine(Finish());
-            }
+            StopAllCoroutines();
+            StartCoroutine(Finish());
         }
 
         IEnumerator Finish()
@@ -115,7 +130,7 @@ namespace Customers
                 && finishedTransaction 
                 && other.transform.CompareTag("Product") 
                 && ProductManager.TryGetProductInfo(other.transform, out var info)
-                && requestedProduct == info)
+                && requestedProducts.Find(identifier => identifier.productInfo == info) != null)
                 holder.Pickup(other.transform.GetComponent<Pickuppable>());
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Interactables.Holding;
 using UnityEngine;
@@ -12,9 +13,9 @@ namespace Customers
         [SerializeField, Min(0.01f)] float dropSpeed = 1;
         [SerializeField, Min(0)] float dropHeight = 0.5f;
 
-        Pickuppable heldItem;
+        List<Pickuppable> heldItems = new();
 
-        public bool IsHoldingItem => heldItem;
+        public bool IsHoldingItem => heldItems.Count > 0;
         
         void OnDrawGizmosSelected()
         {
@@ -24,25 +25,34 @@ namespace Customers
 
         internal YieldInstruction Pickup(Pickuppable pickuppable)
         {
-            (heldItem = pickuppable).OnInteract(transform);
+            heldItems.Add(pickuppable);
+            print(heldItems.Count);
+            pickuppable.OnInteract(transform);
             return pickuppable.transform.DOLocalMove(holdingPosition, holdAnimDuration).WaitForCompletion();
         }
 
-        internal YieldInstruction PrepareToDrop(Vector3 position)
-            => heldItem.transform.DOMoveY(position.y + heldItem.VerticalExtent + dropHeight, dropSpeed)
-                .SetSpeedBased().WaitForCompletion();
-
         internal YieldInstruction Drop(Vector3 position, Vector3 rotation)
         {
+            var heldItem = heldItems[0];
             if (!heldItem) throw new Exception("Drop called with no held item.");
-            var temp = heldItem;
-            position.y += heldItem.VerticalExtent;
-            heldItem = null;
             
-            var duration =
-                temp.transform.DOMove(position, dropSpeed).SetSpeedBased().OnComplete(temp.Drop).Duration();
+            heldItems.Remove(heldItem);
+
+            var sequence = DOTween.Sequence();
+
+            var tempHeight = position.y + heldItem.VerticalExtent;
             
-            return temp.transform.DORotate(rotation, duration).WaitForCompletion();
+            position.y += heldItem.VerticalExtent + dropHeight;
+            
+            var prepare = heldItem.transform.DOMoveY(position.y, dropSpeed).SetSpeedBased();
+            var horizontalMove = heldItem.transform.DOMove(position, dropSpeed).SetSpeedBased();
+            
+            sequence.Append(prepare);
+            sequence.Append(horizontalMove);
+            sequence.Join(heldItem.transform.DORotate(rotation, horizontalMove.Duration()));
+            sequence.Append(heldItem.transform.DOMoveY(tempHeight, dropSpeed).SetSpeedBased());
+            
+            return sequence.OnComplete(heldItem.Drop).WaitForCompletion();
         }
     }
 }
