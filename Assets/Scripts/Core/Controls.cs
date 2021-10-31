@@ -324,6 +324,54 @@ namespace Core
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Console"",
+            ""id"": ""5b48bdef-0698-4b34-8bf0-84c4f81b6cc1"",
+            ""actions"": [
+                {
+                    ""name"": ""Open"",
+                    ""type"": ""Button"",
+                    ""id"": ""49c8e972-4cb7-4688-b6b8-1254ad243b00"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""d554a5ad-e295-4b3b-9743-36f7d01443af"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a138a0c2-392d-481e-b750-56dbbe6c43bc"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Open"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b5f156e-210d-4e3b-bd3f-5107ff06ccc7"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -361,6 +409,10 @@ namespace Core
             // Menu
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
+            // Console
+            m_Console = asset.FindActionMap("Console", throwIfNotFound: true);
+            m_Console_Open = m_Console.FindAction("Open", throwIfNotFound: true);
+            m_Console_Submit = m_Console.FindAction("Submit", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -562,6 +614,47 @@ namespace Core
             }
         }
         public MenuActions @Menu => new MenuActions(this);
+
+        // Console
+        private readonly InputActionMap m_Console;
+        private IConsoleActions m_ConsoleActionsCallbackInterface;
+        private readonly InputAction m_Console_Open;
+        private readonly InputAction m_Console_Submit;
+        public struct ConsoleActions
+        {
+            private @Controls m_Wrapper;
+            public ConsoleActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Open => m_Wrapper.m_Console_Open;
+            public InputAction @Submit => m_Wrapper.m_Console_Submit;
+            public InputActionMap Get() { return m_Wrapper.m_Console; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ConsoleActions set) { return set.Get(); }
+            public void SetCallbacks(IConsoleActions instance)
+            {
+                if (m_Wrapper.m_ConsoleActionsCallbackInterface != null)
+                {
+                    @Open.started -= m_Wrapper.m_ConsoleActionsCallbackInterface.OnOpen;
+                    @Open.performed -= m_Wrapper.m_ConsoleActionsCallbackInterface.OnOpen;
+                    @Open.canceled -= m_Wrapper.m_ConsoleActionsCallbackInterface.OnOpen;
+                    @Submit.started -= m_Wrapper.m_ConsoleActionsCallbackInterface.OnSubmit;
+                    @Submit.performed -= m_Wrapper.m_ConsoleActionsCallbackInterface.OnSubmit;
+                    @Submit.canceled -= m_Wrapper.m_ConsoleActionsCallbackInterface.OnSubmit;
+                }
+                m_Wrapper.m_ConsoleActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Open.started += instance.OnOpen;
+                    @Open.performed += instance.OnOpen;
+                    @Open.canceled += instance.OnOpen;
+                    @Submit.started += instance.OnSubmit;
+                    @Submit.performed += instance.OnSubmit;
+                    @Submit.canceled += instance.OnSubmit;
+                }
+            }
+        }
+        public ConsoleActions @Console => new ConsoleActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -588,6 +681,11 @@ namespace Core
         public interface IMenuActions
         {
             void OnExit(InputAction.CallbackContext context);
+        }
+        public interface IConsoleActions
+        {
+            void OnOpen(InputAction.CallbackContext context);
+            void OnSubmit(InputAction.CallbackContext context);
         }
     }
 }

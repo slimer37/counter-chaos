@@ -11,7 +11,8 @@
                     "id": "5b169ca4-1a72-432d-9866-5217aba38ae5",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Move Mouse",
@@ -19,7 +20,8 @@
                     "id": "e857c98d-cf8b-4f26-958e-db972948ce5d",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Sprint",
@@ -27,7 +29,8 @@
                     "id": "5b48072b-7981-4586-a5ba-4fb427e13e88",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Interact",
@@ -35,7 +38,8 @@
                     "id": "b1cc4888-a331-4bfd-ba99-60f092c5936e",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Secondary Interact",
@@ -43,7 +47,8 @@
                     "id": "21172373-e067-4232-8987-06a08f9e0b98",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Drop",
@@ -51,7 +56,8 @@
                     "id": "4b4e7243-6056-4bff-8a30-ec185ba26502",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Toss",
@@ -59,7 +65,8 @@
                     "id": "c16c4857-2936-4b3d-8003-a95b9618a054",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate",
@@ -67,7 +74,8 @@
                     "id": "0fe83fe5-c0fb-49ba-9860-6776c16f135b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
@@ -75,7 +83,8 @@
                     "id": "8851c95b-4599-4958-a6c3-4c04a3d70ac4",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Slow",
@@ -83,7 +92,8 @@
                     "id": "d95a6736-77a5-4669-affb-04037761138d",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Scroll",
@@ -91,7 +101,8 @@
                     "id": "4167f777-1167-4f61-bd59-db10fa31f0a5",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -272,7 +283,8 @@
                     "id": "c000e25f-6bec-4f9a-be92-faa82ee8711d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -284,6 +296,54 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Console",
+            "id": "5b48bdef-0698-4b34-8bf0-84c4f81b6cc1",
+            "actions": [
+                {
+                    "name": "Open",
+                    "type": "Button",
+                    "id": "49c8e972-4cb7-4688-b6b8-1254ad243b00",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Submit",
+                    "type": "Button",
+                    "id": "d554a5ad-e295-4b3b-9743-36f7d01443af",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a138a0c2-392d-481e-b750-56dbbe6c43bc",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Open",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b5f156e-210d-4e3b-bd3f-5107ff06ccc7",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
