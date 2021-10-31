@@ -1,4 +1,5 @@
 ﻿using System;
+using Checkout;
 using Interactables.Base;
 using Interactables.Holding;
 using Products;
@@ -102,7 +103,10 @@ namespace Project.Editor
             if (!gameObject.GetComponent(col)) gameObject.AddComponent(col);
 
             var identifier = new SerializedObject(AddIfNeeded<ProductIdentifier>());
+            var size = gameObject.GetComponent<MeshFilter>().sharedMesh.bounds.size / ItemArea.UnitSize;
             identifier.FindProperty("productInfo").objectReferenceValue = info;
+            identifier.FindProperty("<Size>k__BackingField").vector2IntValue =
+                new Vector2Int(Mathf.CeilToInt(size.x), Mathf.CeilToInt(size.z));
             
             var hoverable = new SerializedObject(AddIfNeeded<Hoverable>());
             hoverable.FindProperty("icon").intValue = 1;
