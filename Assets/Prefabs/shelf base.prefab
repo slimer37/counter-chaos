@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3288108542837277222}
   - component: {fileID: 6830322862751110297}
   - component: {fileID: 1370974058057310039}
+  - component: {fileID: 7526859863520183298}
   m_Layer: 6
   m_Name: shelf base
   m_TagString: Untagged
@@ -32,6 +33,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -130,6 +132,7 @@ MonoBehaviour:
   maxShelves: 9
   shelfForwardOffset: 0.55
   minShelfHeight: 0.486
+  scaleX: 1
   shelfSnapInterval: 0.226
   shelfPreviewOffset: 0.8
   shelfInDuration: 0.15
@@ -150,3 +153,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: 1
   useOutline: 0
+--- !u!208 &7526859863520183298
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187531067458948056}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 1.25, z: 0.65000004}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.25, z: 0.65000004}
+  m_TimeToStationary: 0.5
