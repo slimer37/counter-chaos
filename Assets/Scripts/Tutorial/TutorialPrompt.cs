@@ -9,11 +9,13 @@ namespace Tutorial
     {
         [SerializeField] string promptTitle;
         [SerializeField, TextArea] string promptMessage;
+        [SerializeField, TextArea] string promptNewVersionMessage;
         [SerializeField] Color promptColor;
         [SerializeField] int tutorialSceneIndex;
         [SerializeField] int defaultSceneIndex;
         
-        static bool PlayerDidTutorial => PlayerPrefs.GetInt(Key, 0) == 1;
+        static bool PlayerDidLatestTutorial => PlayerPrefs.GetString(Key) == Application.version;
+        static bool PlayerDidOldTutorial => PlayerPrefs.HasKey(Key) && PlayerPrefs.GetString(Key) != Application.version;
 
         const string Key = "TutorialDone";
 
@@ -23,9 +25,11 @@ namespace Tutorial
 
         public void BeginPrompt()
         {
-            if (!PlayerDidTutorial)
+            if (!PlayerDidLatestTutorial)
             {
-                Dialog.Instance.YesNo(promptTitle, promptMessage, a => {
+                Dialog.Instance.YesNo(promptTitle,
+                    PlayerDidOldTutorial ? promptNewVersionMessage : promptMessage, 
+                    a => {
                     if (a) DoTutorial();
                     else DeclineTutorial();
                 }, promptColor);
