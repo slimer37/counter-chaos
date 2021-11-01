@@ -1,4 +1,5 @@
 using System;
+using Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -106,7 +107,7 @@ namespace Debugging
             new Command("reload", "Reloads the scene.", function:_ =>
             {
                 var activeScene = SceneManager.GetActiveScene();
-                SceneManager.LoadScene(activeScene.buildIndex);
+                SceneLoader.Load(activeScene.buildIndex);
                 return $"Successfully reloaded scene '{activeScene.name}'.";
             }),
 
