@@ -94,8 +94,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   contents: []
-  positioner: {fileID: 1915634755}
-  pickuppable: {fileID: 1915634764}
   acceptanceDelay: 0.4
   filterProduct: {fileID: 0}
 --- !u!114 &1915634758

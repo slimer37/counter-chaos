@@ -99,7 +99,10 @@ namespace Interactables.Container
                 PlaceInPosition(items[i], startingIndex + i, tween);
         }
 
-        public void RestoreCollision(Component item) =>
+        public void SetForRemoval(Component item)
+        {
+            item.transform.DOKill();
             Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider, false);
+        }
     }
 }

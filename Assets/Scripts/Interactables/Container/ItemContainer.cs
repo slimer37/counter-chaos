@@ -15,11 +15,12 @@ namespace Interactables.Container
         public UnityEvent onOpen;
         public UnityEvent onClose;
         [SerializeField] List<Pickuppable> contents;
-        [SerializeField] ContainerPositioner positioner;
-        [SerializeField] Pickuppable pickuppable;
         [SerializeField] float acceptanceDelay;
         [SerializeField] ProductInfo filterProduct;
 
+        ContainerPositioner positioner;
+        Pickuppable pickuppable;
+        
         List<Pickuppable> itemsWaiting = new();
         bool open;
         
@@ -31,7 +32,12 @@ namespace Interactables.Container
             TryGetComponent(out pickuppable);
         }
 
-        void Awake() => GetComponent<Hoverable>().ClearUnderPriority(1);
+        void Awake()
+        {
+            positioner = GetComponent<ContainerPositioner>();
+            pickuppable = GetComponent<Pickuppable>();
+            GetComponent<Hoverable>().ClearUnderPriority(1);
+        }
 
         void Start() =>
             positioner.PlaceInPositions(contents.ConvertAll(p => p.transform).ToArray(), 0, false);
@@ -79,8 +85,7 @@ namespace Interactables.Container
             var i = contents.Count - 1;
             var item = contents[i];
 
-            item.transform.DOKill();
-            positioner.RestoreCollision(item);
+            positioner.SetForRemoval(item);
             
             inventory.TryGive(item);
             contents.RemoveAt(i);
