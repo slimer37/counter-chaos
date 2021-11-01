@@ -74,6 +74,15 @@ namespace Core
             }
         }
 
+        void SetProgress(float operationProgress)
+        {
+            var progress = Mathf.Clamp01(operationProgress / 0.9f);
+            loadingBar.value = progress;
+
+            percentageText.text = $"{Mathf.RoundToInt(progress * 100)}%";
+            captionText.text = captions[Mathf.RoundToInt(captions.Length * progress - 0.5f)];
+        }
+
         IEnumerator LoadAsync(int index, bool withBase)
         {
             captionText.text = "";
@@ -84,18 +93,26 @@ namespace Core
             canvasGroup.blocksRaycasts = true;
             yield return canvasGroup.DOFade(1, fadeDuration).SetUpdate(true).WaitForCompletion();
             DOTween.KillAll();
+
+            var mainLoadingOffset = 0f;
             
             if (withBase)
-                SceneManager.LoadScene(baseSceneIndex);
+            {
+                var baseLoadOp = SceneManager.LoadSceneAsync(baseSceneIndex);
+                while (!baseLoadOp.isDone)
+                {
+                    // Only fill half the bar for the base scene.
+                    SetProgress(baseLoadOp.progress / 2);
+                    yield return null;
+                }
+                mainLoadingOffset += 0.45f;
+            }
             
             var op = SceneManager.LoadSceneAsync(index, withBase ? LoadSceneMode.Additive : LoadSceneMode.Single);
             while (!op.isDone)
             {
-                var progress = Mathf.Clamp01(op.progress / 0.9f);
-                loadingBar.value = progress;
-
-                percentageText.text = $"{Mathf.RoundToInt(progress * 100)}%";
-                captionText.text = captions[Mathf.RoundToInt(captions.Length * progress - 0.5f)];
+                var progress = Mathf.Clamp(op.progress, mainLoadingOffset, 1);
+                SetProgress(progress);
                 yield return null;
             }
 
