@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 75892468}
   - component: {fileID: 75892467}
   - component: {fileID: 75892466}
+  - component: {fileID: 75892470}
   m_Layer: 5
   m_Name: laptop UI
   m_TagString: Untagged
@@ -335,6 +336,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: -1
   m_TargetDisplay: 0
+--- !u!114 &75892470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75892464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd2f92883498be4e82050cb524947bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &79999342
 GameObject:
   m_ObjectHideFlags: 0
@@ -7390,7 +7403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverable: {fileID: 1449533439}
 --- !u!65 &1449533441
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8411,7 +8423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverable: {fileID: 1640820268}
 --- !u!65 &1640820270
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8734,7 +8745,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverable: {fileID: 1707954882}
 --- !u!65 &1707954884
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9376,7 +9386,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverable: {fileID: 1852967603}
 --- !u!65 &1852967601
 BoxCollider:
   m_ObjectHideFlags: 0

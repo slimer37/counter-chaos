@@ -27,7 +27,22 @@ namespace Upgrades
         Image dependencyLine;
         RectTransform dependencyLineRect;
 
-        public static readonly List<SkillTreeNode> AllNodes = new List<SkillTreeNode>();
+        public static readonly List<SkillTreeNode> AllNodes = new();
+
+        public int Level
+        {
+            get
+            {
+                var current = this;
+                var level = 0;
+                while (current.dependency)
+                {
+                    level++;
+                    current = current.dependency;
+                }
+                return level;
+            }
+        }
         
         public enum NodeState
         {
@@ -59,6 +74,8 @@ namespace Upgrades
 
         void Awake()
         {
+            if (AllNodes.Count > 0 && !AllNodes[0]) AllNodes.Clear();
+            
             ID = DisplayName.ToLower().Replace(" ", "");
             AllNodes.Add(this);
 
@@ -76,6 +93,25 @@ namespace Upgrades
                 
                 if (dependency.startsUnlocked) DependencyUnlock();
                 else dependency.onUnlock += DependencyUnlock;
+            }
+        }
+
+        public void InitState(NodeState state)
+        {
+            switch (state)
+            {
+                case NodeState.Locked:
+                    break;
+                case NodeState.Unlocked:
+                    if (!startsUnlocked)
+                        Unlock();
+                    break;
+                case NodeState.Active:
+                    if (!startsUnlocked)
+                        Unlock();
+                    Activate();
+                    break;
+                default: throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
 
