@@ -1,10 +1,9 @@
 using TMPro;
-using Core;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Serialization
+namespace Serialization.UI
 {
     public class SaveCreator : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Serialization
+namespace Serialization.UI
 {
     public class SaveDisplayBox : MonoBehaviour
     {
