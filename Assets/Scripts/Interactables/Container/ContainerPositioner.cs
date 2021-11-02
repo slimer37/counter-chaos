@@ -1,10 +1,39 @@
 using DG.Tweening;
+using Interactables.Base;
+using Interactables.Holding;
 using UnityEngine;
 
 namespace Interactables.Container
 {
     public class ContainerPositioner : MonoBehaviour
     {
+        struct Item
+        {
+            readonly Collider collider;
+            public readonly int originalLayer;
+            public readonly GameObject gameObject;
+            public readonly Pickuppable pickuppable;
+            public readonly Hoverable hoverable;
+
+            public Item(GameObject obj)
+            {
+                originalLayer = obj.layer;
+                obj.TryGetComponent(out pickuppable);
+                obj.TryGetComponent(out hoverable);
+                obj.TryGetComponent(out collider);
+                gameObject = obj;
+            }
+
+            public void Setup(int layer, Collider ignore) => Setup(layer, ignore, false);
+            public void Reset(Collider ignore) => Setup(originalLayer, ignore, true);
+
+            void Setup(int layer, Collider ignore, bool remove)
+            {
+                Physics.IgnoreCollision(collider, ignore, !remove);
+                gameObject.layer = layer;
+            }
+        }
+        
         [SerializeField, Min(1)] Vector3Int containmentBoxSize = Vector3Int.one;
         [SerializeField, Min(0.01f)] float unitSize = 0.25f;
         [SerializeField] Collider disableCollider;
@@ -17,16 +46,20 @@ namespace Interactables.Container
         [SerializeField] float toStartTime = 0.2f;
 
         Vector3[] positions;
+        Item[] items;
         Sequence currentSequence;
+        int ignoreCollisionsLayer;
         
         public int TotalPositions => positions.Length;
         public bool IsAnimating => currentSequence.IsActive() && currentSequence.IsPlaying();
 
-        void Reset() => TryGetComponent(out disableCollider);
-
         void Awake()
         {
-            positions = new Vector3[containmentBoxSize.x * containmentBoxSize.y * containmentBoxSize.z];
+            var numPoints = containmentBoxSize.x * containmentBoxSize.y * containmentBoxSize.z;
+            positions = new Vector3[numPoints];
+            items = new Item[numPoints];
+            ignoreCollisionsLayer = LayerMask.NameToLayer("Ignore Collision");
+            
             var i = 0;
             for (var y = 0; y < containmentBoxSize.y; y++)
             for (var x = 0; x < containmentBoxSize.x; x++)
@@ -65,7 +98,9 @@ namespace Interactables.Container
 
         public void PlaceInPosition(Transform item, int index, bool tween = true, bool raiseItemFirst = false)
         {
-            Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider);
+            items[index] = new Item(item.gameObject);
+            items[index].Setup(ignoreCollisionsLayer, disableCollider);
+            
             var rb = item.GetComponent<Rigidbody>();
             rb.isKinematic = true;
             item.parent = transform;
@@ -93,16 +128,23 @@ namespace Interactables.Container
             }
         }
 
-        public void PlaceInPositions(Transform[] items, int startingIndex, bool tween = true)
+        public void PlaceInPositions(Transform[] set, int startingIndex, bool tween = true)
         {
-            for (var i = 0; i < items.Length; i++)
-                PlaceInPosition(items[i], startingIndex + i, tween);
+            for (var i = 0; i < set.Length; i++)
+                PlaceInPosition(set[i], startingIndex + i, tween);
         }
 
-        public void SetForRemoval(Component item)
+        public bool TryGiveToPlayer(int index)
         {
-            item.transform.DOKill();
-            Physics.IgnoreCollision(item.GetComponent<Collider>(), disableCollider, false);
+            if (IsAnimating || Inventory.Main.IsFull) return false;
+            
+            var item = items[index];
+            item.gameObject.transform.DOKill();
+            item.Reset(disableCollider);
+            
+            Inventory.Main.TryGive(item.pickuppable);
+            item.hoverable.OnHoverExit();
+            return true;
         }
     }
 }

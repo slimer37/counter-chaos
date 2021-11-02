@@ -4246,7 +4246,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh647160
+  m_Name: pb_Mesh29316
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7340,6 +7340,7 @@ GameObject:
   - component: {fileID: 1449533441}
   - component: {fileID: 1449533440}
   - component: {fileID: 1449533439}
+  - component: {fileID: 1449533442}
   m_Layer: 6
   m_Name: Hanger (3)
   m_TagString: Untagged
@@ -7389,7 +7390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animTime: 0.5
   hoverable: {fileID: 1449533439}
 --- !u!65 &1449533441
 BoxCollider:
@@ -7404,6 +7404,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.3, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1449533442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449533437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c15c3a42c1f184f95a58ed153c626e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containmentBoxSize: {x: 1, y: 1, z: 1}
+  unitSize: 0.25
+  disableCollider: {fileID: 1449533441}
+  baseContentsOffset: {x: 0, y: 0, z: 0}
+  positionVariance: {x: 0, y: 0, z: 0}
+  baseContentsRotation: {x: 0, y: 0, z: 0}
+  rotationVariance: {x: 0, y: 0, z: 0}
+  placeTime: 0.2
+  tweenStartHeight: 1
+  toStartTime: 0.2
 --- !u!1001 &1452913835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8339,6 +8361,7 @@ GameObject:
   - component: {fileID: 1640820270}
   - component: {fileID: 1640820269}
   - component: {fileID: 1640820268}
+  - component: {fileID: 1640820271}
   m_Layer: 6
   m_Name: Hanger (1)
   m_TagString: Untagged
@@ -8388,7 +8411,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animTime: 0.5
   hoverable: {fileID: 1640820268}
 --- !u!65 &1640820270
 BoxCollider:
@@ -8403,6 +8425,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.3, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1640820271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640820266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c15c3a42c1f184f95a58ed153c626e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containmentBoxSize: {x: 1, y: 1, z: 1}
+  unitSize: 0.25
+  disableCollider: {fileID: 1640820270}
+  baseContentsOffset: {x: 0, y: 0, z: 0}
+  positionVariance: {x: 0, y: 0, z: 0}
+  baseContentsRotation: {x: 0, y: 0, z: 0}
+  rotationVariance: {x: 0, y: 0, z: 0}
+  placeTime: 0.2
+  tweenStartHeight: 1
+  toStartTime: 0.2
 --- !u!1001 &1667052619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8640,6 +8684,7 @@ GameObject:
   - component: {fileID: 1707954884}
   - component: {fileID: 1707954883}
   - component: {fileID: 1707954882}
+  - component: {fileID: 1707954885}
   m_Layer: 6
   m_Name: Hanger (2)
   m_TagString: Untagged
@@ -8689,7 +8734,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animTime: 0.5
   hoverable: {fileID: 1707954882}
 --- !u!65 &1707954884
 BoxCollider:
@@ -8704,6 +8748,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.3, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1707954885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707954880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c15c3a42c1f184f95a58ed153c626e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containmentBoxSize: {x: 1, y: 1, z: 1}
+  unitSize: 0.25
+  disableCollider: {fileID: 1707954884}
+  baseContentsOffset: {x: 0, y: 0, z: 0}
+  positionVariance: {x: 0, y: 0, z: 0}
+  baseContentsRotation: {x: 0, y: 0, z: 0}
+  rotationVariance: {x: 0, y: 0, z: 0}
+  placeTime: 0.2
+  tweenStartHeight: 1
+  toStartTime: 0.2
 --- !u!1 &1713370669
 GameObject:
   m_ObjectHideFlags: 0
@@ -9290,6 +9356,7 @@ GameObject:
   - component: {fileID: 1852967601}
   - component: {fileID: 1852967600}
   - component: {fileID: 1852967603}
+  - component: {fileID: 1852967604}
   m_Layer: 6
   m_Name: Hanger
   m_TagString: Untagged
@@ -9309,7 +9376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc690759f91d3d4c8f0dda5a77230be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animTime: 0.5
   hoverable: {fileID: 1852967603}
 --- !u!65 &1852967601
 BoxCollider:
@@ -9354,6 +9420,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: 1
   useOutline: 1
+--- !u!114 &1852967604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852967599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c15c3a42c1f184f95a58ed153c626e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containmentBoxSize: {x: 1, y: 1, z: 1}
+  unitSize: 0.25
+  disableCollider: {fileID: 1852967601}
+  baseContentsOffset: {x: 0, y: 0, z: 0}
+  positionVariance: {x: 0, y: 0, z: 0}
+  baseContentsRotation: {x: 0, y: 0, z: 0}
+  rotationVariance: {x: 0, y: 0, z: 0}
+  placeTime: 0.2
+  tweenStartHeight: 1
+  toStartTime: 0.2
 --- !u!1 &1855786999
 GameObject:
   m_ObjectHideFlags: 0

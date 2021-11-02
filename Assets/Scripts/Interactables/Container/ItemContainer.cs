@@ -83,12 +83,8 @@ namespace Interactables.Container
             if (positioner.IsAnimating || inventory.IsFull) return;
             
             var i = contents.Count - 1;
-            var item = contents[i];
-
-            positioner.SetForRemoval(item);
-            
-            inventory.TryGive(item);
-            contents.RemoveAt(i);
+            if (positioner.TryGiveToPlayer(i))
+                contents.RemoveAt(i);
         }
 
         public void OnSecondaryInteract(Transform sender) => ToggleOpen();
