@@ -26,7 +26,6 @@ namespace Customers
         internal YieldInstruction Pickup(Pickuppable pickuppable)
         {
             heldItems.Add(pickuppable);
-            print(heldItems.Count);
             pickuppable.OnInteract(transform);
             return pickuppable.transform.DOLocalMove(holdingPosition, holdAnimDuration).WaitForCompletion();
         }
