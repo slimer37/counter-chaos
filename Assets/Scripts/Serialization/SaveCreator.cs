@@ -1,6 +1,7 @@
 using TMPro;
 using Core;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Serialization
@@ -12,7 +13,7 @@ namespace Serialization
         [SerializeField] TextMeshProUGUI warningText;
         [SerializeField] TMP_InputField playerNameField;
         [SerializeField] Button createButton;
-        [SerializeField] int gameStartScene;
+        [SerializeField] UnityEvent onStartGame;
 
         void Awake()
         {
@@ -59,7 +60,7 @@ namespace Serialization
             var newData = new SaveData(saveNameField.text, playerNameField.text);
             newData.Save();
             SaveSystem.LoadedSave = newData;
-            SceneLoader.Load(gameStartScene);
+            onStartGame?.Invoke();
         }
     }
 }

@@ -3,6 +3,7 @@ using TMPro;
 using Core;
 using UI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Serialization
@@ -17,7 +18,7 @@ namespace Serialization
         [SerializeField] TextMeshProUGUI details;
         [SerializeField] GameObject noneSelectedText;
         [SerializeField] Button loadButton;
-        [SerializeField] int gameStartScene;
+        [SerializeField] UnityEvent onStartGame;
 
         [Header("Deletion")]
         [SerializeField] Color deletionDialogColor;
@@ -36,7 +37,7 @@ namespace Serialization
         void LoadAndPlay()
         {
             SaveSystem.LoadedSave = focused;
-            SceneLoader.Load(gameStartScene);
+            onStartGame?.Invoke();
         }
 	
         public void View(SaveData save)
