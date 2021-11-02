@@ -18,7 +18,7 @@ namespace Serialization
                 }
                 return loadedSave;
             }
-            internal set => loadedSave = value;
+            set => loadedSave = value;
         }
 
         static SaveData loadedSave;
