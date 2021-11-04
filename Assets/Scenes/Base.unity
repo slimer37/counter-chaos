@@ -1020,7 +1020,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1687258584}
-  defaultHoldingPosition: {x: 0.42, y: 0.25, z: 0.8}
+  defaultHoldingPosition: {x: 0.25, y: 0.59, z: 0.52}
   defaultHoldingRotation: {x: 0, y: 210, z: 0}
   pickupTime: 0.4
   timeBetweenHoldPositions: 0.1
@@ -4928,7 +4928,7 @@ MonoBehaviour:
   m_RenderPostProcessing: 1
   m_Antialiasing: 1
   m_AntialiasingQuality: 2
-  m_StopNaN: 1
+  m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
   m_AllowXRRendering: 1
