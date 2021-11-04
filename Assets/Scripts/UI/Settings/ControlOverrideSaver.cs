@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace UI.Settings
 {
-    public static class ControlOverrideSaver
+    public class ControlOverrideSaver : MonoBehaviour
     {
+        [SerializeField] InputActionAsset instanceAsset;
+        
         [Serializable]
         struct BindingList { public List<BindingSerializable> bindings; }
 	
@@ -18,16 +21,34 @@ namespace UI.Settings
 
         static InputActionAsset asset;
 
+        void Awake()
+        {
+            asset = instanceAsset;
+            Load();
+        }
+
         public static void ClearOverrides()
         {
+            if (!asset)
+            {
+                Debug.LogWarning("No input action asset loaded. Will not clear controls overrides.");
+                return;
+            }
+            
             foreach (var map in asset.actionMaps)
                 map.RemoveAllBindingOverrides();
 		
             PlayerPrefs.DeleteKey("Controls");
         }
 
-        public static void SetPref()
+        public static void SaveOverrides()
         {
+            if (!asset)
+            {
+                Debug.LogWarning("No input action asset loaded. Will not save controls overrides.");
+                return;
+            }
+            
             var bindingList = new BindingList { bindings = new List<BindingSerializable>() };
 		
             foreach (var map in asset.actionMaps)
@@ -39,11 +60,8 @@ namespace UI.Settings
             PlayerPrefs.SetString("Controls", JsonUtility.ToJson(bindingList));
         }
         
-        [RuntimeInitializeOnLoadMethod]
         static void Load()
         {
-            asset = Resources.Load<InputActionAsset>("Controls");
-            
             if (!PlayerPrefs.HasKey("Controls")) return;
 
             var bindingList = JsonUtility.FromJson<BindingList>(PlayerPrefs.GetString("Controls"));

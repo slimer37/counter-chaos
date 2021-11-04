@@ -6,7 +6,7 @@ namespace UI.Settings
     {
         public void Save()
         {
-            ControlOverrideSaver.SetPref();
+            ControlOverrideSaver.SaveOverrides();
             PlayerPrefs.Save();
         }
     }
