@@ -1030,6 +1030,7 @@ MonoBehaviour:
   flatSurfaceTolerance: 5
   correctionAmount: 0.01
   correctionLimit: 30
+  lineOfSightMaxDist: 5
   tossObstacleMask:
     serializedVersion: 2
     m_Bits: 1097

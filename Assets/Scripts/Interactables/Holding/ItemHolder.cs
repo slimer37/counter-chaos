@@ -24,6 +24,7 @@ namespace Interactables.Holding
         [SerializeField] int correctionLimit = 10;
         
         [Header("Obstacle Detection")]
+        [SerializeField] float lineOfSightMaxDist = 5;
         [SerializeField] LayerMask tossObstacleMask;
         [SerializeField] LayerMask cameraBlockRaycastMask;
         [SerializeField] LayerMask dropObstacleMask;
@@ -61,6 +62,7 @@ namespace Interactables.Holding
         bool isRotating;
         float holdTime;
 
+        bool inDefaultDropPos;
         bool onFlatSurface;
         
         Inventory inv;
@@ -125,6 +127,7 @@ namespace Interactables.Holding
 
         void ReturnItemToHolding()
         {
+            SetHeldObjectLayers(heldObjectLayer);
             MoveAndRotateHeldItem(holdingPosition, holdingRotation, timeBetweenHoldPositions);
             ghost.Hide();
         }
@@ -147,10 +150,12 @@ namespace Interactables.Holding
 
                 controller.EnableLook(true);
 
-                if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults) || heldItem.Info.groundPlacementOnly && !onFlatSurface)
-                    ReturnItemToHolding();
-                else
+                if (!heldItem.IsIntersecting(dropObstacleMask, obstacleResults)
+                    && (!heldItem.Info.groundPlacementOnly || onFlatSurface)
+                    && (!inDefaultDropPos || !IsLineOfSightBlocked()))
                     Drop(false);
+                else
+                    ReturnItemToHolding();
             }
         }
         
@@ -193,8 +198,17 @@ namespace Interactables.Holding
 
             bool CheckForTossObstacles() =>
                 heldItem.IsIntersecting(tossObstacleMask, obstacleResults)
-                || Physics.Raycast(GetCameraRay(), out var hit, tossFromPosition.magnitude, cameraBlockRaycastMask)
+                || IsLineOfSightBlocked();
+        }
+        
+        bool IsLineOfSightBlocked()
+        {
+            var camPos = camera.transform.position;
+            var camItemRay = new Ray(camPos, heldItem.transform.position - camPos);
+            var temp = Physics.Raycast(camItemRay, out var hit, lineOfSightMaxDist, cameraBlockRaycastMask)
                 && hit.transform != heldItem.transform;
+            Debug.Log("Line of sight check result: " + temp);
+            return temp;
         }
 
         Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -287,12 +301,16 @@ namespace Interactables.Holding
                     onFlatSurface &= onFreeSpot && hit.transform.gameObject.IsInLayerMask(groundLayerMask);
                 
                 if (onFreeSpot && (!heldItem.Info.groundPlacementOnly || onFlatSurface))
+                {
                     ghost.Hide();
+                    inDefaultDropPos = false;
+                }
                 else
                 {
                     if (rayHit) ghost.ShowAt(itemTransform.position, itemTransform.rotation);
                     else ghost.Hide();
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);
+                    inDefaultDropPos = true;
                 }
                 
                 SetHeldObjectLayers(onFreeSpot ? droppingObjectLayer : heldObjectLayer);
