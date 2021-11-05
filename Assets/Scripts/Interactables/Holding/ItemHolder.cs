@@ -207,7 +207,6 @@ namespace Interactables.Holding
             var camItemRay = new Ray(camPos, heldItem.transform.position - camPos);
             var temp = Physics.Raycast(camItemRay, out var hit, lineOfSightMaxDist, cameraBlockRaycastMask)
                 && hit.transform != heldItem.transform;
-            Debug.Log("Line of sight check result: " + temp);
             return temp;
         }
 
