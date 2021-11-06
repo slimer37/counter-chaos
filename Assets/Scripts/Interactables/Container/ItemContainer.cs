@@ -36,6 +36,7 @@ namespace Interactables.Container
         {
             positioner = GetComponent<ContainerPositioner>();
             pickuppable = GetComponent<Pickuppable>();
+            pickuppable.enabled = !open;
             GetComponent<Hoverable>().ClearUnderPriority(1);
         }
 
