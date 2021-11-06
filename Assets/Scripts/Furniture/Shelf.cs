@@ -7,7 +7,7 @@ namespace Furniture
     [RequireComponent(typeof(Pickuppable))]
     public class Shelf : MonoBehaviour, IInteractHandler
     {
-        public enum Style { Gondola, Refrigerator }
+        public enum Style { Gondola, Refrigerator, Warehouse }
         
         [field: SerializeField] internal Style ShelfStyle { get; private set; }
 
