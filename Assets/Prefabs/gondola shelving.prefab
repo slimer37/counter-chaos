@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3627542172714210705}
   - component: {fileID: 2822910134207732827}
   m_Layer: 6
-  m_Name: Shelving
+  m_Name: gondola shelving
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +32,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 849029101936606567}
-  m_Mesh: {fileID: -8623414835133675392, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
+  m_Mesh: {fileID: 4008699763078763144, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
 --- !u!23 &7097721036117075333
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8955624152899789139, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
+  - {fileID: -4377479308288366294, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

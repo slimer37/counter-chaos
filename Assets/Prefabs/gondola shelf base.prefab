@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1370974058057310039}
   - component: {fileID: 7526859863520183298}
   m_Layer: 6
-  m_Name: shelf base
+  m_Name: gondola shelf base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2187531067458948056}
-  m_Mesh: {fileID: -8315146866647653853, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
+  m_Mesh: {fileID: 8879521525764699691, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
 --- !u!23 &385998513175669261
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8877859940283137870, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
+  - {fileID: 3836613688799461823, guid: 64398ba022b7bca41bbeaed47f8b25a3, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
