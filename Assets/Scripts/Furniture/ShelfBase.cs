@@ -12,7 +12,7 @@ namespace Furniture
     {
         [SerializeField] Collider mainCollider;
         [SerializeField] Shelf.Style style;
-        [SerializeField] float attachDistance;
+        [SerializeField] float attachDistance = 4;
         
         [Header("Shelf Position")]
         [SerializeField] int maxShelves;
@@ -22,13 +22,13 @@ namespace Furniture
         [Header("Attachment")]
         [SerializeField] float scaleX = 1;
         [SerializeField] float shelfSnapInterval;
-        [SerializeField] float shelfPreviewOffset;
+        [SerializeField] float shelfPreviewOffset = 0.8f;
         
         [Header("Animation")]
-        [SerializeField] float shelfInDuration;
-        [SerializeField] float shelfAnimUp;
-        [SerializeField] float beforeDownInterval;
-        [SerializeField] float shelfDownDuration;
+        [SerializeField] float shelfInDuration = 0.15f;
+        [SerializeField] float shelfAnimUp = 0.1f;
+        [SerializeField] float beforeDownInterval = 0.05f;
+        [SerializeField] float shelfDownDuration = 0.05f;
         
         Shelf[] shelves;
         int availableSlots;
