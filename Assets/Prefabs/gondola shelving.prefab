@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Info>k__BackingField:
+    label: Gondola Shelf
     canBeDropped: 0
     canBeThrown: 0
     canBeHung: 0

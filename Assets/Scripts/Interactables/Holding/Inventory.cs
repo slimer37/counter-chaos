@@ -24,7 +24,7 @@ namespace Interactables.Holding
                     var outline = value.GetComponent<Plugins.Outline>();
                     if (outline) outline.enabled = false;
 
-                    previewTex = RuntimePreviewGenerator.GenerateModelPreview(value.transform, dim.x, dim.y);
+                    previewTex = ItemThumbnail.Generate(content);
 
                     if (outline) outline.enabled = true;
 
@@ -37,14 +37,12 @@ namespace Interactables.Holding
             Texture2D previewTex;
 
             readonly RawImage thumbnail;
-            readonly Vector2Int dim;
 
             public bool IsFilled => content != null;
             public readonly Transform transform;
 
-            public Slot(GameObject obj, Vector2Int dimensions)
+            public Slot(GameObject obj)
             {
-                dim = dimensions;
                 transform = obj.transform;
                 
                 thumbnail = transform.GetChild(0).GetComponent<RawImage>()
@@ -60,7 +58,6 @@ namespace Interactables.Holding
             {
                 content = null;
                 thumbnail.enabled = false;
-                Destroy(previewTex);
             }
         }
         
@@ -74,10 +71,6 @@ namespace Interactables.Holding
         [SerializeField, Min(0)] float hideDelay = 1.5f;
         [SerializeField, Min(0)] float moveOffDuration = 0.1f;
         [SerializeField, Min(0)] float timeScaleGoingUp = 2;
-
-        [Header("Thumbnails")]
-        [SerializeField, Min(1)] Vector2Int previewDimensions = new(64, 64);
-        [SerializeField] bool orthographic;
         
         [field: SerializeField] public ItemHolder Holder { get; private set; }
 
@@ -102,10 +95,6 @@ namespace Interactables.Holding
 
         void Awake()
         {
-            RuntimePreviewGenerator.MarkTextureNonReadable = true;
-            RuntimePreviewGenerator.BackgroundColor = Color.clear;
-            RuntimePreviewGenerator.OrthographicMode = orthographic;
-            
             var rect = GetComponent<RectTransform>();
             moveOffScreen = DOTween.Sequence();
             moveOffScreen.Append(rect.DOPivotY(1, moveOffDuration).SetAutoKill(false));
@@ -117,10 +106,10 @@ namespace Interactables.Holding
             Main = this;
             
             slots = new Slot[numSlots];
-            slots[0] = new Slot(slotTemplate, previewDimensions);
+            slots[0] = new Slot(slotTemplate);
             
             for (var i = 1; i < numSlots; i++)
-                slots[i] = new Slot(Instantiate(slotTemplate, transform), previewDimensions);
+                slots[i] = new Slot(Instantiate(slotTemplate, transform));
 
             Keyboard.current.onTextInput += OnTextInput;
 

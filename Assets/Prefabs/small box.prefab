@@ -407,6 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Info>k__BackingField:
+    label: Small Box
     canBeDropped: 1
     canBeThrown: 0
     canBeHung: 0
