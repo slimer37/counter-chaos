@@ -6,10 +6,15 @@ ModelImporter:
   - first:
       74: -938292396753308366
     second: Curled Receipt|Print Receipt
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metallic
+    second: {fileID: 2100000, guid: a78b66b0e31dca640b95c856303dca6e, type: 2}
   materials:
     materialImportMode: 2
-    materialName: 0
+    materialName: 2
     materialSearch: 1
     materialLocation: 1
   animations:
