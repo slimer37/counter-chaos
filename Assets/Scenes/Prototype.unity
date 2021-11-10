@@ -565,7 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953e553a9aafc7b458ed97cabd8ce6ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invert: 1
+  invert: 0
   rotationMin: -90
   rotationMax: 0
   stopTime: 0.5
@@ -3662,7 +3662,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2013932100}
-  m_RootOrder: 8
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 14.068}
 --- !u!64 &355959897
 MeshCollider:
@@ -4110,8 +4110,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 0
   m_Resolution: 128
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 29.904997, y: 10, z: 21.673027}
-  m_BoxOffset: {x: 1.9942636, y: 0, z: 2.5785441}
+  m_BoxSize: {x: 29.904997, y: 10, z: 21.316494}
+  m_BoxOffset: {x: 1.9942636, y: 0, z: 2.756811}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -9731,8 +9731,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 0
   m_Resolution: 128
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 14.966211, y: 7.1453705, z: 8.069826}
-  m_BoxOffset: {x: -0.63561916, y: 1.056284, z: -0.11926675}
+  m_BoxSize: {x: 14.966211, y: 7.1453705, z: 8.437146}
+  m_BoxOffset: {x: -0.63561916, y: 1.056284, z: 0.06439352}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -11630,7 +11630,7 @@ GameObject:
   - component: {fileID: 1107157745}
   - component: {fileID: 1107157744}
   - component: {fileID: 1107157743}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: door pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11679,8 +11679,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 1
-  rotationMin: -90
-  rotationMax: 0
+  rotationMin: 0
+  rotationMax: 90
   stopTime: 0.5
 --- !u!114 &1107157745
 MonoBehaviour:
@@ -16867,7 +16867,7 @@ GameObject:
   - component: {fileID: 1616569392}
   - component: {fileID: 1616569394}
   - component: {fileID: 1616569393}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21856,11 +21856,11 @@ Transform:
   - {fileID: 1261129411}
   - {fileID: 1107157742}
   - {fileID: 52923738}
+  - {fileID: 355959896}
   - {fileID: 8103796238767092562}
   - {fileID: 186940676}
   - {fileID: 1921579468}
   - {fileID: 1056839689}
-  - {fileID: 355959896}
   - {fileID: 1726726251}
   m_Father: {fileID: 1785811358}
   m_RootOrder: 1
