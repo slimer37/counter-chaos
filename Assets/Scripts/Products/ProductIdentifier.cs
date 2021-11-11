@@ -9,8 +9,6 @@ namespace Products
         [field: SerializeField, Min(1)] public Vector2Int Size { get; private set; } = Vector2Int.one;
         public ProductInfo productInfo;
 
-        BarcodeDisplay currentBarcodeDisplay;
-
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
@@ -34,9 +32,9 @@ namespace Products
         }
 
         public void OnSecondaryInteract(Transform sender) =>
-            (currentBarcodeDisplay = sender.GetComponent<BarcodeDisplay>()).ShowBarcodeFor(productInfo);
+            BarcodeDisplay.Main.ShowBarcodeFor(productInfo);
 
         public void OnStopSecondaryInteract(Transform sender) =>
-            currentBarcodeDisplay?.HideBarcode();
+            BarcodeDisplay.Main.HideBarcode();
     }
 }

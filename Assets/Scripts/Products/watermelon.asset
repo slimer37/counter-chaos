@@ -15,3 +15,4 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Watermelon
   <Price>k__BackingField: 4.8
   <Description>k__BackingField: Good source of water.
+  cannotBeScanned: 1

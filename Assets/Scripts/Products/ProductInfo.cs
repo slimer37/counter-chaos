@@ -12,10 +12,12 @@ namespace Products
         [field: SerializeField] public string DisplayName { get; private set; }
         [field: SerializeField] public float Price { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
+        [SerializeField] bool cannotBeScanned;
         
         public int ID { get; private set; }
         public string CompactName { get; private set; }
         public Texture2D Barcode { get; private set; }
+        public bool HasBarcode => Barcode;
 
         static readonly Dictionary<int, ProductInfo> IDTable = new();
         
@@ -29,7 +31,8 @@ namespace Products
             Random.InitState(seed);
             
             GenerateID();
-            Barcode = Products.Barcode.Generate();
+            
+            if (!cannotBeScanned) Barcode = Products.Barcode.Generate();
             
             Random.state = tempState;
 
@@ -61,7 +64,7 @@ namespace Products
 
                 CompactName += rawName[i];
             }
-            CompactName += rawName[rawName.Length - 1];
+            CompactName += rawName[^1];
         }
 
         public static ProductInfo LookUp(int id) => IDTable.ContainsKey(id) ? IDTable[id] : null;

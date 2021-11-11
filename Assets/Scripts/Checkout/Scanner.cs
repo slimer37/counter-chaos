@@ -32,7 +32,8 @@ namespace Checkout
         void Scan(Transform scanned)
         {
             lastScanned = scanned;
-            if (scanned.TryGetComponent(out ProductIdentifier productIdentifier))
+            if (scanned.TryGetComponent(out ProductIdentifier productIdentifier)
+            && productIdentifier.productInfo.HasBarcode)
                 OnScan?.Invoke(productIdentifier);
             
             StopAllCoroutines();
