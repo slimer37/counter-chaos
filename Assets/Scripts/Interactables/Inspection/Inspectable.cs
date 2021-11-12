@@ -38,6 +38,8 @@ namespace Interactables.Inspection
         {
             // Can hover if no item is being inspected.
             hoverable.OnAttemptHover += CanInteract;
+            
+            hoverable.icon = InteractionIcon.Eye;
 
             originalPosition = transform.position;
             originalRotation = transform.rotation;
