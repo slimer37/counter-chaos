@@ -8,7 +8,7 @@ namespace Interactables.Base
     [DisallowMultipleComponent]
     public class Hoverable : MonoBehaviour
     {
-        public InteractionIcon icon;
+        public InteractionIcon icon = InteractionIcon.Access;
 
         [SerializeField] bool useOutline = true;
 
