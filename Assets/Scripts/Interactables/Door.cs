@@ -56,6 +56,8 @@ namespace Interactables
 
         void Update()
         {
+            if (!isInteracting && delta == 0) return;
+            
             if (isInteracting)
             {
                 var a = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
