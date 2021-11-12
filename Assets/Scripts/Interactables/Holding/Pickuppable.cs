@@ -79,6 +79,7 @@ namespace Interactables.Holding
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
             VerticalExtent = transform.position.y - meshBounds.center.y + meshBounds.extents.y;
             hoverable.OnAttemptHover += OnAttemptHover;
+            hoverable.icon = InteractionIcon.Pickup;
         }
 
         // Can hover if the sender is not holding anything.

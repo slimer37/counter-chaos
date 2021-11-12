@@ -35,6 +35,8 @@ namespace Interactables
 
         void Awake()
         {
+            GetComponent<Hoverable>().icon = InteractionIcon.Pull;
+            
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnRelease;
             var rend = GetComponentInChildren<Renderer>();
