@@ -853,6 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 1
+  showPullByDefault: 1
   rotationMin: -90
   rotationMax: 0
   stopTime: 0.5
@@ -1091,6 +1092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 0
+  showPullByDefault: 1
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
@@ -1221,6 +1223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 0
+  showPullByDefault: 1
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5

@@ -10,6 +10,7 @@ namespace Interactables
     {
         [Header("Pulling")]
         [SerializeField] bool invert;
+        [SerializeField] bool showPullByDefault;
         [Space]
         [SerializeField, Range(-180, 0)] float rotationMin = -180;
         [SerializeField, Range(0, 180)] float rotationMax = 180;
@@ -24,6 +25,7 @@ namespace Interactables
         float delta;
         bool isInteracting;
 
+        Hoverable hoverable;
         Controls controls;
 
         void OnValidate()
@@ -35,7 +37,11 @@ namespace Interactables
 
         void Awake()
         {
-            GetComponent<Hoverable>().icon = InteractionIcon.Pull;
+            hoverable = GetComponent<Hoverable>();
+            hoverable.OnAttemptHover += _ => {
+                UpdateIcon();
+                return true;
+            };
             
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnRelease;
@@ -52,6 +58,21 @@ namespace Interactables
             if (resetTween.IsActive())
                 resetTween.Kill();
             controls.Enable();
+        }
+
+        void UpdateIcon()
+        {
+            var yRot = transform.localEulerAngles.y;
+            if (yRot > 180) yRot -= 360;
+            var facingFront = Vector3.Dot(Player.Camera.transform.forward, transform.forward) < 0;
+            
+            bool push;
+            if (showPullByDefault)
+                push = facingFront != invert ? yRot >= rotationMax : yRot <= rotationMin;
+            else
+                push = facingFront != invert ? yRot > rotationMin : yRot < rotationMax;
+            
+            hoverable.icon = push ? InteractionIcon.Push : InteractionIcon.Pull;
         }
 
         void Update()
