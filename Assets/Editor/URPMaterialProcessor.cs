@@ -19,6 +19,8 @@ namespace Project.Editor
             { "Shininess", f => 1 - Mathf.Sqrt(f) / 10 }
         };
 
+        public override int GetPostprocessOrder() => 10;
+
         void OnPreprocessMaterialDescription(MaterialDescription description, Material material, AnimationClip[] animations)
         {
             LogProperties(description);
