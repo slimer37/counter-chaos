@@ -724,6 +724,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: b305faa47a066a844ad93846ed09e737, type: 2}
+  - {fileID: 2100000, guid: 7a32430e134d1404590ac839e48cc2b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -766,6 +767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 0
+  showPullByDefault: 0
   rotationMin: -90
   rotationMax: 0
   stopTime: 0.5
@@ -12624,6 +12626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 1
+  showPullByDefault: 0
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
@@ -18242,6 +18245,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: b305faa47a066a844ad93846ed09e737, type: 2}
+  - {fileID: 2100000, guid: 7a32430e134d1404590ac839e48cc2b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
