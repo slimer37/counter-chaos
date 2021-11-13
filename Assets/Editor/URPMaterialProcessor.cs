@@ -23,13 +23,11 @@ namespace Project.Editor
 
         void OnPreprocessMaterialDescription(MaterialDescription description, Material material, AnimationClip[] animations)
         {
-            LogProperties(description);
             foreach (var key in floatDefinitions.Keys)
                 if (description.TryGetProperty(key, out float value))
                 {
                     if (floatConverters.ContainsKey(key)) value = floatConverters[key](value);
                     material.SetFloat(floatDefinitions[key], value);
-                    Debug.Log($"Set {floatDefinitions[key]} to {value}");
                 }
         }
         
