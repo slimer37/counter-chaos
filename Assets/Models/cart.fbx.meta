@@ -3,17 +3,7 @@ guid: 896ae5b92dd290040bcebf70b08647b8
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: cart
-    second: {fileID: 2100000, guid: c846b532268b95241a19c20d5a676bca, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: wheel
-    second: {fileID: 2100000, guid: 6acc2445fc4467f4697e9b1181c3587a, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 1

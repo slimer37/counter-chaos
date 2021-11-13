@@ -9,11 +9,6 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Keyboard
     second: {fileID: 2100000, guid: 1f815cb00f9d98b4e850af40b2cef84d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Laptop
-    second: {fileID: 2100000, guid: 1f815cb00f9d98b4e850af40b2cef84d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

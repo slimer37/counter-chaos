@@ -16,7 +16,7 @@ namespace Project.Editor
 
         readonly Dictionary<string, Func<float, float>> floatConverters = new()
         {
-            { "Shininess", f => 1 - Mathf.Sqrt(f) / 10 }
+            { "Shininess", f => Mathf.Sqrt(f) / 10 }
         };
 
         public override int GetPostprocessOrder() => 10;
