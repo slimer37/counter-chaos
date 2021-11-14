@@ -50,6 +50,8 @@ namespace UI.Statistics
                 }
                 
                 DrawLine(points[i - 1], points[i], i - 1, vh);
+
+                if (i == points.Count - 1) break;
                 
                 // Draw caps.
                 var index = i * 4 - 2;
