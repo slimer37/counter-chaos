@@ -9,6 +9,12 @@ namespace UI.Statistics
         [field: SerializeField, Min(0.01f)] public float Thickness { get; private set; } = 5;
         [field: SerializeField, Min(0.01f)] public Vector2Int GridSize { get; private set; } = new(1, 1);
 
+        [Header("Border")]
+        [SerializeField, Min(0)] float borderThickness = 5;
+        [SerializeField, Min(0)] float tickThickness = 5;
+        [SerializeField, Min(0)] float tickHeight = 40;
+        [SerializeField] Color borderColor = Color.white;
+
         VertexHelper vh;
 
         public float Width { get; private set; }
@@ -37,6 +43,34 @@ namespace UI.Statistics
                     index++;
                 }
             }
+            
+            var gridHeight = GridSize.y * CellHeight;
+            var gridWidth = GridSize.x * CellWidth;
+            DrawRect(Vector3.zero, borderColor, gridWidth, borderThickness);
+            DrawRect(Vector3.zero, borderColor, borderThickness, gridHeight);
+
+            for (var x = 1; x < GridSize.x; x++)
+            {
+                var pos = new Vector3(x * CellWidth - tickThickness / 2, borderThickness);
+                DrawRect(pos, borderColor, tickThickness, tickHeight);
+            }
+            for (var y = 1; y < GridSize.y; y++)
+            {
+                var pos = new Vector3(borderThickness, y * CellHeight - tickThickness / 2);
+                DrawRect(pos, borderColor, tickHeight, tickThickness);
+            }
+        }
+
+        void DrawRect(Vector3 origin, Color rectColor, float width, float height)
+        {
+            var vertex = UIVertex.simpleVert;
+            vertex.color = rectColor;
+            var i = vh.currentVertCount;
+            
+            CreateRect(origin, width, height, vertex);
+            
+            vh.AddTriangle(i, i + 1, i + 2);
+            vh.AddTriangle(i + 2, i + 3, i);
         }
 
         void DrawCell(int x, int y, int index)
@@ -66,14 +100,15 @@ namespace UI.Statistics
 
         void CreateRect(Vector3 origin, float width, float height, UIVertex vertex)
         {
-            origin -= new Vector3(rectTransform.rect.width / 2, rectTransform.rect.height / 2);
+            origin -= new Vector3(rectTransform.rect.width, rectTransform.rect.height) / 2;
+            
             vertex.position = origin;
             vh.AddVert(vertex);
-            vertex.position = new Vector3(origin.x, origin.y + height);
+            vertex.position = origin + new Vector3(0, height);
             vh.AddVert(vertex);
-            vertex.position = new Vector3(origin.x + width, origin.y + height);
+            vertex.position = origin + new Vector3(width, height);
             vh.AddVert(vertex);
-            vertex.position = new Vector3(origin.x + width, origin.y);
+            vertex.position = origin + new Vector3(width, 0);
             vh.AddVert(vertex);
         }
     }
