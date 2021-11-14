@@ -12,25 +12,12 @@ namespace UI.Statistics
         [SerializeField] Color negativeColor = Color.red;
         [SerializeField] GridRenderer grid;
         [SerializeField, Min(0.01f)] float thickness = 1;
-        [SerializeField, Min(0)] float progress;
+        
+        [Range(0, 1)] public float progress = 1;
 
         public List<Vector2> points = new();
 
         Vector2Int gridSize;
-
-        bool PointsCorrectlyAssigned()
-        {
-            for (var i = 0; i < points.Count; i++)
-            {
-                var pt = points[i];
-                if (i == 0 && pt.x < 0
-                    || i == points.Count - 1 && pt.x > grid.GridSize.x
-                    || pt.y < 0
-                    || pt.y > grid.GridSize.y) return false;
-            }
-
-            return true;
-        }
 
         void Update()
         {
@@ -46,21 +33,28 @@ namespace UI.Statistics
         {
             vh.Clear();
 
-            if (points.Count < 2) return;
-
-            for (var i = 0; i < points.Count; i++)
+            if (points.Count < 2 || progress < 0.001f) return;
+            
+            var limit = progress * grid.GridSize.x;
+            for (var i = 1; i < points.Count; i++)
             {
-                if (i < points.Count - 1)
+                if (points[i].x >= limit)
                 {
-                    DrawLine(points[i], points[i + 1], i, vh);
-                    if (i > 0)
-                    {
-                        // Draw caps.
-                        var index = i * 4 - 2;
-                        vh.AddTriangle(index + 3, index + 2, index);
-                        vh.AddTriangle(index, index + 1, index + 3);
-                    }
+                    var pt = points[i];
+                    var prev = points[i - 1];
+                    var s = (pt.y - prev.y) / (pt.x - prev.x);
+                    pt.x = limit;
+                    pt.y = prev.y + (limit - prev.x) * s;
+                    DrawLine(prev, pt, i - 1, vh);
+                    break;
                 }
+                
+                DrawLine(points[i - 1], points[i], i - 1, vh);
+                
+                // Draw caps.
+                var index = i * 4 - 2;
+                vh.AddTriangle(index + 3, index + 2, index);
+                vh.AddTriangle(index, index + 1, index + 3);
             }
         }
 
