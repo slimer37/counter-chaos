@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,14 +7,18 @@ namespace UI.Statistics
     [RequireComponent(typeof(CanvasRenderer))]
     public class GridRenderer : Graphic
     {
+        [field: Header("Grid")]
         [field: SerializeField, Min(0.01f)] public float Thickness { get; private set; } = 5;
         [field: SerializeField, Min(0.01f)] public Vector2Int GridSize { get; private set; } = new(1, 1);
 
         [Header("Border")]
         [SerializeField, Min(0)] float borderThickness = 5;
-        [SerializeField, Min(0)] float tickThickness = 5;
-        [SerializeField, Min(0)] float tickHeight = 40;
         [SerializeField] Color borderColor = Color.white;
+
+        [Header("Ticks")]
+        [SerializeField, Min(0)] float tickThickness = 5;
+        [SerializeField] float tickHeight = 40;
+        [SerializeField] TextMeshProUGUI numbersText;
 
         VertexHelper vh;
 
@@ -49,16 +54,7 @@ namespace UI.Statistics
             DrawRect(Vector3.zero, borderColor, gridWidth, borderThickness);
             DrawRect(Vector3.zero, borderColor, borderThickness, gridHeight);
 
-            for (var x = 1; x < GridSize.x; x++)
-            {
-                var pos = new Vector3(x * CellWidth - tickThickness / 2, borderThickness);
-                DrawRect(pos, borderColor, tickThickness, tickHeight);
-            }
-            for (var y = 1; y < GridSize.y; y++)
-            {
-                var pos = new Vector3(borderThickness, y * CellHeight - tickThickness / 2);
-                DrawRect(pos, borderColor, tickHeight, tickThickness);
-            }
+            DrawTicksWithLabels();
         }
 
         void DrawRect(Vector3 origin, Color rectColor, float width, float height)
@@ -71,6 +67,81 @@ namespace UI.Statistics
             
             vh.AddTriangle(i, i + 1, i + 2);
             vh.AddTriangle(i + 2, i + 3, i);
+        }
+
+        void DrawTicksWithLabels()
+        {
+            // Ensure monospace numbers.
+            numbersText.enableKerning = false;
+            
+            // Fill text with label numbers.
+            numbersText.text = "";
+            for (var y = 1; y < GridSize.y; y++) numbersText.text += y + " ";
+            for (var x = 1; x < GridSize.x; x++) numbersText.text += x + " ";
+            numbersText.ForceMeshUpdate();
+            
+            for (var y = 1; y < GridSize.y; y++)
+            {
+                var pos = new Vector3(borderThickness, y * CellHeight - tickThickness / 2);
+                DrawRect(pos, borderColor, tickHeight, tickThickness);
+                if (numbersText)
+                    SetWordPos(y - 1,
+                        pos + new Vector3(tickHeight, tickThickness / 2),
+                        true);
+            }
+            for (var x = 1; x < GridSize.x; x++)
+            {
+                var pos = new Vector3(x * CellWidth - tickThickness / 2, borderThickness);
+                DrawRect(pos, borderColor, tickThickness, tickHeight);
+                if (numbersText)
+                    SetWordPos(GridSize.y + x - 2,
+                        pos + new Vector3(tickThickness / 2, tickHeight),
+                        false, true);
+            }
+
+            void SetWordPos(int wordIndex, Vector3 origin, bool alignLeft = false, bool alignBottom = false)
+            {
+                var textInfo = numbersText.textInfo;
+                var wordInfo = textInfo.wordInfo[wordIndex];
+                
+                var characterInfo = textInfo.characterInfo;
+                var totalWidth = characterInfo[wordInfo.lastCharacterIndex].bottomRight.x - characterInfo[wordInfo.firstCharacterIndex].bottomLeft.x;
+                
+                if (!alignLeft)
+                    origin -= Vector3.right * totalWidth / 2;
+                
+                for (var i = 0; i < wordInfo.characterCount; i++)
+                {
+                    var charIndex = wordInfo.firstCharacterIndex + i;
+                    var dim = GetCharDimensions(characterInfo[charIndex]);
+                    SetCharPos(charIndex,
+                        origin + Vector3.right * (i * totalWidth / wordInfo.characterCount + dim.x / (alignLeft ? 1 : 2))
+                        + Vector3.up * (alignBottom ? dim.y : 0));
+                }
+            }
+
+            void SetCharPos(int charIndex, Vector3 origin)
+            {
+                origin -= new Vector3(rectTransform.rect.width, rectTransform.rect.height) / 2;
+                var charInfo = numbersText.textInfo.characterInfo[charIndex];
+                var vertIndex = charInfo.vertexIndex;
+                var dim = GetCharDimensions(charInfo);
+                
+                var meshInfo = numbersText.textInfo.meshInfo[charInfo.materialReferenceIndex];
+                meshInfo.vertices[vertIndex] = origin - dim / 2;
+                meshInfo.vertices[vertIndex + 1] = origin + new Vector3(-dim.x, dim.y) / 2;
+                meshInfo.vertices[vertIndex + 2] = origin + dim / 2;
+                meshInfo.vertices[vertIndex + 3] = origin + new Vector3(dim.x, -dim.y) / 2;
+                meshInfo.mesh.vertices = meshInfo.vertices;
+                numbersText.UpdateGeometry(meshInfo.mesh, charInfo.materialReferenceIndex);
+            }
+
+            Vector3 GetCharDimensions(TMP_CharacterInfo charInfo)
+            {
+                var width = charInfo.bottomRight.x - charInfo.bottomLeft.x;
+                var height = charInfo.topRight.y - charInfo.bottomRight.y;
+                return new Vector3(width, height);
+            }
         }
 
         void DrawCell(int x, int y, int index)
