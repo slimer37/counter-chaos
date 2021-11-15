@@ -38,10 +38,11 @@ namespace UI.Statistics
             var limit = progress * grid.GridSize.x;
             for (var i = 1; i < points.Count; i++)
             {
+                var pt = points[i];
+                var prev = points[i - 1];
+
                 if (points[i].x >= limit)
                 {
-                    var pt = points[i];
-                    var prev = points[i - 1];
                     var s = (pt.y - prev.y) / (pt.x - prev.x);
                     pt.x = limit;
                     pt.y = prev.y + (limit - prev.x) * s;
@@ -49,7 +50,7 @@ namespace UI.Statistics
                     break;
                 }
                 
-                DrawLine(points[i - 1], points[i], i - 1, vh);
+                DrawLine(prev, pt, i - 1, vh);
 
                 if (i == points.Count - 1) break;
                 
