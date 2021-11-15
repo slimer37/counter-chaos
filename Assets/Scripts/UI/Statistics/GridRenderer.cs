@@ -18,6 +18,9 @@ namespace UI.Statistics
         [Header("Ticks")]
         [SerializeField, Min(0)] float tickThickness = 5;
         [SerializeField] float tickHeight = 40;
+        [SerializeField, Min(1)] int stepX = 1;
+        [SerializeField, Min(1)] int stepY = 1;
+        [SerializeField] bool showEdgeTicks;
         [SerializeField] TextMeshProUGUI numbersText;
 
         VertexHelper vh;
@@ -71,31 +74,37 @@ namespace UI.Statistics
 
         void DrawTicksWithLabels()
         {
-            // Ensure monospace numbers.
-            numbersText.enableKerning = false;
+            var ticksY = GridSize.y + (showEdgeTicks ? 1 : 0);
+            var ticksX = GridSize.x + (showEdgeTicks ? 1 : 0);
             
-            // Fill text with label numbers.
-            numbersText.text = "";
-            for (var y = 1; y < GridSize.y; y++) numbersText.text += y + " ";
-            for (var x = 1; x < GridSize.x; x++) numbersText.text += x + " ";
-            numbersText.ForceMeshUpdate();
-            
-            for (var y = 1; y < GridSize.y; y++)
+            if (numbersText)
             {
-                var pos = new Vector3(borderThickness, y * CellHeight - tickThickness / 2);
-                DrawRect(pos, borderColor, tickHeight, tickThickness);
+                // Ensure monospace numbers.
+                numbersText.enableKerning = false;
+
+                // Fill text with label numbers.
+                numbersText.text = "";
+                for (var y = 1; y < ticksY; y++) numbersText.text += y * stepY + " ";
+                for (var x = 1; x < ticksX; x++) numbersText.text += x * stepX + " ";
+                numbersText.ForceMeshUpdate();
+            }
+            
+            for (var y = 1; y < ticksY; y++)
+            {
+                var pos = new Vector3(0, y * stepY * CellHeight - tickThickness / 2);
+                DrawRect(pos, borderColor, tickHeight + borderThickness, tickThickness);
                 if (numbersText)
                     SetWordPos(y - 1,
-                        pos + new Vector3(tickHeight, tickThickness / 2),
+                        pos + new Vector3(tickHeight + borderThickness, tickThickness / 2),
                         true);
             }
-            for (var x = 1; x < GridSize.x; x++)
+            for (var x = 1; x < ticksX; x++)
             {
-                var pos = new Vector3(x * CellWidth - tickThickness / 2, borderThickness);
-                DrawRect(pos, borderColor, tickThickness, tickHeight);
+                var pos = new Vector3(x * stepX * CellWidth - tickThickness / 2, 0);
+                DrawRect(pos, borderColor, tickThickness, tickHeight + borderThickness);
                 if (numbersText)
-                    SetWordPos(GridSize.y + x - 2,
-                        pos + new Vector3(tickThickness / 2, tickHeight),
+                    SetWordPos(ticksY + x - 2,
+                        pos + new Vector3(tickThickness / 2, tickHeight + borderThickness),
                         false, true);
             }
 
