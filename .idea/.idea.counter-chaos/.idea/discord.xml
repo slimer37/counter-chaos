@@ -3,5 +3,7 @@
   <component name="DiscordProjectSettings">
     <option name="show" value="PROJECT_FILES" />
     <option name="nameOverrideEnabled" value="true" />
+    <option name="nameOverrideText" value="store game" />
+    <option name="description" value="" />
   </component>
 </project>
