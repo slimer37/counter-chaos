@@ -107,6 +107,7 @@ MonoBehaviour:
   maxShelves: 22
   shelfForwardOffset: 0
   minShelfHeight: 0.2
+  ignoreDirection: 1
   scaleX: 1
   shelfSnapInterval: 0.146
   shelfPreviewOffset: 0
