@@ -18,8 +18,9 @@ namespace Furniture
         [SerializeField] int maxShelves;
         [SerializeField] float shelfForwardOffset;
         [SerializeField] float minShelfHeight;
-        
+
         [Header("Attachment")]
+        [SerializeField] bool ignoreDirection;
         [SerializeField] float scaleX = 1;
         [SerializeField] float shelfSnapInterval;
         [SerializeField] float shelfPreviewOffset = 0.8f;
@@ -56,7 +57,7 @@ namespace Furniture
             
             // Only interactable if no shelf is currently being attached and the player is in front, holding a compatible shelf.
             GetComponent<Hoverable>().OnAttemptHover +=
-                sender => !shelfIsBeingAttached && Vector3.Dot(transform.forward, sender.forward) < 0
+                sender => !shelfIsBeingAttached && (ignoreDirection || Vector3.Dot(transform.forward, sender.forward) < 0)
                     && Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.TryGetComponent(out Shelf shelf)
                     && shelf.ShelfStyle == style;
 
@@ -135,7 +136,7 @@ namespace Furniture
             var requestedShelfIndex = 0;
             
             var playerCamera = Player.Camera;
-            if (Vector3.Dot(transform.forward, playerCamera.transform.forward) < 0
+            if ((ignoreDirection || Vector3.Dot(transform.forward, playerCamera.transform.forward) < 0)
                 && mainCollider.Raycast(playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, attachDistance))
             {
                 shelfAttachPos = Vector3.forward * shelfPreviewOffset;
