@@ -114,7 +114,7 @@ namespace UI
                 {
                     var conversion = TagConversions[key];
                     post = key.StartsWith("r:")
-                        ? Regex.Replace(post, key.Substring(2), conversion)
+                        ? Regex.Replace(post, key[2..], conversion)
                         : post.Replace(key, conversion);
 
                     yield return null;
@@ -145,25 +145,29 @@ namespace UI
         
         static readonly Dictionary<string, string> TagConversions = new()
         {
-            { "\n", "" },
             { "</p>", "\n" },
+            // Replace <strong>, <h#>, <em>, and <del>
             { "<strong>", "<b>" },
             { "</strong>", "</b>" },
+            { "r:<h.*?>", "<b>" },
+            { "r:</h.*?>", "</b>" },
             { "<em>", "<i>" },
             { "</em>", "</i>" },
             { "<del>", "<s>" },
             { "</del>", "</s>" },
-            { "<ul><li>", "\n• " },
-            { "<ol><li>", "\n• " },
+            // Reformat list tags
+            { "<ul><li>", "• " },
+            { "<ol><li>", "• " },
             { "<li>", "\n• " },
             { "</ul>", "\n" },
             { "</ol>", "\n" },
+            // Other
             { "</pre>", "\n" },
             { "</blockquote>", "\n" },
-            { "r:</h.*?>", "\n" },
             { "r:<table>.*?</table>", "[Can't display tables here.]\n" },
             // Remove all leftover tags (including closing tags)
-            { "r:<.*?>", "" }
+            // Excludes removal of b, i, and s tags
+            { "r:<(?!\\/*b\\b|\\/*i\\b|\\/*s\\b).*?>", "" }
         };
     }
 }
