@@ -4,7 +4,7 @@ using Interactables.Base;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Interactables
+namespace Doors
 {
     public class Door : MonoBehaviour, IInteractHandler
     {
