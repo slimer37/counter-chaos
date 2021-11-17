@@ -4,6 +4,7 @@
 # Rider ignored files
 /projectSettingsUpdater.xml
 /modules.xml
+/discord.xml
 /contentModel.xml
 /.idea.counter-chaos.iml
 # Editor-based HTTP Client requests
