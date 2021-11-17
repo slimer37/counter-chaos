@@ -37,3 +37,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Test scene
+Assets/Scenes/Test.unity
+Assets/Scenes/Test.unity.meta
