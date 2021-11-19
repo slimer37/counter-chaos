@@ -13,11 +13,12 @@ namespace Products
         {
             Gizmos.color = Color.cyan;
             var unit = ItemArea.UnitSize;
-            var center = transform.position + new Vector3((Size.x + 1) % 2, 0, (Size.y + 1) % 2) / 2 * unit;
+            var center = new Vector3((Size.x + 1) % 2, 0, (Size.y + 1) % 2) / 2 * unit;
+            Gizmos.matrix = transform.localToWorldMatrix;
             for (var x = 0; x < Size.x; x++)
             for (var y = 0; y < Size.y; y++)
                 Gizmos.DrawWireCube(
-                    center + transform.rotation * new Vector3(x - Size.x / 2, 0, y - Size.y / 2) * unit,
+                    center + new Vector3(x - Size.x / 2, 0, y - Size.y / 2) * unit,
                     new Vector3(1, 0, 1) * unit);
         }
 
