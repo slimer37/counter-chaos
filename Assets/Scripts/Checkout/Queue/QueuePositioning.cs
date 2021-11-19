@@ -43,7 +43,7 @@ namespace Checkout
                     positions[i] = positions[i - 1] + forward;
 
                     // Check for obstacles.
-                    if (!OverlapSphere(positions[i]) && !IsPathObstructed(positions[i - 1], positions[i]))
+                    if (!CheckSphere(positions[i]) && !IsPathObstructed(positions[i - 1], positions[i]))
                         continue;
 
                     var pos = positions[i];
@@ -70,12 +70,8 @@ namespace Checkout
             }
         }
 
-        static bool OverlapSphere(Vector3 pos)
-        {
-            var collided = new Collider[1];
-            pos += Vector3.up * CheckHeightOffset;
-            return Physics.OverlapSphereNonAlloc(pos, CheckRadius, collided, ObstacleMask) > 0;
-        }
+        static bool CheckSphere(Vector3 pos) =>
+            Physics.CheckSphere(pos + Vector3.up * CheckHeightOffset, CheckRadius, ObstacleMask);
 
         static bool IsPathObstructed(Vector3 from, Vector3 to)
         {
@@ -103,7 +99,7 @@ namespace Checkout
                 for (var angle = 0; angle <= MaxCheckAngle / 2; angle += CheckInterval)
                 {
                     attempt = lastPosition + Quaternion.Euler(0, multiplier * angle, 0) * forward;
-                    if (!OverlapSphere(attempt) && !IsPathObstructed(lastPosition, attempt)) return true;
+                    if (!CheckSphere(attempt) && !IsPathObstructed(lastPosition, attempt)) return true;
                 }
                 return false;
             }

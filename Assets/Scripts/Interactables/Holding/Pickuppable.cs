@@ -85,9 +85,8 @@ namespace Interactables.Holding
         // Can hover if the sender is not holding anything.
         bool OnAttemptHover(Transform sender) => !isHeld && !Inventory.Main.Holder.IsHoldingItem;
 
-        public bool IsIntersecting(LayerMask mask, Collider[] results) =>
-            !neverIntersects
-            && Physics.OverlapBoxNonAlloc(rend.bounds.center, meshBounds.extents, results, transform.rotation, mask) > 0;
+        public bool IsIntersecting(LayerMask mask) =>
+            !neverIntersects && Physics.CheckBox(rend.bounds.center, meshBounds.extents, transform.rotation, mask);
 
         public void OnInteract(Transform sender) => OnPickup(sender);
 

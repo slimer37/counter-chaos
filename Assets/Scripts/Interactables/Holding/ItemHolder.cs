@@ -67,8 +67,6 @@ namespace Interactables.Holding
         
         Inventory inv;
 
-        readonly Collider[] obstacleResults = new Collider[1];
-
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
@@ -150,7 +148,7 @@ namespace Interactables.Holding
 
                 controller.EnableLook(true);
 
-                if (!heldItem.IsIntersecting(dropObstacleMask, obstacleResults)
+                if (!heldItem.IsIntersecting(dropObstacleMask)
                     && (!heldItem.Info.groundPlacementOnly || onFlatSurface)
                     && (!inDefaultDropPos || !IsLineOfSightBlocked()))
                     Drop(false);
@@ -196,9 +194,7 @@ namespace Interactables.Holding
                     Drop(true);
             }
 
-            bool CheckForTossObstacles() =>
-                heldItem.IsIntersecting(tossObstacleMask, obstacleResults)
-                || IsLineOfSightBlocked();
+            bool CheckForTossObstacles() => heldItem.IsIntersecting(tossObstacleMask) || IsLineOfSightBlocked();
         }
         
         bool IsLineOfSightBlocked()
@@ -249,7 +245,7 @@ namespace Interactables.Holding
 
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
 
-                    if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                    if (heldItem.IsIntersecting(dropObstacleMask))
                     {
                         for (var i = 0; i < correctionLimit; i++)
                         {
@@ -279,7 +275,7 @@ namespace Interactables.Holding
                         for (var i = 0; i <= limits; i++)
                         {
                             itemTransform.position += direction;
-                            if (heldItem.IsIntersecting(dropObstacleMask, obstacleResults))
+                            if (heldItem.IsIntersecting(dropObstacleMask))
                             {
                                 if (useFarthest)
                                 {
