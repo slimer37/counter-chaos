@@ -9,17 +9,19 @@ namespace Doors
         [SerializeField] Vector3 moveAmount;
         [SerializeField] float moveTime;
         [SerializeField] Ease ease;
-        [SerializeField] Transform rightDoor;
+        [SerializeField] Transform leftDoor;
         
         [Header("Optional")]
-        [SerializeField] Transform leftDoor;
+        [SerializeField] Transform rightDoor;
+        [SerializeField] bool dontNegateMovement;
 
         Sequence openSequence;
+        Vector3 rightDoorMoveAmount => moveAmount * (dontNegateMovement ? 1 : -1);
         
         void OnDrawGizmosSelected()
         {
-            DrawDoorGizmo(rightDoor, false);
-            DrawDoorGizmo(leftDoor, true);
+            DrawDoorGizmo(leftDoor, false);
+            DrawDoorGizmo(rightDoor, !dontNegateMovement);
             
             void DrawDoorGizmo(Transform door, bool negateMove)
             {
@@ -42,8 +44,8 @@ namespace Doors
         void Awake()
         {
             openSequence = DOTween.Sequence();
-            openSequence.Append(rightDoor.DOLocalMove(moveAmount, moveTime).SetRelative().SetEase(Ease.Linear));
-            if (leftDoor) openSequence.Join(leftDoor.DOLocalMove(-moveAmount, moveTime).SetRelative().SetEase(Ease.Linear));
+            openSequence.Append(leftDoor.DOLocalMove(moveAmount, moveTime).SetRelative().SetEase(Ease.Linear));
+            if (rightDoor) openSequence.Join(rightDoor.DOLocalMove(rightDoorMoveAmount, moveTime).SetRelative().SetEase(Ease.Linear));
             openSequence.SetAutoKill(false).SetEase(ease).Pause();
             
             // Act like the door just closed so OnTriggerStay doesn't return early
