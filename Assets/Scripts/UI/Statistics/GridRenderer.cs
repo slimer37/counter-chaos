@@ -19,9 +19,10 @@ namespace UI.Statistics
         [Header("Ticks")]
         [SerializeField, Min(0)] float tickThickness = 5;
         [SerializeField] float tickHeight = 40;
+        [SerializeField] bool showEdgeTicks;
         [field: SerializeField, Min(1)] public Vector2Int Step { get; private set; } = new(1, 1);
         [SerializeField, Min(1)] Vector2Int skip = new(1, 1);
-        [SerializeField] bool showEdgeTicks;
+        [Space]
         [SerializeField] TextMeshProUGUI numbersText;
 
         VertexHelper vh;
@@ -79,8 +80,8 @@ namespace UI.Statistics
 
         void DrawTicksWithLabels()
         {
-            var ticksY = GridSize.y + (showEdgeTicks ? 1 : 0);
-            var ticksX = GridSize.x + (showEdgeTicks ? 1 : 0);
+            var ticksY = GridSize.y / skip.y + (showEdgeTicks ? 1 : 0);
+            var ticksX = GridSize.x / skip.x + (showEdgeTicks ? 1 : 0);
             
             if (numbersText)
             {
