@@ -18,8 +18,8 @@ namespace UI.Statistics
         [Header("Ticks")]
         [SerializeField, Min(0)] float tickThickness = 5;
         [SerializeField] float tickHeight = 40;
-        [SerializeField, Min(1)] int stepX = 1;
-        [SerializeField, Min(1)] int stepY = 1;
+        [field: SerializeField, Min(1)] public Vector2Int Step { get; private set; } = new(1, 1);
+        [SerializeField, Min(1)] Vector2Int skip = new(1, 1);
         [SerializeField] bool showEdgeTicks;
         [SerializeField] TextMeshProUGUI numbersText;
 
@@ -84,14 +84,14 @@ namespace UI.Statistics
 
                 // Fill text with label numbers.
                 numbersText.text = "";
-                for (var y = 1; y < ticksY; y++) numbersText.text += y * stepY + " ";
-                for (var x = 1; x < ticksX; x++) numbersText.text += x * stepX + " ";
+                for (var y = 1; y < ticksY; y++) numbersText.text += y * skip.y * Step.y + " ";
+                for (var x = 1; x < ticksX; x++) numbersText.text += x * skip.x * Step.x + " ";
                 numbersText.ForceMeshUpdate();
             }
             
             for (var y = 1; y < ticksY; y++)
             {
-                var pos = new Vector3(0, y * stepY * CellHeight - tickThickness / 2);
+                var pos = new Vector3(0, y * skip.y * CellHeight - tickThickness / 2);
                 DrawRect(pos, borderColor, tickHeight + borderThickness, tickThickness);
                 if (numbersText)
                     SetWordPos(y - 1,
@@ -100,7 +100,7 @@ namespace UI.Statistics
             }
             for (var x = 1; x < ticksX; x++)
             {
-                var pos = new Vector3(x * stepX * CellWidth - tickThickness / 2, 0);
+                var pos = new Vector3(x * skip.x * CellWidth - tickThickness / 2, 0);
                 DrawRect(pos, borderColor, tickThickness, tickHeight + borderThickness);
                 if (numbersText)
                     SetWordPos(ticksY + x - 2,

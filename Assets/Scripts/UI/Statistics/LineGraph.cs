@@ -18,13 +18,15 @@ namespace UI.Statistics
         public List<Vector2> points = new();
 
         Vector2Int gridSize;
+        Vector2Int step;
 
         void Update()
         {
             if (!grid) return;
-            if (gridSize != grid.GridSize)
+            if (gridSize != grid.GridSize || step != grid.Step)
             {
                 gridSize = grid.GridSize;
+                step = grid.Step;
                 SetVerticesDirty();
             }
         }
@@ -79,7 +81,7 @@ namespace UI.Statistics
 
             void DrawVerticesAtPoint(Vector2 point, float angle)
             {
-                vertex.position = new Vector3(grid.CellWidth * point.x, grid.CellHeight * point.y);
+                vertex.position = new Vector3(grid.CellWidth * point.x / step.x, grid.CellHeight * point.y / step.y);
                 vertex.position -= new Vector3(grid.Width, grid.Height) / 2;
                 vertex.position -= Quaternion.Euler(0, 0, angle) * new Vector3(thickness / 2, 0);
                 vh.AddVert(vertex);
