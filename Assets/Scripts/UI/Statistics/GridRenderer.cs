@@ -58,10 +58,11 @@ namespace UI.Statistics
             var gridWidth = GridSize.x * CellWidth;
 
             var t = borderThickness;
+            var edgeAdd = showEdgeTicks ? tickThickness / 2 : 0;
             DrawRect(drawOutside ? new Vector3(0, -t) : Vector3.zero,
-                borderColor, gridWidth, t);
+                borderColor, gridWidth + edgeAdd, t);
             DrawRect(drawOutside ? -new Vector3(t, t) : Vector3.zero,
-                borderColor, t, gridHeight + (drawOutside ? t : 0));
+                borderColor, t, gridHeight + (drawOutside ? t : 0) + edgeAdd);
 
             DrawTicksWithLabels();
         }
