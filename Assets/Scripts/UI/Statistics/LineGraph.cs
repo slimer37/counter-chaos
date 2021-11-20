@@ -64,10 +64,7 @@ namespace UI.Statistics
 
                 if (i == points.Count - 1) break;
                 
-                // Draw caps.
-                var index = i * 4 - 2;
-                vh.AddTriangle(index + 3, index + 2, index);
-                vh.AddTriangle(index, index + 1, index + 3);
+                vh.DrawCaps();
                 
                 void DrawLine() => vh.DrawLine(GridToWorld(prev), GridToWorld(pt), thickness, lineColor);
             }

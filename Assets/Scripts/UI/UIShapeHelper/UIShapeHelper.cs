@@ -36,6 +36,13 @@ namespace UI.UIShapeHelper
     
         public static float GetAngle(Vector2 me, Vector2 target) => Mathf.Atan2(target.y - me.y, target.x - me.x) * 180 / Mathf.PI + 45;
 
+        public static void DrawCaps(this VertexHelper vh)
+        {
+            var index = vh.currentVertCount - 2;
+            vh.AddTriangle(index + 3, index + 2, index);
+            vh.AddTriangle(index, index + 1, index + 3);
+        }
+
         public static void DrawLine(this VertexHelper vh, Vector2 a, Vector2 b, float thickness, Color color) =>
             vh.DrawLine(a, b, GetAngle(a, b), thickness, color);
 
