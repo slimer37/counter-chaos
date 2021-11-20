@@ -1,4 +1,5 @@
 using TMPro;
+using UI.UIShapeHelper;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,14 +70,8 @@ namespace UI.Statistics
 
         void DrawRect(Vector3 origin, Color rectColor, float width, float height)
         {
-            var vertex = UIVertex.simpleVert;
-            vertex.color = rectColor;
-            var i = vh.currentVertCount;
-            
-            CreateRect(origin, width, height, vertex);
-            
-            vh.AddTriangle(i, i + 1, i + 2);
-            vh.AddTriangle(i + 2, i + 3, i);
+            origin -= new Vector3(rectTransform.rect.width, rectTransform.rect.height) / 2;
+            vh.DrawRect(origin, rectColor, width, height);
         }
 
         void DrawTicksWithLabels()
@@ -190,15 +185,7 @@ namespace UI.Statistics
         void CreateRect(Vector3 origin, float width, float height, UIVertex vertex)
         {
             origin -= new Vector3(rectTransform.rect.width, rectTransform.rect.height) / 2;
-            
-            vertex.position = origin;
-            vh.AddVert(vertex);
-            vertex.position = origin + new Vector3(0, height);
-            vh.AddVert(vertex);
-            vertex.position = origin + new Vector3(width, height);
-            vh.AddVert(vertex);
-            vertex.position = origin + new Vector3(width, 0);
-            vh.AddVert(vertex);
+            vh.CreateRect(origin, width, height, vertex);
         }
     }
 }

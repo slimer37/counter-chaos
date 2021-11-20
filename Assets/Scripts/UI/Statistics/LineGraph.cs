@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UI.UIShapeHelper;
 
 namespace UI.Statistics
 {
@@ -31,6 +32,10 @@ namespace UI.Statistics
             }
         }
 
+        Vector2 GridToWorld(Vector2 point) =>
+            new Vector2(grid.CellWidth * point.x / step.x, grid.CellHeight * point.y / step.y)
+            - new Vector2(grid.Width, grid.Height) / 2;
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();
@@ -42,17 +47,20 @@ namespace UI.Statistics
             {
                 var pt = points[i];
                 var prev = points[i - 1];
+                
+                var lineColor = prev.y == pt.y || !colorByDifference ? color :
+                    pt.y - prev.y > 0 ? positiveColor : negativeColor;
 
                 if (points[i].x >= limit)
                 {
                     var s = (pt.y - prev.y) / (pt.x - prev.x);
                     pt.x = limit;
                     pt.y = prev.y + (limit - prev.x) * s;
-                    DrawLine(prev, pt, vh);
+                    DrawLine();
                     break;
                 }
                 
-                DrawLine(prev, pt, vh);
+                DrawLine();
 
                 if (i == points.Count - 1) break;
                 
@@ -60,35 +68,8 @@ namespace UI.Statistics
                 var index = i * 4 - 2;
                 vh.AddTriangle(index + 3, index + 2, index);
                 vh.AddTriangle(index, index + 1, index + 3);
-            }
-        }
-
-        float GetAngle(Vector2 me, Vector2 target) => Mathf.Atan2(target.y - me.y, target.x - me.x) * 180 / Mathf.PI + 45;
-
-        void DrawLine(Vector2 a, Vector2 b, VertexHelper vh)
-        {
-            var vertex = UIVertex.simpleVert;
-
-            vertex.color = a.y == b.y || !colorByDifference ? color :
-                b.y - a.y > 0 ? positiveColor : negativeColor;
-
-            var index = vh.currentVertCount;
-            
-            DrawVerticesAtPoint(a, GetAngle(a, b));
-            DrawVerticesAtPoint(b, GetAngle(a, b));
-
-            vh.AddTriangle(index, index + 1, index + 3);
-            vh.AddTriangle(index + 3, index + 2, index);
-
-            void DrawVerticesAtPoint(Vector2 point, float angle)
-            {
-                vertex.position = new Vector3(grid.CellWidth * point.x / step.x, grid.CellHeight * point.y / step.y);
-                vertex.position -= new Vector3(grid.Width, grid.Height) / 2;
-                vertex.position -= Quaternion.Euler(0, 0, angle) * new Vector3(thickness / 2, 0);
-                vh.AddVert(vertex);
-
-                vertex.position += Quaternion.Euler(0, 0, angle) * new Vector3(thickness, 0);
-                vh.AddVert(vertex);
+                
+                void DrawLine() => vh.DrawLine(GridToWorld(prev), GridToWorld(pt), thickness, lineColor);
             }
         }
     }
