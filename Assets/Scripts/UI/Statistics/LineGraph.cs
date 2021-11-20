@@ -48,11 +48,11 @@ namespace UI.Statistics
                     var s = (pt.y - prev.y) / (pt.x - prev.x);
                     pt.x = limit;
                     pt.y = prev.y + (limit - prev.x) * s;
-                    DrawLine(prev, pt, i - 1, vh);
+                    DrawLine(prev, pt, vh);
                     break;
                 }
                 
-                DrawLine(prev, pt, i - 1, vh);
+                DrawLine(prev, pt, vh);
 
                 if (i == points.Count - 1) break;
                 
@@ -65,17 +65,18 @@ namespace UI.Statistics
 
         float GetAngle(Vector2 me, Vector2 target) => Mathf.Atan2(target.y - me.y, target.x - me.x) * 180 / Mathf.PI + 45;
 
-        void DrawLine(Vector2 a, Vector2 b, int index, VertexHelper vh)
+        void DrawLine(Vector2 a, Vector2 b, VertexHelper vh)
         {
             var vertex = UIVertex.simpleVert;
 
             vertex.color = a.y == b.y || !colorByDifference ? color :
                 b.y - a.y > 0 ? positiveColor : negativeColor;
 
+            var index = vh.currentVertCount;
+            
             DrawVerticesAtPoint(a, GetAngle(a, b));
             DrawVerticesAtPoint(b, GetAngle(a, b));
 
-            index *= 4;
             vh.AddTriangle(index, index + 1, index + 3);
             vh.AddTriangle(index + 3, index + 2, index);
 
