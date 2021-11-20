@@ -37,7 +37,7 @@ namespace UI.Statistics
 
             if (points.Count < 2 || progress < 0.001f) return;
             
-            var limit = progress * grid.GridSize.x;
+            var limit = progress * grid.GridSize.x * step.x;
             for (var i = 1; i < points.Count; i++)
             {
                 var pt = points[i];
