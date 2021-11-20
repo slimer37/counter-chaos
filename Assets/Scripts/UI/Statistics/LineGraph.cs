@@ -63,7 +63,7 @@ namespace UI.Statistics
             }
         }
 
-        float GetAngle(Vector2 me, Vector2 target) => Mathf.Atan2(target.y - me.y, target.x - me.x) * 180 / Mathf.PI;
+        float GetAngle(Vector2 me, Vector2 target) => Mathf.Atan2(target.y - me.y, target.x - me.x) * 180 / Mathf.PI + 45;
 
         void DrawLine(Vector2 a, Vector2 b, int index, VertexHelper vh)
         {
@@ -72,8 +72,8 @@ namespace UI.Statistics
             vertex.color = a.y == b.y || !colorByDifference ? color :
                 b.y - a.y > 0 ? positiveColor : negativeColor;
 
-            DrawVerticesAtPoint(a, GetAngle(a, b) + 90);
-            DrawVerticesAtPoint(b, GetAngle(a, b) + 90);
+            DrawVerticesAtPoint(a, GetAngle(a, b));
+            DrawVerticesAtPoint(b, GetAngle(a, b));
 
             index *= 4;
             vh.AddTriangle(index, index + 1, index + 3);
