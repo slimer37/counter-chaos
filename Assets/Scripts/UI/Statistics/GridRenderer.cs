@@ -14,6 +14,7 @@ namespace UI.Statistics
         [Header("Border")]
         [SerializeField, Min(0)] float borderThickness = 5;
         [SerializeField] Color borderColor = Color.white;
+        [SerializeField] bool drawOutside;
 
         [Header("Ticks")]
         [SerializeField, Min(0)] float tickThickness = 5;
@@ -54,8 +55,12 @@ namespace UI.Statistics
             
             var gridHeight = GridSize.y * CellHeight;
             var gridWidth = GridSize.x * CellWidth;
-            DrawRect(Vector3.zero, borderColor, gridWidth, borderThickness);
-            DrawRect(Vector3.zero, borderColor, borderThickness, gridHeight);
+
+            var t = borderThickness;
+            DrawRect(drawOutside ? new Vector3(0, -t) : Vector3.zero,
+                borderColor, gridWidth, t);
+            DrawRect(drawOutside ? -new Vector3(t, t) : Vector3.zero,
+                borderColor, t, gridHeight + (drawOutside ? t : 0));
 
             DrawTicksWithLabels();
         }
@@ -88,23 +93,25 @@ namespace UI.Statistics
                 for (var x = 1; x < ticksX; x++) numbersText.text += x * skip.x * Step.x + " ";
                 numbersText.ForceMeshUpdate();
             }
+
+            var offset = drawOutside ? 0 : borderThickness;
             
             for (var y = 1; y < ticksY; y++)
             {
                 var pos = new Vector3(0, y * skip.y * CellHeight - tickThickness / 2);
-                DrawRect(pos, borderColor, tickHeight + borderThickness, tickThickness);
+                DrawRect(pos, borderColor, tickHeight + offset, tickThickness);
                 if (numbersText)
                     SetWordPos(y - 1,
-                        pos + new Vector3(tickHeight + borderThickness, tickThickness / 2),
+                        pos + new Vector3(tickHeight + offset, tickThickness / 2),
                         true);
             }
             for (var x = 1; x < ticksX; x++)
             {
                 var pos = new Vector3(x * skip.x * CellWidth - tickThickness / 2, 0);
-                DrawRect(pos, borderColor, tickThickness, tickHeight + borderThickness);
+                DrawRect(pos, borderColor, tickThickness, tickHeight + offset);
                 if (numbersText)
                     SetWordPos(ticksY + x - 2,
-                        pos + new Vector3(tickThickness / 2, tickHeight + borderThickness),
+                        pos + new Vector3(tickThickness / 2, tickHeight + offset),
                         false, true);
             }
 
