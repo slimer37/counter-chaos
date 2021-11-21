@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,11 @@ namespace Upgrades
         [Header("UI")]
         [SerializeField] Button button;
         [SerializeField] TextMeshProUGUI label;
+
+        [Header("Animation")]
+        [SerializeField] Transform shaker;
+        [SerializeField] Vector3 shakeAmount;
+        [SerializeField] float shakeDuration;
 
         public string ID { get; private set; }
         public SkillTreeNode Parent => dependency;
@@ -135,7 +141,14 @@ namespace Upgrades
             colors.disabledColor = colors.pressedColor;
             button.colors = colors;
             button.interactable = false;
+            label.color = colors.pressedColor;
             onActivate?.Invoke();
+
+            var seq = DOTween.Sequence();
+            seq.Append(shaker.DOMove(shakeAmount, shakeDuration / 4).SetRelative());
+            seq.Append(shaker.DOMove(-shakeAmount * 2, shakeDuration / 2).SetRelative());
+            seq.Append(shaker.DOMove(transform.position, shakeDuration / 4));
+            
         }
     }
 }
