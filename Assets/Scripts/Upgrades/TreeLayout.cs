@@ -8,11 +8,11 @@ using UnityEngine.UI;
 namespace Upgrades
 {
     [RequireComponent(typeof(CanvasRenderer))]
-    public class TreeLayout : Graphic
+    public class TreeLayout : Graphic, ILayoutGroup
     {
         [Header("Node Layout")]
-        [SerializeField] float topRowHeight;
         [SerializeField] float rowHeight = 200;
+        [SerializeField] float horizontalNodeSpace;
         
         [Header("Connection Lines")]
         [SerializeField] Color unlockedColor;
@@ -23,24 +23,45 @@ namespace Upgrades
         
         SkillTreeNode[] nodes;
         Vector3[] positionCache;
+        Vector3 oldPosition;
         SkillTreeNode.NodeState[] stateCache;
 
         readonly List<TreeNode> drawnDownBranches = new();
 
+        [ContextMenu("Manual Update")]
+        void ManualUpdate()
+        {
+            nodes = GetComponentsInChildren<SkillTreeNode>();
+            SetAllDirty();
+        }
+
         void Update()
         {
-            if (nodes == null)
+            if (nodes == null || nodes.Length != transform.childCount)
             {
-                SetVerticesDirty();
+                nodes = GetComponentsInChildren<SkillTreeNode>();
+                positionCache = new Vector3[nodes.Length];
+                stateCache = new SkillTreeNode.NodeState[nodes.Length];
+                SetAllDirty();
+                return;
+            }
+
+            if (oldPosition != transform.position)
+            {
+                oldPosition = transform.position;
+                SetAllDirty();
                 return;
             }
 
             for (var i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i].transform.position != positionCache[i]
-                || Application.isPlaying && nodes[i].State != stateCache[i])
+                // Lock positions
+                if (nodes[i].transform.position != positionCache[i])
+                    nodes[i].transform.position = positionCache[i];
+                
+                if (Application.isPlaying && nodes[i].State != stateCache[i])
                 {
-                    SetVerticesDirty();
+                    SetAllDirty();
                     return;
                 }
             }
@@ -54,18 +75,51 @@ namespace Upgrades
             _ => throw new ArgumentException("Invalid node state.", nameof(state))
         };
 
+        public void SetLayoutHorizontal()
+        {
+            for (var i = 0; i < TreeNode.AllTreeNodes.Count; i++)
+            {
+                var node = TreeNode.AllTreeNodes[i];
+                if (node.parent == null)
+                {
+                    var pos = node.node.transform.position;
+                    pos.x = transform.position.x;
+                    node.node.transform.position = pos;
+                    node.PositionHierarchy(horizontalNodeSpace);
+                }
+                positionCache[i].x = node.node.transform.position.x;
+            }
+        }
+
+        public void SetLayoutVertical()
+        {
+            if (nodes == null) return;
+            
+            var maxDepth = 0;
+            foreach (var node in nodes)
+            {
+                var depth = node.GetDepth();
+                if (depth > maxDepth) maxDepth = depth;
+            }
+
+            for (var i = 0; i < nodes.Length; i++)
+            {
+                var node = nodes[i];
+                var pos = node.transform.position;
+                pos.y = maxDepth * rowHeight / 2 + transform.position.y - node.GetDepth() * rowHeight;
+                node.transform.position = pos;
+                positionCache[i].y = pos.y;
+            }
+        }
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             TreeNode.AllTreeNodes.Clear();
             vh.Clear();
 
-            nodes ??= GetComponentsInChildren<SkillTreeNode>();
             foreach (var node in nodes)
                 if (!node)
                     nodes = GetComponentsInChildren<SkillTreeNode>();
-            
-            positionCache = new Vector3[nodes.Length];
-            stateCache = new SkillTreeNode.NodeState[nodes.Length];
 
             drawnDownBranches.Clear();
 
@@ -73,13 +127,7 @@ namespace Upgrades
             
             for (var i = 0; i < nodes.Length; i++)
             {
-                var nodeT = nodes[i].transform;
-                var pos = nodeT.position;
-                pos.y = rectTransform.rect.yMax + transform.position.y - topRowHeight - nodes[i].GetDepth() * rowHeight;
-                nodeT.position = pos;
-                
                 var node = TreeNode.AllTreeNodes[i];
-                positionCache[i] = node.Position;
                 stateCache[i] = node.State;
                 
                 if (node.parent != null) DrawLineToParent(node, vh);
@@ -124,6 +172,42 @@ namespace Upgrades
 
             public static readonly List<TreeNode> AllTreeNodes = new();
 
+            readonly RectTransform rectTransform;
+
+            public void PositionHierarchy(float horizontalNodeSpace)
+            {
+                if (parent != null) 
+                    throw new InvalidOperationException($"Can only use {nameof(PositionHierarchy)} on root nodes.");
+                
+                var maxDepth = 0;
+                foreach (var treeNode in AllTreeNodes)
+                {
+                    var depth = treeNode.node.GetDepth();
+                    if (depth > maxDepth) maxDepth = depth;
+                }
+
+                for (var i = 0; i < maxDepth; i++) RecursivePositionHierarchy(horizontalNodeSpace);
+            }
+
+            float RecursivePositionHierarchy(float horizontalNodeSpace)
+            {
+                var totalWidth = children.Count * horizontalNodeSpace;
+                
+                for (var i = 0; i < children.Count; i++)
+                {
+                    var child = children[i];
+                    var pos = child.rectTransform.position;
+                    var nodeSpace = horizontalNodeSpace;
+                    var factor = i - (children.Count - 1) / 2f;
+                    pos.x = rectTransform.position.x + nodeSpace * factor;
+                    if (child.children.Count > 0)
+                        pos.x += (child.RecursivePositionHierarchy(horizontalNodeSpace) - horizontalNodeSpace) / 2 * (factor < 0 ? -1 : 1);
+                    child.rectTransform.position = pos;
+                }
+                
+                return totalWidth;
+            }
+
             public SkillTreeNode.NodeState GreatestChildState()
             {
                 var max = Enum.GetValues(typeof(SkillTreeNode.NodeState)).Cast<int>().Max();
@@ -152,6 +236,7 @@ namespace Upgrades
             TreeNode(SkillTreeNode node)
             {
                 this.node = node;
+                rectTransform = node.GetComponent<RectTransform>();
                 
                 if (node.Parent)
                 {
