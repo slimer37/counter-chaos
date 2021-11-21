@@ -248,8 +248,13 @@ namespace Upgrades
                     pos.x = rectTransform.position.x + nodeSpace * factor;
                     if (child.children.Count > 0)
                     {
-                        var offset = (child.RecursivePositionHierarchy(horizontalNodeSpace) - horizontalNodeSpace) / 2 * (factor < 0 ? -1 : 1);
-                        if (children.Count > 1) pos.x += offset;
+                        var width = child.RecursivePositionHierarchy(horizontalNodeSpace);
+                        if (factor != 0)
+                        {
+                            width -= horizontalNodeSpace;
+                            pos.x += width / 2 * (factor < 0 ? -1 : 1);
+                        }
+                        totalWidth += Mathf.Abs(width);
                     }
                     child.rectTransform.position = pos;
                 }
