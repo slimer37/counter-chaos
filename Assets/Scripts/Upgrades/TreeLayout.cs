@@ -29,7 +29,7 @@ namespace Upgrades
         [ContextMenu("Manual Update")]
         void ManualUpdate()
         {
-            nodes = GetComponentsInChildren<SkillTreeNode>();
+            ReinitNodes();
             SetAllDirty();
         }
 
@@ -37,11 +37,9 @@ namespace Upgrades
         {
             var setDirty = false;
             
-            if (nodes == null || nodes.Length != transform.childCount)
+            if (nodes == null || nodes.Length != transform.childCount || nodes.Length != TreeNode.AllTreeNodes.Count)
             {
-                nodes = GetComponentsInChildren<SkillTreeNode>();
-                positionCache = new Vector3[nodes.Length];
-                stateCache = new SkillTreeNode.NodeState[nodes.Length];
+                ReinitNodes();
                 setDirty = true;
             }
 
@@ -74,6 +72,8 @@ namespace Upgrades
 
         public void SetLayoutHorizontal()
         {
+            if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
+            
             for (var i = 0; i < TreeNode.AllTreeNodes.Count; i++)
             {
                 var node = TreeNode.AllTreeNodes[i];
@@ -90,7 +90,7 @@ namespace Upgrades
 
         public void SetLayoutVertical()
         {
-            if (nodes == null) return;
+            if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
             
             var maxDepth = 0;
             foreach (var node in nodes)
@@ -111,15 +111,10 @@ namespace Upgrades
 
         protected override void OnPopulateMesh(VertexHelper vh)
         {
-            TreeNode.AllTreeNodes.Clear();
+            if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
+            
             vh.Clear();
 
-            foreach (var node in nodes)
-                if (!node)
-                    nodes = GetComponentsInChildren<SkillTreeNode>();
-
-            foreach (var node in nodes) TreeNode.Create(node);
-            
             for (var i = 0; i < nodes.Length; i++)
             {
                 var node = TreeNode.AllTreeNodes[i];
@@ -127,6 +122,15 @@ namespace Upgrades
 
                 if (node.children.Count > 0) DrawLinesToChildren(node, vh);
             }
+        }
+
+        void ReinitNodes()
+        {
+            nodes = GetComponentsInChildren<SkillTreeNode>();
+            positionCache = new Vector3[nodes.Length];
+            stateCache = new SkillTreeNode.NodeState[nodes.Length];
+            TreeNode.AllTreeNodes.Clear();
+            foreach (var node in nodes) TreeNode.Create(node);
         }
 
         void DrawLinesToChildren(TreeNode node, VertexHelper vh)
