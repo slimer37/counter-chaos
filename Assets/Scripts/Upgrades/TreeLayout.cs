@@ -53,15 +53,12 @@ namespace Upgrades
 
             for (var i = 0; i < nodes.Length; i++)
             {
-                // Lock positions
-                if (nodes[i].transform.position != positionCache[i])
+                if (nodes[i].transform.position != positionCache[i]
+                || Application.isPlaying && nodes[i].State != stateCache[i])
                 {
-                    nodes[i].transform.position = positionCache[i];
                     setDirty = true;
+                    break;
                 }
-                
-                if (Application.isPlaying && nodes[i].State != stateCache[i])
-                    setDirty = true;
             }
             
             if (setDirty) SetAllDirty();
