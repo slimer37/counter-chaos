@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,12 +19,10 @@ namespace Upgrades
         [SerializeField] TextMeshProUGUI label;
 
         public string ID { get; private set; }
+        public SkillTreeNode Parent => dependency;
         
         Action onActivate;
         Action onUnlock;
-        
-        Image dependencyLine;
-        RectTransform dependencyLineRect;
 
         public static readonly List<SkillTreeNode> AllNodes = new();
 
@@ -70,6 +67,18 @@ namespace Upgrades
 
         void OnValidate() => SetInfo();
 
+        public int GetDepth()
+        {
+            var node = this;
+            var depth = 0;
+            while (node.Parent)
+            {
+                depth++;
+                node = node.Parent;
+            }
+            return depth;
+        }
+
         void SetInfo() => name = label.text = DisplayName;
 
         void Awake()
@@ -85,15 +94,8 @@ namespace Upgrades
             button.onClick.AddListener(Activate);
             
             SetInfo();
-            GenerateLine();
 
-            if (dependency)
-            {
-                dependency.onActivate += Unlock;
-                
-                if (dependency.startsUnlocked) DependencyUnlock();
-                else dependency.onUnlock += DependencyUnlock;
-            }
+            if (dependency) dependency.onActivate += Unlock;
         }
 
         public void InitState(NodeState state)
@@ -115,12 +117,6 @@ namespace Upgrades
             }
         }
 
-        void DependencyUnlock()
-        {
-            var colorBlock = dependency.button.colors;
-            dependencyLine.DOColor(colorBlock.normalColor, colorBlock.fadeDuration);
-        }
-
         void Unlock()
         {
             if (startsUnlocked) throw new Exception("Called Unlock on a node that starts unlocked.");
@@ -129,12 +125,6 @@ namespace Upgrades
             button.interactable = true;
             State = NodeState.Unlocked;
             onUnlock?.Invoke();
-
-            if (dependencyLine)
-            {
-                var colorBlock = dependency.button.colors;
-                dependencyLine.DOColor(colorBlock.pressedColor, colorBlock.fadeDuration);
-            }
         }
 
         void Activate()
@@ -146,31 +136,6 @@ namespace Upgrades
             button.colors = colors;
             button.interactable = false;
             onActivate?.Invoke();
-        }
-
-        void Update() => CalculateLinePos();
-
-        void GenerateLine()
-        {
-            if (!dependency) return;
-
-            dependencyLine = new GameObject("line").AddComponent<CanvasRenderer>().gameObject.AddComponent<Image>();
-            dependencyLineRect = dependencyLine.GetComponent<RectTransform>();
-            dependencyLineRect.SetParent(transform.parent, false);
-            dependencyLineRect.SetAsFirstSibling();
-            dependencyLine.color = button.colors.disabledColor;
-            
-            CalculateLinePos();
-        }
-
-        void CalculateLinePos()
-        {
-            if (!dependency) return;
-            
-            var difference = dependency.transform.position - transform.position;
-            dependencyLineRect.position = transform.position + difference / 2;
-            dependencyLineRect.sizeDelta = new Vector2(10, difference.magnitude);
-            dependencyLineRect.eulerAngles = Vector3.forward * (Mathf.Atan2(difference.y, difference.x) * 180 / Mathf.PI + 90);
         }
     }
 }
