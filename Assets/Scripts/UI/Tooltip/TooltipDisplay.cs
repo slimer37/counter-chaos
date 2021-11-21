@@ -13,6 +13,7 @@ namespace UI.Tooltip
         [SerializeField] TextMeshProUGUI title;
         [SerializeField] TextMeshProUGUI description;
         [SerializeField] int characterWrapLimit;
+        [SerializeField] float showDelay;
         [SerializeField] float fadeDuration;
         [SerializeField] Vector2 pivotAdjustmentMargin;
         [SerializeField] Vector2 defaultPivot;
@@ -22,6 +23,8 @@ namespace UI.Tooltip
         
         Controls controls;
         RectTransform rectTransform;
+
+        Tween fadeTween;
 
         void Update()
         {
@@ -56,13 +59,14 @@ namespace UI.Tooltip
             
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
             controls.Enable();
-            group.DOFade(1, fadeDuration);
+            fadeTween = group.DOFade(1, fadeDuration).SetDelay(showDelay);
         }
 
         public void Hide()
         {
             controls.Disable();
-            group.DOFade(0, fadeDuration);
+            fadeTween.Kill();
+            group.alpha = 0;
         }
 
         void RecordPosition(InputAction.CallbackContext context)
