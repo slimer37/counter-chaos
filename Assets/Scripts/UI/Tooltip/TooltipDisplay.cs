@@ -7,23 +7,31 @@ using DG.Tweening;
 
 namespace UI.Tooltip
 {
-    [RequireComponent(typeof(CanvasGroup))]
+    [ExecuteInEditMode]
     internal class TooltipDisplay : Singleton<TooltipDisplay>
     {
         [SerializeField] TextMeshProUGUI title;
         [SerializeField] TextMeshProUGUI description;
+        [SerializeField] int characterWrapLimit;
         [SerializeField] float fadeDuration;
         [SerializeField] Vector2 pivotAdjustmentMargin;
         [SerializeField] Vector2 defaultPivot;
 
-        [SerializeField, HideInInspector] CanvasGroup group;
+        [SerializeField] CanvasGroup group;
+        [SerializeField] LayoutElement layoutElement;
         
         Controls controls;
         RectTransform rectTransform;
 
+        void Update()
+        {
+            if (Application.isPlaying || !layoutElement) return;
+            layoutElement.enabled = description.text.Length > characterWrapLimit;
+        }
+
         void OnValidate()
         {
-            if (!group) group = GetComponent<CanvasGroup>();
+            if (!group) return;
             group.interactable = false;
             group.blocksRaycasts = false;
         }
@@ -40,6 +48,12 @@ namespace UI.Tooltip
         {
             title.text = titleText;
             description.text = descText;
+
+            title.gameObject.SetActive(titleText != "");
+            description.gameObject.SetActive(descText != "");
+            
+            layoutElement.enabled = descText.Length > characterWrapLimit;
+            
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
             controls.Enable();
             group.DOFade(1, fadeDuration);
