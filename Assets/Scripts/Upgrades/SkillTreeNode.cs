@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using UI.Tooltip;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Upgrades
         
         [field: Header("Info")]
         [field: SerializeField] public string DisplayName { get; private set; }
+        [field: SerializeField, TextArea] public string Description { get; private set; }
         
         [Header("UI")]
         [SerializeField] Button button;
@@ -93,6 +95,10 @@ namespace Upgrades
 
         void Awake()
         {
+            var tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
+            tooltipTrigger.titleText = DisplayName;
+            tooltipTrigger.descriptionText = Description;
+            
             if (AllNodes.Count > 0 && !AllNodes[0]) AllNodes.Clear();
             
             ID = DisplayName.ToLower().Replace(" ", "");
