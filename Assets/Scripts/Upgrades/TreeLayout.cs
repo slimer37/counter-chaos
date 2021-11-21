@@ -166,10 +166,11 @@ namespace Upgrades
             for (var i = 0; i < node.children.Count; i++)
             {
                 var child = node.children[i];
+                var isActive = child.State == SkillTreeNode.NodeState.Active;
                 var childPos = child.Position - transform.position;
                 var isMiddleNode = Mathf.Abs(i - (node.children.Count - 1) / 2f) < 0.1f;
 
-                if (isMiddleNode)
+                if (isMiddleNode && isActive)
                 {
                     vh.DrawLine(childPos, parentPos, 0, thickness, StateToColor(child.State));
                     continue;
@@ -181,6 +182,7 @@ namespace Upgrades
                     : child.Position.x > node.Position.x ? 1 : -1;
 
                 var end = childBranch + cornerOffset;
+                if (!squareCorners && !isActive && i > 0 && i < node.children.Count - 1) end -= Vector3.up * thickness / 2;
                 vh.DrawLine(childPos, end, 0, thickness, StateToColor(child.State));
                 
                 if (child.State != SkillTreeNode.NodeState.Active) continue;
