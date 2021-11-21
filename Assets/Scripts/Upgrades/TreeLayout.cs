@@ -35,34 +35,36 @@ namespace Upgrades
 
         void Update()
         {
+            var setDirty = false;
+            
             if (nodes == null || nodes.Length != transform.childCount)
             {
                 nodes = GetComponentsInChildren<SkillTreeNode>();
                 positionCache = new Vector3[nodes.Length];
                 stateCache = new SkillTreeNode.NodeState[nodes.Length];
-                SetAllDirty();
-                return;
+                setDirty = true;
             }
 
             if (oldPosition != transform.position)
             {
                 oldPosition = transform.position;
-                SetAllDirty();
-                return;
+                setDirty = true;
             }
 
             for (var i = 0; i < nodes.Length; i++)
             {
                 // Lock positions
                 if (nodes[i].transform.position != positionCache[i])
+                {
                     nodes[i].transform.position = positionCache[i];
+                    setDirty = true;
+                }
                 
                 if (Application.isPlaying && nodes[i].State != stateCache[i])
-                {
-                    SetAllDirty();
-                    return;
-                }
+                    setDirty = true;
             }
+            
+            if (setDirty) SetAllDirty();
         }
         
         Color StateToColor(SkillTreeNode.NodeState state) => state switch
