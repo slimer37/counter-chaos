@@ -285,6 +285,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Cursor Position",
+                    "type": "Value",
+                    "id": "06430bda-aed7-4aef-b574-958855bad0f6",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -296,6 +305,17 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "560f6350-0373-4ba2-a8da-f185466fe408",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Cursor Position",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
