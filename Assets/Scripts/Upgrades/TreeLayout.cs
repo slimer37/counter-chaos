@@ -26,8 +26,6 @@ namespace Upgrades
         Vector3 oldPosition;
         SkillTreeNode.NodeState[] stateCache;
 
-        readonly List<TreeNode> drawnDownBranches = new();
-
         [ContextMenu("Manual Update")]
         void ManualUpdate()
         {
@@ -121,45 +119,78 @@ namespace Upgrades
                 if (!node)
                     nodes = GetComponentsInChildren<SkillTreeNode>();
 
-            drawnDownBranches.Clear();
-
             foreach (var node in nodes) TreeNode.Create(node);
             
             for (var i = 0; i < nodes.Length; i++)
             {
                 var node = TreeNode.AllTreeNodes[i];
                 stateCache[i] = node.State;
-                
-                if (node.parent != null) DrawLineToParent(node, vh);
+
+                if (node.children.Count > 0) DrawLinesToChildren(node, vh);
             }
         }
 
-        void DrawLineToParent(TreeNode node, VertexHelper vh)
+        void DrawLinesToChildren(TreeNode node, VertexHelper vh)
         {
-            var parentPos = node.parent.Position - transform.position;
-            var nodePos = node.Position - transform.position;
-            var midHeightDelta = Vector3.up * (parentPos.y - nodePos.y) / 2;
-            var nodeBranch = nodePos + midHeightDelta;
-            var parentBranch = parentPos - midHeightDelta;
-
+            if (node.children.Count == 1)
+            {
+                vh.DrawLine(node.children[0].Position - transform.position, node.Position - transform.position,
+                    0, thickness, StateToColor(node.children[0].State));
+                return;
+            }
+            
+            var parentPos = node.node.transform.position - transform.position;
+            var midHeightDelta = Vector3.up * rowHeight / 2;
             var cornerOffset = Vector3.up * (squareCorners ? thickness / 2 : 0);
             var sideOffset = Vector3.right * (squareCorners ? thickness / 2 : 0);
-            var nodeIsToRight = nodePos.x > parentPos.x;
-                
-            vh.DrawLine(nodePos, nodeBranch + cornerOffset,
-                0, thickness, StateToColor(node.State));
-            if (!squareCorners) vh.DrawCaps();
-            vh.DrawLine(nodeBranch, parentBranch + sideOffset * (nodeIsToRight ? 1 : -1),
-                90, thickness, StateToColor(node.State));
+            var parentBranch = parentPos - midHeightDelta;
 
-            if (drawnDownBranches.Contains(node.parent)) return;
-                
+            var greatestState = node.GreatestChildState();
+            
+            if (greatestState != SkillTreeNode.NodeState.Active)
+                vh.DrawLine(parentPos, parentBranch, 0, thickness, StateToColor(greatestState));
+
+            var firstChildPos = node.children[0].Position - transform.position;
+            var lastChildPos = node.children[^1].Position - transform.position;
+            var col = StateToColor((SkillTreeNode.NodeState)Mathf.Max((int)node.State - 1, 0));
+            vh.DrawLine(firstChildPos, firstChildPos + midHeightDelta + cornerOffset, 0, thickness, col);
             if (!squareCorners) vh.DrawCaps();
 
-            vh.DrawLine(parentBranch - cornerOffset, parentPos, 0, thickness,
-                StateToColor(node.parent.GreatestChildState()));
+            vh.DrawLine(firstChildPos + midHeightDelta - sideOffset,
+                lastChildPos + midHeightDelta + sideOffset,
+                90, thickness, col);
+            
+            if (!squareCorners) vh.DrawCaps();
+            vh.DrawLine(lastChildPos + midHeightDelta + cornerOffset, lastChildPos, 0, thickness, col);
+
+            for (var i = 0; i < node.children.Count; i++)
+            {
+                var child = node.children[i];
+                var childPos = child.Position - transform.position;
+                var isMiddleNode = Mathf.Abs(i - (node.children.Count - 1) / 2f) < 0.1f;
+
+                if (isMiddleNode)
+                {
+                    vh.DrawLine(childPos, parentPos, 0, thickness, StateToColor(child.State));
+                    continue;
+                }
                 
-            drawnDownBranches.Add(node.parent);
+                var childBranch = childPos + midHeightDelta;
+
+                var factor = child.Position.x == node.Position.x ? 0
+                    : child.Position.x > node.Position.x ? 1 : -1;
+
+                var end = childBranch + cornerOffset;
+                vh.DrawLine(childPos, end, 0, thickness, StateToColor(child.State));
+                
+                if (child.State != SkillTreeNode.NodeState.Active) continue;
+                
+                if (!squareCorners) vh.DrawCaps();
+
+                vh.DrawLine(childBranch + sideOffset * factor, parentBranch - sideOffset * factor, 90, thickness, activeColor);
+                if (!squareCorners) vh.DrawCaps();
+                vh.DrawLine(parentBranch - cornerOffset, parentPos, 0, thickness, StateToColor(greatestState));
+            }
         }
 
         class TreeNode
@@ -201,7 +232,10 @@ namespace Upgrades
                     var factor = i - (children.Count - 1) / 2f;
                     pos.x = rectTransform.position.x + nodeSpace * factor;
                     if (child.children.Count > 0)
-                        pos.x += (child.RecursivePositionHierarchy(horizontalNodeSpace) - horizontalNodeSpace) / 2 * (factor < 0 ? -1 : 1);
+                    {
+                        var offset = (child.RecursivePositionHierarchy(horizontalNodeSpace) - horizontalNodeSpace) / 2 * (factor < 0 ? -1 : 1);
+                        if (children.Count > 1) pos.x += offset;
+                    }
                     child.rectTransform.position = pos;
                 }
                 
