@@ -71,7 +71,11 @@ namespace Upgrades
             Gizmos.DrawLine(transform.position, dependency.transform.position);
         }
 
-        void OnValidate() => SetInfo();
+        void OnValidate()
+        {
+            if (dependency == this) dependency = null;
+            SetInfo();
+        }
 
         public int GetDepth()
         {

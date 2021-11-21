@@ -22,6 +22,7 @@ namespace Upgrades
         [SerializeField] bool squareCorners;
         
         SkillTreeNode[] nodes;
+        SkillTreeNode[] parentCache;
         Vector3[] positionCache;
         Vector3 oldPosition;
         SkillTreeNode.NodeState[] stateCache;
@@ -51,8 +52,15 @@ namespace Upgrades
 
             for (var i = 0; i < nodes.Length; i++)
             {
+                if (nodes[i].Parent != parentCache[i])
+                {
+                    ReinitNodes();
+                    setDirty = true;
+                    break;
+                }
+                
                 if (nodes[i].transform.position != positionCache[i]
-                || Application.isPlaying && nodes[i].State != stateCache[i])
+                    || Application.isPlaying && nodes[i].State != stateCache[i])
                 {
                     setDirty = true;
                     break;
@@ -119,6 +127,7 @@ namespace Upgrades
             {
                 var node = TreeNode.AllTreeNodes[i];
                 stateCache[i] = node.State;
+                parentCache[i] = nodes[i].Parent;
 
                 if (node.children.Count > 0) DrawLinesToChildren(node, vh);
             }
@@ -127,6 +136,7 @@ namespace Upgrades
         void ReinitNodes()
         {
             nodes = GetComponentsInChildren<SkillTreeNode>();
+            parentCache = new SkillTreeNode[nodes.Length];
             positionCache = new Vector3[nodes.Length];
             stateCache = new SkillTreeNode.NodeState[nodes.Length];
             TreeNode.AllTreeNodes.Clear();
@@ -277,7 +287,7 @@ namespace Upgrades
                 this.node = node;
                 rectTransform = node.GetComponent<RectTransform>();
                 
-                if (node.Parent)
+                if (node.Parent && node.Parent != node)
                 {
                     parent = AllTreeNodes.Find(n => n.node == node.Parent)
                              ?? new TreeNode(node.Parent);
