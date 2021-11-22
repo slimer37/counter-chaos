@@ -81,16 +81,22 @@ namespace Upgrades
         public void SetLayoutHorizontal()
         {
             if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
+
+            var rootFound = false;
             
             for (var i = 0; i < TreeNode.AllTreeNodes.Count; i++)
             {
                 var node = TreeNode.AllTreeNodes[i];
                 if (node.parent == null)
                 {
-                    var pos = node.node.transform.position;
-                    pos.x = transform.position.x;
-                    node.node.transform.position = pos;
-                    node.PositionHierarchy(horizontalNodeSpace);
+                    if (rootFound) Debug.LogWarning(
+                        "More than one tree root was found. " +
+                        $"No more than one node root should be associated with a {nameof(TreeLayout)}.");
+                    else
+                    {
+                        node.PositionHierarchy(horizontalNodeSpace);
+                        rootFound = true;
+                    }
                 }
                 positionCache[i].x = node.node.transform.position.x;
             }
@@ -107,11 +113,11 @@ namespace Upgrades
                 if (depth > maxDepth) maxDepth = depth;
             }
 
-            for (var i = 0; i < nodes.Length; i++)
+            for (var i = 1; i < nodes.Length; i++)
             {
                 var node = nodes[i];
                 var pos = node.transform.position;
-                pos.y = maxDepth * rowHeight / 2 + transform.position.y - node.GetDepth() * rowHeight;
+                pos.y = nodes[0].transform.position.y - node.GetDepth() * rowHeight;
                 node.transform.position = pos;
                 positionCache[i].y = pos.y;
             }
