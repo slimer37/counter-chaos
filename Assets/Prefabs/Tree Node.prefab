@@ -94,7 +94,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: 150
+  m_PreferredHeight: 180
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -134,7 +134,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7986754161649184538
 CanvasRenderer:
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 71a3aa8320ab7b14185365fe6c1e0196, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.1
+  m_fontSize: 19.95
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -692,6 +692,9 @@ MonoBehaviour:
   button: {fileID: 8875631814016833798}
   label: {fileID: 8875631813677613935}
   tagline: {fileID: 6217483727022386521}
+  icon: {fileID: 3429584455116959244}
+  iconSprite: {fileID: 0}
+  lockedSprite: {fileID: 969955678, guid: d7ddebfd69d0d2245ac692dd4452b961, type: 3}
   shaker: {fileID: 3791456740796767597}
   shakeAmount: {x: 5, y: 0, z: 0}
   shakeDuration: 0.2

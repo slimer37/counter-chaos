@@ -22,6 +22,9 @@ namespace Upgrades
         [SerializeField] Button button;
         [SerializeField] TextMeshProUGUI label;
         [SerializeField] TextMeshProUGUI tagline;
+        [SerializeField] Image icon;
+        [SerializeField] Sprite iconSprite;
+        [SerializeField] Sprite lockedSprite;
 
         [Header("Animation")]
         [SerializeField] Transform shaker;
@@ -99,10 +102,14 @@ namespace Upgrades
         {
             if (label) name = label.text = DisplayName;
             if (tagline) tagline.text = Tagline;
+            if (icon) icon.sprite = iconSprite;
         }
 
-        void UpdateTooltip()
+        void UpdateState(NodeState state)
         {
+            State = state;
+            button.interactable = state == NodeState.Unlocked;
+            icon.sprite = state == NodeState.Locked ? lockedSprite : iconSprite;
             tooltipTrigger.titleText = $"{DisplayName} ({State})";
             tooltipTrigger.descriptionText = State == NodeState.Locked ? "" : Description;
         }
@@ -113,15 +120,13 @@ namespace Upgrades
             
             ID = DisplayName.ToLower().Replace(" ", "");
             AllNodes.Add(this);
-
-            button.interactable = startsUnlocked;
-            if (startsUnlocked) State = NodeState.Unlocked;
             
             button.onClick.AddListener(Activate);
             
             tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
-            UpdateTooltip();
             SetInfo();
+            
+            UpdateState(startsUnlocked ? NodeState.Unlocked : NodeState.Locked);
 
             if (dependency) dependency.onActivate += Unlock;
         }
@@ -150,23 +155,19 @@ namespace Upgrades
             if (startsUnlocked) throw new Exception("Called Unlock on a node that starts unlocked.");
             if (IsUnlocked) return;
             
-            button.interactable = true;
-            State = NodeState.Unlocked;
+            UpdateState(NodeState.Unlocked);
             onUnlock?.Invoke();
-            UpdateTooltip();
         }
 
         void Activate()
         {
             if (IsActive) return;
-            State = NodeState.Active;
             var colors = button.colors;
             colors.disabledColor = colors.pressedColor;
             button.colors = colors;
-            button.interactable = false;
             label.color = colors.pressedColor;
+            UpdateState(NodeState.Active);
             onActivate?.Invoke();
-            UpdateTooltip();
 
             var seq = DOTween.Sequence();
             seq.Append(shaker.DOMove(shakeAmount, shakeDuration / 4).SetRelative());
