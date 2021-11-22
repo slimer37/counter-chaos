@@ -24,7 +24,12 @@ namespace Upgrades
         [SerializeField] TextMeshProUGUI tagline;
         [SerializeField] Image icon;
         [SerializeField] Sprite iconSprite;
+        [SerializeField] float lockedAlpha;
+        
+        [Header("Lock")]
+        [SerializeField] Image lockIcon;
         [SerializeField] Sprite lockedSprite;
+        [SerializeField] Sprite openLockSprite;
 
         [Header("Animation")]
         [SerializeField] Transform shaker;
@@ -102,14 +107,26 @@ namespace Upgrades
         {
             if (label) name = label.text = DisplayName;
             if (tagline) tagline.text = Tagline;
-            if (icon) icon.sprite = iconSprite;
+            
+            if (icon)
+            {
+                icon.sprite = iconSprite;
+                var c = icon.color;
+                c.a = startsUnlocked ? 1 : lockedAlpha;
+                icon.color = c;
+            }
+            
+            if (lockIcon)
+            {
+                lockIcon.sprite = lockedSprite;
+                lockIcon.enabled = !startsUnlocked;
+            }
         }
 
         void UpdateState(NodeState state)
         {
             State = state;
             button.interactable = state == NodeState.Unlocked;
-            icon.sprite = state == NodeState.Locked ? lockedSprite : iconSprite;
             tooltipTrigger.titleText = $"{DisplayName} ({State})";
             tooltipTrigger.descriptionText = State == NodeState.Locked ? "" : Description;
         }
@@ -157,10 +174,14 @@ namespace Upgrades
             
             UpdateState(NodeState.Unlocked);
             onUnlock?.Invoke();
+
+            lockIcon.sprite = openLockSprite;
             
             var seq = DOTween.Sequence();
             seq.Append(shaker.DOMove(shakeAmount, shakeDuration / 4).SetRelative());
             seq.Append(shaker.DOMove(-shakeAmount * 2, shakeDuration / 2).SetRelative());
+            seq.Join(lockIcon.DOFade(0, shakeDuration / 2));
+            seq.Join(icon.DOFade(1, shakeDuration / 2));
             seq.Append(shaker.DOMove(transform.position, shakeDuration / 4));
         }
 
