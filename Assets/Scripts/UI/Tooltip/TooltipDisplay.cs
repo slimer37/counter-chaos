@@ -42,6 +42,7 @@ namespace UI.Tooltip
         void Awake()
         {
             OnValidate();
+            group.alpha = 0;
             rectTransform = GetComponent<RectTransform>();
             controls = new Controls();
             controls.Menu.CursorPosition.performed += RecordPosition;
