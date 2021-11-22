@@ -15,11 +15,13 @@ namespace Upgrades
         
         [field: Header("Info")]
         [field: SerializeField] public string DisplayName { get; private set; }
+        [field: SerializeField] public string Tagline { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         
         [Header("UI")]
         [SerializeField] Button button;
         [SerializeField] TextMeshProUGUI label;
+        [SerializeField] TextMeshProUGUI tagline;
 
         [Header("Animation")]
         [SerializeField] Transform shaker;
@@ -91,7 +93,11 @@ namespace Upgrades
             return depth;
         }
 
-        void SetInfo() => name = label.text = DisplayName;
+        void SetInfo()
+        {
+            if (label) name = label.text = DisplayName;
+            if (tagline) tagline.text = Tagline;
+        }
 
         void Awake()
         {
