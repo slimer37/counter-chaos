@@ -34,6 +34,8 @@ namespace Upgrades
         Action onActivate;
         Action onUnlock;
 
+        TooltipTrigger tooltipTrigger;
+
         public static readonly List<SkillTreeNode> AllNodes = new();
 
         public int Level
@@ -99,11 +101,16 @@ namespace Upgrades
             if (tagline) tagline.text = Tagline;
         }
 
+        void UpdateTooltip()
+        {
+            tooltipTrigger.titleText = $"{DisplayName} ({State})";
+            tooltipTrigger.descriptionText = Description;
+        }
+
         void Awake()
         {
-            var tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
-            tooltipTrigger.titleText = DisplayName;
-            tooltipTrigger.descriptionText = Description;
+            tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
+            UpdateTooltip();
             
             if (AllNodes.Count > 0 && !AllNodes[0]) AllNodes.Clear();
             
@@ -147,6 +154,7 @@ namespace Upgrades
             button.interactable = true;
             State = NodeState.Unlocked;
             onUnlock?.Invoke();
+            UpdateTooltip();
         }
 
         void Activate()
@@ -159,6 +167,7 @@ namespace Upgrades
             button.interactable = false;
             label.color = colors.pressedColor;
             onActivate?.Invoke();
+            UpdateTooltip();
 
             var seq = DOTween.Sequence();
             seq.Append(shaker.DOMove(shakeAmount, shakeDuration / 4).SetRelative());
