@@ -104,7 +104,7 @@ namespace Upgrades
         void UpdateTooltip()
         {
             tooltipTrigger.titleText = $"{DisplayName} ({State})";
-            tooltipTrigger.descriptionText = Description;
+            tooltipTrigger.descriptionText = State == NodeState.Locked ? "" : Description;
         }
 
         void Awake()
