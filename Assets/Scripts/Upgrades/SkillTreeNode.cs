@@ -157,6 +157,11 @@ namespace Upgrades
             
             UpdateState(NodeState.Unlocked);
             onUnlock?.Invoke();
+            
+            var seq = DOTween.Sequence();
+            seq.Append(shaker.DOMove(shakeAmount, shakeDuration / 4).SetRelative());
+            seq.Append(shaker.DOMove(-shakeAmount * 2, shakeDuration / 2).SetRelative());
+            seq.Append(shaker.DOMove(transform.position, shakeDuration / 4));
         }
 
         void Activate()
@@ -168,12 +173,6 @@ namespace Upgrades
             label.color = colors.pressedColor;
             UpdateState(NodeState.Active);
             onActivate?.Invoke();
-
-            var seq = DOTween.Sequence();
-            seq.Append(shaker.DOMove(shakeAmount, shakeDuration / 4).SetRelative());
-            seq.Append(shaker.DOMove(-shakeAmount * 2, shakeDuration / 2).SetRelative());
-            seq.Append(shaker.DOMove(transform.position, shakeDuration / 4));
-            
         }
     }
 }
