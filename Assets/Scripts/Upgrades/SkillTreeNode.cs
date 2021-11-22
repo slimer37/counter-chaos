@@ -109,9 +109,6 @@ namespace Upgrades
 
         void Awake()
         {
-            tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
-            UpdateTooltip();
-            
             if (AllNodes.Count > 0 && !AllNodes[0]) AllNodes.Clear();
             
             ID = DisplayName.ToLower().Replace(" ", "");
@@ -122,6 +119,8 @@ namespace Upgrades
             
             button.onClick.AddListener(Activate);
             
+            tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
+            UpdateTooltip();
             SetInfo();
 
             if (dependency) dependency.onActivate += Unlock;
