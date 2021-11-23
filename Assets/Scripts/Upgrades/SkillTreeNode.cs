@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Upgrades
 {
-    public class SkillTreeNode : MonoBehaviour
+    public class SkillTreeNode : TooltipTrigger
     {
         [SerializeField] SkillTreeNode dependency;
         [SerializeField] bool startsUnlocked;
@@ -41,8 +41,6 @@ namespace Upgrades
         
         Action onActivate;
         Action onUnlock;
-
-        TooltipTrigger tooltipTrigger;
 
         public static readonly List<SkillTreeNode> AllNodes = new();
 
@@ -127,8 +125,8 @@ namespace Upgrades
         {
             State = state;
             button.interactable = state == NodeState.Unlocked;
-            tooltipTrigger.titleText = $"{DisplayName} ({State})";
-            tooltipTrigger.descriptionText = State == NodeState.Locked ? "" : Description;
+            TitleText = $"{DisplayName} ({State})";
+            DescriptionText = State == NodeState.Locked ? "" : Description;
         }
 
         void Awake()
@@ -140,7 +138,6 @@ namespace Upgrades
             
             button.onClick.AddListener(Activate);
             
-            tooltipTrigger = gameObject.AddComponent<TooltipTrigger>();
             SetInfo();
             
             UpdateState(startsUnlocked ? NodeState.Unlocked : NodeState.Locked);
