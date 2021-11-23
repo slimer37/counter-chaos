@@ -82,6 +82,14 @@ namespace Upgrades
         {
             if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
 
+            // Verify that all nodes still exist
+            foreach (var node in TreeNode.AllTreeNodes)
+                if (!node.node)
+                {
+                    ReinitNodes();
+                    break;
+                }
+            
             var rootFound = false;
             
             for (var i = 0; i < TreeNode.AllTreeNodes.Count; i++)
@@ -243,29 +251,31 @@ namespace Upgrades
 
             float RecursivePositionHierarchy(float horizontalNodeSpace)
             {
-                var totalWidth = children.Count * horizontalNodeSpace;
+                float totalWidth = children.Count;
                 
-                for (var i = 0; i < children.Count; i++)
+                if (children.Count > 0)
                 {
-                    var child = children[i];
-                    var pos = child.rectTransform.position;
-                    var nodeSpace = horizontalNodeSpace;
-                    var factor = i - (children.Count - 1) / 2f;
-                    pos.x = rectTransform.position.x + nodeSpace * factor;
-                    if (child.children.Count > 0)
+                    for (var i = 0; i < children.Count; i++)
                     {
+                        var child = children[i];
+                        var pos = child.rectTransform.position;
+
+                        var factor = i - (children.Count - 1) / 2f;
+                        pos.x = rectTransform.position.x + horizontalNodeSpace * factor;
+
                         var width = child.RecursivePositionHierarchy(horizontalNodeSpace);
-                        if (factor != 0)
-                        {
-                            width -= horizontalNodeSpace;
-                            pos.x += width / 2 * (factor < 0 ? -1 : 1);
-                        }
-                        totalWidth += Mathf.Abs(width);
+                        
+                        var normalizedFactor = factor / Mathf.Abs(factor);
+                        
+                        if (factor != 0) pos.x += width / 2 * normalizedFactor * horizontalNodeSpace;
+                        
+                        totalWidth += width;
+
+                        child.rectTransform.position = pos;
                     }
-                    child.rectTransform.position = pos;
                 }
                 
-                return totalWidth;
+                return Mathf.Max(totalWidth - 1, 0);
             }
 
             public SkillTreeNode.NodeState GreatestChildState()
