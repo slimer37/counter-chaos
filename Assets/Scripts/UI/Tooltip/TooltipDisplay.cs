@@ -23,8 +23,9 @@ namespace UI.Tooltip
         
         Controls controls;
         RectTransform rectTransform;
-
         Tween fadeTween;
+
+        bool isShowing;
 
         void Update()
         {
@@ -48,7 +49,7 @@ namespace UI.Tooltip
             controls.Menu.CursorPosition.performed += RecordPosition;
         }
 
-        public void Show(string titleText, string descText)
+        internal void Show(string titleText, string descText)
         {
             title.text = titleText;
             description.text = descText;
@@ -59,15 +60,21 @@ namespace UI.Tooltip
             layoutElement.enabled = descText.Length > characterWrapLimit;
             
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+
             controls.Enable();
+            
+            if (isShowing) return;
             fadeTween = group.DOFade(1, fadeDuration).SetDelay(showDelay);
+            
+            isShowing = true;
         }
 
-        public void Hide()
+        internal void Hide()
         {
             controls.Disable();
             fadeTween.Kill();
             group.alpha = 0;
+            isShowing = false;
         }
 
         void RecordPosition(InputAction.CallbackContext context)
