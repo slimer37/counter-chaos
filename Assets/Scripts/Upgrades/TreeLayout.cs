@@ -22,6 +22,8 @@ namespace Upgrades
         [SerializeField] bool squareCorners;
         
         SkillTreeNode[] nodes;
+        readonly List<TreeNode> treeNodes = new();
+        
         SkillTreeNode[] parentCache;
         Vector3[] positionCache;
         Vector3 oldPosition;
@@ -38,7 +40,7 @@ namespace Upgrades
         {
             var setDirty = false;
             
-            if (nodes == null || nodes.Length != transform.childCount || nodes.Length != TreeNode.AllTreeNodes.Count)
+            if (nodes == null || nodes.Length != transform.childCount || nodes.Length != treeNodes.Count)
             {
                 ReinitNodes();
                 setDirty = true;
@@ -80,10 +82,10 @@ namespace Upgrades
 
         public void SetLayoutHorizontal()
         {
-            if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
+            if (nodes.Length == 0 || treeNodes.Count == 0) return;
 
             // Verify that all nodes still exist
-            foreach (var node in TreeNode.AllTreeNodes)
+            foreach (var node in treeNodes)
                 if (!node.node)
                 {
                     ReinitNodes();
@@ -92,9 +94,9 @@ namespace Upgrades
             
             var rootFound = false;
             
-            for (var i = 0; i < TreeNode.AllTreeNodes.Count; i++)
+            for (var i = 0; i < treeNodes.Count; i++)
             {
-                var node = TreeNode.AllTreeNodes[i];
+                var node = treeNodes[i];
                 if (node.parent == null)
                 {
                     if (rootFound) Debug.LogWarning(
@@ -102,7 +104,7 @@ namespace Upgrades
                         $"No more than one node root should be associated with a {nameof(TreeLayout)}.");
                     else
                     {
-                        node.PositionHierarchy(horizontalNodeSpace);
+                        node.PositionHierarchy(treeNodes, horizontalNodeSpace);
                         rootFound = true;
                     }
                 }
@@ -112,7 +114,7 @@ namespace Upgrades
 
         public void SetLayoutVertical()
         {
-            if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
+            if (nodes.Length == 0 || treeNodes.Count == 0) return;
             
             var maxDepth = 0;
             foreach (var node in nodes)
@@ -133,13 +135,13 @@ namespace Upgrades
 
         protected override void OnPopulateMesh(VertexHelper vh)
         {
-            if (nodes.Length == 0 || TreeNode.AllTreeNodes.Count == 0) return;
+            if (nodes.Length == 0 || treeNodes.Count == 0) return;
             
             vh.Clear();
 
             for (var i = 0; i < nodes.Length; i++)
             {
-                var node = TreeNode.AllTreeNodes[i];
+                var node = treeNodes[i];
                 stateCache[i] = node.State;
                 parentCache[i] = nodes[i].Parent;
 
@@ -153,8 +155,8 @@ namespace Upgrades
             parentCache = new SkillTreeNode[nodes.Length];
             positionCache = new Vector3[nodes.Length];
             stateCache = new SkillTreeNode.NodeState[nodes.Length];
-            TreeNode.AllTreeNodes.Clear();
-            foreach (var node in nodes) TreeNode.Create(node);
+            treeNodes.Clear();
+            foreach (var node in nodes) treeNodes.Add(new TreeNode(node, treeNodes));
         }
 
         void DrawLinesToChildren(TreeNode node, VertexHelper vh)
@@ -230,17 +232,15 @@ namespace Upgrades
             public Vector3 Position => node.transform.position;
             public SkillTreeNode.NodeState State => node.State;
 
-            public static readonly List<TreeNode> AllTreeNodes = new();
-
             readonly RectTransform rectTransform;
-
-            public void PositionHierarchy(float horizontalNodeSpace)
+            
+            public void PositionHierarchy(List<TreeNode> allNodes, float horizontalNodeSpace)
             {
                 if (parent != null) 
                     throw new InvalidOperationException($"Can only use {nameof(PositionHierarchy)} on root nodes.");
                 
                 var maxDepth = 0;
-                foreach (var treeNode in AllTreeNodes)
+                foreach (var treeNode in allNodes)
                 {
                     var depth = treeNode.node.GetDepth();
                     if (depth > maxDepth) maxDepth = depth;
@@ -301,17 +301,15 @@ namespace Upgrades
                 return (SkillTreeNode.NodeState)greatest;
             }
 
-            public static void Create(SkillTreeNode node) => AllTreeNodes.Add(new TreeNode(node));
-
-            TreeNode(SkillTreeNode node)
+            public TreeNode(SkillTreeNode node, List<TreeNode> allNodes)
             {
                 this.node = node;
                 rectTransform = node.GetComponent<RectTransform>();
                 
                 if (node.Parent && node.Parent != node)
                 {
-                    parent = AllTreeNodes.Find(n => n.node == node.Parent)
-                             ?? new TreeNode(node.Parent);
+                    parent = allNodes.Find(n => n.node == node.Parent)
+                             ?? new TreeNode(node.Parent, allNodes);
                     parent.children.Add(this);
                 }
             }
