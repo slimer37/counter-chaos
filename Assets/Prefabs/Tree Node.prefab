@@ -761,8 +761,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 175e6ab909501b04883ae2f8c287658f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleText: 
-  descriptionText: 
   dependency: {fileID: 0}
   startsUnlocked: 0
   <DisplayName>k__BackingField: Tree Node
