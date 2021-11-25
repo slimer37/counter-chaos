@@ -97,7 +97,7 @@ namespace Upgrades.Tree
                     break;
                 }
             
-            treeNodes[0].PositionHierarchy();
+            treeNodes[0].PositionHierarchy(transform.position.x);
             
             for (var i = 0; i < treeNodes.Count; i++) positionCache[i].x = treeNodes[i].rectTransform.position.x;
         }

@@ -20,14 +20,12 @@ namespace Upgrades.Tree
         readonly float horizontalNodeSpace;
 
         float mod;
-        float xInNodeSpaces;
 
         float X
         {
-            get => xInNodeSpaces;
+            get => rectTransform.position.x;
             set
             {
-                xInNodeSpaces = value;
                 var pos = rectTransform.position;
                 pos.x = value;
                 rectTransform.position = pos;
@@ -57,7 +55,7 @@ namespace Upgrades.Tree
             all.Add(this);
         }
         
-        public void PositionHierarchy()
+        public void PositionHierarchy(float rootCenter)
         {
             if (parent != null) 
                 throw new InvalidOperationException($"Can only use {nameof(PositionHierarchy)} on root nodes.");
@@ -68,6 +66,9 @@ namespace Upgrades.Tree
             CalculateInitialX();
             
             CalculateFinalX(mod);
+
+            var offset = rootCenter - X;
+            foreach (var n in allNodes) n.X += offset;
         }
 
         TreeNode GetPreviousSibling() => parent.children[localX - 1];
