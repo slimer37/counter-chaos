@@ -97,7 +97,8 @@ namespace Upgrades.Tree
                     break;
                 }
             
-            treeNodes[0].PositionHierarchy(transform.position.x);
+            treeNodes[0].PositionHierarchy(rectTransform.position.x, out var treeWidth);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, treeWidth + horizontalNodeSpace);
             
             for (var i = 0; i < treeNodes.Count; i++) positionCache[i].x = treeNodes[i].rectTransform.position.x;
         }
@@ -112,6 +113,12 @@ namespace Upgrades.Tree
                 var depth = node.GetDepth();
                 if (depth > maxDepth) maxDepth = depth;
             }
+
+            var treeHeight = maxDepth * rowHeight;
+            var rootPos = nodes[0].transform.position;
+            rootPos.y = rectTransform.position.y + rectTransform.rect.center.y + treeHeight / 2;
+            nodes[0].transform.position = rootPos;
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, treeHeight + rowHeight);
 
             for (var i = 1; i < nodes.Length; i++)
             {

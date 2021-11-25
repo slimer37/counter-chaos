@@ -55,7 +55,7 @@ namespace Upgrades.Tree
             all.Add(this);
         }
         
-        public void PositionHierarchy(float rootCenter)
+        public void PositionHierarchy(float centerX, out float width)
         {
             if (parent != null) 
                 throw new InvalidOperationException($"Can only use {nameof(PositionHierarchy)} on root nodes.");
@@ -66,8 +66,12 @@ namespace Upgrades.Tree
             CalculateInitialX();
             
             CalculateFinalX(mod);
-
-            var offset = rootCenter - X;
+            
+            var leftest = allNodes.Min(n => n.X);
+            var rightest = allNodes.Max(n => n.X);
+            width = rightest - leftest;
+            
+            var offset = centerX - (rightest + leftest) / 2;
             foreach (var n in allNodes) n.X += offset;
         }
 
