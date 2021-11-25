@@ -294,6 +294,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Open Laptop",
+                    "type": "Button",
+                    "id": "24bfc0fe-0cd3-4ff3-8971-973cf05cd1e1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -316,6 +325,17 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Cursor Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58c12b3f-3e70-4595-9327-cbe904488959",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Open Laptop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

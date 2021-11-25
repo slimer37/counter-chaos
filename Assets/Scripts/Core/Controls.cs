@@ -318,6 +318,15 @@ namespace Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Open Laptop"",
+                    ""type"": ""Button"",
+                    ""id"": ""24bfc0fe-0cd3-4ff3-8971-973cf05cd1e1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -340,6 +349,17 @@ namespace Core
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
                     ""action"": ""Cursor Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58c12b3f-3e70-4595-9327-cbe904488959"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Open Laptop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -430,6 +450,7 @@ namespace Core
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Exit = m_Menu.FindAction("Exit", throwIfNotFound: true);
             m_Menu_CursorPosition = m_Menu.FindAction("Cursor Position", throwIfNotFound: true);
+            m_Menu_OpenLaptop = m_Menu.FindAction("Open Laptop", throwIfNotFound: true);
             // Console
             m_Console = asset.FindActionMap("Console", throwIfNotFound: true);
             m_Console_Open = m_Console.FindAction("Open", throwIfNotFound: true);
@@ -608,12 +629,14 @@ namespace Core
         private IMenuActions m_MenuActionsCallbackInterface;
         private readonly InputAction m_Menu_Exit;
         private readonly InputAction m_Menu_CursorPosition;
+        private readonly InputAction m_Menu_OpenLaptop;
         public struct MenuActions
         {
             private @Controls m_Wrapper;
             public MenuActions(@Controls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Exit => m_Wrapper.m_Menu_Exit;
             public InputAction @CursorPosition => m_Wrapper.m_Menu_CursorPosition;
+            public InputAction @OpenLaptop => m_Wrapper.m_Menu_OpenLaptop;
             public InputActionMap Get() { return m_Wrapper.m_Menu; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -629,6 +652,9 @@ namespace Core
                     @CursorPosition.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnCursorPosition;
                     @CursorPosition.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnCursorPosition;
                     @CursorPosition.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnCursorPosition;
+                    @OpenLaptop.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnOpenLaptop;
+                    @OpenLaptop.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnOpenLaptop;
+                    @OpenLaptop.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnOpenLaptop;
                 }
                 m_Wrapper.m_MenuActionsCallbackInterface = instance;
                 if (instance != null)
@@ -639,6 +665,9 @@ namespace Core
                     @CursorPosition.started += instance.OnCursorPosition;
                     @CursorPosition.performed += instance.OnCursorPosition;
                     @CursorPosition.canceled += instance.OnCursorPosition;
+                    @OpenLaptop.started += instance.OnOpenLaptop;
+                    @OpenLaptop.performed += instance.OnOpenLaptop;
+                    @OpenLaptop.canceled += instance.OnOpenLaptop;
                 }
             }
         }
@@ -711,6 +740,7 @@ namespace Core
         {
             void OnExit(InputAction.CallbackContext context);
             void OnCursorPosition(InputAction.CallbackContext context);
+            void OnOpenLaptop(InputAction.CallbackContext context);
         }
         public interface IConsoleActions
         {
