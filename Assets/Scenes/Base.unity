@@ -7748,6 +7748,7 @@ MonoBehaviour:
   laptop: {fileID: 294773195}
   uiGroup: {fileID: 1480329489}
   laptopAnimator: {fileID: 294773196}
+  controller: {fileID: 235475063}
   fadeTime: 0.5
   openAnimation: laptop_open
   closeAnimation: laptop_close

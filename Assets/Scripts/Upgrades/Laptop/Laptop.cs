@@ -11,6 +11,7 @@ namespace Upgrades
         [SerializeField] GameObject laptop;
         [SerializeField] CanvasGroup uiGroup;
         [SerializeField] Animator laptopAnimator;
+        [SerializeField] PlayerController controller;
         
         [Header("Animation Options")]
         [SerializeField] float fadeTime = 0.5f;
@@ -21,15 +22,12 @@ namespace Upgrades
         int OpenAnimation => Animator.StringToHash(openAnimation);
         int CloseAnimation => Animator.StringToHash(closeAnimation);
 
-        PlayerController controller;
         Controls controls;
         bool animating;
         bool open;
 
         void Awake()
         {
-            controller = Player.Transform.GetComponent<PlayerController>();
-            
             controls = new Controls();
             controls.Menu.OpenLaptop.performed += _ => OnOpenLaptop();
             controls.Enable();
