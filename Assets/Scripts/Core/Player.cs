@@ -5,8 +5,27 @@ namespace Core
 {
     public static class Player
     {
-        public static Camera Camera => camera ??= Camera.main;
-        public static Transform Transform => transform ??= Camera.transform.root;
+        public static Camera Camera
+        {
+            get
+            {
+                if (!camera)
+                    camera = Camera.main;
+                
+                return camera;
+            }
+        }
+        
+        public static Transform Transform
+        {
+            get
+            {
+                if (!transform)
+                    transform = Camera.transform.root;
+
+                return transform;
+            }
+        }
         
         static Camera camera;
         static Transform transform;
