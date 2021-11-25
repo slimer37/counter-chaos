@@ -2,25 +2,34 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using Core;
+using Interactables.Holding;
 
 namespace Upgrades
 {
     public class Laptop : MonoBehaviour
     {
         [SerializeField] GameObject laptop;
-        [SerializeField] Animator laptopAnimator;
-        [SerializeField] string closeAnimation;
         [SerializeField] CanvasGroup uiGroup;
+        [SerializeField] Animator laptopAnimator;
+        
+        [Header("Animation Options")]
         [SerializeField] float fadeTime = 0.5f;
+        [SerializeField] string openAnimation;
+        [SerializeField] string closeAnimation;
+        [SerializeField] float transitionDuration;
 
+        int OpenAnimation => Animator.StringToHash(openAnimation);
         int CloseAnimation => Animator.StringToHash(closeAnimation);
 
+        PlayerController controller;
         Controls controls;
         bool animating;
         bool open;
 
         void Awake()
         {
+            controller = Player.Transform.GetComponent<PlayerController>();
+            
             controls = new Controls();
             controls.Menu.OpenLaptop.performed += _ => OnOpenLaptop();
             controls.Enable();
@@ -35,6 +44,8 @@ namespace Upgrades
 
         void OnOpenLaptop()
         {
+            if (!open && Inventory.Main.Holder.IsHoldingItem) return;
+            
             open = !open;
             StopAllCoroutines();
             StartCoroutine(open ? OpenLaptop() : CloseLaptop());
@@ -50,17 +61,24 @@ namespace Upgrades
 
         IEnumerator OpenLaptop()
         {
+            controller.Suspend();
             laptop.SetActive(true);
-            yield return new WaitForSeconds(laptopAnimator.GetCurrentAnimatorStateInfo(0).length);
+            yield return PlayAnimation(OpenAnimation);
             ShowUI(true);
         }
 
         IEnumerator CloseLaptop()
         {
+            controller.Suspend(false);
             ShowUI(false);
-            laptopAnimator.Play(CloseAnimation);
-            yield return new WaitForSeconds(laptopAnimator.GetCurrentAnimatorStateInfo(0).length);
+            yield return PlayAnimation(CloseAnimation);
             laptop.SetActive(false);
+        }
+
+        IEnumerator PlayAnimation(int id)
+        {
+            laptopAnimator.CrossFadeInFixedTime(id, transitionDuration);
+            yield return new WaitForSeconds(laptopAnimator.GetCurrentAnimatorStateInfo(0).length);
         }
     }
 }
