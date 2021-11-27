@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Core;
 using DG.Tweening;
 using Interactables.Holding;
-using Tutorial.Visuals;
+using UI.Visuals;
 using UnityEngine;
 
 namespace Tutorial
