@@ -116,9 +116,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -163,9 +163,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: RobotoSlab SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: -604170010
   material: {fileID: -3344631520118379436}
-  materialHashCode: 0
+  materialHashCode: -1500752250
   m_Version: 1.1.0
   m_SourceFontFileGUID: 1eb2f520f30d2ed4d9d757ef93643c31
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 1eb2f520f30d2ed4d9d757ef93643c31, type: 3}
@@ -2651,7 +2651,11 @@ MonoBehaviour:
   m_FontWeightTable:
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: 4fb98f5dc2550b84aa6102f96e911fde, type: 2}
+    italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: 472c82de21bc0534ebbd671b152458ea, type: 2}
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
@@ -2659,11 +2663,7 @@ MonoBehaviour:
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: 35b81bc6b9756f147a49fc3c3145d3a7, type: 2}
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
