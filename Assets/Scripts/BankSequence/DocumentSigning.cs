@@ -8,11 +8,16 @@ namespace BankSequence
 {
     public class DocumentSigning : MonoBehaviour
     {
-        [SerializeField] Transform cam;
-        [SerializeField] Vector3 expectedFacingDirection;
-        [SerializeField, Range(-1, 1)] float dotProductMinimum;
+        [SerializeField] Camera cam;
+        
+        [Header("Text")]
         [SerializeField] TMP_Text documentText;
+        [SerializeField, Min(0)] int charLimit;
+        
+        [Header("Animation")]
         [SerializeField] Transform upPosition;
+        [SerializeField] Transform pen;
+        [SerializeField] Transform penUpPosition;
         [SerializeField] float focusDuration;
         [SerializeField] Ease ease;
 
@@ -27,16 +32,8 @@ namespace BankSequence
 
         Sequence upSequence;
 
-        void OnDrawGizmosSelected()
-        {
-            if (!cam || expectedFacingDirection.sqrMagnitude == 0) return;
-            Gizmos.DrawRay(cam.position, expectedFacingDirection.normalized);
-        }
-
         void Awake()
         {
-            expectedFacingDirection.Normalize();
-            
             originalText = documentText.text = documentText.text.Replace("{0}", DateTime.Now.ToLongDateString());
             nameIndex = originalText.IndexOf("{1}", StringComparison.Ordinal);
             originalText = originalText.Replace("{1}", "");
@@ -46,14 +43,22 @@ namespace BankSequence
             keyboard.onTextInput += OnTextInput;
 
             upSequence = DOTween.Sequence();
-            upSequence.Append(transform.DOMove(upPosition.position, focusDuration).SetEase(ease));
-            upSequence.Join(transform.DORotate(upPosition.eulerAngles, focusDuration).SetEase(ease));
+            AddTweenTransform(transform, upPosition);
+            if (pen) AddTweenTransform(pen, penUpPosition);
             upSequence.Pause().SetAutoKill(false);
+            upSequence.isBackwards = true;
+
+            void AddTweenTransform(Transform obj, Transform to)
+            {
+                upSequence.Join(obj.DOMove(to.position, focusDuration).SetEase(ease));
+                upSequence.Join(obj.DORotate(to.eulerAngles, focusDuration).SetEase(ease));
+            }
         }
 
         void Update()
         {
-            ableToSign = Vector3.Dot(cam.forward, expectedFacingDirection) > dotProductMinimum;
+            ableToSign = Physics.Raycast(cam.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit)
+                         && hit.transform == transform;
             Focus(ableToSign);
             
             if (!ableToSign || signature.Length == 0) return;
@@ -66,7 +71,7 @@ namespace BankSequence
         
         void OnTextInput(char c)
         {
-            if (!ableToSign || char.IsControl(c)) return;
+            if (!ableToSign || signature.Length >= charLimit || char.IsControl(c)) return;
             signature += c;
             UpdateText();
         }
