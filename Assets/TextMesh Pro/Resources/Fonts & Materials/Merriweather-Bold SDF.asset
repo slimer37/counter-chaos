@@ -59,9 +59,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Merriweather-Bold SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: -129172448
   material: {fileID: 1308492735656965933}
-  materialHashCode: 0
+  materialHashCode: 1401936384
   m_Version: 1.1.0
   m_SourceFontFileGUID: ef79eae0cf19fa545bd68d79a635ef04
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: ef79eae0cf19fa545bd68d79a635ef04, type: 3}
@@ -2637,9 +2637,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
