@@ -5205,7 +5205,7 @@ RectTransform:
   m_Children:
   - {fileID: 1103919534}
   m_Father: {fileID: 1135354971}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -5224,7 +5224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee07a62718263c478d8ea292c4711e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expandBy: {x: 50, y: 10}
+  expandBy: {x: 20, y: 5}
   animDuration: 0.5
   ease: 6
   ignoreTimeScale: 0
@@ -11783,8 +11783,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 941950946}
-  - {fileID: 685411134}
   - {fileID: 1395556535}
+  - {fileID: 685411134}
   m_Father: {fileID: 740433408}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13703,7 +13703,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1135354971}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -17280,7 +17280,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 8
   m_Viewport: {fileID: 348307474}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 778302202}
@@ -18272,8 +18272,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
