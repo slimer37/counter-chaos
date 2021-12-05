@@ -35,11 +35,13 @@ namespace Upgrades.Tree
             SetAllDirty();
         }
 
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
             ManualUpdate();
         }
+#endif
 
         void Update()
         {
