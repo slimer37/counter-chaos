@@ -1,0 +1,16 @@
+{
+    "name": "RichPresence",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ea171db81f44c6f49ad00f188c982519"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
