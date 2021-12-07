@@ -1,8 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Discord;
+using System;
 using Serialization;
+using Discord;
+using Steamworks;
 
 public class RichPresence : MonoBehaviour
 {
@@ -16,8 +17,22 @@ public class RichPresence : MonoBehaviour
     {
         SceneManager.sceneLoaded += (s, m) => UpdateDiscordRPC(s.buildIndex, m);
         
-        InitDiscordRPCIfNeeded();
-        UpdateDiscordRPC(0, 0);
+        UpdateAllRPC(0, 0);
+    }
+
+    static void UpdateAllRPC(int s, LoadSceneMode m)
+    {
+        if (m == LoadSceneMode.Additive) return;
+        UpdateSteamRPC(s, m);
+        UpdateDiscordRPC(s, m);
+    }
+    
+    static void UpdateSteamRPC(int sceneIndex, LoadSceneMode m)
+    {
+        if (!SteamManager.Initialized) return;
+        SteamFriends.ClearRichPresence();
+        var status = sceneIndex == 0 ? "MainMenu" : "Playing";
+        SteamFriends.SetRichPresence("steam_display", $"#Status_{status}");
     }
 
     static void InitDiscordRPCIfNeeded()
@@ -32,7 +47,7 @@ public class RichPresence : MonoBehaviour
     {
         InitDiscordRPCIfNeeded();
         
-        if (discordClient == null || m == LoadSceneMode.Additive) return;
+        if (discordClient == null) return;
 
         activityManager.ClearActivity(_ => { });
 
