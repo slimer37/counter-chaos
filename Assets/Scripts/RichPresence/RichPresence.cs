@@ -15,7 +15,7 @@ public class RichPresence : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Init()
     {
-        SceneManager.sceneLoaded += (s, m) => UpdateDiscordRPC(s.buildIndex, m);
+        SceneManager.sceneLoaded += (s, m) => UpdateAllRPC(s.buildIndex, m);
         
         UpdateAllRPC(0, 0);
     }
