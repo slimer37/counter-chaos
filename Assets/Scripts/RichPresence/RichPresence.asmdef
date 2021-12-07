@@ -2,7 +2,8 @@
     "name": "RichPresence",
     "rootNamespace": "",
     "references": [
-        "GUID:ea171db81f44c6f49ad00f188c982519"
+        "GUID:ea171db81f44c6f49ad00f188c982519",
+        "GUID:33f3158628d38c34598ada24849d2996"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
