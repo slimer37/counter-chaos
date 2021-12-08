@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Plugins;
 using UnityEngine;
@@ -40,6 +41,12 @@ namespace Interactables.Base
             outline.OutlineColor = Color.yellow;
             outline.OutlineMode = Outline.Mode.OutlineVisible;
             outline.OutlineWidth = 10;
+            StartCoroutine(DelayedDisableOutline());
+        }
+
+        IEnumerator DelayedDisableOutline()
+        {
+            yield return null;
             outline.enabled = false;
         }
 
