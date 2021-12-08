@@ -96,11 +96,29 @@ public static class RuntimePreviewGenerator
 				m_internalCamera.nearClipPlane = 0.01f;
 				m_internalCamera.cullingMask = 1 << PREVIEW_LAYER;
 				m_internalCamera.gameObject.hideFlags = HideFlags.HideAndDontSave;
-			}
+                
+                // Add spot light to camera
+                internalLight = new GameObject("Spot Light").AddComponent<Light>();
+                internalLight.cullingMask = 1 << PREVIEW_LAYER;
+                internalLight.type = LightType.Spot;
+                internalLight.transform.SetParent(m_internalCamera.transform);
+            }
 
 			return m_internalCamera;
 		}
 	}
+    
+    // In my code style because I added it
+    static Light internalLight = null;
+    public static Light InternalLight
+    {
+        get => internalLight ? internalLight : InternalCamera.GetComponentInChildren<Light>();
+        set
+        {
+            internalLight = value;
+            value.transform.SetParent(InternalCamera.transform);
+        }
+    }
 
 	private static Camera m_previewRenderCamera;
 	public static Camera PreviewRenderCamera

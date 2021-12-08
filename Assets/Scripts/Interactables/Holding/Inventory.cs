@@ -24,7 +24,7 @@ namespace Interactables.Holding
                     var outline = value.GetComponent<Plugins.Outline>();
                     if (outline) outline.enabled = false;
 
-                    previewTex = ItemThumbnail.Generate(content);
+                    previewTex = ItemThumbnail.Grab(content);
 
                     if (outline) outline.enabled = true;
 

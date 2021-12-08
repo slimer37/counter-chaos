@@ -18,7 +18,7 @@ namespace Interactables.Holding
     
     public static class ItemThumbnail
     {
-        public static readonly Vector2Int Dimensions = new(64, 64);
+        public static readonly Vector2Int Dimensions = Vector2Int.one * 128;
         const bool Orthographic = true;
         
         static readonly Dictionary<string, Texture2D> Thumbnails = new();
@@ -29,9 +29,17 @@ namespace Interactables.Holding
             RuntimePreviewGenerator.MarkTextureNonReadable = false;
             RuntimePreviewGenerator.BackgroundColor = Color.clear;
             RuntimePreviewGenerator.OrthographicMode = Orthographic;
+            RuntimePreviewGenerator.PreviewDirection = new Vector3(-0.5f, -0.5f, -1);
+            RuntimePreviewGenerator.Padding = 0.01f;
+            
+            var light = RuntimePreviewGenerator.InternalLight;
+            light.intensity = 1.5f;
+            light.spotAngle = 150;
+            light.innerSpotAngle = 140;
+            light.transform.localPosition = Vector3.back * 0.5f;
         }
 
-        public static Texture2D Generate(Pickuppable pickuppable)
+        public static Texture2D Grab(Pickuppable pickuppable)
         {
             var label = pickuppable.Info.label;
             var model = pickuppable.transform;
