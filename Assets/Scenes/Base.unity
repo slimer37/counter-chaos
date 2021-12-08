@@ -9267,7 +9267,7 @@ MonoBehaviour:
   onUnpause:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334423426726539482}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UI.Settings.PrefSaver, Settings
         m_MethodName: Save
         m_Mode: 1
@@ -9649,7 +9649,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -12569,17 +12569,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2adcbf376b03034f812af0dafa2abe1, type: 3}
---- !u!114 &1334423426726539482 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1719112801322098819, guid: c2adcbf376b03034f812af0dafa2abe1, type: 3}
-  m_PrefabInstance: {fileID: 1334423426726539481}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca93ac6d30884e4ca389d474d6ac510, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1342789550088250452
 GameObject:
   m_ObjectHideFlags: 0
