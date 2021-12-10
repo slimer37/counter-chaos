@@ -2,7 +2,8 @@
     "name": "Steamworks",
     "rootNamespace": "",
     "references": [
-        "GUID:68bd7fdb68ef2684e982e8a9825b18a5"
+        "GUID:68bd7fdb68ef2684e982e8a9825b18a5",
+        "GUID:774cbf8dec953074490f3406b31cf818"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
