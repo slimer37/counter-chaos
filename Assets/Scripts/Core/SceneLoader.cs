@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Core
         [SerializeField] TextMeshProUGUI percentageText;
         [SerializeField] Slider loadingBar;
         [SerializeField] TextMeshProUGUI captionText;
+        [SerializeField] int[] loadWithoutBase;
         [SerializeField] string[] captions;
 
         static SceneLoader instance;
@@ -63,11 +65,17 @@ namespace Core
 
             var shouldLoadBase = i != 0;
             
-            if (instance) instance.StartCoroutine(instance.LoadAsync(i, shouldLoadBase));
+            if (instance)
+            {
+                shouldLoadBase &= !instance.loadWithoutBase.Contains(i);
+                if (shouldLoadBase && instance.loadWithoutBase.Contains(i))
+                    shouldLoadBase = false;
+                instance.StartCoroutine(instance.LoadAsync(i, shouldLoadBase));
+            }
             else
             {
                 DOTween.KillAll();
-                Debug.LogWarning("Couldn't find a SceneLoader instance. Loading normally...");
+                Debug.LogWarning("Couldn't find a SceneLoader instance. Loading normally (Base load overrides will be ignored).");
                 if (shouldLoadBase)
                     SceneManager.LoadScene(baseSceneIndex);
                 SceneManager.LoadScene(i, shouldLoadBase ? LoadSceneMode.Additive : LoadSceneMode.Single);
