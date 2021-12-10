@@ -72,7 +72,10 @@ public class RichPresence : MonoBehaviour
             Instance = playing
         };
         
-        activityManager.UpdateActivity(activity, r => print("Discord RPC: " + r));
+        activityManager.UpdateActivity(activity, r => {
+            if (r != Result.Ok)
+                Debug.LogError("(Discord RPC) Update activity failed: " + r);
+        });
     }
 
     void Update()
