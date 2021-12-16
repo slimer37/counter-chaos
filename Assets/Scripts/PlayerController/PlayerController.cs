@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
     Vector3 camRot;
     Vector3 moveVector;
 
+    float tempSensitivity;
+
     bool canMove = true;
     bool canLook = true;
     
@@ -156,6 +158,13 @@ public class PlayerController : MonoBehaviour
         isSlow = val.isPressed;
         currentSpeed = isSlow ? slowSpeed : walkSpeed;
         UpdateBobbing();
+
+        if (isSlow)
+        {
+            tempSensitivity = sensitivity;
+            sensitivity /= 2;
+        }
+        else sensitivity = tempSensitivity;
 
         if (isSlow && isSprinting)
             fovTween = DOTween.Sequence()
