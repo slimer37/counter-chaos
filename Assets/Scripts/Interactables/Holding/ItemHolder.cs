@@ -71,6 +71,8 @@ namespace Interactables.Holding
         
         Inventory inv;
 
+        public const string UseOldSystemPrefKey = "HoldSystem";
+
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
@@ -80,6 +82,7 @@ namespace Interactables.Holding
         void Awake()
         {
             controller = GetComponent<PlayerController>();
+            useOldSystem = PlayerPrefs.GetInt(UseOldSystemPrefKey) == 1;
         }
 
         internal Pickuppable StopHolding()

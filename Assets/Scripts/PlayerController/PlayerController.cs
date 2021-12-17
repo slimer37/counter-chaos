@@ -57,6 +57,9 @@ public class PlayerController : MonoBehaviour
     
     static readonly int Speed = Animator.StringToHash("speed");
 
+    public const string SensitivityPrefKey = "Sensitivity";
+    public const float DefaultSensitivity = 40;
+
     public void EnableMovement(bool value)
     {
         canMove = value;
@@ -132,6 +135,8 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        sensitivity = PlayerPrefs.GetFloat(SensitivityPrefKey, DefaultSensitivity);
+        
         camRot = cam.transform.localEulerAngles;
         originalCamY = cam.transform.localPosition.y;
         originalFov = cam.fieldOfView;
