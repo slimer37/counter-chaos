@@ -9,6 +9,8 @@ namespace Interactables.Holding
 {
     public class ItemHolder : MonoBehaviour
     {
+        public bool useOldSystem;
+        
         [SerializeField] new Camera camera;
         [SerializeField] Vector3 defaultHoldingPosition;
         [SerializeField] Vector3 defaultHoldingRotation;
@@ -62,6 +64,8 @@ namespace Interactables.Holding
         bool isRotating;
         float holdTime;
 
+        Vector2 mousePos;
+
         bool inDefaultDropPos;
         bool onFlatSurface;
         
@@ -111,7 +115,7 @@ namespace Interactables.Holding
         void OnRotate(InputValue value)
         {
             isRotating = value.isPressed;
-            if (!isHoldingDrop) return;
+            if (!useOldSystem || !isHoldingDrop) return;
             controller.EnableLook(!isRotating);
         }
 
@@ -155,6 +159,11 @@ namespace Interactables.Holding
                 else
                     ReturnItemToHolding();
             }
+
+            if (useOldSystem) return;
+            controller.EnableLook(!isHoldingDrop);
+            Cursor.lockState = isHoldingDrop ? CursorLockMode.Confined : CursorLockMode.Locked;
+            mousePos = new Vector2(Screen.width, Screen.height) / 2;
         }
         
         void SetHeldObjectLayers(int layer)
@@ -210,6 +219,13 @@ namespace Interactables.Holding
 
         void OnMoveMouse(InputValue val)
         {
+            if (!useOldSystem && isHoldingDrop && !isRotating)
+            {
+                mousePos += val.Get<Vector2>();
+                mousePos.x = Mathf.Clamp(mousePos.x, 0, Screen.width);
+                mousePos.y = Mathf.Clamp(mousePos.y, 0, Screen.height);
+            }
+            
             if (!isHoldingDrop || !isRotating) return;
             rotationDelta = val.Get<Vector2>().x * rotationSpeed;
         }
@@ -232,7 +248,8 @@ namespace Interactables.Holding
                     itemTransform.localEulerAngles += rotationDelta * Time.deltaTime * Vector3.up;
 
                 var onFreeSpot = false;
-                var rayHit = Physics.Raycast(GetCameraRay(), out var hit, dropReach, dropSurfaceMask);
+                var point = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
+                var rayHit = Physics.Raycast(point, out var hit, dropReach, dropSurfaceMask);
 
                 if (rayHit)
                 {
