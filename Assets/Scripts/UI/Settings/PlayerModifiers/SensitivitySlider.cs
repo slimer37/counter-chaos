@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UI.Settings
+namespace UI.Settings.PlayerModifiers
 {
     public class SensitivitySlider : MonoBehaviour
     {
