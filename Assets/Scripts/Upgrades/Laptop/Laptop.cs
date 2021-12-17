@@ -35,7 +35,7 @@ namespace Upgrades
             laptop.SetActive(false);
             uiGroup.gameObject.SetActive(true);
             uiGroup.alpha = 0;
-            uiGroup.interactable = false;
+            uiGroup.interactable = uiGroup.blocksRaycasts = false;
         }
 
         void OnDestroy() => controls.Disable();
@@ -51,7 +51,7 @@ namespace Upgrades
 
         void ShowUI(bool show)
         {
-            uiGroup.interactable = show;
+            uiGroup.interactable = uiGroup.blocksRaycasts = show;
             uiGroup.DOFade(show ? 1 : 0, fadeTime);
             Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = show;
