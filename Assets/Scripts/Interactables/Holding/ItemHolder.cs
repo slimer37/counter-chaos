@@ -64,6 +64,8 @@ namespace Interactables.Holding
         bool isRotating;
         float holdTime;
 
+        Vector3 droppingRotation;
+
         Vector2 mousePos;
 
         bool inDefaultDropPos;
@@ -145,6 +147,7 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
+                droppingRotation = heldItem.transform.eulerAngles;
                 heldItem.transform.localRotation = dropOrThrowRotation;
                 heldItem.transform.DOKill();
             }
@@ -247,8 +250,9 @@ namespace Interactables.Holding
             {
                 var itemTransform = heldItem.transform;
                 
-                if (isRotating)
-                    itemTransform.localEulerAngles += rotationDelta * Time.deltaTime * Vector3.up;
+                if (isRotating) droppingRotation += rotationDelta * Time.deltaTime * Vector3.up;
+                
+                itemTransform.eulerAngles = droppingRotation;
 
                 var onFreeSpot = false;
                 var point = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
