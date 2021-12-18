@@ -124,13 +124,14 @@ namespace Tutorial
             var slow = actions.Slow.FormatDisplayString();
             
             yield return textBox.Display(true, $"You can drop the item with {drop}.",
-                $"Holding {drop} and looking at a surface will place the item on the surface.",
+                $"Holding {drop} will start placing an item. You can move your mouse around and release {drop} to place it.",
                 "If you're aiming at a location that doesn't fit it, " +
                 "a red ghost of the object will appear and the object will be placed in front of you.",
                 $"While holding {drop}, you can also use {rotate} to rotate the item.");
             yield return new WaitForSeconds(1);
             yield return textBox.Display(true,
-                $"For finer placement, you can hold {slow} to move slowly.");
+                $"For finer placement, you can hold {slow} to move slowly. " +
+                $"(Note that you can still move while holding {drop} or {rotate}.)");
             yield return new WaitForSeconds(1);
             yield return textBox.Display(true,
                 $"You can also throw the item with {toss}.");
@@ -142,7 +143,8 @@ namespace Tutorial
             
             yield return textBox.Display(
                 "Practice some of these a little bit.\n" +
-                $"Drop: {drop} | Rotate while dropping: {rotate} | Throw: {toss} | Slow down: {slow}");
+                $"Drop: Hold {drop}, move mouse, release | Rotate while dropping: {rotate}\n" +
+                $"Throw: {toss} | Slow down: {slow}");
             
             for (var i = 0; i < 5; i++)
             {
