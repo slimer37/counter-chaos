@@ -32,6 +32,7 @@ namespace Interactables.Holding
         [SerializeField] LayerMask dropObstacleMask;
         
         [Header("Dropping")]
+        [SerializeField] Transform cursor3D;
         [SerializeField] Vector3 defaultDropPosition;
         [SerializeField] float dropReach;
         [SerializeField] float extraDropHeight;
@@ -85,6 +86,7 @@ namespace Interactables.Holding
         {
             controller = GetComponent<PlayerController>();
             useOldSystem = PlayerPrefs.GetInt(UseOldSystemPrefKey) == 1;
+            cursor3D.gameObject.SetActive(false);
         }
 
         internal Pickuppable StopHolding()
@@ -167,6 +169,7 @@ namespace Interactables.Holding
             }
 
             if (useOldSystem) return;
+            cursor3D.gameObject.SetActive(isHoldingDrop);
             controller.EnableLook(!isHoldingDrop);
             Cursor.lockState = isHoldingDrop ? CursorLockMode.Confined : CursorLockMode.Locked;
             mousePos = new Vector2(Screen.width, Screen.height) / 2;
@@ -268,6 +271,9 @@ namespace Interactables.Holding
                     distanceOffSurface += onFlatSurface ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
 
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
+                    
+                    cursor3D.gameObject.SetActive(true);
+                    cursor3D.position = hit.point;
 
                     if (heldItem.IsIntersecting(dropObstacleMask))
                     {
@@ -314,7 +320,10 @@ namespace Interactables.Holding
                     }
                 }
                 else
+                {
                     onFlatSurface = false;
+                    cursor3D.gameObject.SetActive(false);
+                }
                 
                 if (onFlatSurface)
                     onFlatSurface &= onFreeSpot && hit.transform.gameObject.IsInLayerMask(groundLayerMask);
