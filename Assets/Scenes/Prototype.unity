@@ -5564,6 +5564,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: customer (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4645798425924900037, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5418641384659930751, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -29175,6 +29179,10 @@ PrefabInstance:
     - target: {fileID: 4645798425924900037, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
       propertyPath: m_Name
       value: customer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645798425924900037, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5418641384659930751, guid: 31e58ad1501dc6d42ac03f5bc6ba62d1, type: 3}
       propertyPath: m_RootOrder
