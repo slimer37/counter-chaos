@@ -31,12 +31,14 @@ namespace Interactables.Holding
             RuntimePreviewGenerator.OrthographicMode = Orthographic;
             RuntimePreviewGenerator.PreviewDirection = new Vector3(-0.5f, -0.5f, -1);
             RuntimePreviewGenerator.Padding = 0.01f;
-            
-            var light = RuntimePreviewGenerator.InternalLight;
+
+            var light = new GameObject("Preview Generator Light").AddComponent<Light>();
+            light.type = LightType.Spot;
             light.intensity = 1.5f;
             light.spotAngle = 150;
             light.innerSpotAngle = 140;
             light.transform.localPosition = Vector3.back * 0.5f;
+            RuntimePreviewGenerator.InternalLight = light;
         }
 
         public static Texture2D Grab(Pickuppable pickuppable)

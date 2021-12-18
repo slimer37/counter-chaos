@@ -89,19 +89,13 @@ public static class RuntimePreviewGenerator
 	{
 		get
 		{
-			if( m_internalCamera == null )
+			if (m_internalCamera == null )
 			{
 				m_internalCamera = new GameObject( "ModelPreviewGeneratorCamera" ).AddComponent<Camera>();
 				m_internalCamera.enabled = false;
 				m_internalCamera.nearClipPlane = 0.01f;
 				m_internalCamera.cullingMask = 1 << PREVIEW_LAYER;
-				m_internalCamera.gameObject.hideFlags = HideFlags.HideAndDontSave;
-                
-                // Add spot light to camera
-                internalLight = new GameObject("Spot Light").AddComponent<Light>();
-                internalLight.cullingMask = 1 << PREVIEW_LAYER;
-                internalLight.type = LightType.Spot;
-                internalLight.transform.SetParent(m_internalCamera.transform);
+                Object.DontDestroyOnLoad(m_internalCamera.gameObject);
             }
 
 			return m_internalCamera;
@@ -112,11 +106,14 @@ public static class RuntimePreviewGenerator
     static Light internalLight = null;
     public static Light InternalLight
     {
-        get => internalLight ? internalLight : InternalCamera.GetComponentInChildren<Light>();
+        get => internalLight;
         set
         {
+            if (internalLight) Object.Destroy(internalLight);
             internalLight = value;
+            internalLight.cullingMask = 1 << PREVIEW_LAYER;
             value.transform.SetParent(InternalCamera.transform);
+            value.transform.localEulerAngles = value.transform.localPosition = Vector3.zero;
         }
     }
 
