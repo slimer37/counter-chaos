@@ -21,12 +21,12 @@ namespace Interactables.Holding
                     
                     content = value;
                     
-                    var outline = value.GetComponent<Plugins.Outline>();
-                    if (outline) outline.enabled = false;
+                    var highlight = value.GetComponent<Base.Highlight>();
+                    if (highlight) highlight.enabled = false;
 
                     previewTex = ItemThumbnail.Grab(content);
 
-                    if (outline) outline.enabled = true;
+                    if (highlight) highlight.enabled = true;
 
                     thumbnail.texture = previewTex;
                     thumbnail.enabled = true;

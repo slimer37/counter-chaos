@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Plugins;
 using UnityEngine;
 
 namespace Interactables.Base
@@ -22,13 +20,9 @@ namespace Interactables.Base
         readonly List<Func<Transform, bool>> hoverChecks = new();
         
         IconHandler tempIconHandler;
-        Outline outline;
+        Highlight highlight;
         
         readonly Dictionary<Type, object> cachedHandlers = new();
-
-        float startHoverTime;
-        
-        const float FlashSpeed = 1.5f;
 
         public bool LastCheckSuccessful { get; private set; }
 
@@ -37,17 +31,8 @@ namespace Interactables.Base
         void Awake()
         {
             if (!useOutline) return;
-            outline = gameObject.AddComponent<Outline>();
-            outline.OutlineColor = Color.yellow;
-            outline.OutlineMode = Outline.Mode.OutlineVisible;
-            outline.OutlineWidth = 10;
-            StartCoroutine(DelayedDisableOutline());
-        }
-
-        IEnumerator DelayedDisableOutline()
-        {
-            yield return null;
-            outline.enabled = false;
+            highlight = gameObject.AddComponent<Highlight>();
+            highlight.enabled = false;
         }
 
         public void ClearUnderPriority(int priority)
@@ -99,10 +84,8 @@ namespace Interactables.Base
                 tempIconHandler = iconHandler;
                 iconHandler.ShowIcon(icon);
 
-                if (!useOutline || outline.enabled) return;
-                startHoverTime = Time.time;
-                SetOutlineAlpha(0);
-                outline.enabled = true;
+                if (!useOutline || highlight.enabled) return;
+                highlight.enabled = true;
             }
             else
                 HideIcon();
@@ -127,23 +110,7 @@ namespace Interactables.Base
             }
 
             if (useOutline)
-                outline.enabled = false;
-        }
-
-        void SetOutlineAlpha(float a)
-        {
-            var color = outline.OutlineColor;
-            color.a = a;
-            outline.OutlineColor = color;
-        }
-
-        void Update()
-        {
-            if (!useOutline || !outline.enabled) return;
-
-            var t = (Time.time - startHoverTime) * FlashSpeed;
-            var a = -Mathf.Cos(t * 2 * Mathf.PI) / 2 + 0.5f;
-            SetOutlineAlpha(a);
+                highlight.enabled = false;
         }
     }
 }
