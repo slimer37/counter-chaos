@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace UI.Visuals
 {
-    public class TextBox : Singleton<TextBox>
+    public class TextBox : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI textMesh;
         [SerializeField, Min(1)] float charsPerSec = 30;

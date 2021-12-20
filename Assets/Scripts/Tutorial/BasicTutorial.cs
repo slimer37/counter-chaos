@@ -10,6 +10,7 @@ namespace Tutorial
 {
     public class BasicTutorial : Tutorial
     {
+        [SerializeField] TextBox textBox;
         [SerializeField] Pickuppable itemToPickUp;
         [SerializeField] Transform goalGhostGroup;
         [SerializeField] Transform shelfGroup;
@@ -82,7 +83,6 @@ namespace Tutorial
         {
             var actions = Controls.Gameplay;
             var locator = LocatorHint.Instance;
-            var textBox = TextBox.Instance;
             
             itemToPickUp.gameObject.SetActive(false);
             goalGhostGroup.gameObject.SetActive(false);
