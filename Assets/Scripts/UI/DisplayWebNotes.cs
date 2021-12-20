@@ -17,8 +17,6 @@ namespace UI
         [SerializeField] string rssFeedSource;
         [SerializeField] string loadingMessage;
         [Header("Title")]
-        [SerializeField] string beginTitleTag;
-        [SerializeField] string endTitleTag;
         [SerializeField, RequireSubstring(true, "{0}", "{1}")] string headerFormat;
         [SerializeField] string dateFormatSpecifier;
         [Header("Content Tags")]
@@ -48,93 +46,81 @@ namespace UI
                 throw new ArgumentException("Beginning or ending tags are unspecified.");
             
             text.text = loadingMessage;
-            
-            var links = new List<string>();
-            var dates = new List<DateTime>();
+
+            var posts = new List<Post>();
 
             var feed = UnityWebRequest.Get(rssFeedSource);
             yield return feed.SendWebRequest();
             ShowErrorIfNeeded(feed);
             
+            // Start processing RSS feed
+            
             using var strReader = new StringReader(feed.downloadHandler.text);
             {
                 var settings = new XmlReaderSettings {Async = true};
                 var reader = XmlReader.Create(strReader, settings);
-                var foundItem = false;
-                
-                var onLink = false;
-                var onDate = false;
 
                 var readTask = reader.ReadAsync();
                 yield return new WaitUntil(() => readTask.IsCompleted);
 
                 while (readTask.Result)
                 {
-                    switch (reader.NodeType)
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "item")
                     {
-                        case XmlNodeType.Element:
-                            if (!foundItem && reader.Name == "item") foundItem = true;
-                            if (foundItem && reader.Name == "link") onLink = true;
-                            if (foundItem && reader.Name == "pubDate") onDate = true;
-                            break;
-                        case XmlNodeType.Text:
-                            if (onLink)
-                            {
-                                links.Add(reader.Value);
-                                onLink = false;
-                            }
-                            else if (onDate)
-                            {
-                                dates.Add(DateTime.Parse(reader.Value));
-                                onDate = false;
-                            }
-                            break;
+                        yield return Read();
+                        
+                        // Posts must begin with titles
+                        if (reader.Name != "title") continue;
+                        
+                        // format: title, desc, link, pubDate
+                        yield return Read();
+                        var title = reader.Value;
+                        for (var i = 0; i < 2; i++) yield return Read();
+                        var description = reader.Value;
+                        for (var i = 0; i < 4; i++) yield return Read();
+                        var pubDate = DateTime.Parse(reader.Value);
+
+                        posts.Add(new Post { title = title, description = description, pubDate = pubDate });
                     }
 
-                    readTask = reader.ReadAsync();
-                    yield return new WaitUntil(() => readTask.IsCompleted);
+                    yield return Read();
+
+                    IEnumerator Read()
+                    {
+                        readTask = reader.ReadAsync();
+                        yield return new WaitUntil(() => readTask.IsCompleted);
+                        
+                        if (reader.NodeType is XmlNodeType.Whitespace or XmlNodeType.EndElement)
+                            yield return Read();
+                    }
                 }
             }
             
+            // Grab and format text from each item's link
+            
             var content = "";
 
-            for (var i = 0; i < links.Count; i++)
+            foreach (var post in posts)
             {
-                var link = links[i];
-                var request = UnityWebRequest.Get(link);
-
-                yield return request.SendWebRequest();
-                ShowErrorIfNeeded(request);
-
-                var pageContent = request.downloadHandler.text;
-                var title = RetrieveBetween(pageContent, beginTitleTag, endTitleTag);
-                var post = RetrieveBetween(pageContent, beginTag, endTag);
-
+                var postText = post.description;
+                
                 foreach (var key in TagConversions.Keys)
                 {
                     var conversion = TagConversions[key];
-                    post = key.StartsWith("r:")
-                        ? Regex.Replace(post, key[2..], conversion)
-                        : post.Replace(key, conversion);
+                    postText = key.StartsWith("r:")
+                        ? Regex.Replace(postText, key[2..], conversion)
+                        : postText.Replace(key, conversion);
 
                     yield return null;
                 }
-
+                
                 content +=
                     WebUtility.HtmlDecode(
-                        string.Format(headerFormat, title, dates[i].ToString(dateFormatSpecifier)) + post).Trim('\n') 
+                        string.Format(headerFormat, post.title, post.pubDate.ToString(dateFormatSpecifier)) + postText).Trim('\n') 
                     + splitter;
             }
 
             text.text = content;
-
-            static string RetrieveBetween(string text, string beginTag, string endTag)
-            {
-                var invCulture = StringComparison.InvariantCulture;
-                var start = text.IndexOf(beginTag, invCulture) + beginTag.Length;
-                var length = text.Substring(start).IndexOf(endTag, invCulture);
-                return text.Substring(start, length);
-            }
 
             void ShowErrorIfNeeded(UnityWebRequest request)
             {
@@ -142,22 +128,22 @@ namespace UI
                     text.text = $"<color=red>{request.error}</color>";
             }
         }
+
+        struct Post
+        {
+            public string title;
+            public DateTime pubDate;
+            public string description;
+        }
         
         static readonly Dictionary<string, string> TagConversions = new()
         {
-            { "</p>", "\n" },
-            // Replace <strong>, <h#>, <em>, and <del>
-            { "<strong>", "<b>" },
-            { "</strong>", "</b>" },
-            { "r:<h.*?>", "<b>" },
-            { "r:</h.*?>", "</b>" },
-            { "<em>", "<i>" },
-            { "</em>", "</i>" },
+            { "<br>", "\n" },
             { "<del>", "<s>" },
             { "</del>", "</s>" },
             // Reformat list tags
-            { "<ul><li>", "• " },
-            { "<ol><li>", "• " },
+            { "<ul class=\"bb_ul\"><li>", "• " },
+            { "<ol class=\"bb_ul\"><li>", "• " },
             { "<li>", "\n• " },
             { "</ul>", "\n" },
             { "</ol>", "\n" },
