@@ -149,8 +149,8 @@ namespace Interactables.Holding
             if (value.isPressed)
             {
                 isHoldingDrop = true;
-                droppingRotation = heldItem.transform.eulerAngles;
                 heldItem.transform.localRotation = dropOrThrowRotation;
+                droppingRotation = heldItem.transform.eulerAngles;
                 heldItem.transform.DOKill();
             }
             // On release
