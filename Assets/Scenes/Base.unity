@@ -4869,6 +4869,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -2760730043326370099, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2738492945284299316, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -5241,6 +5245,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -86660355763864230, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -80104686643239676, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -5304,6 +5312,10 @@ PrefabInstance:
     - target: {fileID: 308702145739886642, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -3.7434914
+      objectReference: {fileID: 0}
+    - target: {fileID: 357344144889231236, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 367021667753632932, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
       propertyPath: m_Layer
@@ -5480,6 +5492,10 @@ PrefabInstance:
     - target: {fileID: 1468589473992541078, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1476956783274514560, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1491446701682411093, guid: 94dad4a3ac6154e4bbcd67c6a0912edb, type: 3}
       propertyPath: m_Layer
@@ -8288,6 +8304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 973766890}
+  nameFormat: 
   textBox: {fileID: 1195622213}
 --- !u!114 &1195622213
 MonoBehaviour:
