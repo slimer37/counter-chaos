@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
     public const string SensitivityPrefKey = "Sensitivity";
     public const float DefaultSensitivity = 40;
+    
+    public bool UseGravity { get; set; } = true;
 
     public void EnableMovement(bool value)
     {
@@ -183,7 +185,7 @@ public class PlayerController : MonoBehaviour
     {
         // Gravity
         
-        if (!characterController.isGrounded)
+        if (UseGravity && !characterController.isGrounded)
             moveVector.y -= gravity * Time.deltaTime;
         
         // Moving
