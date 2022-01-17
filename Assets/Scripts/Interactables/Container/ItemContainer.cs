@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using DG.Tweening;
 using Interactables.Base;
 using Interactables.Holding;
 using Products;
@@ -9,11 +8,12 @@ using UnityEngine.Events;
 
 namespace Interactables.Container
 {
-    [RequireComponent(typeof(ContainerPositioner), typeof(Pickuppable))]
+    [RequireComponent(typeof(ContainerPositioner))]
     public class ItemContainer : MonoBehaviour, IInteractHandler, ISecondaryInteractHandler
     {
         public UnityEvent onOpen;
         public UnityEvent onClose;
+        [SerializeField] bool cannotBeClosed;
         [SerializeField] List<Pickuppable> contents;
         [SerializeField] float acceptanceDelay;
         [SerializeField] ProductInfo filterProduct;
@@ -35,8 +35,8 @@ namespace Interactables.Container
         void Awake()
         {
             positioner = GetComponent<ContainerPositioner>();
-            pickuppable = GetComponent<Pickuppable>();
-            pickuppable.enabled = !open;
+            if (cannotBeClosed) open = true;
+            if (TryGetComponent(out pickuppable)) pickuppable.enabled = !open;
             GetComponent<Hoverable>().ClearUnderPriority(1);
         }
 
@@ -92,8 +92,12 @@ namespace Interactables.Container
 
         void ToggleOpen()
         {
+            if (cannotBeClosed) return;
+            
             open = !open;
-            pickuppable.enabled = !open;
+            
+            if (pickuppable) pickuppable.enabled = !open;
+            
             if (open)
             {
                 onOpen.Invoke();
