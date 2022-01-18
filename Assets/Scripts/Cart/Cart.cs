@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Interactables.Base;
 using Core;
+using DG.Tweening;
 
 public class Cart : MonoBehaviour, IInteractHandler
 {
@@ -21,6 +22,16 @@ public class Cart : MonoBehaviour, IInteractHandler
     [SerializeField] Vector3 forwardBox;
     [SerializeField] Vector3 forwardBoxCenter;
 
+    [Header("Animation")]
+    [SerializeField] float duration;
+    [SerializeField] Vector3 strength;
+    [SerializeField] int vibrato;
+    [SerializeField] Transform animateCart;
+    [SerializeField] bool fadeOut;
+
+    [Header("Container")]
+    [SerializeField] Transform container;
+
     bool isBeingPushed;
     Controls controls;
     Vector3 moveDirection;
@@ -29,6 +40,11 @@ public class Cart : MonoBehaviour, IInteractHandler
     
     Vector3 moveDelta;
     float upOffset;
+
+    Vector3 containerPos;
+
+    Tween shake;
+    Quaternion originalCartRot;
 
     void OnDrawGizmosSelected()
     {
@@ -39,8 +55,17 @@ public class Cart : MonoBehaviour, IInteractHandler
         Gizmos.DrawWireCube(forwardBoxCenter, forwardBox);
     }
 
+    void OnValidate()
+    {
+        if (container && container.parent != transform)
+            Debug.LogWarning("Container should be a child of the cart object.");
+    }
+
     void Awake()
     {
+        originalCartRot = animateCart.localRotation;
+        shake = animateCart.DOShakeRotation(duration, strength, vibrato, fadeOut: fadeOut).SetLoops(-1).SetAutoKill(false).Pause();
+        
         upOffset = playerStartHeight - transform.position.y;
         
         controls = new Controls();
@@ -50,6 +75,11 @@ public class Cart : MonoBehaviour, IInteractHandler
         controls.Enable();
         
         hoverable.RegisterPriorityCheck(_ => !isBeingPushed, 0);
+
+        containerPos = container.transform.localPosition;
+        container.transform.parent = null;
+        
+        rb.maxAngularVelocity = 0;
     }
     
     void Move(InputAction.CallbackContext ctx)
@@ -89,13 +119,20 @@ public class Cart : MonoBehaviour, IInteractHandler
 
     void FixedUpdate()
     {
-        if (!isBeingPushed) return;
+        if (!isBeingPushed)
+        {
+            container.transform.position = transform.TransformPoint(containerPos);
+            container.transform.rotation = transform.rotation;
+            return;
+        }
         
         var dir = moveDirection;
-
+        
+        // Move cart forward if back collider is in wall
         if (Physics.CheckBox(transform.TransformPoint(playerCheckOffset), playerCheckBox / 2, transform.rotation, mask))
-            dir.z = Mathf.Max(moveSpeed, dir.z);
-
+            dir.z = Mathf.Max(moveSpeed / 2, dir.z);
+        
+        // Stop cart moving forward if front collider is in wall
         if (Physics.CheckBox(transform.TransformPoint(forwardBoxCenter), forwardBox / 2, transform.rotation, mask))
             dir.z = Mathf.Min(0, dir.z);
 
@@ -111,5 +148,24 @@ public class Cart : MonoBehaviour, IInteractHandler
         var pos = rb.position - transform.forward * holdDistance;
         pos.y += upOffset;
         controller.transform.position = pos;
+        
+        container.transform.position = transform.TransformPoint(containerPos);
+        container.transform.rotation = transform.rotation;
+        
+        rb.velocity = Vector3.zero;
+
+        if (dir.z != 0)
+        {
+            if (!shake.IsPlaying())
+                shake.Play();
+        }
+        else
+        {
+            if (shake.IsPlaying())
+            {
+                shake.Pause();
+                animateCart.localRotation = originalCartRot;
+            }
+        }
     }
 }
