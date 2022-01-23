@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
     public const string SensitivityPrefKey = "Sensitivity";
     public const float DefaultSensitivity = 40;
+
+    const float MouseScale = 0.05f;
     
     public bool UseGravity { get; set; } = true;
 
@@ -133,7 +135,7 @@ public class PlayerController : MonoBehaviour
         isSprinting = val.isPressed;
     }
     
-    void OnMoveMouse(InputValue val) => mouseDelta = sensitivity * val.Get<Vector2>();
+    void OnMoveMouse(InputValue val) => mouseDelta = sensitivity * MouseScale * val.Get<Vector2>();
 
     void Awake()
     {
@@ -201,8 +203,8 @@ public class PlayerController : MonoBehaviour
         
         if (canLook)
         {
-            camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y * Time.deltaTime, -rotLimit, rotLimit);
-            body.localEulerAngles += mouseDelta.x * Time.deltaTime * Vector3.up;
+            camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y, -rotLimit, rotLimit);
+            body.localEulerAngles += mouseDelta.x * Vector3.up;
             cam.transform.localEulerAngles = camRot;
         }
         
