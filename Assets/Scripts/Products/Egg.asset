@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f16322d66f3aeb4d8665d9704f02626, type: 3}
   m_Name: Egg
   m_EditorClassIdentifier: 
-  <DisplayName>k__BackingField: 
+  <DisplayName>k__BackingField: Egg
   <Price>k__BackingField: 0
   <Description>k__BackingField: 
+  cannotBeScanned: 0

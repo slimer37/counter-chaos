@@ -24,8 +24,8 @@ namespace Products
                     new Vector3(1, 0, 1) * unit);
         }
 
-        void OnEnable() => ProductManager.RegisterProduct(this);
-        void OnDisable() => ProductManager.DeregisterProduct(this);
+        void OnEnable() => ProductLibrary.AddInstance(this);
+        void OnDisable() => ProductLibrary.RemoveInstance(this);
 
         void Awake()
         {

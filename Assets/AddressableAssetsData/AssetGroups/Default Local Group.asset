@@ -16,7 +16,52 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 0c1b66c6bd77d6642b1017769c1b05b2
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 88725fc3f6cc3a34e943e404bb949cc0
+    m_Address: Watermelon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: 5fa5cd48057e85b429e6dd59ced7ce68
+    m_Address: Test
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: e89514fd01c7dcb4eb78b7043d5506b2
+    m_Address: Green Sun Veggie Soup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: 8dbd04360c8539e408842b3304ed510e
+    m_Address: Pork's Soda
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: cb22d593ffbeafc4292141ee0d581817
+    m_Address: Voxel Lab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: f1f976224d1a38f43b998c13d9cba5c5
+    m_Address: SPAZ Headphones
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: 3ef1de5426b9c0f44b2b34dd8982a100
+    m_Address: Egg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: 39aa93b1dbba1024bb9aea4f45139cb8
+    m_Address: Egg Dozen
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: f82d47aea8ffa48408f1e4312c971c1c
+    m_Address: Kips Chips
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7a4307c3c63b16c448e600be2bbc2f79, type: 2}
   m_SchemaSet:

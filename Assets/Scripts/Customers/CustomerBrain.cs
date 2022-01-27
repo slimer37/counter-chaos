@@ -35,10 +35,10 @@ namespace Customers
         {
             for (var i = 0; i < Random.Range(minProducts, maxProducts); i++)
             {
-                var newProduct = ProductManager.GetRandomProductInstance();
+                var newProduct = ProductLibrary.GetRandomProductInstance();
                 
                 while (newProduct.GetComponent<Pickuppable>().IsHeld || requestedProducts.Contains(newProduct))
-                    newProduct = ProductManager.GetRandomProductInstance();
+                    newProduct = ProductLibrary.GetRandomProductInstance();
                 
                 if (requestedProducts.Count <= i) requestedProducts.Add(newProduct);
                 else requestedProducts[i] = newProduct;
@@ -129,7 +129,7 @@ namespace Customers
             if (!holder.IsHoldingItem
                 && finishedTransaction 
                 && other.transform.CompareTag("Product") 
-                && ProductManager.TryGetProductInfo(other.transform, out var info)
+                && ProductLibrary.TryGetProductInfo(other.transform, out var info)
                 && requestedProducts.Find(identifier => identifier.productInfo == info) != null)
                 holder.Pickup(other.transform.GetComponent<Pickuppable>());
         }

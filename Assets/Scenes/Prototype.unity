@@ -633,7 +633,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh339228
+  m_Name: pb_Mesh35764
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4003,7 +4003,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh338032
+  m_Name: pb_Mesh34568
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15309,7 +15309,6 @@ MonoBehaviour:
   vibrato: 10
   animateCart: {fileID: 1969231376}
   fadeOut: 0
-  frontWheels: []
   container: {fileID: 2023822733}
 --- !u!65 &1240946008
 BoxCollider:
@@ -15646,7 +15645,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh338140
+  m_Name: pb_Mesh34676
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -21629,35 +21628,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1685707615}
-  - component: {fileID: 1685707614}
   m_Layer: 0
-  m_Name: Product Manager
+  m_Name: Products
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1685707614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1685707613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 754b4e941de9b474fa88d522f6e30229, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allProducts:
-  - {fileID: 11400000, guid: 5fa5cd48057e85b429e6dd59ced7ce68, type: 2}
-  - {fileID: 11400000, guid: 8dbd04360c8539e408842b3304ed510e, type: 2}
-  - {fileID: 11400000, guid: f1f976224d1a38f43b998c13d9cba5c5, type: 2}
-  - {fileID: 11400000, guid: cb22d593ffbeafc4292141ee0d581817, type: 2}
-  - {fileID: 11400000, guid: f82d47aea8ffa48408f1e4312c971c1c, type: 2}
-  - {fileID: 11400000, guid: 88725fc3f6cc3a34e943e404bb949cc0, type: 2}
-  - {fileID: 11400000, guid: 39aa93b1dbba1024bb9aea4f45139cb8, type: 2}
-  - {fileID: 11400000, guid: e89514fd01c7dcb4eb78b7043d5506b2, type: 2}
 --- !u!4 &1685707615
 Transform:
   m_ObjectHideFlags: 0
@@ -26840,7 +26817,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh339252
+  m_Name: pb_Mesh35788
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

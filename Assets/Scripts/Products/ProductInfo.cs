@@ -25,7 +25,7 @@ namespace Products
         
         static readonly char[] Vowels = {'A', 'E', 'I', 'O', 'U'};
 
-        public void Init(int seed)
+        internal void Init(int seed)
         {
             var tempState = Random.state;
             Random.InitState(seed);
