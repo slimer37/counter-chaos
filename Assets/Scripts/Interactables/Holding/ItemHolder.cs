@@ -335,7 +335,8 @@ namespace Interactables.Holding
                 }
                 else
                 {
-                    if (rayHit) ghost.ShowAt(itemTransform.position, itemTransform.rotation);
+                    var ghostOffset = extraDropHeight + (onFlatSurface ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal);
+                    if (rayHit) ghost.ShowAt(hit.point + hit.normal * ghostOffset, itemTransform.rotation);
                     else ghost.Hide();
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);
                     inDefaultDropPos = true;
