@@ -1,4 +1,3 @@
-using Checkout;
 using UnityEngine;
 using Interactables.Base;
 
@@ -12,7 +11,10 @@ namespace Products
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
-            var unit = ItemArea.UnitSize;
+            
+            // Use unit size from ItemArea
+            var unit = 0.1f;
+            
             var center = new Vector3((Size.x + 1) % 2, 0, (Size.y + 1) % 2) / 2 * unit;
             Gizmos.matrix = transform.localToWorldMatrix;
             for (var x = 0; x < Size.x; x++)

@@ -18,6 +18,7 @@ namespace Checkout
         
         bool[,] occupied;
         
+        // Change display unit in ProductIdentifier when changing this
         public const float UnitSize = 0.1f;
         
         void Awake() => occupied = new bool[Width, Length];
