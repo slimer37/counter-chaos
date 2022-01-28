@@ -19,10 +19,6 @@ namespace Interactables.Base
             renderers = GetComponentsInChildren<Renderer>();
             if (selectedMaterial) return;
             InitMaterial();
-            
-            selectedMaterial.SetColor(ColorID, Color.yellow);
-            selectedMaterial.SetFloat(FlashSpeedID, 4);
-            selectedMaterial.SetFloat(MaxDitherID, 0.3f);
         }
 
         void InitMaterial() => selectedMaterial = new Material(Shader.Find("Shader Graphs/Selected")) { name = "Selected (Instance)" };
