@@ -32,12 +32,12 @@ namespace Products
                 i++;
             });
             
-            productLoadHandle.Completed += OnProductProductLoadCompleted;
+            productLoadHandle.Completed += OnProductLoadCompleted;
         }
         
-        static void OnProductProductLoadCompleted(AsyncOperationHandle<IList<ProductInfo>> obj)
+        static void OnProductLoadCompleted(AsyncOperationHandle<IList<ProductInfo>> handle)
         {
-            allProducts = obj.Result.ToArray();
+            allProducts = handle.Result.ToArray();
             Debug.Log(string.Join<ProductInfo>(' ', allProducts));
         }
 
