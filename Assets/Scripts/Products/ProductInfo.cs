@@ -68,16 +68,5 @@ namespace Products
         }
 
         public static ProductInfo LookUp(int id) => IDTable.ContainsKey(id) ? IDTable[id] : null;
-
-        public static bool operator ==(ProductInfo lhs, ProductInfo rhs)
-        {
-            if (lhs is null != rhs is null) return false;
-            if (lhs is null) return true; // If both are null.
-            return lhs.ID == rhs.ID;
-        }
-        
-        public override bool Equals(object other) => other is ProductInfo productInfo && productInfo.ID == ID;
-        public static bool operator !=(ProductInfo lhs, ProductInfo rhs) => !(lhs == rhs);
-        public override int GetHashCode() => ID;
     }
 }
