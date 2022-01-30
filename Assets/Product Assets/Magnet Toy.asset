@@ -15,3 +15,9 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Voxel Lab
   <Price>k__BackingField: 20
   <Description>k__BackingField: The creative Voxel Lab magnet kit by Rinth games.
+  cannotBeScanned: 0
+  prefabAsset:
+    m_AssetGUID: 22c1c299b8ecd6746b57bd87f9eaeb22
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

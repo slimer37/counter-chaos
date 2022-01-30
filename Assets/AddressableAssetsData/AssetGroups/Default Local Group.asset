@@ -62,6 +62,60 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - product
+  - m_GUID: 5859b08849c007345aba3b16df4ab9ea
+    m_Address: test
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: ed2d482adcc42114bbdf62fae45d2a37
+    m_Address: chips
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: c702fcb585d93e349842806ec7ceb083
+    m_Address: egg carton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: fb5eb58ab07fe044cb22d91ee91eed15
+    m_Address: egg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: 970cb012125a0974d9d100161786aaaf
+    m_Address: headphones
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: 22c1c299b8ecd6746b57bd87f9eaeb22
+    m_Address: magnets
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: c5d091f00a70e2543aeccf380349fd80
+    m_Address: soda
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: 10e2bdd8ebb12b0468d865f314be2ce3
+    m_Address: soup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
+  - m_GUID: 24163cac66fb4894380db15e96943a0f
+    m_Address: watermelon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product instance
+    - prefab
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7a4307c3c63b16c448e600be2bbc2f79, type: 2}
   m_SchemaSet:

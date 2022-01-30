@@ -85,7 +85,7 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - product
-    - product instance
+    - prefab
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1485c6b2c9ad94e439238ca4db3300d9, type: 2}

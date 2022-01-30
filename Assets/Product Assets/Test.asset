@@ -15,3 +15,9 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Test
   <Price>k__BackingField: 1.5
   <Description>k__BackingField: Test
+  cannotBeScanned: 0
+  prefabAsset:
+    m_AssetGUID: 5859b08849c007345aba3b16df4ab9ea
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

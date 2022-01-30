@@ -15,3 +15,9 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Kips Chips
   <Price>k__BackingField: 0.75
   <Description>k__BackingField: A pack of kips can make a day.
+  cannotBeScanned: 0
+  prefabAsset:
+    m_AssetGUID: ed2d482adcc42114bbdf62fae45d2a37
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

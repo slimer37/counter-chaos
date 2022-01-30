@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Random = UnityEngine.Random;
 
 namespace Products
@@ -13,6 +15,7 @@ namespace Products
         [field: SerializeField] public float Price { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         [SerializeField] bool cannotBeScanned;
+        [SerializeField] AssetReferenceT<GameObject> prefabAsset;
         
         public int ID { get; private set; }
         public string CompactName { get; private set; }
@@ -24,6 +27,10 @@ namespace Products
         public const int IDLength = 5;
         
         static readonly char[] Vowels = {'A', 'E', 'I', 'O', 'U'};
+
+	    GameObject prefab;
+        
+        public GameObject Instantiate() => Instantiate(prefab);
 
         internal void Init(int seed)
         {
@@ -37,7 +44,11 @@ namespace Products
             Random.state = tempState;
 
             GenerateCompactName();
+
+	        Addressables.LoadAssetAsync<GameObject>(prefabAsset).Completed += OnPrefabLoadCompleted;
         }
+
+	    void OnPrefabLoadCompleted(AsyncOperationHandle<GameObject> handle) => prefab = handle.Result;
 
         void GenerateID()
         {

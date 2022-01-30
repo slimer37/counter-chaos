@@ -18,3 +18,9 @@ MonoBehaviour:
     Pork''s Consumables.
 
     "Whether you''re thirsty or not, it''s Pork''s."'
+  cannotBeScanned: 0
+  prefabAsset:
+    m_AssetGUID: c5d091f00a70e2543aeccf380349fd80
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

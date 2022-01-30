@@ -15,3 +15,9 @@ MonoBehaviour:
   <DisplayName>k__BackingField: Egg Dozen
   <Price>k__BackingField: 1.5
   <Description>k__BackingField: 12 eggs.
+  cannotBeScanned: 0
+  prefabAsset:
+    m_AssetGUID: c702fcb585d93e349842806ec7ceb083
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

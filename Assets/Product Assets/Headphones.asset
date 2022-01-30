@@ -16,3 +16,9 @@ MonoBehaviour:
   <Price>k__BackingField: 50
   <Description>k__BackingField: A pair of SPAZ-brand headphones, world-renowned for
     their comfort and audio quality.
+  cannotBeScanned: 0
+  prefabAsset:
+    m_AssetGUID: 970cb012125a0974d9d100161786aaaf
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
