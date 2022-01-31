@@ -24,7 +24,7 @@ namespace Interactables.Holding
                     var highlight = value.GetComponent<Base.Highlight>();
                     if (highlight) highlight.enabled = false;
 
-                    previewTex = ItemThumbnail.Grab(content);
+                    previewTex = Preview.Thumbnail.Grab(content.Info.label, content.transform);
 
                     if (highlight) highlight.enabled = true;
 
