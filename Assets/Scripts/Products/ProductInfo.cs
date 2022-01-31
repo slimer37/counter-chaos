@@ -15,13 +15,14 @@ namespace Products
         [field: SerializeField] public float Price { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         [SerializeField] bool cannotBeScanned;
-        [SerializeField] AssetReferenceT<GameObject> prefabAsset;
+        [SerializeField] AssetReferenceGameObject prefabAsset;
         
         public int ID { get; private set; }
         public string CompactName { get; private set; }
         public Texture2D Barcode { get; private set; }
         public bool HasBarcode => Barcode;
         
+	    GameObject prefab;
         Vector3 meshSize;
 
         static readonly Dictionary<int, ProductInfo> IDTable = new();
@@ -30,9 +31,11 @@ namespace Products
         
         static readonly char[] Vowels = {'A', 'E', 'I', 'O', 'U'};
 
-	    GameObject prefab;
-        
         public GameObject Instantiate() => Instantiate(prefab);
+        
+#if UNITY_EDITOR
+        public GameObject PrefabEditorAsset => prefabAsset.editorAsset;
+#endif
 
         public Vector3 Size
         {
