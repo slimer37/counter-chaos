@@ -21,6 +21,8 @@ namespace Products
         public string CompactName { get; private set; }
         public Texture2D Barcode { get; private set; }
         public bool HasBarcode => Barcode;
+        
+        Vector3 meshSize;
 
         static readonly Dictionary<int, ProductInfo> IDTable = new();
         
@@ -31,6 +33,20 @@ namespace Products
 	    GameObject prefab;
         
         public GameObject Instantiate() => Instantiate(prefab);
+
+        public Vector3 Size
+        {
+            get
+            {
+                if (meshSize != default) return meshSize;
+                
+                try { meshSize = prefabAsset.editorAsset.GetComponentInChildren<MeshFilter>().sharedMesh.bounds.size; }
+                catch (Exception e)
+                { throw new Exception($"Encountered an error while trying to set product size for {DisplayName}.", e); }
+                
+                return meshSize;
+            }
+        }
 
         internal void Init(int seed)
         {

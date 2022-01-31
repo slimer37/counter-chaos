@@ -70,7 +70,7 @@ namespace Customers
                 while (true)
                 {
                     yield return new WaitForSeconds(conveyorPlaceAttemptInterval);
-                    if (queue.Area.TryOccupy(t.Size.x, t.Size.y, out position, out rotation))
+                    if (queue.Area.TryOccupy(t.productInfo.Size, out position, out rotation))
                         break;
                 }
                 

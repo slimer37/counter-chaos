@@ -5,24 +5,7 @@ namespace Products
 {
     public class ProductIdentifier : MonoBehaviour, ISecondaryInteractHandler, IStopSecondaryInteractHandler
     {
-        [field: SerializeField, Min(1)] public Vector2Int Size { get; private set; } = Vector2Int.one;
         public ProductInfo productInfo;
-
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.cyan;
-            
-            // Use unit size from ItemArea
-            var unit = 0.1f;
-            
-            var center = new Vector3((Size.x + 1) % 2, 0, (Size.y + 1) % 2) / 2 * unit;
-            Gizmos.matrix = transform.localToWorldMatrix;
-            for (var x = 0; x < Size.x; x++)
-            for (var y = 0; y < Size.y; y++)
-                Gizmos.DrawWireCube(
-                    center + new Vector3(x - Size.x / 2, 0, y - Size.y / 2) * unit,
-                    new Vector3(1, 0, 1) * unit);
-        }
 
         void OnEnable() => ProductLibrary.AddInstance(this);
         void OnDisable() => ProductLibrary.RemoveInstance(this);

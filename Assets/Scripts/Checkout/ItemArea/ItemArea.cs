@@ -48,8 +48,13 @@ namespace Checkout
             });
         }
     	
-    	public bool TryOccupy(int sizeX, int sizeY, out Vector3 position, out Vector3 rotation)
+    	public bool TryOccupy(Vector3 boundsSize, out Vector3 position, out Vector3 rotation)
         {
+            // Generate bounding area size
+            var size = Vector3Int.CeilToInt(boundsSize / UnitSize);
+            var sizeX = size.x;
+            var sizeY = size.z;
+            
             var alternate = Random.value > 0.5f;
             if (alternate)
                 if (UseAlternate(out position, out rotation))
