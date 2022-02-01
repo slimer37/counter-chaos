@@ -97,6 +97,7 @@ namespace Interactables.Holding
             Drop(false, false);
             controller.EnableLook(true);
             holdIndicator.enabled = false;
+            cursor3D.gameObject.SetActive(false);
             return temp;
         }
         
@@ -260,6 +261,7 @@ namespace Interactables.Holding
                 var onFreeSpot = false;
                 var point = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
                 var rayHit = Physics.Raycast(point, out var hit, dropReach, dropSurfaceMask);
+                var initialPoint = Vector3.zero;
 
                 if (rayHit)
                 {
@@ -271,6 +273,7 @@ namespace Interactables.Holding
                     distanceOffSurface += onFlatSurface ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
 
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
+                    initialPoint = itemTransform.position;
                     
                     cursor3D.gameObject.SetActive(true);
                     cursor3D.position = hit.point;
@@ -335,8 +338,7 @@ namespace Interactables.Holding
                 }
                 else
                 {
-                    var ghostOffset = extraDropHeight + (onFlatSurface ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal);
-                    if (rayHit) ghost.ShowAt(hit.point + hit.normal * ghostOffset, itemTransform.rotation);
+                    if (rayHit) ghost.ShowAt(initialPoint, itemTransform.rotation);
                     else ghost.Hide();
                     itemTransform.position = transform.TransformPoint(defaultDropPosition);
                     inDefaultDropPos = true;
