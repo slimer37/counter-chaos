@@ -10,7 +10,8 @@ namespace Interactables.Holding
 
         [Header("Bounds")]
         [SerializeField] bool useColliderBounds;
-        [SerializeField] bool neverIntersects;
+        [SerializeField, Tooltip("These are never used if useColliderBounds is false.")]
+        BoxCollider[] boxColliders;
         
         [Header("Overrides")]
         [SerializeField] Vector3 overrideHoldingPosition;
@@ -33,7 +34,7 @@ namespace Interactables.Holding
         public Vector3? OverridePosition => UseIfNotZeroes(overrideHoldingPosition);
         public Vector3? OverrideRotation => useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
         
-        static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : (Vector3?)null;
+        static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : null;
 
         void OnDrawGizmosSelected()
         {
@@ -67,14 +68,7 @@ namespace Interactables.Holding
 
         void Awake()
         {
-            if (useColliderBounds)
-            {
-                if (!TryGetComponent(out Collider col))
-                    throw new Exception("Tried to fetch collider bounds but no collider was found.");
-                meshBounds = col.bounds;
-            }
-            else
-                meshBounds = rend.bounds;
+            meshBounds = rend.localBounds;
             
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
             VerticalExtent = transform.position.y - meshBounds.center.y + meshBounds.extents.y;
@@ -85,8 +79,17 @@ namespace Interactables.Holding
         // Can hover if the sender is not holding anything.
         bool OnAttemptHover(Transform sender) => !isHeld && !Inventory.Main.Holder.IsHoldingItem;
 
-        public bool IsIntersecting(LayerMask mask) =>
-            !neverIntersects && Physics.CheckBox(rend.bounds.center, meshBounds.extents, transform.rotation, mask);
+        public bool IsIntersecting(LayerMask mask)
+        {
+            if (!useColliderBounds)
+                return Physics.CheckBox(transform.TransformPoint(meshBounds.center), meshBounds.extents, transform.rotation, mask);
+            
+            foreach (var c in boxColliders)
+                if (Physics.CheckBox(transform.TransformPoint(c.center), c.size / 2, c.transform.rotation, mask))
+                    return true;
+            
+            return false;
+        }
 
         public void OnInteract(Transform sender) => OnPickup(sender);
 

@@ -24269,7 +24269,7 @@ MonoBehaviour:
     canBeHung: 0
     groundPlacementOnly: 0
   useColliderBounds: 0
-  neverIntersects: 0
+  boxColliders: []
   overrideHoldingPosition: {x: 0, y: 0, z: 1}
   useRotationIfZeroes: 0
   overrideHoldingRotation: {x: 0, y: 0, z: 0}
