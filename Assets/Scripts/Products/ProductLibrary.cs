@@ -14,7 +14,7 @@ namespace Products
         static ProductInfo[] allProducts;
         static readonly List<ProductIdentifier> productInstances = new();
         
-        static IReadOnlyList<ProductInfo> AllProducts => allProducts;
+        public static IReadOnlyList<ProductInfo> AllProducts => allProducts;
 
         const string ProductsKey = "product";
 
