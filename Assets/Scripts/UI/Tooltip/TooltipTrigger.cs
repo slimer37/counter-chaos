@@ -1,10 +1,9 @@
-using Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace UI.Tooltip
 {
-    public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public sealed class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public string TitleText
         {
@@ -26,8 +25,8 @@ namespace UI.Tooltip
             }
         }
         
-        [SerializeField, HideInSubClass] string titleText;
-        [SerializeField, HideInSubClass, TextArea] string descriptionText;
+        [SerializeField] string titleText;
+        [SerializeField, TextArea] string descriptionText;
 
         bool tooltipIsShowing;
 
