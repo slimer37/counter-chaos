@@ -54,10 +54,10 @@ namespace UI.Tooltip
             title.text = titleText;
             description.text = descText;
 
-            title.gameObject.SetActive(titleText != "");
-            description.gameObject.SetActive(descText != "");
+            title.gameObject.SetActive(!string.IsNullOrEmpty(titleText));
+            description.gameObject.SetActive(!string.IsNullOrEmpty(descText));
             
-            layoutElement.enabled = descText.Length > characterWrapLimit;
+            layoutElement.enabled = (descText?.Length ?? 0) > characterWrapLimit;
             
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
 
