@@ -32,13 +32,7 @@ namespace Products
                 i++;
             });
             
-            productLoadHandle.Completed += OnProductLoadCompleted;
-        }
-        
-        static void OnProductLoadCompleted(AsyncOperationHandle<IList<ProductInfo>> handle)
-        {
-            allProducts = handle.Result.ToArray();
-            Debug.Log(string.Join<ProductInfo>(' ', allProducts));
+            allProducts = productLoadHandle.WaitForCompletion().ToArray();
         }
 
         public static void AddInstance(ProductIdentifier productIdentifier) => productInstances.Add(productIdentifier);

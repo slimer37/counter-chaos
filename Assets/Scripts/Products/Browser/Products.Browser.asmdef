@@ -2,8 +2,10 @@
     "name": "Products.Browser",
     "rootNamespace": "",
     "references": [
-        "GUID:6f504e33be78198458fb2d6c40b8862a",
-        "GUID:93ebc5540178db34ab61feabae3e9fea"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:93ebc5540178db34ab61feabae3e9fea",
+        "GUID:0609f42bf62d2ab4dbe752f8a0ad3568",
+        "GUID:44ceaa2dec3488e459b46df0fbfa00d1"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
