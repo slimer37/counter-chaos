@@ -51,7 +51,7 @@ namespace Products
             }
         }
 
-        internal void Init(int seed)
+        internal void Init(int seed, Action onPrefabLoad)
         {
             var tempState = Random.state;
             Random.InitState(seed);
@@ -64,7 +64,9 @@ namespace Products
 
             GenerateCompactName();
 
-	        Addressables.LoadAssetAsync<GameObject>(prefabAsset).Completed += OnPrefabLoadCompleted;
+	        var handle = prefabAsset.LoadAssetAsync();
+	        handle.Completed += OnPrefabLoadCompleted;
+            handle.Completed += _ => onPrefabLoad();
         }
 
 	    void OnPrefabLoadCompleted(AsyncOperationHandle<GameObject> handle) => prefab = handle.Result;

@@ -15,8 +15,14 @@ namespace Products
         static readonly List<ProductIdentifier> productInstances = new();
         
         public static IReadOnlyList<ProductInfo> AllProducts => allProducts;
+        public static event Action AssetsFullyLoaded;
+        
+        public static bool AssetsAreFullyLoaded => loadGoal != -1 && loaded == loadGoal && allProducts != null;
 
         const string ProductsKey = "product";
+
+        static int loaded;
+        static int loadGoal = -1;
 
         [RuntimeInitializeOnLoadMethod]
         static void Init()
@@ -28,11 +34,21 @@ namespace Products
 
             var i = 0;
             var productLoadHandle = Addressables.LoadAssetsAsync<ProductInfo>(ProductsKey, info => {
-                info.Init(i);
+                info.Init(i, OnSingleProductLoad);
                 i++;
             });
             
             allProducts = productLoadHandle.WaitForCompletion().ToArray();
+            
+            loadGoal = i;
+        }
+
+        static void OnSingleProductLoad()
+        {
+            loaded++;
+            
+            if (AssetsAreFullyLoaded)
+                AssetsFullyLoaded?.Invoke();
         }
 
         public static void AddInstance(ProductIdentifier productIdentifier) => productInstances.Add(productIdentifier);

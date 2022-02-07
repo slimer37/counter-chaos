@@ -8,7 +8,6 @@ namespace Products.Browser
     {
         [SerializeField] GameObject infoPage;
         [SerializeField] Button backButton;
-        [SerializeField] RawImage image;
         
         [Header("Text")]
         [SerializeField] TMP_Text productName;
@@ -16,9 +15,24 @@ namespace Products.Browser
         [SerializeField] TMP_Text price;
         [SerializeField] TMP_Text description;
 
+        [Header("Preview")]
+        [SerializeField] RawImage image;
+        [SerializeField] Camera cam;
+        [SerializeField] Transform productPosition;
+        [SerializeField] Vector2Int size;
+        [SerializeField, Range(0, 1)] float padding;
+        [SerializeField, Min(0)] float back;
+
+        GameObject preview;
+        
         void Awake()
         {
             backButton.onClick.AddListener(Hide);
+            infoPage.SetActive(false);
+
+            cam.enabled = false;
+            cam.targetTexture = new RenderTexture(size.x, size.y, 16);
+            image.texture = cam.targetTexture;
         }
 
         public void View(ProductInfo info)
@@ -29,13 +43,36 @@ namespace Products.Browser
             price.text = info.Price.ToString("C");
             infoLine.text = $"ID: #{info.ID}";
             description.text = info.Description;
+
+            productPosition.rotation = Quaternion.identity;
             
-            image.texture = Preview.Thumbnail.Grab(info.DisplayName, null);
+            preview = info.Instantiate();
+            preview.GetComponentInChildren<Rigidbody>().useGravity = false;
+            preview.transform.SetParent(productPosition);
+            preview.transform.Rotate(Vector3.up * 180);
+
+            var filter = preview.GetComponentInChildren<MeshFilter>();
+            var bounds = filter.sharedMesh.bounds;
+            
+            var extents = bounds.extents;
+            extents.Scale(preview.transform.lossyScale);
+            bounds.extents = extents;
+            
+            preview.transform.localPosition = bounds.center;
+
+            bounds.center += preview.transform.position;
+            
+            RuntimePreviewGenerator.CalculateCameraPosition(cam, bounds, padding);
+            cam.transform.Translate(Vector3.back * back, Space.Self);
+            
+            cam.enabled = true;
         }
 
         void Hide()
         {
             infoPage.SetActive(false);
+            Destroy(preview);
+            cam.enabled = false;
         }
     }
 }

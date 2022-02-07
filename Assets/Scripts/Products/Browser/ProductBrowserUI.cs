@@ -23,13 +23,11 @@ namespace Products.Browser
 
         void Awake()
         {
-            searchBar.onValueChanged.AddListener(s => SearchLibrary());
-        }
-
-        void Start()
-        {
             productButtonPrefab.SetActive(false);
-            Populate();
+            searchBar.onValueChanged.AddListener(s => SearchLibrary());
+            
+            if (ProductLibrary.AssetsAreFullyLoaded) Populate();
+            else ProductLibrary.AssetsFullyLoaded += Populate;
         }
 
         void SearchLibrary()
@@ -77,6 +75,8 @@ namespace Products.Browser
 
         void Populate()
         {
+            loadingGraphic.SetActive(true);
+            
             queueInactive = new bool[ProductLibrary.AllProducts.Count];
             
             foreach (var product in ProductLibrary.AllProducts)
@@ -105,6 +105,8 @@ namespace Products.Browser
                 clone.GetComponentInChildren<TMP_Text>().text = string.Format(itemStringFormat,
                     product.Price.ToString("C"), product.DisplayName);
             }
+            
+            loadingGraphic.SetActive(false);
         }
     }
 }
