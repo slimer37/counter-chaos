@@ -16,6 +16,7 @@ namespace Products.Browser
         [SerializeField] TMP_Text description;
 
         [Header("Preview")]
+        [SerializeField] Vector3 startingRotation = Vector3.up * 180;
         [SerializeField] RawImage image;
         [SerializeField] Camera cam;
         [SerializeField] Transform productPosition;
@@ -49,7 +50,7 @@ namespace Products.Browser
             preview = info.Instantiate();
             preview.GetComponentInChildren<Rigidbody>().useGravity = false;
             preview.transform.SetParent(productPosition);
-            preview.transform.Rotate(Vector3.up * 180);
+            productPosition.transform.localRotation = Quaternion.Euler(startingRotation);
 
             var filter = preview.GetComponentInChildren<MeshFilter>();
             var bounds = filter.sharedMesh.bounds;

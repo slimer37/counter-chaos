@@ -3292,6 +3292,7 @@ MonoBehaviour:
   infoLine: {fileID: 298201626}
   price: {fileID: 51340084}
   description: {fileID: 2132041976}
+  startingRotation: {x: 0, y: 180, z: 0}
   image: {fileID: 233343994}
   cam: {fileID: 387669651}
   productPosition: {fileID: 1055242072}
@@ -3561,12 +3562,12 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
+  m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.18431373, g: 0.21176471, b: 0.2509804, a: 1}
+    m_HighlightedColor: {r: 0.44313726, g: 0.5019608, b: 0.5764706, a: 1}
+    m_PressedColor: {r: 0.72652894, g: 0.732686, b: 0.745, a: 1}
+    m_SelectedColor: {r: 0.86274517, g: 0.86666673, b: 0.882353, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -3599,7 +3600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.18431373, g: 0.21176471, b: 0.2509804, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10447,7 +10448,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 0.9
   m_Range: 3
   m_SpotAngle: 130
   m_InnerSpotAngle: 120
@@ -10562,7 +10563,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 0.9
   m_Range: 3
   m_SpotAngle: 130
   m_InnerSpotAngle: 120
