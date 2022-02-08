@@ -56,9 +56,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Roboto Mono SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 489044249
   material: {fileID: -8331093943272546155}
-  materialHashCode: 0
+  materialHashCode: 1571533849
   m_Version: 1.1.0
   m_SourceFontFileGUID: c7f75b738438b73479056570f8a693d2
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: c7f75b738438b73479056570f8a693d2, type: 3}
@@ -2564,7 +2564,7 @@ MonoBehaviour:
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: 9d0cc6db77e350a4fac48e6d1fb9fc4f, type: 2}
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
