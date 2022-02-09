@@ -8,12 +8,16 @@ namespace Products.Browser
     {
         [SerializeField] GameObject infoPage;
         [SerializeField] Button backButton;
+        [SerializeField] Button addToCartButton;
+        [SerializeField] TMP_InputField quantityField;
+        [SerializeField] ProductBrowserCart cart;
         
         [Header("Text")]
         [SerializeField] TMP_Text productName;
         [SerializeField] TMP_Text infoLine;
         [SerializeField] TMP_Text price;
         [SerializeField] TMP_Text description;
+        [SerializeField] GameObject successBox;
 
         [Header("Preview")]
         [SerializeField] Vector3 startingRotation = Vector3.up * 180;
@@ -25,19 +29,38 @@ namespace Products.Browser
         [SerializeField, Min(0)] float back;
 
         GameObject preview;
+        ProductInfo currentSubject;
         
         void Awake()
         {
+            addToCartButton.onClick.AddListener(AddToCart);
+            addToCartButton.interactable = false;
+            
+            quantityField.onValueChanged.AddListener(QuantityChanged);
+            
             backButton.onClick.AddListener(Hide);
             infoPage.SetActive(false);
+            successBox.SetActive(false);
 
             cam.enabled = false;
             cam.targetTexture = new RenderTexture(size.x, size.y, 16);
             image.texture = cam.targetTexture;
         }
 
+        void QuantityChanged(string text) => addToCartButton.interactable = !string.IsNullOrEmpty(text);
+
+        void AddToCart()
+        {
+            var quantity = int.Parse(quantityField.text);
+            cart.AddItemToCart(currentSubject, quantity);
+            
+            successBox.SetActive(true);
+        }
+
         public void View(ProductInfo info)
         {
+            currentSubject = info;
+            
             infoPage.SetActive(true);
 
             productName.text = info.DisplayName;
@@ -71,7 +94,10 @@ namespace Products.Browser
 
         void Hide()
         {
+            currentSubject = null;
+            
             infoPage.SetActive(false);
+            successBox.SetActive(false);
             Destroy(preview);
             cam.enabled = false;
         }
