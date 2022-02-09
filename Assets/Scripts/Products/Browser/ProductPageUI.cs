@@ -37,6 +37,7 @@ namespace Products.Browser
             addToCartButton.interactable = false;
             
             quantityField.onValueChanged.AddListener(QuantityChanged);
+            quantityField.onValidateInput += OnValidateInput;
             
             backButton.onClick.AddListener(Hide);
             infoPage.SetActive(false);
@@ -46,8 +47,15 @@ namespace Products.Browser
             cam.targetTexture = new RenderTexture(size.x, size.y, 16);
             image.texture = cam.targetTexture;
         }
+        
+        char OnValidateInput(string text, int charIndex, char addedChar) =>
+            char.IsDigit(addedChar) ? addedChar : '\0';
 
-        void QuantityChanged(string text) => addToCartButton.interactable = !string.IsNullOrEmpty(text);
+        void QuantityChanged(string text)
+        {
+            var qty = int.Parse(text);
+            addToCartButton.interactable = !string.IsNullOrEmpty(text) && qty is > 0 and <= CartItem.MaximumQuantity;
+        }
 
         void AddToCart()
         {

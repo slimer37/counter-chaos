@@ -75,13 +75,14 @@ namespace Products.Browser
         public GameObject uiItem;
         public TMP_Text dataText;
         
+        public const int MaximumQuantity = 100;
+        
         public int Quantity
         {
             get => quantity;
             set
             {
-                quantity = value;
-                Total = Product.Price * quantity;
+                SetQuantity(value);
                 UpdateText();
             }
         }
@@ -99,11 +100,16 @@ namespace Products.Browser
             dataText.text = $"{Total:C} | [QTY: {Quantity}]";
         }
 
+        void SetQuantity(int value)
+        {
+            quantity = Mathf.Clamp(value, 1, MaximumQuantity);
+            Total = Product.Price * quantity;
+        }
+
         public CartItem(ProductInfo product, int quantity)
         {
             Product = product;
-            this.quantity = quantity;
-            Total = quantity * product.Price;
+            SetQuantity(quantity);
         }
     }
 }
