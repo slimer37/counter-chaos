@@ -100,5 +100,7 @@ namespace Products
         }
 
         public static ProductInfo LookUp(int id) => IDTable.ContainsKey(id) ? IDTable[id] : null;
+
+        public override string ToString() => $"{DisplayName} (#{ID})";
     }
 }
