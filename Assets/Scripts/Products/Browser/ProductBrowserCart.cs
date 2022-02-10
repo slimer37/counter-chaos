@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using OrderSystem;
 using Preview;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Products.Browser
 {
     public class ProductBrowserCart : MonoBehaviour
     {
+        [SerializeField] DeliveryManager deliveryManager;
         [SerializeField] Transform listParent;
         [SerializeField] Button placeOrderButton;
         
@@ -54,15 +56,17 @@ namespace Products.Browser
 
         public void PlaceOrder()
         {
-            var total = 0f;
-            
-            foreach (var item in contents)
+            var shipmentItems = new ShipmentItem[contents.Count];
+
+            for (var i = 0; i < contents.Count; i++)
             {
-                total += item.Total;
+                var item = contents[i];
+                shipmentItems[i] = new ShipmentItem(item.product, item.Quantity);
                 Destroy(item.uiItem);
             }
+
+            deliveryManager.CreateShipment(shipmentItems);
             
-            Debug.Log(total);
             contents.Clear();
         }
     }
