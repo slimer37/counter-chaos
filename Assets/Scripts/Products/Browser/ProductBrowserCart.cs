@@ -69,7 +69,8 @@ namespace Products.Browser
     
     internal class CartItem
     {
-        public ProductInfo Product { get; }
+        public readonly ProductInfo product;
+        
         public float Total { get; private set; }
 
         public GameObject uiItem;
@@ -103,12 +104,12 @@ namespace Products.Browser
         void SetQuantity(int value)
         {
             quantity = Mathf.Clamp(value, 1, MaximumQuantity);
-            Total = Product.Price * quantity;
+            Total = product.Price * quantity;
         }
 
         public CartItem(ProductInfo product, int quantity)
         {
-            Product = product;
+            this.product = product;
             SetQuantity(quantity);
         }
     }
