@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using Products;
 using UnityEngine;
 
 namespace OrderSystem
@@ -19,6 +17,7 @@ namespace OrderSystem
                 yield return new WaitForSeconds(1);
                 
                 // Collection gets modified outside loop so can't use foreach enumeration
+                // ReSharper disable once ForCanBeConvertedToForeach
                 for (var i = 0; i < shipments.Count; i++)
                     shipments[i].IncreaseProgress();
             }
@@ -45,44 +44,6 @@ namespace OrderSystem
             shipments.Remove(shipment);
             
             Debug.Log("New shipment has been delivered: " + string.Join(", ", shipment.items));
-        }
-    }
-
-    public readonly struct ShipmentItem
-    {
-        public readonly ProductInfo product;
-        public readonly int quantity;
-
-        public ShipmentItem(ProductInfo product, int quantity)
-        {
-            this.product = product;
-            this.quantity = quantity;
-        }
-
-        public override string ToString() => $"{product} x {quantity}";
-    }
-
-    internal class Shipment
-    {
-        public int ShippingProgress { get; private set; }
-        
-        public readonly ShipmentItem[] items;
-        public readonly int shippingTotalTime;
-
-        readonly Action<Shipment> delivered;
-
-        public Shipment(ShipmentItem[] items, int shipTime, Action<Shipment> onDeliver)
-        {
-            this.items = items;
-            delivered = onDeliver;
-            shippingTotalTime = shipTime;
-        }
-
-        public void IncreaseProgress()
-        {
-            ShippingProgress++;
-            if (ShippingProgress == shippingTotalTime)
-                delivered?.Invoke(this);
         }
     }
 }
