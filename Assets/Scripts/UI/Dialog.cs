@@ -1,4 +1,5 @@
 using System;
+using Core;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class Dialog : MonoBehaviour
+    public class Dialog : Singleton<Dialog>
     {
         [SerializeField] CanvasGroup dialogBoxAndPanel;
         [SerializeField] RectTransform dialogBox;
@@ -18,15 +19,12 @@ namespace UI
         [SerializeField] float fadeTime;
 
         Action<bool> onAnswerReceived;
-
-        public static Dialog Instance { get; private set; }
 	
         Color defaultBarColor;
         bool affectedTimeScale;
 
         void Awake()
         {
-            Instance = this;
             defaultBarColor = dialogTopBar.color;
         }
 
