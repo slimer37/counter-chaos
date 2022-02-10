@@ -12,6 +12,9 @@ namespace Products.Browser
         [SerializeField] DeliveryManager deliveryManager;
         [SerializeField] Transform listParent;
         [SerializeField] Button placeOrderButton;
+        [SerializeField] TMP_Text detailsText;
+        [SerializeField, TextArea(5, 10), Tooltip("{0} - # items, {1} - delivery time, {2} - total")] string detailsFormat;
+        [SerializeField, TextArea] string emptyCartMessage;
         
         [Header("List Item Prefab")]
         [SerializeField] GameObject itemPrefab;
@@ -26,6 +29,8 @@ namespace Products.Browser
         {
             placeOrderButton.onClick.AddListener(PlaceOrder);
             itemPrefab.SetActive(false);
+
+            UpdateDetails();
         }
 
         public void AddItemToCart(ProductInfo product, int quantity)
@@ -43,15 +48,27 @@ namespace Products.Browser
             var listItem = new CartItem(product, quantity) {uiItem = clone.gameObject, dataText = rightText};
             listItem.UpdateText();
 
-            add.onClick.AddListener(() => listItem.Quantity++);
-            subtract.onClick.AddListener(() => listItem.Quantity--);
-            remove.onClick.AddListener(() => {
-                contents.Remove(listItem);
-                Destroy(listItem.uiItem);
-            });
+            add.onClick.AddListener(() => ChangeQuantity(listItem, true));
+            subtract.onClick.AddListener(() => ChangeQuantity(listItem, false));
+            remove.onClick.AddListener(() => RemoveItem(listItem));
 
             contents.Add(listItem);
             clone.gameObject.SetActive(true);
+            
+            UpdateDetails();
+        }
+
+        void ChangeQuantity(CartItem item, bool increase)
+        {
+            item.Quantity += increase ? 1 : -1;
+            UpdateDetails();
+        }
+
+        void RemoveItem(CartItem item)
+        {
+            contents.Remove(item);
+            Destroy(item.uiItem);
+            UpdateDetails();
         }
 
         public void PlaceOrder()
@@ -68,6 +85,33 @@ namespace Products.Browser
             deliveryManager.CreateShipment(shipmentItems);
             
             contents.Clear();
+            
+            UpdateDetails();
+        }
+
+        void UpdateDetails()
+        {
+            placeOrderButton.interactable = contents.Count > 0;
+            
+            if (contents.Count == 0)
+            {
+                detailsText.text = emptyCartMessage;
+                return;
+            }
+            
+            var totalCost = 0f;
+            var numItems = 0;
+            
+            foreach (var item in contents)
+            {
+                totalCost += item.Total;
+                numItems += item.Quantity;
+            }
+            
+            detailsText.text = string.Format(detailsFormat,
+                numItems,
+                deliveryManager.EstimateDeliveryTime(numItems),
+                totalCost.ToString("C"));
         }
     }
     

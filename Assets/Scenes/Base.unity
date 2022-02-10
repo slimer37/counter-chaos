@@ -5098,6 +5098,16 @@ MonoBehaviour:
   deliveryManager: {fileID: 1722187666}
   listParent: {fileID: 280035932}
   placeOrderButton: {fileID: 1711934209}
+  detailsText: {fileID: 1533980423}
+  detailsFormat: 'You have {0} items in your cart.
+
+
+    Estimated delivery time
+    is {1} seconds.
+
+
+    <b>Total: {2}</b>'
+  emptyCartMessage: Your cart is empty. Go to the <i>Products</i> page to add some!
   itemPrefab: {fileID: 834561127}
   image: {fileID: 157590808}
   leftText: {fileID: 983105907}
@@ -17663,7 +17673,7 @@ GameObject:
   - component: {fileID: 1533980424}
   - component: {fileID: 1533980423}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: details
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17721,7 +17731,7 @@ MonoBehaviour:
     Tax (5%): 50
 
 
-    <b>Total: $1,050</b>'
+    Total: $1,050'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68f585a2cd9b50140800971cf4aeb6c5, type: 2}
   m_sharedMaterial: {fileID: -8331093943272546155, guid: 68f585a2cd9b50140800971cf4aeb6c5, type: 2}
