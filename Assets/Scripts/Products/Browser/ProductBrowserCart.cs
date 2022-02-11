@@ -20,17 +20,27 @@ namespace Products.Browser
         [SerializeField] GameObject itemPrefab;
         [SerializeField] RawImage image;
         [SerializeField] TMP_Text leftText;
-        [SerializeField] string rightTextPath;
-        [SerializeField] string subtractButtonPath, addButtonPath, removeButtonPath;
+        [SerializeField] TMP_Text rightText;
+        [SerializeField] Button subtractButton, addButton, removeButton;
         
         List<CartItem> contents = new();
 
+        string rightTextPath, subtractPath, addPath, removePath;
+
         void Awake()
         {
+            CachePath(rightText, out rightTextPath);
+            CachePath(subtractButton, out subtractPath);
+            CachePath(addButton, out addPath);
+            CachePath(removeButton, out removePath);
+            
             placeOrderButton.onClick.AddListener(PlaceOrder);
             itemPrefab.SetActive(false);
 
             UpdateDetails();
+
+            void CachePath(Object c, out string cache) =>
+                cache = itemPrefab.transform.FindPathRecursive(c.name);
         }
 
         public void AddItemToCart(ProductInfo product, int quantity)
@@ -40,13 +50,14 @@ namespace Products.Browser
             
             var clone = Instantiate(itemPrefab, listParent).transform;
             
-            var rightText = clone.transform.Find(rightTextPath).GetComponent<TMP_Text>();
-            var add = clone.transform.Find(addButtonPath).GetComponent<Button>();
-            var subtract = clone.transform.Find(subtractButtonPath).GetComponent<Button>();
-            var remove = clone.transform.Find(removeButtonPath).GetComponent<Button>();
+            var listItem = new CartItem(product, quantity) { uiItem = clone.gameObject };
             
-            var listItem = new CartItem(product, quantity) {uiItem = clone.gameObject, dataText = rightText};
+            FindInClone(rightTextPath, out listItem.dataText);
             listItem.UpdateText();
+            
+            FindInClone(addPath, out Button add);
+            FindInClone(subtractPath, out Button subtract);
+            FindInClone(removePath, out Button remove);
 
             add.onClick.AddListener(() => ChangeQuantity(listItem, true));
             subtract.onClick.AddListener(() => ChangeQuantity(listItem, false));
@@ -56,6 +67,9 @@ namespace Products.Browser
             clone.gameObject.SetActive(true);
             
             UpdateDetails();
+
+            void FindInClone<T>(string path, out T result) where T : Component
+                => result = clone.Find(path).GetComponent<T>();
         }
 
         void ChangeQuantity(CartItem item, bool increase)

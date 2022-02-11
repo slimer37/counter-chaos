@@ -5114,10 +5114,10 @@ MonoBehaviour:
   itemPrefab: {fileID: 834561127}
   image: {fileID: 157590808}
   leftText: {fileID: 983105907}
-  rightTextPath: right/right text
-  subtractButtonPath: right/dec
-  addButtonPath: right/inc
-  removeButtonPath: right/remove
+  rightText: {fileID: 1645770455}
+  subtractButton: {fileID: 1639946855}
+  addButton: {fileID: 1722919254}
+  removeButton: {fileID: 758300991}
 --- !u!1 &370218678
 GameObject:
   m_ObjectHideFlags: 0
