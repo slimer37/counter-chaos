@@ -4,17 +4,8 @@ namespace Products.Browser
 {
     public static class FindExtensions
     {
-        public static Transform FindRecursive(this Transform parent, string childName)
-        {
-            foreach (Transform child in parent)
-            {
-                if (child.name == childName) return child;
-                
-                var found = child.FindRecursive(childName);
-                if (found) return found;
-            }
-            return null;
-        }
+        public static Transform FindRecursive(this Transform parent, string childName) =>
+            parent.Find(parent.FindPathRecursive(childName));
 
         /// <summary>
         /// Finds the child of the specified name and gives the path that would give that child if used in a Find query on the parent.
