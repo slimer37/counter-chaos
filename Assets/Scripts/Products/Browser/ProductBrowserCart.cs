@@ -28,8 +28,14 @@ namespace Products.Browser
 
         string rightTextPath, subtractPath, addPath, removePath;
 
+        bool awoke;
+
         void Awake()
         {
+            if (awoke) return;
+            
+            awoke = true;
+            
             CachePath(rightText, out rightTextPath);
             CachePath(subtractButton, out subtractPath);
             CachePath(addButton, out addPath);
@@ -46,6 +52,8 @@ namespace Products.Browser
 
         public void AddItemToCart(ProductInfo product, int quantity)
         {
+            if (!awoke) Awake();
+            
             image.texture = Thumbnail.Grab(product.DisplayName, null);
             leftText.GetComponent<TMP_Text>().text = $"{product.DisplayName} (#{product.ID.ToString()}) ({product.Price:C})";
             
@@ -83,7 +91,7 @@ namespace Products.Browser
             UpdateDetails();
         }
 
-        public void PlaceOrder()
+        void PlaceOrder()
         {
             var shipmentItems = new ShipmentItem[contents.Count];
 
