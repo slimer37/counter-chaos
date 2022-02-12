@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Products.Browser
+namespace UI.Extensions
 {
     public static class FindExtensions
     {
@@ -39,5 +39,8 @@ namespace Products.Browser
             path = null;
             return false;
         }
+        
+        public static void FindComponent<T>(this Transform clone, string path, out T result) where T : Component
+            => result = clone.Find(path).GetComponent<T>();
     }
 }

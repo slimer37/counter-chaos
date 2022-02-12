@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using OrderSystem;
 using Preview;
 using TMPro;
+using UI.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,7 @@ namespace Products.Browser
         [SerializeField] TMP_Text rightText;
         [SerializeField] Button subtractButton, addButton, removeButton;
         
-        List<CartItem> contents = new();
+        readonly List<CartItem> contents = new();
 
         string rightTextPath, subtractPath, addPath, removePath;
 
@@ -52,12 +53,12 @@ namespace Products.Browser
             
             var listItem = new CartItem(product, quantity) { uiItem = clone.gameObject };
             
-            FindInClone(rightTextPath, out listItem.dataText);
+            clone.FindComponent(rightTextPath, out listItem.dataText);
             listItem.UpdateText();
             
-            FindInClone(addPath, out Button add);
-            FindInClone(subtractPath, out Button subtract);
-            FindInClone(removePath, out Button remove);
+            clone.FindComponent(addPath, out Button add);
+            clone.FindComponent(subtractPath, out Button subtract);
+            clone.FindComponent(removePath, out Button remove);
 
             add.onClick.AddListener(() => ChangeQuantity(listItem, true));
             subtract.onClick.AddListener(() => ChangeQuantity(listItem, false));
@@ -67,9 +68,6 @@ namespace Products.Browser
             clone.gameObject.SetActive(true);
             
             UpdateDetails();
-
-            void FindInClone<T>(string path, out T result) where T : Component
-                => result = clone.Find(path).GetComponent<T>();
         }
 
         void ChangeQuantity(CartItem item, bool increase)
