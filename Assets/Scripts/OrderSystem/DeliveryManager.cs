@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace OrderSystem
@@ -7,7 +8,9 @@ namespace OrderSystem
     public class DeliveryManager : MonoBehaviour
     {
         [SerializeField] float secondsPerItem;
-        
+
+        public ReadOnlyCollection<Shipment> Shipments => shipments.AsReadOnly();
+
         readonly List<Shipment> shipments = new();
 
         IEnumerator TimeShipments()

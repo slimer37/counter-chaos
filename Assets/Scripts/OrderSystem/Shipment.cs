@@ -3,7 +3,7 @@ using Products;
 
 namespace OrderSystem
 {
-    internal class Shipment
+    public class Shipment
     {
         public int ShippingProgress { get; private set; }
         
@@ -12,14 +12,14 @@ namespace OrderSystem
 
         readonly Action<Shipment> delivered;
 
-        public Shipment(ShipmentItem[] items, int shipTime, Action<Shipment> onDeliver)
+        internal Shipment(ShipmentItem[] items, int shipTime, Action<Shipment> onDeliver)
         {
             this.items = items;
             delivered = onDeliver;
             shippingTotalTime = shipTime;
         }
 
-        public void IncreaseProgress()
+        internal void IncreaseProgress()
         {
             ShippingProgress++;
             if (ShippingProgress == shippingTotalTime)
