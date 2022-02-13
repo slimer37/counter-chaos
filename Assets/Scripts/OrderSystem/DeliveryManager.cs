@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace OrderSystem
         public ReadOnlyCollection<Shipment> Shipments => shipments.AsReadOnly();
 
         readonly List<Shipment> shipments = new();
+
+        public event Action<Shipment> Shipped;
 
         IEnumerator TimeShipments()
         {
@@ -36,10 +39,15 @@ namespace OrderSystem
             
             var time = EstimateDeliveryTime(total);
             
-            shipments.Add(new Shipment(items, time, Deliver));
+            var shipment = new Shipment(items, time);
+            shipment.Delivered += Deliver;
+            
+            shipments.Add(shipment);
 
             if (shipments.Count == 1)
                 StartCoroutine(TimeShipments());
+            
+            Shipped?.Invoke(shipment);
         }
 
         void Deliver(Shipment shipment)

@@ -10,12 +10,11 @@ namespace OrderSystem
         public readonly ShipmentItem[] items;
         public readonly int shippingTotalTime;
 
-        readonly Action<Shipment> delivered;
+        public event Action<Shipment> Delivered;
 
-        internal Shipment(ShipmentItem[] items, int shipTime, Action<Shipment> onDeliver)
+        internal Shipment(ShipmentItem[] items, int shipTime)
         {
             this.items = items;
-            delivered = onDeliver;
             shippingTotalTime = shipTime;
         }
 
@@ -23,7 +22,7 @@ namespace OrderSystem
         {
             ShippingProgress++;
             if (ShippingProgress == shippingTotalTime)
-                delivered?.Invoke(this);
+                Delivered?.Invoke(this);
         }
     }
     
