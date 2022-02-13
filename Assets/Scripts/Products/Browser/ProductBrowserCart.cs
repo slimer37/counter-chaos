@@ -102,7 +102,7 @@ namespace Products.Browser
                 Destroy(item.uiItem);
             }
 
-            deliveryManager.CreateShipment(shipmentItems);
+            deliveryManager.CreateShipment(shipmentItems, Thumbnail.Grab(contents[0].product.DisplayName, null));
             
             contents.Clear();
             

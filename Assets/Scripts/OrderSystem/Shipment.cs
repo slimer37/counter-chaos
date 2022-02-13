@@ -1,5 +1,6 @@
 using System;
 using Products;
+using UnityEngine;
 
 namespace OrderSystem
 {
@@ -10,13 +11,19 @@ namespace OrderSystem
         
         public readonly ShipmentItem[] items;
         public readonly int shippingTotalTime;
+        public readonly float totalCost;
+        public readonly Texture2D thumbnail;
 
         public event Action<Shipment> Delivered;
 
-        internal Shipment(ShipmentItem[] items, int shipTime)
+        internal Shipment(ShipmentItem[] items, int shipTime, Texture2D thumbnail)
         {
             this.items = items;
+            this.thumbnail = thumbnail;
             shippingTotalTime = shipTime;
+
+            foreach (var item in items)
+                totalCost += item.product.Price * item.quantity;
         }
 
         internal void IncreaseProgress()

@@ -31,7 +31,7 @@ namespace OrderSystem
 
         public int EstimateDeliveryTime(int numItems) => Mathf.RoundToInt(numItems * secondsPerItem);
 
-        public void CreateShipment(ShipmentItem[] items)
+        public void CreateShipment(ShipmentItem[] items, Texture2D thumbnail)
         {
             var total = 0;
             foreach (var item in items)
@@ -39,7 +39,7 @@ namespace OrderSystem
             
             var time = EstimateDeliveryTime(total);
             
-            var shipment = new Shipment(items, time);
+            var shipment = new Shipment(items, time, thumbnail);
             shipment.Delivered += Deliver;
             
             shipments.Add(shipment);
