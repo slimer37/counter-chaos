@@ -51,6 +51,6 @@ namespace OrderSystem
             this.quantity = quantity;
         }
 
-        public override string ToString() => $"{product} x {quantity}";
+        public override string ToString() => $"{quantity} x {product}";
     }
 }
