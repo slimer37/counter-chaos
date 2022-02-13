@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,14 +7,20 @@ namespace OrderSystem.UI
 {
     internal class TrackedShipmentUI : MonoBehaviour
     {
+        [SerializeField] Button button;
         [SerializeField] Slider progress;
         [SerializeField] TMP_Text deliveredText;
         [SerializeField] TMP_Text detailsText;
         [SerializeField] RawImage image;
 
-        public string Details => $"";
+        public event Action<Shipment> Click;
 
         Shipment shipment;
+
+        void Awake()
+        {
+            button.onClick.AddListener(() => Click?.Invoke(shipment));
+        }
 
         public void SetShipment(Shipment value)
         {
