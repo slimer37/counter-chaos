@@ -6,6 +6,7 @@ namespace OrderSystem
     public class Shipment
     {
         public int ShippingProgress { get; private set; }
+        public bool WasDelivered { get; private set; }
         
         public readonly ShipmentItem[] items;
         public readonly int shippingTotalTime;
@@ -20,9 +21,15 @@ namespace OrderSystem
 
         internal void IncreaseProgress()
         {
+            if (WasDelivered) return;
+            
             ShippingProgress++;
+            
             if (ShippingProgress == shippingTotalTime)
+            {
+                WasDelivered = true;
                 Delivered?.Invoke(this);
+            }
         }
     }
     
