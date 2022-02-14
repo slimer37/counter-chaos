@@ -28,13 +28,19 @@ namespace Products.Browser
 
         string rightTextPath, subtractPath, addPath, removePath;
 
-        bool awoke;
+        bool initialized;
 
         void Awake()
         {
-            if (awoke) return;
+            if (initialized) return;
+            Initialize();
+        }
+
+        void Initialize()
+        {
+            if (initialized) Debug.LogWarning("Initialize was called a second time.");
             
-            awoke = true;
+            initialized = true;
             
             CachePath(rightText, out rightTextPath);
             CachePath(subtractButton, out subtractPath);
@@ -52,7 +58,7 @@ namespace Products.Browser
 
         public void AddItemToCart(ProductInfo product, int quantity)
         {
-            if (!awoke) Awake();
+            if (!initialized) Initialize();
             
             image.texture = Thumbnail.Grab(product.DisplayName, null);
             leftText.GetComponent<TMP_Text>().text = $"{product.DisplayName} (#{product.ID.ToString()}) ({product.Price:C})";
