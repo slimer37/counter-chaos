@@ -15,6 +15,25 @@ namespace OrderSystem
         readonly List<Shipment> shipments = new();
 
         public event Action<Shipment> Shipped;
+        public event Action<Shipment> Delivered;
+
+        public static DeliveryManager Instance { get; private set; }
+
+        void Awake()
+        {
+            if (Instance)
+                Debug.LogWarning(
+                    $"There are multiple {nameof(DeliveryManager)} objects in the scene.",
+                    Instance);
+            
+            Instance = this;
+        }
+
+        void OnDestroy()
+        {
+            if (Instance == this)
+                Instance = null;
+        }
 
         IEnumerator TimeShipments()
         {
@@ -53,6 +72,7 @@ namespace OrderSystem
         void Deliver(Shipment shipment)
         {
             shipments.Remove(shipment);
+            Delivered?.Invoke(shipment);
             
             Debug.Log("New shipment has been delivered: " + string.Join(", ", shipment.items));
         }
