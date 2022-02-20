@@ -32,7 +32,7 @@ namespace OrderSystem
             
             ShippingProgress++;
             
-            if (ShippingProgress == shippingTotalTime)
+            if (ShippingProgress >= shippingTotalTime)
             {
                 WasDelivered = true;
                 Delivered?.Invoke(this);
