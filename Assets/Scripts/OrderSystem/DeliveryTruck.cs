@@ -13,6 +13,7 @@ namespace OrderSystem
         
         [SerializeField] Vector3 trailerCenter;
         [SerializeField] Vector3 trailerSize;
+        [SerializeField] LayerMask mask;
 
         Sequence deliverSequence;
         
@@ -35,7 +36,10 @@ namespace OrderSystem
             deliverSequence = DOTween.Sequence();
             deliverSequence.AppendCallback(() => transform.SetPositionAndRotation(start.position, start.rotation));
             deliverSequence.Append(transform.DOMove(stop.position, speed).SetSpeedBased().SetEase(Ease.OutSine));
-            deliverSequence.AppendCallback(() => StopAndFillTrailer(currentShipment));
+            deliverSequence.AppendCallback(FillTrailer);
+            deliverSequence.AppendInterval(0.5f); // Let physics register spawned items
+            deliverSequence.AppendCallback(() => isStopped = true);
+            
             deliverSequence.Pause().SetAutoKill(false);
         }
 
@@ -50,18 +54,9 @@ namespace OrderSystem
             deliverSequence.Restart();
         }
 
-        void FixedUpdate()
+        void FillTrailer()
         {
-            if (!isStopped) return;
-
-            if (CheckEmpty())
-                Leave();
-        }
-
-        void StopAndFillTrailer(Shipment shipment)
-        {
-            isStopped = true;
-            foreach (var item in shipment.items)
+            foreach (var item in currentShipment.items)
             {
                 for (var i = 0; i < item.quantity; i++)
                 {
@@ -71,13 +66,22 @@ namespace OrderSystem
             }
         }
 
+        void FixedUpdate()
+        {
+            if (!isStopped) return;
+
+            if (CheckForEmptyTrailer())
+                Leave();
+        }
+
         void Leave()
         {
             isStopped = false;
             transform.DOMove(end.position, speed).SetSpeedBased().SetEase(Ease.InSine);
         }
 
-        bool CheckEmpty() =>
-            !Physics.CheckBox(transform.TransformPoint(trailerCenter), trailerSize / 2, transform.rotation);
+        bool CheckForEmptyTrailer() =>
+            !Physics.CheckBox(transform.TransformPoint(trailerCenter), trailerSize / 2,
+                transform.rotation, mask);
     }
 }

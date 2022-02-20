@@ -5429,6 +5429,9 @@ MonoBehaviour:
   speed: 5
   trailerCenter: {x: 0, y: 1.96, z: -9.68}
   trailerSize: {x: 3, y: 3.33, z: 10.02}
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &416254369 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -898103146042229229, guid: 49d6446ae140a234abcd2b4c39b00c7c, type: 3}
