@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Base.unity
     guid: fdfb39321d7032045879048b65daa924
   - enabled: 1
-    path: Assets/Scenes/Prototype.unity
+    path: Assets/Scenes/PrototypeStore.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
   - enabled: 1
     path: Assets/Scenes/Tutorial.unity
