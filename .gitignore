@@ -38,6 +38,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-# Test scene
-Assets/Scenes/Test.unity
-Assets/Scenes/Test.unity.meta
+# Test stuff
+**/[Tt]est
+**/[Tt]est.meta
