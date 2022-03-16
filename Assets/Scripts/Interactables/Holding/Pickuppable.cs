@@ -71,7 +71,7 @@ namespace Interactables.Holding
             meshBounds = rend.localBounds;
             
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
-            VerticalExtent = transform.position.y - meshBounds.center.y + meshBounds.extents.y;
+            VerticalExtent = - meshBounds.center.y + meshBounds.extents.y;
             hoverable.OnAttemptHover += OnAttemptHover;
             hoverable.icon = InteractionIcon.Pickup;
         }
