@@ -280,47 +280,19 @@ namespace Interactables.Holding
 
                     if (heldItem.IsIntersecting(dropObstacleMask))
                     {
-                        for (var i = 0; i < correctionLimit; i++)
-                        {
-                            itemTransform.position += Vector3.up * correctionAmount;
-                            if (AttemptOffset(-transform.forward)
-                                || AttemptOffset(-hit.normal)
-                                || AttemptOffset(-transform.right)
-                                || AttemptOffset(transform.right))
-                            {
-                                onFreeSpot = true;
-                                break;
-                            }
-                        }
+                        // Micro-adjust until intersection stops.
+                        if (AttemptOffset(-transform.forward)
+                            || AttemptOffset(-hit.normal)
+                            || AttemptOffset(-transform.right)
+                            || AttemptOffset(transform.right))
+                            onFreeSpot = true;
                     }
                     else
                         onFreeSpot = true;
                     
-                    // Only try moving item forward if surface is a wall (within 10 degrees of freedom).
+                    // Only try moving item forward if surface is a wall (within 10 degrees).
                     if (Math.Abs(angle - 90) < 10)
                         AttemptOffset(-hit.normal, true);
-
-                    bool AttemptOffset(Vector3 direction, bool useFarthest = false)
-                    {
-                        direction *= correctionAmount;
-                        var temp = itemTransform.position;
-                        var limits = Mathf.Min(correctionLimit, heldItem.BoundHalfDiagonal / correctionAmount);
-                        for (var i = 0; i <= limits; i++)
-                        {
-                            itemTransform.position += direction;
-                            if (heldItem.IsIntersecting(dropObstacleMask))
-                            {
-                                if (useFarthest)
-                                {
-                                    itemTransform.position -= direction;
-                                    break;
-                                }
-                            }
-                            else if (!useFarthest) return true;
-                        }
-                        if (!useFarthest) itemTransform.position = temp;
-                        return false;
-                    }
                 }
                 else
                 {
@@ -346,6 +318,43 @@ namespace Interactables.Holding
                 
                 SetHeldObjectLayers(onFreeSpot ? droppingObjectLayer : heldObjectLayer);
             }
+        }
+        
+        // useFarthest moves the item as far as possible without intersection
+        // Keeping it false moves the item the minimum amount to avoid intersection
+        bool AttemptOffset(Vector3 direction, bool useFarthest = false)
+        {
+            var itemTransform = heldItem.transform;
+            var original = itemTransform.position;
+            var adjust = direction * correctionAmount;
+            
+            var hadSuccess = false;
+            
+            for (var i = 0; i <= correctionLimit; i++)
+            {
+                itemTransform.position += adjust;
+                
+                if (heldItem.IsIntersecting(dropObstacleMask))
+                {
+                    // If we're intersecting now but weren't before, bump it back and exit.
+                    // (only possible with useFarthest, since first success exits)
+                    if (hadSuccess)
+                    {
+                        itemTransform.position -= adjust;
+                        break;
+                    }
+                }
+                
+                // If we're not using the farthest result and not intersecting, we're good.
+                else if (!useFarthest) return true;
+                // Otherwise, keep going and note that we didn't intersect once.
+                else hadSuccess = true;
+            }
+            
+            // Return item to original position upon failure.
+            if (!hadSuccess) itemTransform.position = original;
+            
+            return useFarthest && hadSuccess;
         }
 
         void Drop(bool addForce, bool clearSlot = true)
