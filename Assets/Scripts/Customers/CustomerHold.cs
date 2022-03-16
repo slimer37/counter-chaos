@@ -48,9 +48,9 @@ namespace Customers
 
             var sequence = DOTween.Sequence();
 
-            var tempHeight = position.y + heldItem.VerticalExtent;
+            var tempHeight = position.y + heldItem.StandingDistance;
             
-            position.y += heldItem.VerticalExtent + dropHeight;
+            position.y += heldItem.StandingDistance + dropHeight;
             
             var prepare = heldItem.transform.DOMoveY(position.y, dropSpeed).SetSpeedBased();
             var horizontalMove = heldItem.transform.DOMove(position, dropSpeed).SetSpeedBased();

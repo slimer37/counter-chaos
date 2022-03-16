@@ -270,7 +270,7 @@ namespace Interactables.Holding
                     // Only use bound diagonal if the surface is not horizontal (e.g. the ground but not the ceiling).
                     var angle = Vector3.Angle(hit.normal, Vector3.up);
                     onFlatSurface = angle < flatSurfaceTolerance;
-                    distanceOffSurface += onFlatSurface ? heldItem.VerticalExtent : heldItem.BoundHalfDiagonal;
+                    distanceOffSurface += onFlatSurface ? heldItem.StandingDistance : heldItem.BoundHalfDiagonal;
 
                     itemTransform.position = hit.point + hit.normal * distanceOffSurface;
                     initialPoint = itemTransform.position;
