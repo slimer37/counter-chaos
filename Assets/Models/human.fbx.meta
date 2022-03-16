@@ -90,7 +90,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: rig|idle
-      takeName: rig|idle
+      takeName: rig|0_idle
       internalID: 0
       firstFrame: 0
       lastFrame: 100
