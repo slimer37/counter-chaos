@@ -31,52 +31,70 @@ namespace UI.Visuals
         void OnDisable() => controls.Disable();
         void OnDestroy() => controls.Dispose();
 
-        public YieldInstruction Display(params string[] text) => Display(false, text);
-        public YieldInstruction Display(bool closable, params string[] text) => StartCoroutine(WaitForDisplay(closable, text));
-
-        IEnumerator WaitForDisplay(bool closable, params string[] text)
+        IEnumerator PrepareToDisplay(string prepText)
         {
-            if (isDisplaying) throw new InvalidOperationException("Text box is already being used.");
             isDisplaying = true;
             skipIndicator.gameObject.SetActive(false);
             
-            canvasGroup.DOKill();
-            if (canvasGroup.alpha == 0)
-                canvasGroup.alpha = 1;
-            else if (canvasGroup.alpha < 1)
-                yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
+            // Set text so UI resizes
+            textMesh.text = prepText;
+            textMesh.maxVisibleCharacters = 0;
             
-            foreach (var snippet in text)
-            {
-                skipIndicator.gameObject.SetActive(false);
-                
-                textMesh.text = snippet;
-                textMesh.maxVisibleCharacters = 1;
-                for (var i = 1; i <= snippet.Length; i++)
-                {
-                    yield return new WaitForSeconds(1 / charsPerSec);
-                    textMesh.maxVisibleCharacters = i;
-
-                    if (skipPressed)
-                    {
-                        textMesh.maxVisibleCharacters = snippet.Length;
-                        skipPressed = false;
-                        break;
-                    }
-                }
-
-                if (!closable && snippet == text[text.Length - 1]) break;
-                
-                skipIndicator.gameObject.SetActive(true);
-                yield return new WaitUntil(() => skipPressed);
-                skipPressed = false;
-            }
-
-            if (!closable) yield break;
-            Clear();
+            // Fade in UI from 0
+            canvasGroup.DOKill();
+            canvasGroup.alpha = 0;
+            yield return canvasGroup.DOFade(1, fadeDuration).WaitForCompletion();
         }
 
-        public void Clear()
+        IEnumerator DisplaySnippet(string snippet)
+        {
+            textMesh.text = snippet;
+            textMesh.maxVisibleCharacters = 1;
+            
+            foreach (var _ in snippet)
+            {
+                yield return new WaitForSeconds(1 / charsPerSec);
+                textMesh.maxVisibleCharacters++;
+                
+                // Exit when skip is pressed by checking after each character.
+                if (skipPressed)
+                {
+                    textMesh.maxVisibleCharacters = snippet.Length;
+                    skipPressed = false;
+                    break;
+                }
+            }
+        }
+
+        IEnumerator WaitForSkip()
+        {
+            skipIndicator.gameObject.SetActive(true);
+            yield return new WaitUntil(() => skipPressed);
+            skipPressed = false;
+            skipIndicator.gameObject.SetActive(false);
+        }
+
+        IEnumerator WaitForDisplay(bool closeWhenDone, params string[] snippets)
+        {
+            if (isDisplaying) throw new InvalidOperationException($"Text box {name} is already being used.");
+            
+            yield return PrepareToDisplay(snippets[0]);
+
+            for (var i = 0; i < snippets.Length; i++)
+            {
+                yield return DisplaySnippet(snippets[i]);
+                // On last snippet, don't show skip indicator if this dialogue does not close.
+                if (i == snippets.Length - 1 && !closeWhenDone) break;
+                yield return WaitForSkip();
+            }
+
+            if (closeWhenDone) EndDisplay();
+        }
+        
+        public YieldInstruction Display(params string[] text) => Display(true, text);
+        public YieldInstruction Display(bool closeWhenDone, params string[] text) => StartCoroutine(WaitForDisplay(closeWhenDone, text));
+
+        public void EndDisplay()
         {
             if (!isDisplaying) return;
             StopAllCoroutines();
