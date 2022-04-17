@@ -69,6 +69,7 @@ namespace Interactables.Holding
         void Awake()
         {
             meshBounds = rend.localBounds;
+            meshBounds.extents = Vector3.Scale(meshBounds.extents, transform.lossyScale);
             
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
             StandingDistance = - meshBounds.center.y + meshBounds.extents.y;
