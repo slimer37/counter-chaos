@@ -169,8 +169,8 @@ namespace Interactables.Holding
                     ReturnItemToHolding();
             }
 
-            if (useOldSystem) return;
             cursor3D.gameObject.SetActive(isHoldingDrop);
+            if (useOldSystem) return;
             controller.EnableLook(!isHoldingDrop);
             Cursor.lockState = isHoldingDrop ? CursorLockMode.Confined : CursorLockMode.Locked;
             mousePos = new Vector2(Screen.width, Screen.height) / 2;
