@@ -41,3 +41,6 @@ sysinfo.txt
 # Test stuff
 **/[Tt]est
 **/[Tt]est.meta
+
+# Rider
+ProjectSettings/RiderScriptEditorPersistedState.asset
