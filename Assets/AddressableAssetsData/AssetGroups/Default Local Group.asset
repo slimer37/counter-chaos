@@ -116,6 +116,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - product instance
     - prefab
+  - m_GUID: cf75e6123c3bf4f48853e55b22db9eda
+    m_Address: Milk Jug
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5048b3ef023d35444ba46544748676f2
+    m_Address: milk
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7a4307c3c63b16c448e600be2bbc2f79, type: 2}
   m_SchemaSet:
