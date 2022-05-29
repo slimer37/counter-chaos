@@ -44,7 +44,7 @@ namespace Fracture
             foreach (var rb in rigidbodies)
                 rb.AddExplosionForce(explosionForce, transform.position, 0);
         
-            particles?.Play();
+            if (particles) particles.Play();
             StartCoroutine(DelayedOut(disableCallback));
         }
 
