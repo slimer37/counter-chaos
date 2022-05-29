@@ -21,9 +21,9 @@ namespace Interactables.Holding
         [Space(15)]
         [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
-        [SerializeField] bool nonPhysics;
         [SerializeField] Renderer rend;
 
+        bool nonPhysics;
         Bounds meshBounds;
         bool isHeld;
 
@@ -68,6 +68,9 @@ namespace Interactables.Holding
 
         void Awake()
         {
+            // W/o rigidbody, treat as static (i.e. signs).
+            nonPhysics = !rb;
+            
             meshBounds = rend.localBounds;
             meshBounds.extents = Vector3.Scale(meshBounds.extents, transform.lossyScale);
             
