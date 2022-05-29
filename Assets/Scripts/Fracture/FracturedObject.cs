@@ -8,7 +8,8 @@ namespace Fracture
     {
         [SerializeField] Rigidbody[] rigidbodies;
         [SerializeField] ParticleSystem particles;
-        float delay;
+        [SerializeField] float lifetime = 5;
+        [SerializeField] float explosionForce = 150;
 
         Vector3[] originalRbPositions;
         Quaternion[] originalRbRotations;
@@ -38,19 +39,18 @@ namespace Fracture
             }
         }
 
-        internal void Explode(float force, float destroyDelay, Action<FracturedObject> disableCallback)
+        internal void Explode(Action<FracturedObject> disableCallback)
         {
             foreach (var rb in rigidbodies)
-                rb.AddExplosionForce(force, transform.position, 0);
+                rb.AddExplosionForce(explosionForce, transform.position, 0);
         
-            delay = destroyDelay;
             particles?.Play();
             StartCoroutine(DelayedOut(disableCallback));
         }
 
         IEnumerator DelayedOut(Action<FracturedObject> disableCallback)
         {
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(lifetime);
             for (var i = 0; i < rigidbodies.Length; i++)
             {
                 var rbT = rigidbodies[i].transform;

@@ -178,6 +178,8 @@ MonoBehaviour:
   - {fileID: 8625485008568785388}
   - {fileID: 4542357097573807109}
   particles: {fileID: 6890586392769516761}
+  lifetime: 5
+  explosionForce: 150
 --- !u!1 &2065054036698956738
 GameObject:
   m_ObjectHideFlags: 0
