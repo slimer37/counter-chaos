@@ -16,6 +16,7 @@ namespace Fracture
 
         void OnValidate()
         {
+            if (!fracturedPrefab) return;
             if (!fracturedPrefab.TryGetComponent<FracturedObject>(out _))
                 Debug.LogError("Fractured prefab has no FracturedObject component.");
         }
