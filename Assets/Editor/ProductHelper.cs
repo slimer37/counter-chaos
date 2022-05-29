@@ -12,7 +12,7 @@ namespace Project.Editor
     {
         enum ColliderShape { Box, Mesh, Sphere}
         
-        string productInfoFolder = "Assets/Scripts/Products/";
+        string productInfoFolder = "Assets/Product Assets/";
         string ProductAssetPath => productInfoFolder + productName + ".asset";
         
         string productName;
@@ -103,10 +103,7 @@ namespace Project.Editor
             if (!gameObject.GetComponent(col)) gameObject.AddComponent(col);
 
             var identifier = new SerializedObject(AddIfNeeded<ProductIdentifier>());
-            var size = gameObject.GetComponent<MeshFilter>().sharedMesh.bounds.size / ItemArea.UnitSize;
             identifier.FindProperty("productInfo").objectReferenceValue = info;
-            identifier.FindProperty("<Size>k__BackingField").vector2IntValue =
-                new Vector2Int(Mathf.CeilToInt(size.x), Mathf.CeilToInt(size.z));
             
             var hoverable = new SerializedObject(AddIfNeeded<Hoverable>());
             hoverable.FindProperty("icon").intValue = 1;
@@ -115,7 +112,10 @@ namespace Project.Editor
             hoverable.ApplyModifiedProperties();
             
             AddIfNeeded<Rigidbody>();
-            AddIfNeeded<Pickuppable>();
+            
+            var pbSo = new SerializedObject(AddIfNeeded<Pickuppable>());
+            pbSo.FindProperty("<Info>k__BackingField").FindPropertyRelative("label").stringValue = info.DisplayName;
+            pbSo.ApplyModifiedProperties();
 
             TComponent AddIfNeeded<TComponent>() where TComponent : Component
             {
