@@ -44,7 +44,7 @@ namespace Fracture
                 rb.AddExplosionForce(force, transform.position, 0);
         
             delay = destroyDelay;
-            particles.Play();
+            particles?.Play();
             StartCoroutine(DelayedOut(disableCallback));
         }
 
