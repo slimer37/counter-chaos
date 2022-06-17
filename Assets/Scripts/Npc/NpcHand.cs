@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Customers
 {
-    public class CustomerHold : MonoBehaviour
+    public class NpcHand : MonoBehaviour
     {
         [SerializeField] Vector3 leftHoldingPosition;
         [SerializeField] Vector3 rightHoldingPosition;
@@ -29,7 +29,7 @@ namespace Customers
             Gizmos.DrawCube(rightHoldingPosition, Vector3.one * 0.25f);
         }
 
-        internal YieldInstruction Pickup(Pickuppable pickuppable)
+        public YieldInstruction Pickup(Pickuppable pickuppable)
         {
             heldItems.Add(pickuppable);
             pickuppable.OnInteract(transform);
@@ -40,7 +40,7 @@ namespace Customers
             return pickuppable.transform.DOLocalMove(pos, holdTime).WaitForCompletion();
         }
 
-        internal YieldInstruction Drop(Vector3 position, Vector3 rotation)
+        public YieldInstruction Drop(Vector3 position, Vector3 rotation)
         {
             var heldItem = heldItems[0];
             if (!heldItem) throw new Exception("Drop called with no held item.");

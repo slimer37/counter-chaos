@@ -9,7 +9,7 @@ using Queue = Checkout.Queue;
 
 namespace Customers
 {
-    [RequireComponent(typeof(CustomerHold))]
+    [RequireComponent(typeof(NpcHand))]
     public class CustomerBrain : MonoBehaviour
     {
         [SerializeField] NavMeshAgent agent;
@@ -20,7 +20,7 @@ namespace Customers
         [SerializeField, Min(1)] int maxProducts = 5;
 
         Queue queue;
-        CustomerHold holder;
+        NpcHand hand;
         bool finishedTransaction;     
         
         readonly List<ProductIdentifier> requestedProducts = new();
@@ -31,7 +31,7 @@ namespace Customers
 
         void Awake()
         {
-            holder = GetComponent<CustomerHold>();
+            hand = GetComponent<NpcHand>();
         }
 
         void OnDestroy() => StopAllCoroutines();
@@ -61,7 +61,7 @@ namespace Customers
 
                 var pickuppable = newProduct.GetComponent<Pickuppable>();
                 if (pickuppable.IsHeld) continue;
-                yield return holder.Pickup(pickuppable);
+                yield return hand.Pickup(pickuppable);
             }
             
             queue = Queue.FindClosestQueue(transform.position);
@@ -89,7 +89,7 @@ namespace Customers
                 }
                 
                 queue.Area.StartPlacing();
-                yield return holder.Drop(position, rotation);
+                yield return hand.Drop(position, rotation);
                 queue.Area.EndPlacing();
             }
             
@@ -120,7 +120,7 @@ namespace Customers
         {
             finishedTransaction = true;
             queue.OnCustomerServed -= OnServed;
-            yield return new WaitUntil(() => holder.IsHoldingItem);
+            yield return new WaitUntil(() => hand.IsHoldingItem);
             queue.CustomerLeave(index);
             yield return MoveToward(Level.GetFinishPoint());
             Destroy(gameObject);
@@ -140,12 +140,12 @@ namespace Customers
 
         void OnCollisionEnter(Collision other)
         {
-            if (!holder.IsHoldingItem
+            if (!hand.IsHoldingItem
                 && finishedTransaction 
                 && other.transform.CompareTag("Product") 
                 && ProductLibrary.TryGetProductInfo(other.transform, out var info)
                 && requestedProducts.Find(identifier => identifier.productInfo == info) != null)
-                holder.Pickup(other.transform.GetComponent<Pickuppable>());
+                hand.Pickup(other.transform.GetComponent<Pickuppable>());
         }
     }
 }
