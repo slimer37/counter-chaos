@@ -9,39 +9,53 @@ using Queue = Checkout.Queue;
 
 namespace Customers
 {
+    [RequireComponent(typeof(CustomerHold))]
     public class CustomerBrain : MonoBehaviour
     {
         [SerializeField] NavMeshAgent agent;
         [SerializeField] float rotationSpeed;
         [SerializeField, Min(0.01f)] float conveyorPlaceAttemptInterval = 1;
         [SerializeField] Animator animator;
-        [SerializeField] CustomerHold holder;
         [SerializeField, Min(0)] int minProducts = 3;
         [SerializeField, Min(1)] int maxProducts = 5;
 
         Queue queue;
-        bool finishedTransaction;
-        List<ProductIdentifier> requestedProducts = new();
+        CustomerHold holder;
+        bool finishedTransaction;     
+        
+        readonly List<ProductIdentifier> requestedProducts = new();
 
         int index;
         
         static readonly int Speed = Animator.StringToHash("speed");
 
+        void Awake()
+        {
+            holder = GetComponent<CustomerHold>();
+        }
+
         void OnDestroy() => StopAllCoroutines();
 
         void Update() => animator.SetFloat(Speed, agent.velocity.sqrMagnitude);
+
+        ProductIdentifier SelectNewProduct()
+        {
+            ProductIdentifier newProduct;
+            do
+            {
+                newProduct = ProductLibrary.GetRandomProductInstance();
+            } while (newProduct.GetComponent<Pickuppable>().IsHeld || requestedProducts.Contains(newProduct));
+            
+            requestedProducts.Add(newProduct);
+            
+            return newProduct;
+        }
 
         IEnumerator Start()
         {
             for (var i = 0; i < Random.Range(minProducts, maxProducts); i++)
             {
-                var newProduct = ProductLibrary.GetRandomProductInstance();
-                
-                while (newProduct.GetComponent<Pickuppable>().IsHeld || requestedProducts.Contains(newProduct))
-                    newProduct = ProductLibrary.GetRandomProductInstance();
-                
-                if (requestedProducts.Count <= i) requestedProducts.Add(newProduct);
-                else requestedProducts[i] = newProduct;
+                var newProduct = SelectNewProduct();
                 
                 yield return MoveToward(newProduct.transform.position);
 
