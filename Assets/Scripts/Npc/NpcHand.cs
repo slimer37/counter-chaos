@@ -5,7 +5,7 @@ using Interactables.Holding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Customers
+namespace Npc
 {
     public class NpcHand : MonoBehaviour
     {

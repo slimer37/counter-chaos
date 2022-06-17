@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Customers
+namespace Npc.Customers
 {
     public class Level : MonoBehaviour
     {

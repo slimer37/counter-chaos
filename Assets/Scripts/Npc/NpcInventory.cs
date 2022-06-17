@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Customers
+namespace Npc
 {
     public class NpcInventory : MonoBehaviour
     {

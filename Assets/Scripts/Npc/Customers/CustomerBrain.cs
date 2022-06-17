@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Queue = Checkout.Queue;
 
-namespace Customers
+namespace Npc.Customers
 {
     [RequireComponent(typeof(NpcHand))]
     public class CustomerBrain : MonoBehaviour
