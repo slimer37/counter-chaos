@@ -23,9 +23,10 @@ namespace Customers
         
         void OnDrawGizmosSelected()
         {
+            Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.color = new Color(0, 1, 0, 0.5f);
-            Gizmos.DrawCube(transform.TransformPoint(leftHoldingPosition), Vector3.one * 0.25f);
-            Gizmos.DrawCube(transform.TransformPoint(rightHoldingPosition), Vector3.one * 0.25f);
+            Gizmos.DrawCube(leftHoldingPosition, Vector3.one * 0.25f);
+            Gizmos.DrawCube(rightHoldingPosition, Vector3.one * 0.25f);
         }
 
         internal YieldInstruction Pickup(Pickuppable pickuppable)
