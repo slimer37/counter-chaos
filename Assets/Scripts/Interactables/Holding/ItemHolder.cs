@@ -26,14 +26,12 @@ namespace Interactables.Holding
         [SerializeField] int correctionLimit = 10;
         
         [Header("Obstacle Detection")]
-        [SerializeField] float lineOfSightMaxDist = 5;
         [SerializeField] LayerMask tossObstacleMask;
         [SerializeField] LayerMask cameraBlockRaycastMask;
         [SerializeField] LayerMask dropObstacleMask;
         
         [Header("Dropping")]
         [SerializeField] Transform cursor3D;
-        [SerializeField] Vector3 defaultDropPosition;
         [SerializeField] float dropReach;
         [SerializeField] float extraDropHeight;
         [SerializeField] LayerMask dropSurfaceMask;
@@ -69,7 +67,6 @@ namespace Interactables.Holding
 
         Vector2 mousePos;
 
-        bool inDefaultDropPos;
         bool onFlatSurface;
 
         public const string UseOldSystemPrefKey = "HoldSystem";
@@ -158,9 +155,10 @@ namespace Interactables.Holding
 
                 controller.EnableLook(true);
 
-                if (!heldItem.IsIntersecting(dropObstacleMask)
+                if (!ghost.gameObject.activeSelf
+                    && !heldItem.IsIntersecting(dropObstacleMask)
                     && (!heldItem.Info.groundPlacementOnly || onFlatSurface)
-                    && (!inDefaultDropPos || !IsLineOfSightBlocked()))
+                    && !IsLineOfSightBlocked())
                     Drop(false);
                 else
                     ReturnItemToHolding();
@@ -256,8 +254,8 @@ namespace Interactables.Holding
                 itemTransform.eulerAngles = droppingRotation;
 
                 var onFreeSpot = false;
-                var point = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
-                var rayHit = Physics.Raycast(point, out var hit, dropReach, dropSurfaceMask);
+                var ray = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
+                var rayHit = Physics.Raycast(ray, out var hit, dropReach, dropSurfaceMask);
                 var initialPoint = Vector3.zero;
 
                 if (rayHit)
@@ -303,14 +301,20 @@ namespace Interactables.Holding
                 if (onFreeSpot && (!heldItem.Info.groundPlacementOnly || onFlatSurface))
                 {
                     ghost.Hide();
-                    inDefaultDropPos = false;
                 }
                 else
                 {
-                    if (rayHit) ghost.ShowAt(initialPoint, itemTransform.rotation);
-                    else ghost.Hide();
-                    itemTransform.position = transform.TransformPoint(defaultDropPosition);
-                    inDefaultDropPos = true;
+                    if (rayHit)
+                    {
+                        ghost.ShowAt(initialPoint, itemTransform.rotation);
+                        itemTransform.localPosition = holdingPosition;
+                        itemTransform.localRotation = holdingRotation;
+                    }
+                    else
+                    {
+                        ghost.Hide();
+                        itemTransform.position = ray.GetPoint(dropReach - heldItem.BoundHalfDiagonal);
+                    }
                 }
                 
                 SetHeldObjectLayers(onFreeSpot ? droppingObjectLayer : heldObjectLayer);
