@@ -81,7 +81,7 @@ namespace Interactables.Holding
         }
 
         // Can hover if the sender is not holding anything.
-        bool OnAttemptHover(Transform sender) => !isHeld && !Inventory.Main.Holder.IsHoldingItem;
+        bool OnAttemptHover(Transform sender) => !isHeld && !Inventory.Main.IsFull;
 
         public bool IsIntersecting(LayerMask mask)
         {
