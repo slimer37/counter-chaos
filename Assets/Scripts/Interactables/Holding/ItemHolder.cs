@@ -214,10 +214,10 @@ namespace Interactables.Holding
         bool IsLineOfSightBlocked()
         {
             var camPos = camera.transform.position;
-            var camItemRay = new Ray(camPos, heldItem.transform.position - camPos);
-            var temp = Physics.Raycast(camItemRay, out var hit, lineOfSightMaxDist, cameraBlockRaycastMask)
+            var dir = heldItem.transform.position - camPos;
+            var camItemRay = new Ray(camPos, dir);
+            return Physics.Raycast(camItemRay, out var hit, dir.magnitude, cameraBlockRaycastMask)
                 && hit.transform != heldItem.transform;
-            return temp;
         }
 
         Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
