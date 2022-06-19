@@ -11,20 +11,20 @@ namespace Interactables.Holding
     {
         struct Slot
         {
-            public Pickuppable Content
+            public Pickuppable Item
             {
-                get => content;
+                get => item;
                 set
                 {
                     if (value == null) throw new Exception("Use Clear() to empty a slot.");
-                    if (content != null) throw new Exception("Attempted to assign occupied slot.");
+                    if (item != null) throw new Exception("Attempted to assign occupied slot.");
                     
-                    content = value;
+                    item = value;
                     
                     var highlight = value.GetComponent<Base.Highlight>();
                     if (highlight) highlight.enabled = false;
 
-                    previewTex = Preview.Thumbnail.Grab(content.Info.label, content.transform);
+                    previewTex = Preview.Thumbnail.Grab(item.Info.label, item.transform);
 
                     if (highlight) highlight.enabled = true;
 
@@ -33,12 +33,12 @@ namespace Interactables.Holding
                 }
             }
             
-            Pickuppable content;
+            Pickuppable item;
             Texture2D previewTex;
 
             readonly RawImage thumbnail;
 
-            public bool IsFilled => content != null;
+            public bool HasItem => item != null;
             public readonly Transform transform;
 
             public Slot(GameObject obj)
@@ -49,14 +49,14 @@ namespace Interactables.Holding
                        ?? throw new Exception("Slot template's first child is not a raw image.");
                 thumbnail.enabled = false;
                 
-                content = null;
+                item = null;
                 
                 previewTex = null;
             }
 
             public void Clear()
             {
-                content = null;
+                item = null;
                 thumbnail.enabled = false;
             }
         }
@@ -124,14 +124,14 @@ namespace Interactables.Holding
                 if (!CanSwitch) return;
                 var delta = (invertScrollDirection ? -1 : 1) * (ctx.ReadValue<float>() > 0 ? 1 : -1);
                 var newIndex = (ActiveSlotIndex + delta + numSlots) % numSlots;
-                SetActiveSlot(newIndex, false);
+                SetActiveSlot(newIndex);
             };
         }
         
         void OnTextInput(char c)
         {
             if (CanSwitch && int.TryParse(c.ToString(), out var i) && i > 0 && i <= numSlots)
-                SetActiveSlot(i - 1, false);
+                SetActiveSlot(i - 1);
         }
 
         void OnDestroy()
@@ -155,10 +155,10 @@ namespace Interactables.Holding
             else moveOffScreen.PlayBackwards();
         }
 
-        void SetActiveSlot(int index, bool newPickup)
+        void SetActiveSlot(int index, bool force = false)
         {
             if (index < 0 || index >= numSlots) throw new IndexOutOfRangeException($"Slot {index} does not exist.");
-            if (!newPickup && index == ActiveSlotIndex) return;
+            if (!force && index == ActiveSlotIndex) return;
             
             ActiveSlotIndex = index;
             activeImage.transform.position = slots[ActiveSlotIndex].transform.position;
@@ -167,36 +167,31 @@ namespace Interactables.Holding
             
             if (Holder.IsHoldingItem)
                 Holder.StopHolding().gameObject.SetActive(false);
-            
-            if (slots[index].IsFilled)
-            {
-                var obj = slots[index].Content.gameObject;
 
-                if (!newPickup)
-                {
-                    var player = transform.root;
-                    obj.transform.position = player.position;
-                    obj.transform.rotation = player.rotation;
-                }
-                
-                obj.SetActive(true);
-                Holder.Hold(slots[index].Content, this);
-            }
+            if (!slots[index].HasItem) return;
+            
+            var obj = slots[index].Item.gameObject;
+            
+            var player = transform.root;
+            obj.transform.SetPositionAndRotation(player.position, player.rotation);
+            
+            obj.SetActive(true);
+            Holder.Hold(slots[index].Item);
         }
 
-        public Pickuppable GetSlotContent(int index) => slots[index].Content;
+        public Pickuppable GetSlotContent(int index) => slots[index].Item;
 
         public Pickuppable ClearSlot(int index, bool destroy = false)
         {
             if (index > numSlots) throw new ArgumentOutOfRangeException(nameof(index));
-            if (!slots[index].Content) return null;
+            if (!slots[index].Item) return null;
             
             inactiveTime = 0;
             numItems--;
             
-            var temp = slots[index].Content;
+            var temp = slots[index].Item;
             if (index == ActiveSlotIndex && Holder.IsHoldingItem) Holder.StopHolding();
-            if (destroy) Destroy(slots[index].Content.gameObject);
+            if (destroy) Destroy(slots[index].Item.gameObject);
             slots[index].Clear();
             return temp;
         }
