@@ -64,7 +64,7 @@ namespace Npc
 
         protected YieldInstruction Drop(Vector3 pos, Vector3 rot)
         {
-            if (!heldItem) throw new Exception("Drop called with no held item.");
+            if (items.Count == 0) throw new Exception("Drop called with no items.");
             heldItem = items[0];
             items.Remove(heldItem);
             return hand.Drop(heldItem, pos, rot);
