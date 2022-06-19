@@ -71,8 +71,6 @@ namespace Interactables.Holding
 
         bool inDefaultDropPos;
         bool onFlatSurface;
-        
-        Inventory inv;
 
         public const string UseOldSystemPrefKey = "HoldSystem";
 
@@ -101,10 +99,9 @@ namespace Interactables.Holding
             return temp;
         }
         
-        internal void Hold(Pickuppable pickuppable, Inventory inv)
+        internal void Hold(Pickuppable pickuppable)
         {
             if (heldItem) throw new InvalidOperationException("Cannot give item while player is holding an item.");
-            this.inv = inv;
 
             holdingPosition = pickuppable.OverridePosition ?? defaultHoldingPosition;
             holdingRotation = Quaternion.Euler(pickuppable.OverrideRotation ?? defaultHoldingRotation);
@@ -380,7 +377,7 @@ namespace Interactables.Holding
             heldItem = null;
             ghost.Hide();
 
-            if (clearSlot) inv.ClearActiveSlot();
+            if (clearSlot) Inventory.Main.ClearActiveSlot();
         }
     }
 }
