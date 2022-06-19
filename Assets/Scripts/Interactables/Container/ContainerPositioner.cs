@@ -24,12 +24,12 @@ namespace Interactables.Container
                 gameObject = obj;
             }
 
-            public void Setup(int layer, Collider ignore) => Setup(layer, ignore, false);
-            public void Reset(Collider ignore) => Setup(originalLayer, ignore, true);
+            public void Setup(int layer, Collider ignore) => Setup(layer, ignore, true);
+            public void Reset(Collider ignore) => Setup(originalLayer, ignore, false);
 
-            void Setup(int layer, Collider ignore, bool remove)
+            void Setup(int layer, Collider ignore, bool shouldIgnore)
             {
-                Physics.IgnoreCollision(collider, ignore, !remove);
+                Physics.IgnoreCollision(collider, ignore, shouldIgnore);
                 gameObject.layer = layer;
             }
         }
@@ -136,14 +136,17 @@ namespace Interactables.Container
 
         public bool TryGiveToPlayer(int index)
         {
+            var item = items[index];
+
             if (IsAnimating || Inventory.Main.IsFull) return false;
             
-            var item = items[index];
             item.gameObject.transform.DOKill();
             item.Reset(disableCollider);
             
             Inventory.Main.TryGive(item.pickuppable);
+            
             item.hoverable.OnHoverExit();
+
             return true;
         }
     }

@@ -212,21 +212,21 @@ namespace Interactables.Holding
         public bool TryGive(Pickuppable item)
         {
             if (IsFull) return false;
-
-            var success = false;
             
             var i = ActiveSlotIndex;
             for (var j = 0; j < slots.Length; j++)
             {
                 var index = (i + j) % numSlots;
-                if (slots[index].IsFilled) continue;
-                slots[index].Content = item;
-                success = true;
+                
+                if (slots[index].HasItem) continue;
+                
+                slots[index].Item = item;
+                
+                // Record successful slot to switch to.
+                i = index;
+                
                 break;
             }
-            
-            if (!success) return false;
-            
             SetActiveSlot(i, true);
             return true;
         }

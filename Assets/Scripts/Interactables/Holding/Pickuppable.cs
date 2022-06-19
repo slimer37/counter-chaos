@@ -100,15 +100,16 @@ namespace Interactables.Holding
         void OnPickup(Transform sender)
         {
             var isPlayer = sender.CompareTag("Player");
-            if (!isPlayer && isHeld)
-                throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
             
-            var inventory = Inventory.Main;
-            
-            if (isHeld || isPlayer && inventory.Holder.IsHoldingItem) return;
+            if (isHeld)
+            {
+                if (!isPlayer)
+                    throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
+                return;
+            }
             
             if (isPlayer)
-                inventory.TryGive(this);
+                Inventory.Main.TryGive(this);
             else
                 Setup(sender);
         }
