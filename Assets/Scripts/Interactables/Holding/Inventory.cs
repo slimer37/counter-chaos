@@ -222,6 +222,8 @@ namespace Interactables.Holding
                 
                 break;
             }
+
+            numItems++;
             SetActiveSlot(i, true);
             return true;
         }
