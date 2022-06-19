@@ -4,39 +4,23 @@ using DG.Tweening;
 using Interactables.Holding;
 using Products;
 using UnityEngine;
-using UnityEngine.AI;
 using Queue = Checkout.Queue;
 
 namespace Npc.Customers
 {
     [RequireComponent(typeof(NpcHand))]
-    public class CustomerBrain : MonoBehaviour
+    public class CustomerBrain : NpcBase
     {
-        [SerializeField] NavMeshAgent agent;
-        [SerializeField] float rotationSpeed;
         [SerializeField, Min(0.01f)] float conveyorPlaceAttemptInterval = 1;
-        [SerializeField] Animator animator;
         [SerializeField, Min(0)] int minProducts = 3;
         [SerializeField, Min(1)] int maxProducts = 5;
 
         Queue queue;
-        NpcHand hand;
         bool finishedTransaction;     
         
         readonly List<ProductIdentifier> requestedProducts = new();
 
         int index;
-        
-        static readonly int Speed = Animator.StringToHash("speed");
-
-        void Awake()
-        {
-            hand = GetComponent<NpcHand>();
-        }
-
-        void OnDestroy() => StopAllCoroutines();
-
-        void Update() => animator.SetFloat(Speed, agent.velocity.sqrMagnitude);
 
         ProductIdentifier SelectNewProduct()
         {
@@ -61,7 +45,7 @@ namespace Npc.Customers
 
                 var pickuppable = newProduct.GetComponent<Pickuppable>();
                 if (pickuppable.IsHeld) continue;
-                yield return hand.Pickup(pickuppable);
+                yield return Pickup(pickuppable);
             }
             
             queue = Queue.FindClosestQueue(transform.position);
@@ -70,7 +54,7 @@ namespace Npc.Customers
             yield return MoveToward(linePos);
             
             if (index > 0)
-                yield return Rotate(Quaternion.LookRotation(queue.LineSpots[index - 1] - linePos));
+                yield return LookAt(queue.LineSpots[index - 1]);
 
             queue.MoveLine += MoveLine;
             yield return new WaitUntil(() => index == 0);
@@ -89,7 +73,7 @@ namespace Npc.Customers
                 }
                 
                 queue.Area.StartPlacing();
-                yield return hand.Drop(position, rotation);
+                yield return Drop(position, rotation);
                 queue.Area.EndPlacing();
             }
             
@@ -120,32 +104,20 @@ namespace Npc.Customers
         {
             finishedTransaction = true;
             queue.OnCustomerServed -= OnServed;
-            yield return new WaitUntil(() => hand.IsHoldingItem);
+            yield return new WaitUntil(() => IsHoldingItem);
             queue.CustomerLeave(index);
             yield return MoveToward(Level.GetFinishPoint());
             Destroy(gameObject);
         }
 
-        IEnumerator MoveToward(Vector3 position)
-        {
-            agent.SetDestination(position);
-            yield return null;
-            yield return new WaitUntil(() => agent.remainingDistance < agent.stoppingDistance);
-        }
-
-        IEnumerator Rotate(Quaternion rotation)
-        {
-            yield return transform.DORotateQuaternion(rotation, rotationSpeed).SetSpeedBased().WaitForCompletion();
-        }
-
         void OnCollisionEnter(Collision other)
         {
-            if (!hand.IsHoldingItem
+            if (!IsHoldingItem
                 && finishedTransaction 
                 && other.transform.CompareTag("Product") 
                 && ProductLibrary.TryGetProductInfo(other.transform, out var info)
                 && requestedProducts.Find(identifier => identifier.productInfo == info) != null)
-                hand.Pickup(other.transform.GetComponent<Pickuppable>());
+                Pickup(other.transform.GetComponent<Pickuppable>());
         }
     }
 }

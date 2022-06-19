@@ -16,10 +16,6 @@ namespace Npc
         [SerializeField, Min(0.01f)] float dropSpeed = 1;
         [SerializeField, Min(0)] float dropHeight = 0.5f;
         [SerializeField, Min(0)] float holdTime = 1;
-
-        List<Pickuppable> heldItems = new();
-
-        public bool IsHoldingItem => heldItems.Count > 0;
         
         void OnDrawGizmosSelected()
         {
@@ -29,9 +25,8 @@ namespace Npc
             Gizmos.DrawCube(rightHoldingPosition, Vector3.one * 0.25f);
         }
 
-        public YieldInstruction Pickup(Pickuppable pickuppable)
+        internal YieldInstruction Pickup(Pickuppable pickuppable)
         {
-            heldItems.Add(pickuppable);
             pickuppable.OnInteract(transform);
             
             var leftHanded = Random.value > 0.5f;
@@ -40,13 +35,8 @@ namespace Npc
             return pickuppable.transform.DOLocalMove(pos, holdTime).WaitForCompletion();
         }
 
-        public YieldInstruction Drop(Vector3 position, Vector3 rotation)
+        internal YieldInstruction Drop(Pickuppable heldItem, Vector3 position, Vector3 rotation)
         {
-            var heldItem = heldItems[0];
-            if (!heldItem) throw new Exception("Drop called with no held item.");
-            
-            heldItems.Remove(heldItem);
-
             var sequence = DOTween.Sequence();
 
             var tempHeight = position.y + heldItem.StandingDistance;
