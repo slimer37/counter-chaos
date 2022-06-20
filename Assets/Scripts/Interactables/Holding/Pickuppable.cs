@@ -30,6 +30,7 @@ namespace Interactables.Holding
         public bool IsHeld => isHeld;
 
         public float BoundHalfDiagonal { get; private set; }
+        public float ToTopDistance { get; private set; }
         public float StandingDistance { get; private set; }
         public Vector3? OverridePosition => UseIfNotZeroes(overrideHoldingPosition);
         public Vector3? OverrideRotation => useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
@@ -76,6 +77,7 @@ namespace Interactables.Holding
             
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
             StandingDistance = - meshBounds.center.y + meshBounds.extents.y;
+            ToTopDistance = meshBounds.center.y + meshBounds.extents.y;
             hoverable.OnAttemptHover += OnAttemptHover;
             hoverable.icon = InteractionIcon.Pickup;
         }
