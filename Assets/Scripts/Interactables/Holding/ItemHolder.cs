@@ -46,6 +46,7 @@ namespace Interactables.Holding
         [SerializeField] Image holdIndicator;
 
         public bool IsHoldingItem => heldItem;
+        public bool IsDroppingItem => isHoldingDrop;
         public Pickuppable HeldItem => heldItem;
 
         PlayerController controller;
@@ -317,7 +318,7 @@ namespace Interactables.Holding
                     }
                 }
                 
-                SetHeldObjectLayers(onFreeSpot ? droppingObjectLayer : heldObjectLayer);
+                SetHeldObjectLayers(droppingObjectLayer);
             }
         }
         
