@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Core;
 using UnityEngine;
 using DG.Tweening;
@@ -32,7 +33,9 @@ namespace Interactables.Holding
         
         [Header("Dropping")]
         [SerializeField] Transform cursor3D;
-        [SerializeField] float dropReach;
+        [SerializeField] float minDropReach = 0.5f;
+        [SerializeField] float maxDropReach = 3f;
+        [SerializeField] float reachChangeRate = 0.1f;
         [SerializeField] float extraDropHeight;
         [SerializeField] LayerMask dropSurfaceMask;
         [SerializeField] LayerMask groundLayerMask;
@@ -63,12 +66,15 @@ namespace Interactables.Holding
         bool isHoldingDrop;
         bool isRotating;
         float holdTime;
+        float dropReach;
 
         Vector3 droppingRotation;
 
         Vector2 mousePos;
 
         bool onFlatSurface;
+
+        RaycastHit dropRayHit;
 
         public const string UseOldSystemPrefKey = "HoldSystem";
 
@@ -83,6 +89,8 @@ namespace Interactables.Holding
             controller = GetComponent<PlayerController>();
             useOldSystem = PlayerPrefs.GetInt(UseOldSystemPrefKey) == 1;
             cursor3D.gameObject.SetActive(false);
+
+            dropReach = maxDropReach;
         }
 
         internal Pickuppable StopHolding()
@@ -254,10 +262,12 @@ namespace Interactables.Holding
                 
                 itemTransform.eulerAngles = droppingRotation;
 
-                var onFreeSpot = false;
+                bool onFreeSpot;
                 var ray = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
                 var rayHit = Physics.Raycast(ray, out var hit, dropReach, dropSurfaceMask);
                 var initialPoint = Vector3.zero;
+                
+                dropRayHit = hit;
 
                 if (rayHit)
                 {
@@ -274,17 +284,12 @@ namespace Interactables.Holding
                     cursor3D.gameObject.SetActive(true);
                     cursor3D.position = hit.point;
 
-                    if (heldItem.IsIntersecting(dropObstacleMask))
-                    {
-                        // Micro-adjust until intersection stops.
-                        if (AttemptOffset(-transform.forward)
-                            || AttemptOffset(-hit.normal)
-                            || AttemptOffset(-transform.right)
-                            || AttemptOffset(transform.right))
-                            onFreeSpot = true;
-                    }
-                    else
-                        onFreeSpot = true;
+                    onFreeSpot = !heldItem.IsIntersecting(dropObstacleMask) ||
+                                 AttemptOffsets(-transform.forward,
+                                     -hit.normal,
+                                     Vector3.up,
+                                     -transform.right,
+                                     transform.right);
                     
                     // Only try moving item forward if surface is a wall (within 10 degrees).
                     if (Math.Abs(angle - 90) < 10)
@@ -292,36 +297,55 @@ namespace Interactables.Holding
                 }
                 else
                 {
+                    var cursorPoint = ray.GetPoint(dropReach - heldItem.BoundHalfDiagonal);
+                    itemTransform.position = cursorPoint + Vector3.up * heldItem.StandingDistance;
+                    initialPoint = itemTransform.position;
+                    
                     onFlatSurface = false;
-                    cursor3D.gameObject.SetActive(false);
+                    cursor3D.gameObject.SetActive(true);
+                    cursor3D.position = cursorPoint;
+
+                    onFreeSpot = !heldItem.IsIntersecting(dropObstacleMask) ||
+                                 AttemptOffsets(Vector3.up,
+                                     -transform.forward,
+                                     -transform.right,
+                                     transform.right);
                 }
                 
                 if (onFlatSurface)
                     onFlatSurface &= onFreeSpot && hit.transform.gameObject.IsInLayerMask(groundLayerMask);
                 
                 if (onFreeSpot && (!heldItem.Info.groundPlacementOnly || onFlatSurface))
-                {
                     ghost.Hide();
-                }
                 else
                 {
-                    if (rayHit)
-                    {
-                        ghost.ShowAt(initialPoint, itemTransform.rotation);
-                        itemTransform.localPosition = holdingPosition;
-                        itemTransform.localRotation = holdingRotation;
-                    }
-                    else
-                    {
-                        ghost.Hide();
-                        itemTransform.position = ray.GetPoint(dropReach - heldItem.BoundHalfDiagonal);
-                    }
+                    ghost.ShowAt(initialPoint, itemTransform.rotation);
+                    itemTransform.localPosition = holdingPosition;
+                    itemTransform.localRotation = holdingRotation;
                 }
                 
                 SetHeldObjectLayers(droppingObjectLayer);
             }
         }
+
+        void OnScroll(InputValue value)
+        {
+            var scroll = value.Get<float>();
+            if (!IsDroppingItem || scroll == 0) return;
+            
+            // If the drop ray has hit, use current item distance when decreasing reach
+            if (scroll < 0 && dropRayHit.distance != 0)
+                dropReach = dropRayHit.distance;
+            
+            var delta = scroll > 0 ? 1 : -1;
+            dropReach += delta * reachChangeRate;
+            dropReach = Mathf.Clamp(dropReach, minDropReach, maxDropReach);
+        }
         
+        // Provides alternative to large if statement using ORs to chain AttemptOffset calls
+        bool AttemptOffsets(params Vector3[] directions) =>
+            directions.Any(dir => AttemptOffset(dir));
+
         // useFarthest moves the item as far as possible without intersection
         // Keeping it false moves the item the minimum amount to avoid intersection
         bool AttemptOffset(Vector3 direction, bool useFarthest = false)
@@ -336,7 +360,8 @@ namespace Interactables.Holding
             {
                 itemTransform.position += adjust;
                 
-                if (heldItem.IsIntersecting(dropObstacleMask))
+                if (heldItem.IsIntersecting(dropObstacleMask) ||
+                    Physics.Raycast(original, direction, correctionAmount * (i + 1), dropObstacleMask))
                 {
                     // If we're intersecting now but weren't before, bump it back and exit.
                     // (only possible with useFarthest, since first success exits)

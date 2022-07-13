@@ -89,7 +89,7 @@ namespace Interactables.Holding
 
         Controls controls;
         
-        bool CanSwitch => Time.timeScale != 0 && !interactHeld && !secInteractHeld;
+        bool CanSwitch => Time.timeScale != 0 && !interactHeld && !secInteractHeld && !Holder.IsDroppingItem;
         bool interactHeld;
         bool secInteractHeld;
 
@@ -120,12 +120,15 @@ namespace Interactables.Holding
             controls.Gameplay.SecondaryInteract.performed += _ => secInteractHeld = true;
             controls.Gameplay.SecondaryInteract.canceled += _ => secInteractHeld = false;
 
-            controls.Gameplay.Scroll.performed += ctx => {
-                if (!CanSwitch) return;
-                var delta = (invertScrollDirection ? -1 : 1) * (ctx.ReadValue<float>() > 0 ? 1 : -1);
-                var newIndex = (ActiveSlotIndex + delta + numSlots) % numSlots;
-                SetActiveSlot(newIndex);
-            };
+            controls.Gameplay.Scroll.performed += OnScroll;
+        }
+
+        void OnScroll(InputAction.CallbackContext ctx)
+        {
+            if (!CanSwitch) return;
+            var delta = (invertScrollDirection ? -1 : 1) * (ctx.ReadValue<float>() > 0 ? 1 : -1);
+            var newIndex = (ActiveSlotIndex + delta + numSlots) % numSlots;
+            SetActiveSlot(newIndex);
         }
         
         void OnTextInput(char c)

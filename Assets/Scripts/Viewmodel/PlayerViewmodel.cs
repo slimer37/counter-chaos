@@ -1,4 +1,3 @@
-using System;
 using Interactables.Holding;
 using UnityEngine;
 
