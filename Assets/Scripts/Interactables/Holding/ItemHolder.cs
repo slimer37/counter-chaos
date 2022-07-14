@@ -67,6 +67,7 @@ namespace Interactables.Holding
         bool isRotating;
         float holdTime;
         float dropReach;
+        float adjustedMinReach;
 
         Vector3 droppingRotation;
 
@@ -121,6 +122,9 @@ namespace Interactables.Holding
             
             SetHeldObjectLayers(heldObjectLayer);
             MoveAndRotateHeldItem(holdingPosition, holdingRotation, pickupTime);
+            
+            adjustedMinReach = minDropReach + heldItem.BoundHalfDiagonal * 2;
+            ValidateDropReach();
         }
 
         void OnRotate(InputValue value)
@@ -341,9 +345,11 @@ namespace Interactables.Holding
             
             var delta = scroll > 0 ? 1 : -1;
             dropReach += delta * reachChangeRate;
-            dropReach = Mathf.Clamp(dropReach, minDropReach, maxDropReach);
+            ValidateDropReach();
         }
-        
+
+        void ValidateDropReach() => dropReach = Mathf.Clamp(dropReach, adjustedMinReach, maxDropReach);
+
         // Provides alternative to large if statement using ORs to chain AttemptOffset calls
         bool AttemptOffsets(params Vector3[] directions) =>
             directions.Any(dir => AttemptOffset(dir));
