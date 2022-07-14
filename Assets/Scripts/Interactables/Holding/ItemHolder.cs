@@ -294,6 +294,7 @@ namespace Interactables.Holding
                                  AttemptOffsets(-transform.forward,
                                      -hit.normal,
                                      Vector3.up,
+                                     Vector3.down,
                                      -transform.right,
                                      transform.right);
                     
@@ -313,6 +314,7 @@ namespace Interactables.Holding
 
                     onFreeSpot = !heldItem.IsIntersecting(dropObstacleMask) ||
                                  AttemptOffsets(Vector3.up,
+                                     Vector3.down,
                                      -transform.forward,
                                      -transform.right,
                                      transform.right);
