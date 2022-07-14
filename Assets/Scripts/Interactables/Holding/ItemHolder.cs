@@ -262,10 +262,12 @@ namespace Interactables.Holding
                 
                 itemTransform.eulerAngles = droppingRotation;
 
+                Vector3 initialPoint;
                 bool onFreeSpot;
+                
                 var ray = useOldSystem ? GetCameraRay() : camera.ScreenPointToRay(mousePos);
-                var rayHit = Physics.Raycast(ray, out var hit, dropReach, dropSurfaceMask);
-                var initialPoint = Vector3.zero;
+                var rayHit = Physics.Raycast(ray, out var hit, dropReach - heldItem.BoundHalfDiagonal,
+                    dropSurfaceMask);
                 
                 dropRayHit = hit;
 
