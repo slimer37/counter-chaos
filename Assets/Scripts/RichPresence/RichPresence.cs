@@ -62,7 +62,7 @@ public class RichPresence : MonoBehaviour
             Details = playing ? $"{save.playerName}'s store: {save.money:C}" : "",
             Timestamps =
             {
-                Start = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds
+                Start = (int)DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds
             },
             Assets =
             {
