@@ -23,7 +23,7 @@ namespace Viewmodel
             originalLocalPos = transform.InverseTransformPoint(rootBone.position);
         }
 
-        void Update()
+        void LateUpdate()
         {
             rend.enabled = holder.IsDroppingItem && !ghost.activeSelf;
             
