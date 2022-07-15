@@ -125,7 +125,10 @@ namespace UI
             void ShowErrorIfNeeded(UnityWebRequest request)
             {
                 if (request.result != UnityWebRequest.Result.Success)
+                {
                     text.text = $"<color=red>{request.error}</color>";
+                    throw new Exception(request.error);
+                }
             }
         }
 
