@@ -91,9 +91,7 @@ namespace Products.Browser
                     clone.name = product.DisplayName.ToLowerInvariant();
                     
                     var img = clone.GetComponentInChildren<RawImage>();
-                    var productClone = product.Instantiate();
-                    img.texture = Preview.Thumbnail.Grab(product.DisplayName, productClone.transform, imageSize);
-                    Destroy(productClone);
+                    img.texture = Preview.Thumbnail.Grab(product.DisplayName, product.Prefab.transform, imageSize);
                     clone.SetActive(true);
                 }
                 catch (System.Exception e)
