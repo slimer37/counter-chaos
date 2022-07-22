@@ -15,15 +15,13 @@ namespace Products
         [field: SerializeField] public float Price { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         [SerializeField] bool cannotBeScanned;
-        [SerializeField] AssetReferenceGameObject prefabAsset;
+        [SerializeField] GameObject prefab;
         
+        public GameObject Prefab => prefab;
         public int ID { get; private set; }
         public string CompactName { get; private set; }
         public Texture2D Barcode { get; private set; }
         public bool HasBarcode => Barcode;
-        
-	    GameObject prefab;
-        Vector3 meshSize;
 
         static readonly Dictionary<int, ProductInfo> IDTable = new();
         
@@ -32,26 +30,10 @@ namespace Products
         static readonly char[] Vowels = {'A', 'E', 'I', 'O', 'U'};
 
         public GameObject Instantiate() => Instantiate(prefab);
-        
-#if UNITY_EDITOR
-        public GameObject PrefabEditorAsset => prefabAsset.editorAsset;
-#endif
 
-        public Vector3 Size
-        {
-            get
-            {
-                if (meshSize != default) return meshSize;
-                
-                try { meshSize = prefabAsset.editorAsset.GetComponentInChildren<MeshFilter>().sharedMesh.bounds.size; }
-                catch (Exception e)
-                { throw new Exception($"Encountered an error while trying to set product size for {DisplayName}.", e); }
-                
-                return meshSize;
-            }
-        }
+        public Vector3 Size { get; private set; }
 
-        internal void Init(int seed, Action onPrefabLoad)
+        internal void Init(int seed)
         {
             var tempState = Random.state;
             Random.InitState(seed);
@@ -64,12 +46,8 @@ namespace Products
 
             GenerateCompactName();
 
-	        var handle = prefabAsset.LoadAssetAsync();
-	        handle.Completed += OnPrefabLoadCompleted;
-            handle.Completed += _ => onPrefabLoad();
+            Size = prefab.GetComponentInChildren<MeshFilter>().sharedMesh.bounds.size;
         }
-
-	    void OnPrefabLoadCompleted(AsyncOperationHandle<GameObject> handle) => prefab = handle.Result;
 
         void GenerateID()
         {

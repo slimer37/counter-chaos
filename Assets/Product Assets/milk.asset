@@ -17,8 +17,4 @@ MonoBehaviour:
   <Description>k__BackingField: A Konnor-brand milk jug. Genetic modification is
     probably the best part about this milk.
   cannotBeScanned: 0
-  prefabAsset:
-    m_AssetGUID: 5048b3ef023d35444ba46544748676f2
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
+  prefab: {fileID: 983908532601667274, guid: 5048b3ef023d35444ba46544748676f2, type: 3}

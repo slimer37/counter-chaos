@@ -17,8 +17,4 @@ MonoBehaviour:
   <Description>k__BackingField: A hearty can of vegetable soup never fails for any
     sort of meal or any sort of eater!
   cannotBeScanned: 0
-  prefabAsset:
-    m_AssetGUID: 10e2bdd8ebb12b0468d865f314be2ce3
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
+  prefab: {fileID: 7004504270865866449, guid: 10e2bdd8ebb12b0468d865f314be2ce3, type: 3}

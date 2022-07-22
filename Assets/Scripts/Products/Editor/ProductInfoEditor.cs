@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Products
+namespace Products.Editor
 {
     [CustomEditor(typeof(ProductInfo))]
-    public class ProductInfoEditor : Editor
+    public class ProductInfoEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
@@ -12,7 +12,7 @@ namespace Products
             
             var info = (ProductInfo)target;
 
-            var prefab = info.PrefabEditorAsset;
+            var prefab = serializedObject.FindProperty("prefab").objectReferenceValue as GameObject;
 
             if (!prefab)
             {

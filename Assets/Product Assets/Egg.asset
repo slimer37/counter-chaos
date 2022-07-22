@@ -16,8 +16,4 @@ MonoBehaviour:
   <Price>k__BackingField: 0
   <Description>k__BackingField: 
   cannotBeScanned: 0
-  prefabAsset:
-    m_AssetGUID: fb5eb58ab07fe044cb22d91ee91eed15
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
+  prefab: {fileID: 6102404844103625594, guid: fb5eb58ab07fe044cb22d91ee91eed15, type: 3}

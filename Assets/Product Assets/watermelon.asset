@@ -16,8 +16,4 @@ MonoBehaviour:
   <Price>k__BackingField: 4.8
   <Description>k__BackingField: Good source of water.
   cannotBeScanned: 1
-  prefabAsset:
-    m_AssetGUID: 24163cac66fb4894380db15e96943a0f
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
+  prefab: {fileID: 2454649368034079682, guid: 24163cac66fb4894380db15e96943a0f, type: 3}

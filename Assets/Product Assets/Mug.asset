@@ -16,8 +16,4 @@ MonoBehaviour:
   <Price>k__BackingField: 5
   <Description>k__BackingField: A ceramic mug from the Yeoflaskeon Basic series.
   cannotBeScanned: 0
-  prefabAsset:
-    m_AssetGUID: f71382192bb45ef4d8a8444029b0cfbf
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
+  prefab: {fileID: 475979273835726063, guid: f71382192bb45ef4d8a8444029b0cfbf, type: 3}

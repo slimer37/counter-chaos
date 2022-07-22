@@ -16,8 +16,4 @@ MonoBehaviour:
   <Price>k__BackingField: 1.5
   <Description>k__BackingField: 12 eggs.
   cannotBeScanned: 0
-  prefabAsset:
-    m_AssetGUID: c702fcb585d93e349842806ec7ceb083
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
+  prefab: {fileID: 3421850991272926979, guid: c702fcb585d93e349842806ec7ceb083, type: 3}
