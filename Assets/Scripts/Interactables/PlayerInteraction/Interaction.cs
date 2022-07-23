@@ -16,24 +16,16 @@ namespace Interactables
 
         Hoverable hoveredObject;
 
-        void Call(Func<IInteractable, Action<Transform>> action)
-        {
-            var t = transform;
-            if (!hoveredObject || !hoveredObject.TryGetInteractable(t, out var interactable)) return;
-            var interactionFunc = action.Invoke(interactable);
-            interactionFunc.Invoke(t);
-        }
-
         void OnInteract(InputValue value)
         {
-            if (value.isPressed) Call(i => i.OnInteract);
-            else Call(i => i.OnStopInteract);
+            if (!hoveredObject) return;
+            hoveredObject.Interact(transform, value.isPressed, false);
         }
 
         void OnSecondaryInteract(InputValue value)
         {
-            if (value.isPressed) Call(i => i.OnSecondaryInteract);
-            else Call(i => i.OnStopSecondaryInteract);
+            if (!hoveredObject) return;
+            hoveredObject.Interact(transform, value.isPressed, true);
         }
 
         void Update()
@@ -63,8 +55,8 @@ namespace Interactables
             void HoverOff()
             {
                 if (!hoveredObject) return;
-                Call(i => i.OnStopInteract);
-                Call(i => i.OnStopSecondaryInteract);
+                hoveredObject.Interact(transform, false, false);
+                hoveredObject.Interact(transform, false, true);
                 hoveredObject.OnHoverExit();
                 hoveredObject = null;
             }

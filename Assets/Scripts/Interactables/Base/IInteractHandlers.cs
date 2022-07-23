@@ -5,6 +5,7 @@ namespace Interactables.Base
     public interface IInteractable
     {
         public InteractionIcon Icon => InteractionIcon.Access;
+        public bool PassThrough => false;
 
         public bool CanInteract(Transform sender) => true;
         

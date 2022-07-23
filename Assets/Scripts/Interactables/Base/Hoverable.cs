@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using UnityEngine;
 
 namespace Interactables.Base
@@ -27,15 +27,38 @@ namespace Interactables.Base
                 Debug.LogWarning($"{name} is not on the Interactable layer.", gameObject);
         }
 
-        public bool TryGetInteractable(Transform sender, out IInteractable interactable)
+        public bool IsInteractable(Transform sender, out IInteractable i)
         {
-            interactable = null;
-            
+            IInteractable temp = null;
+
+            var result = ForAllInteractable(sender, i => temp = i, false);
+
+            i = temp;
+
+            return result;
+        }
+
+        public bool Interact(Transform sender, bool start, bool secondary)
+        {
+            Action<IInteractable> action = secondary switch
+            {
+                true when start => i => i.OnSecondaryInteract(sender),
+                true => i => i.OnStopSecondaryInteract(sender),
+                false when start=> i => i.OnInteract(sender),
+                false => i => i.OnStopInteract(sender),
+            };
+
+            return ForAllInteractable(sender, action, true);
+        }
+
+        bool ForAllInteractable(Transform sender, Action<IInteractable> action, bool allowPassThrough)
+        {
             foreach (var i in interactables)
             {
                 if (i.CanInteract(sender))
                 {
-                    interactable = i;
+                    action(i);
+                    if (allowPassThrough && i.PassThrough) continue;
                     return true;
                 }
             }
@@ -45,7 +68,7 @@ namespace Interactables.Base
 
         public void OnHover(IconHandler iconHandler, Transform sender)
         {
-            if (TryGetInteractable(sender, out var interactable))
+            if (IsInteractable(sender, out var interactable))
             {
                 tempIconHandler = iconHandler;
                 iconHandler.ShowIcon(interactable.Icon);
