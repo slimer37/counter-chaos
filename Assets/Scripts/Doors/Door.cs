@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Doors
 {
-    public class Door : MonoBehaviour, IInteractHandler
+    public class Door : MonoBehaviour, IInteractable
     {
         [Header("Pulling")]
         [SerializeField] bool invert;
@@ -28,6 +28,8 @@ namespace Doors
         Hoverable hoverable;
         Controls controls;
 
+        public InteractionIcon Icon { get; protected set; }
+
         void OnValidate()
         {
             for (var i = 0; i < 3; i++)
@@ -37,14 +39,10 @@ namespace Doors
 
         void Awake()
         {
-            hoverable = GetComponent<Hoverable>();
-            hoverable.OnAttemptHover += _ => {
-                UpdateIcon();
-                return true;
-            };
-            
+            // Release door when releasing control, not when hovering off.
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnRelease;
+            
             var rend = GetComponentInChildren<Renderer>();
             if (!rend) Debug.LogWarning("No renderer found to calculate door center.", this);
             center = transform.InverseTransformPoint(rend.bounds.center);
@@ -72,23 +70,26 @@ namespace Doors
             else
                 push = facingFront != invert ? yRot > rotationMin : yRot < rotationMax;
             
-            hoverable.icon = push ? InteractionIcon.Push : InteractionIcon.Pull;
+            Icon = push ? InteractionIcon.Push : InteractionIcon.Pull;
         }
 
         void Update()
         {
-            if (!isInteracting && delta == 0) return;
-            
             if (isInteracting)
             {
                 var a = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
                 var b = Quaternion.Inverse(transform.rotation) * (a - transform.TransformPoint(center));
                 delta = b.z * RotationSpeed * (invert ? -1 : 1);
             }
+            else if (delta == 0)
+                return;
+            
             var rot = transform.localEulerAngles;
             if (rot.y > 180) rot.y -= 360;
             rot.y = Mathf.Clamp(rot.y + delta * Time.deltaTime, rotationMin, rotationMax);
             transform.localEulerAngles = rot;
+            
+            UpdateIcon();
         }
 
         public void OnRelease(InputAction.CallbackContext ctx)

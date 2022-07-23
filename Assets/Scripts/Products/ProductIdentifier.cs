@@ -3,7 +3,7 @@ using Interactables.Base;
 
 namespace Products
 {
-    public class ProductIdentifier : MonoBehaviour, ISecondaryInteractHandler, IStopSecondaryInteractHandler
+    public class ProductIdentifier : MonoBehaviour, IInteractable
     {
         public ProductInfo productInfo;
 

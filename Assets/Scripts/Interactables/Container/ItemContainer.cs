@@ -9,7 +9,7 @@ using UnityEngine.Events;
 namespace Interactables.Container
 {
     [RequireComponent(typeof(ContainerPositioner))]
-    public class ItemContainer : MonoBehaviour, IInteractHandler, ISecondaryInteractHandler
+    public class ItemContainer : MonoBehaviour, IInteractable
     {
         public UnityEvent onOpen;
         public UnityEvent onClose;
@@ -37,7 +37,6 @@ namespace Interactables.Container
             positioner = GetComponent<ContainerPositioner>();
             if (cannotBeClosed) open = true;
             if (TryGetComponent(out pickuppable)) pickuppable.enabled = !open;
-            GetComponent<Hoverable>().ClearUnderPriority(1);
         }
 
         void Start() =>

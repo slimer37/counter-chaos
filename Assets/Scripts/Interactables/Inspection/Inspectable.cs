@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Interactables.Inspection
 {
-    public class Inspectable : MonoBehaviour, IInteractHandler, IStopInteractHandler
+    public class Inspectable : MonoBehaviour, IInteractable
     {
         [SerializeField] Hoverable hoverable;
         [SerializeField] float distanceFromCamera;
@@ -15,7 +15,9 @@ namespace Interactables.Inspection
         [SerializeField] Vector3 forwardDirection = Vector3.forward;
         [SerializeField, Min(0)] float angleAllowance = 180;
         [SerializeField] float animTime;
-        
+
+        public InteractionIcon Icon => InteractionIcon.Eye;
+
         static bool itemBeingInspected;
 
         Vector3 originalPosition;
@@ -36,17 +38,12 @@ namespace Interactables.Inspection
 
         void Awake()
         {
-            // Can hover if no item is being inspected.
-            hoverable.OnAttemptHover += CanInteract;
-            
-            hoverable.icon = InteractionIcon.Eye;
-
             originalPosition = transform.position;
             originalRotation = transform.rotation;
             angleCheckVector = transform.TransformDirection(-forwardDirection);
         }
 
-        bool CanInteract(Transform s)
+        public bool CanInteract(Transform s)
         {
             var playerCamera = Player.Camera.transform;
             return itemBeingInspected

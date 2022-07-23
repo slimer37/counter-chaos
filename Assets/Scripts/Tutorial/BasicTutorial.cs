@@ -53,7 +53,7 @@ namespace Tutorial
                 
                 if (closestDist < okPosError && IsWithinError(closest.transform.eulerAngles, goal.eulerAngles, okRotError))
                 {
-                    closest.GetComponent<Rigidbody>().isKinematic = true;
+                    closest.gameObject.GetComponent<Rigidbody>().isKinematic = true;
                     closest.transform.position = goal.position;
                     closest.transform.rotation = goal.rotation;
                     closest.gameObject.layer = 0;

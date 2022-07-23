@@ -16,43 +16,33 @@ namespace Interactables
 
         Hoverable hoveredObject;
 
-        void CallOnEach<THandler>(Func<THandler, Action<Transform>> action)
+        void Call(Func<IInteractable, Action<Transform>> action)
         {
-            if (!hoveredObject || !hoveredObject.LastCheckSuccessful) return;
-            var handlers = hoveredObject.GetOnce<THandler>();
-            foreach (var handler in handlers)
-            {
-                if (!(handler as MonoBehaviour).enabled) continue;
-                action(handler)(transform);
-            }
+            var t = transform;
+            if (!hoveredObject || !hoveredObject.TryGetInteractable(t, out var interactable)) return;
+            var interactionFunc = action.Invoke(interactable);
+            interactionFunc.Invoke(t);
         }
 
         void OnInteract(InputValue value)
         {
-            if (value.isPressed)
-                CallOnEach<IInteractHandler>(handler => handler.OnInteract);
-            else
-                CallOnEach<IStopInteractHandler>(handler => handler.OnStopInteract);
+            if (value.isPressed) Call(i => i.OnInteract);
+            else Call(i => i.OnStopInteract);
         }
 
         void OnSecondaryInteract(InputValue value)
         {
-            if (value.isPressed)
-                CallOnEach<ISecondaryInteractHandler>(handler => handler.OnSecondaryInteract);
-            else
-                CallOnEach<IStopSecondaryInteractHandler>(handler => handler.OnStopSecondaryInteract);
+            if (value.isPressed) Call(i => i.OnSecondaryInteract);
+            else Call(i => i.OnStopSecondaryInteract);
         }
 
         void Update()
         {
-            if (Physics.Raycast(camera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, reach, inclusionMask))
+            var eyeRay = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+            
+            if (Physics.Raycast(eyeRay, out var hit, reach, inclusionMask)
+                && hit.transform.gameObject.layer == interactablesLayer)
             {
-                if (hit.transform.gameObject.layer != interactablesLayer)
-                {
-                    HoverOff();
-                    return;
-                }
-
                 if (hoveredObject)
                 {
                     if (hoveredObject.transform != hit.transform)
@@ -65,9 +55,7 @@ namespace Interactables
                 }
                 
                 var hoverable = hit.transform.GetComponent<Hoverable>();
-                
-                if (hoverable && hoverable.enabled)
-                    (hoveredObject = hoverable).OnHover(iconHandler, transform);
+                (hoveredObject = hoverable)?.OnHover(iconHandler, transform);
             }
             else
                 HoverOff();
@@ -75,8 +63,8 @@ namespace Interactables
             void HoverOff()
             {
                 if (!hoveredObject) return;
-                CallOnEach<IStopInteractHandler>(handler => handler.OnStopInteract);
-                CallOnEach<IStopSecondaryInteractHandler>(handler => handler.OnStopSecondaryInteract);
+                Call(i => i.OnStopInteract);
+                Call(i => i.OnStopSecondaryInteract);
                 hoveredObject.OnHoverExit();
                 hoveredObject = null;
             }

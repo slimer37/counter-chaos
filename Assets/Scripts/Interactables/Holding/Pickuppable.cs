@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Interactables.Holding
 {
-    public sealed class Pickuppable : MonoBehaviour, IInteractHandler
+    public sealed class Pickuppable : MonoBehaviour, IInteractable
     {
         [field: SerializeField] public HoldableInfo Info { get; private set; }
 
@@ -19,7 +19,6 @@ namespace Interactables.Holding
         [SerializeField] Vector3 overrideHoldingRotation;
         
         [Space(15)]
-        [SerializeField] Hoverable hoverable;
         [SerializeField] Rigidbody rb;
         [SerializeField] Renderer rend;
 
@@ -36,6 +35,8 @@ namespace Interactables.Holding
         public Vector3? OverrideRotation => useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
         
         static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : null;
+
+        public InteractionIcon Icon => InteractionIcon.Pickup;
 
         void OnDrawGizmosSelected()
         {
@@ -62,7 +63,6 @@ namespace Interactables.Holding
             info.canBeDropped = info.canBeThrown = true;
             Info = info;
             
-            TryGetComponent(out hoverable);
             TryGetComponent(out rb);
             TryGetComponent(out rend);
         }
@@ -78,12 +78,10 @@ namespace Interactables.Holding
             BoundHalfDiagonal = Mathf.Sqrt(meshBounds.extents.x * meshBounds.extents.x + meshBounds.extents.z * meshBounds.extents.z);
             StandingDistance = - meshBounds.center.y + meshBounds.extents.y;
             ToTopDistance = meshBounds.center.y + meshBounds.extents.y;
-            hoverable.OnAttemptHover += OnAttemptHover;
-            hoverable.icon = InteractionIcon.Pickup;
         }
 
         // Can hover if the sender is not holding anything.
-        bool OnAttemptHover(Transform sender) => !isHeld && !Inventory.Main.IsFull;
+        public bool CanInteract(Transform sender) => !isHeld && !Inventory.Main.IsFull;
 
         public bool IsIntersecting(LayerMask mask)
         {

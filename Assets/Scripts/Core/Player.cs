@@ -10,6 +10,7 @@ namespace Core
             get
             {
                 if (!camera)
+                    // ReSharper disable once Unity.PerformanceCriticalCodeCameraMain
                     camera = Camera.main;
                 
                 return camera;

@@ -5,9 +5,8 @@ using UnityEngine.InputSystem;
 
 namespace Checkout.RegisterInput
 {
-    public class RegisterIDEntry : MonoBehaviour, IInteractHandler, IStopInteractHandler
+    public class RegisterIDEntry : MonoBehaviour, IInteractable
     {
-        [SerializeField] Hoverable hoverable;
         [SerializeField] UnityEvent<char?> onNumberInput;
         [SerializeField] UnityEvent onSubmitInput;
 

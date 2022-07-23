@@ -4,7 +4,7 @@ using Interactables.Base;
 using Core;
 using DG.Tweening;
 
-public class Cart : MonoBehaviour, IInteractHandler
+public class Cart : MonoBehaviour, IInteractable
 {
     [SerializeField] float rotSpeed;
     [SerializeField] float moveSpeed;
@@ -61,6 +61,8 @@ public class Cart : MonoBehaviour, IInteractHandler
             Debug.LogWarning("Container should be a child of the cart object.");
     }
 
+    public bool CanInteract(Transform sender) => !isBeingPushed;
+
     void Awake()
     {
         originalCartRot = animateCart.localRotation;
@@ -73,8 +75,6 @@ public class Cart : MonoBehaviour, IInteractHandler
         controls.Gameplay.Move.performed += Move;
         controls.Gameplay.Move.canceled += Move;
         controls.Enable();
-        
-        hoverable.RegisterPriorityCheck(_ => !isBeingPushed, 0);
 
         containerPos = container.transform.localPosition;
         container.transform.parent = null;

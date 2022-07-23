@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Interactables
 {
-    public class TextEntry : MonoBehaviour, ISecondaryInteractHandler
+    public class TextEntry : MonoBehaviour, IInteractable
     {
         [SerializeField] TextMeshPro text;
         [SerializeField, Min(1)] int charLimit = 1;
@@ -13,7 +13,7 @@ namespace Interactables
         bool initGui;
         PlayerController tempController;
 
-        void Awake() => GetComponent<Hoverable>().OnAttemptHover += _ => !enteringText;
+        public bool CanInteract(Transform sender) => !enteringText;
 
         void OnGUI()
         {

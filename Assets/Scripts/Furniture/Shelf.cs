@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Furniture
 {
     [RequireComponent(typeof(Pickuppable))]
-    public class Shelf : MonoBehaviour, IInteractHandler
+    public class Shelf : MonoBehaviour, IInteractable
     {
         public enum Style { Gondola, Refrigerator, Warehouse }
         
@@ -20,13 +20,7 @@ namespace Furniture
 
         void OnCollisionExit(Collision other) => numColliding--;
 
-        void Awake() => GetComponent<Hoverable>().OnAttemptHover += CanInteract;
-
-        bool CanInteract(Transform s)
-        {
-            if (!interactable) return false;
-            return numColliding == 0;
-        }
+        public bool CanInteract(Transform s) => interactable && numColliding == 0;
 
         internal void Disable() => interactable = false;
         internal void Enable() => interactable = true;

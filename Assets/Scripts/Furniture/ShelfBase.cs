@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace Furniture
 {
-    public class ShelfBase : MonoBehaviour, IInteractHandler
+    public class ShelfBase : MonoBehaviour, IInteractable
     {
         [SerializeField] Collider mainCollider;
         [SerializeField] Shelf.Style style;
@@ -47,19 +47,23 @@ namespace Furniture
 
         [RuntimeInitializeOnLoadMethod]
         static void Init() => ignoreCollisionLayer = LayerMask.NameToLayer("Ignore Collision");
-        
+
+        // Only interactable if no shelf is currently being attached and the player is in front,
+        // holding a compatible shelf.
+        public bool CanInteract(Transform sender) =>
+            availableSlots > 0
+            && !shelfIsBeingAttached
+            && (ignoreDirection || Vector3.Dot(transform.forward, sender.forward) < 0)
+            && Inventory.Main.Holder.IsHoldingItem
+            && Inventory.Main.Holder.HeldItem.TryGetComponent(out Shelf shelf)
+            && shelf.ShelfStyle == style;
+
         void Awake()
         {
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnReleaseInteract;
             
             shelves = new Shelf[maxShelves];
-            
-            // Only interactable if no shelf is currently being attached and the player is in front, holding a compatible shelf.
-            GetComponent<Hoverable>().OnAttemptHover +=
-                sender => !shelfIsBeingAttached && (ignoreDirection || Vector3.Dot(transform.forward, sender.forward) < 0)
-                    && Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.TryGetComponent(out Shelf shelf)
-                    && shelf.ShelfStyle == style;
 
             availableSlots = maxShelves;
             foreach (var shelf in GetComponentsInChildren<Shelf>())
@@ -86,8 +90,6 @@ namespace Furniture
 
         public void OnInteract(Transform sender)
         {
-            if (availableSlots == 0) return;
-
             if (!sender.CompareTag("Player")) return;
 
             var inventory = Inventory.Main;
@@ -179,10 +181,13 @@ namespace Furniture
             
             controls.Disable();
             availableSlots--;
+            
+            Debug.Log("attach " + shelfToAttach.gameObject.name, shelfToAttach.gameObject);
         }
 
         internal void Detach(int index)
         {
+            Debug.Log("detach " + shelves[index].gameObject.name, shelves[index].gameObject);
             DOTween.Kill(index | GetInstanceID());
             shelves[index].transform.localScale = Vector3.one;
             shelves[index] = null;

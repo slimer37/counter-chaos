@@ -5,23 +5,21 @@ using UnityEngine;
 namespace Interactables.Container
 {
     [RequireComponent(typeof(ContainerPositioner))]
-    public class Hanger : MonoBehaviour, IInteractHandler
+    public class Hanger : MonoBehaviour, IInteractable
     {
-        Hoverable hoverable;
         ContainerPositioner positioner;
         Pickuppable hungItem;
 
-        void Reset() => TryGetComponent(out hoverable);
+        public bool CanInteract(Transform sender) =>
+            !hungItem
+            && Inventory.Main.Holder.IsHoldingItem
+            && Inventory.Main.Holder.HeldItem.Info.canBeHung
+            || hungItem
+            && !Inventory.Main.Holder.IsHoldingItem;
 
         void Awake()
         {
             positioner = GetComponent<ContainerPositioner>();
-            hoverable = GetComponent<Hoverable>();
-            
-            hoverable.OnAttemptHover +=
-                sender =>
-                    !hungItem && Inventory.Main.Holder.IsHoldingItem && Inventory.Main.Holder.HeldItem.Info.canBeHung
-                    || hungItem && !Inventory.Main.Holder.IsHoldingItem;
         }
 
         public void OnInteract(Transform sender)
