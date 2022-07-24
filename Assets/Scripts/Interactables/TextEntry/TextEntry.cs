@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Interactables
 {
-    public class TextEntry : MonoBehaviour, IInteractable
+    public class TextEntry : MonoBehaviour, ISecondaryInteractable
     {
         [SerializeField] TextMeshPro text;
         [SerializeField, Min(1)] int charLimit = 1;

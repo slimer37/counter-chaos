@@ -9,7 +9,7 @@ using UnityEngine.Events;
 namespace Interactables.Container
 {
     [RequireComponent(typeof(ContainerPositioner))]
-    public class ItemContainer : MonoBehaviour, IInteractable
+    public class ItemContainer : MonoBehaviour, IInteractable, ISecondaryInteractable
     {
         public UnityEvent onOpen;
         public UnityEvent onClose;

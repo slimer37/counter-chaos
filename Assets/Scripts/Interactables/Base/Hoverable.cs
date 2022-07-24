@@ -9,12 +9,14 @@ namespace Interactables.Base
         [SerializeField] bool useOutline = true;
         
         IInteractable[] interactables;
+        ISecondaryInteractable secondaryInteractable;
         IconHandler tempIconHandler;
         Highlight highlight;
 
         void Awake()
         {
             interactables = GetComponents<IInteractable>();
+            secondaryInteractable = GetComponent<ISecondaryInteractable>();
             
             if (!useOutline) return;
             highlight = gameObject.AddComponent<Highlight>();
@@ -38,17 +40,21 @@ namespace Interactables.Base
             return result;
         }
 
-        public bool Interact(Transform sender, bool start, bool secondary)
+        public void Interact(Transform sender, bool start, bool secondary)
         {
-            Action<IInteractable> action = secondary switch
+            if (secondary)
             {
-                true when start => i => i.OnSecondaryInteract(sender),
-                true => i => i.OnStopSecondaryInteract(sender),
-                false when start=> i => i.OnInteract(sender),
-                false => i => i.OnStopInteract(sender),
-            };
-
-            return ForAllInteractable(sender, action, true);
+                if (secondaryInteractable == null) return;
+                if (start) secondaryInteractable.OnSecondaryInteract(sender);
+                else secondaryInteractable.OnStopSecondaryInteract(sender);
+                return;
+            }
+            
+            ForAllInteractable(sender,
+                start
+                    ? i => i.OnInteract(sender)
+                    : i => i.OnStopInteract(sender),
+                true);
         }
 
         bool ForAllInteractable(Transform sender, Action<IInteractable> action, bool allowPassThrough)
