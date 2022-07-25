@@ -36,8 +36,6 @@ namespace Interactables.Base
                 for (var i = 0; i < interactables.Length; i++)
                 {
                     labels[i] = interactables[i].GetType().Name;
-                    if (interactables[i].PassThrough)
-                        labels[i] = $"<color=yellow>{labels[i]}*</color>";
                 }
             }
 
@@ -73,8 +71,6 @@ namespace Interactables.Base
             EditorGUILayout.LabelField(secondary, style);
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.LabelField("* - Pass-through", EditorStyles.miniLabel);
             
             if (playing)
                 EditorGUILayout.HelpBox(
