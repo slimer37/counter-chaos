@@ -135,9 +135,7 @@ MonoBehaviour:
   overrideHoldingPosition: {x: 0, y: 0, z: 0}
   useRotationIfZeroes: 0
   overrideHoldingRotation: {x: 0, y: 0, z: 0}
-  hoverable: {fileID: 7262433758931680726}
   rb: {fileID: 1683448169890517030}
-  nonPhysics: 0
   rend: {fileID: 1632405231610175263}
 --- !u!114 &7262433758931680726
 MonoBehaviour:
@@ -151,7 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab86fc62513470247a6f7c5f7460a6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: 2
   useOutline: 1
 --- !u!23 &1632405231610175263 stripped
 MeshRenderer:

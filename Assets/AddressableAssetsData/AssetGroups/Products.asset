@@ -40,8 +40,7 @@ MonoBehaviour:
   - m_GUID: cb22d593ffbeafc4292141ee0d581817
     m_Address: Voxel Lab
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - product
+    m_SerializedLabels: []
   - m_GUID: f1f976224d1a38f43b998c13d9cba5c5
     m_Address: SPAZ Headphones
     m_ReadOnly: 0
@@ -59,6 +58,16 @@ MonoBehaviour:
     - product
   - m_GUID: f82d47aea8ffa48408f1e4312c971c1c
     m_Address: Kips Chips
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: cf75e6123c3bf4f48853e55b22db9eda
+    m_Address: Milk Jug
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - product
+  - m_GUID: be3f77d5254801049a6cbd1462fdf585
+    m_Address: Mug
     m_ReadOnly: 0
     m_SerializedLabels:
     - product
