@@ -11,6 +11,8 @@ namespace Customization
 
         void Awake()
         {
+            if (bodyRenderers != null) return;
+            
             bodyRenderers = GetComponentsInChildren<Renderer>();
             
             var list = bodyRenderers.ToList();
@@ -22,6 +24,8 @@ namespace Customization
 
         public void SetColor(Color color)
         {
+            if (bodyRenderers == null) Awake();
+            
             foreach (var rend in bodyRenderers)
                 rend.material.color = color;
         }
