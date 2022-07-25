@@ -3700,8 +3700,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c2d8fcec674f31b01ec9d2beb699bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: -0.25
-  idleSpeed: -20
+  sensitivity: 100
+  idleSpeed: 20
   speedUpTime: 2
   idleTime: 2
   rotator: {fileID: 1055242072}

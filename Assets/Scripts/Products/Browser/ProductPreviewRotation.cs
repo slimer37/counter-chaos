@@ -36,12 +36,13 @@ namespace Products.Browser
                 return;
             }
             
-            rotator.Rotate(Vector3.up * Mathf.Lerp(0, idleSpeed, t) * Time.deltaTime);
+            rotator.Rotate(-Mathf.Lerp(0, idleSpeed, t) * Time.deltaTime * Vector3.up);
             t += Time.deltaTime / speedUpTime;
         }
 
         public void OnPointerDown(PointerEventData eventData) => freeze = true;
-        public void OnDrag(PointerEventData eventData) => rotator.Rotate(Vector3.up * eventData.delta.x * sensitivity);
+        public void OnDrag(PointerEventData eventData) =>
+            rotator.Rotate(-eventData.delta.x * sensitivity * Time.deltaTime * Vector3.up);
         public void OnEndDrag(PointerEventData eventData)
         {
             freeze = false;
