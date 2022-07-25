@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -8,6 +7,9 @@ namespace UI.ColorPicker
 {
     public class ColorPicker : MonoBehaviour, IDragHandler
     {
+        [SerializeField] Color color;
+        public UnityEvent<Color> onColorChanged;
+        
         [Header("Background")]
         [SerializeField] ComputeShader computeShader;
         [SerializeField] RawImage bgImage;
@@ -22,8 +24,6 @@ namespace UI.ColorPicker
         [SerializeField] Slider hueSlider;
         [SerializeField] Image sliderBar;
         [SerializeField, Min(1)] int barResolution = 256;
-
-        public Color OutputColor { get; private set; }
         
         RenderTexture renderTexture;
         Texture2D pickerBackground;
@@ -36,19 +36,29 @@ namespace UI.ColorPicker
             
             GenerateColorBar();
             ConfigureShader();
+            UpdateHue(hueSlider.value);
         }
 
-        IEnumerator Start()
+        void OnValidate()
         {
-            UpdateHue(hueSlider.value);
-            yield return null;
-            UpdateColor();
+            color.a = 1;
+            
+            Color.RGBToHSV(color, out var h, out var s, out var v);
+            
+            hueSlider.value = h;
+
+            var rect = bgImage.GetComponent<RectTransform>().rect;
+            var point = Rect.NormalizedToPoint(rect, new Vector2(s, v));
+            
+            picker.localPosition = point;
+            
+            pickerSprite.color = previewSprite.color = color;
         }
 
         void UpdateHue(float value)
         {
             // Run shader
-            computeShader.SetFloat("Hue", hueSlider.value);
+            computeShader.SetFloat("Hue", value);
             computeShader.Dispatch(0,
                 bgResolution.x / 8,
                 bgResolution.y / 8,
@@ -78,10 +88,13 @@ namespace UI.ColorPicker
         void UpdateColor()
         {
             var pickPoint = Rect.PointToNormalized(rectT.rect, picker.localPosition);
-            OutputColor = pickerBackground.GetPixel(Mathf.FloorToInt(pickPoint.x * bgResolution.x),
+            
+            color = pickerBackground.GetPixel(Mathf.FloorToInt(pickPoint.x * bgResolution.x),
                 Mathf.FloorToInt(pickPoint.y * bgResolution.y));
-            pickerSprite.color = OutputColor;
-            previewSprite.color = OutputColor;
+            
+            pickerSprite.color = previewSprite.color = color;
+            
+            onColorChanged?.Invoke(color);
         }
 
         void GenerateColorBar()
