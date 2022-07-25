@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7097721036117075333}
   - component: {fileID: 7369786389505810301}
   - component: {fileID: 2999472540433879454}
-  - component: {fileID: 3627542172714210705}
   - component: {fileID: 2822910134207732827}
+  - component: {fileID: 3627542172714210705}
   m_Layer: 6
   m_Name: gondola shelving
   m_TagString: Untagged
@@ -112,8 +112,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab86fc62513470247a6f7c5f7460a6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: 1
   useOutline: 0
+--- !u!114 &2822910134207732827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849029101936606567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edc00d0c2f821ee4980d3addaead051e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShelfStyle>k__BackingField: 0
 --- !u!114 &3627542172714210705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,24 +145,9 @@ MonoBehaviour:
     canBeHung: 0
     groundPlacementOnly: 0
   useColliderBounds: 0
-  neverIntersects: 0
+  boxColliders: []
   overrideHoldingPosition: {x: 0, y: 0, z: 0.5}
   useRotationIfZeroes: 0
   overrideHoldingRotation: {x: 0, y: 180, z: 0}
-  hoverable: {fileID: 2999472540433879454}
   rb: {fileID: 0}
-  nonPhysics: 1
   rend: {fileID: 7097721036117075333}
---- !u!114 &2822910134207732827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849029101936606567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edc00d0c2f821ee4980d3addaead051e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <ShelfStyle>k__BackingField: 0

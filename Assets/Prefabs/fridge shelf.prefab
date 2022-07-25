@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1034749808482813324}
   - component: {fileID: 8549253379914569824}
   - component: {fileID: 7406618176815869689}
-  - component: {fileID: 820644450540812671}
   - component: {fileID: 820644450540812670}
+  - component: {fileID: 820644450540812671}
   - component: {fileID: 820644450540812657}
   - component: {fileID: 820644450540812668}
   m_Layer: 6
@@ -32,6 +32,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -86,32 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &820644450540812671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 820644450540812656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Info>k__BackingField:
-    canBeDropped: 0
-    canBeThrown: 0
-    canBeHung: 0
-    groundPlacementOnly: 0
-  useColliderBounds: 0
-  neverIntersects: 0
-  overrideHoldingPosition: {x: 0, y: 0, z: 1}
-  useRotationIfZeroes: 0
-  overrideHoldingRotation: {x: 0, y: 180, z: 0}
-  hoverable: {fileID: 820644450540812657}
-  rb: {fileID: 0}
-  nonPhysics: 1
-  rend: {fileID: 7406618176815869689}
 --- !u!114 &820644450540812670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +100,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ShelfStyle>k__BackingField: 1
+--- !u!114 &820644450540812671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820644450540812656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Info>k__BackingField:
+    label: 
+    canBeDropped: 0
+    canBeThrown: 0
+    canBeHung: 0
+    groundPlacementOnly: 0
+  useColliderBounds: 0
+  boxColliders: []
+  overrideHoldingPosition: {x: 0, y: 0, z: 1}
+  useRotationIfZeroes: 0
+  overrideHoldingRotation: {x: 0, y: 180, z: 0}
+  rb: {fileID: 0}
+  rend: {fileID: 7406618176815869689}
 --- !u!114 &820644450540812657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab86fc62513470247a6f7c5f7460a6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: 1
   useOutline: 0
 --- !u!65 &820644450540812668
 BoxCollider:

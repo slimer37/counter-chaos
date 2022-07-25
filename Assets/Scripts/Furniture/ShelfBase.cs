@@ -181,13 +181,10 @@ namespace Furniture
             
             controls.Disable();
             availableSlots--;
-            
-            Debug.Log("attach " + shelfToAttach.gameObject.name, shelfToAttach.gameObject);
         }
 
         internal void Detach(int index)
         {
-            Debug.Log("detach " + shelves[index].gameObject.name, shelves[index].gameObject);
             DOTween.Kill(index | GetInstanceID());
             shelves[index].transform.localScale = Vector3.one;
             shelves[index] = null;

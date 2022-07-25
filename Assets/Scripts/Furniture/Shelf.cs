@@ -40,5 +40,12 @@ namespace Furniture
                 attachedBase = null;
             }
         }
+
+        public bool OnProcessInteract(Transform sender)
+        {
+            if (!CanInteract(sender)) return false;
+            OnInteract(sender);
+            return true;
+        }
     }
 }

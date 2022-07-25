@@ -55,13 +55,11 @@ namespace Interactables.Container
             && (!filterProduct || obj.GetComponent<ProductIdentifier>().productInfo == filterProduct)
             && !obj.TryGetComponent<ItemContainer>(out _);
         
+        public bool CanInteract(Transform sender) => open;
+        
         public void OnInteract(Transform sender)
         {
-            if (!sender.CompareTag("Player")) return;
-            
             var inventory = Inventory.Main;
-            
-            if (!open) return;
 
             if (inventory.Holder.IsHoldingItem)
             {

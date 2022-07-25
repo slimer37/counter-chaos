@@ -263,8 +263,8 @@ GameObject:
   - component: {fileID: 7751767150376502384}
   - component: {fileID: 5189078594754102846}
   - component: {fileID: 6519486107022526825}
-  - component: {fileID: 5009907510690721262}
   - component: {fileID: 5212319788340469273}
+  - component: {fileID: 5009907510690721262}
   - component: {fileID: 5481454430948195058}
   - component: {fileID: 3896482107835756568}
   m_Layer: 6
@@ -394,33 +394,6 @@ MonoBehaviour:
   placeTime: 0.2
   tweenStartHeight: 1
   toStartTime: 0.2
---- !u!114 &5009907510690721262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4736446743246194419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Info>k__BackingField:
-    label: Small Box
-    canBeDropped: 1
-    canBeThrown: 0
-    canBeHung: 0
-    groundPlacementOnly: 0
-  useColliderBounds: 0
-  neverIntersects: 0
-  overrideHoldingPosition: {x: 0, y: 0, z: 1}
-  useRotationIfZeroes: 0
-  overrideHoldingRotation: {x: 0, y: 180, z: 0}
-  hoverable: {fileID: 5481454430948195058}
-  rb: {fileID: 7751767150376502384}
-  nonPhysics: 0
-  rend: {fileID: 3432768495549850476}
 --- !u!114 &5212319788340469273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,9 +436,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  cannotBeClosed: 0
   contents: []
   acceptanceDelay: 0.4
   filterProduct: {fileID: 0}
+--- !u!114 &5009907510690721262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4736446743246194419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df42ffa4e8b5ae4ca0146e892105b0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Info>k__BackingField:
+    label: Small Box
+    canBeDropped: 1
+    canBeThrown: 0
+    canBeHung: 0
+    groundPlacementOnly: 0
+  useColliderBounds: 0
+  boxColliders: []
+  overrideHoldingPosition: {x: 0, y: 0, z: 1}
+  useRotationIfZeroes: 0
+  overrideHoldingRotation: {x: 0, y: 180, z: 0}
+  rb: {fileID: 7751767150376502384}
+  rend: {fileID: 3432768495549850476}
 --- !u!114 &5481454430948195058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,7 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab86fc62513470247a6f7c5f7460a6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: 1
   useOutline: 1
 --- !u!114 &3896482107835756568
 MonoBehaviour:
