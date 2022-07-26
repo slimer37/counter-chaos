@@ -29,31 +29,49 @@ namespace UI.ColorPicker
         Texture2D pickerBackground;
         RectTransform rectT;
 
-        void Awake()
+        public Color Color
+        {
+            get => color;
+            set => SetColor(value);
+        }
+
+        void Start()
         {
             rectT = bgImage.GetComponent<RectTransform>();
             hueSlider.onValueChanged.AddListener(UpdateHue);
             
             GenerateColorBar();
             ConfigureShader();
-            UpdateHue(hueSlider.value);
+            UpdateHue();
         }
 
         void OnValidate()
         {
+            rectT = bgImage.GetComponent<RectTransform>();
+            SetColor(color);
+        }
+
+        void SetColor(Color newColor)
+        {
+            color = newColor;
             color.a = 1;
             
             Color.RGBToHSV(color, out var h, out var s, out var v);
             
             hueSlider.value = h;
 
-            var rect = bgImage.GetComponent<RectTransform>().rect;
-            var point = Rect.NormalizedToPoint(rect, new Vector2(s, v));
+            var point = Rect.NormalizedToPoint(rectT.rect, new Vector2(s, v));
             
             picker.localPosition = point;
             
+            // Hacky way of checking if playing
+            if (pickerBackground != null)
+                UpdateHue();
+            
             pickerSprite.color = previewSprite.color = color;
         }
+
+        void UpdateHue() => UpdateHue(hueSlider.value);
 
         void UpdateHue(float value)
         {
