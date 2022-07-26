@@ -16,8 +16,8 @@ namespace Interactables.Holding
                 get => item;
                 set
                 {
-                    if (value == null) throw new Exception("Use Clear() to empty a slot.");
-                    if (item != null) throw new Exception("Attempted to assign occupied slot.");
+                    if (!value) throw new Exception("Use Clear() to empty a slot.");
+                    if (item) throw new Exception("Attempted to assign occupied slot.");
                     
                     item = value;
                     
