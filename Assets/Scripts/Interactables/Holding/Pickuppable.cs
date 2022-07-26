@@ -1,39 +1,23 @@
 using System;
-using Interactables.Base;
 using UnityEngine;
 
 namespace Interactables.Holding
 {
-    public sealed class Pickuppable : MonoBehaviour, IInteractable
+    public sealed class Pickuppable : Item
     {
-        [field: SerializeField] public HoldableInfo Info { get; private set; }
-
         [SerializeField] bool useColliderBounds;
         [SerializeField, Tooltip("These are never used if useColliderBounds is false.")]
         BoxCollider[] boxColliders;
-        
-        [SerializeField] Vector3 overrideHoldingPosition;
-        [SerializeField] bool useRotationIfZeroes;
-        [SerializeField] Vector3 overrideHoldingRotation;
         
         [SerializeField] Rigidbody rb;
         [SerializeField] Renderer rend;
 
         bool nonPhysics;
         Bounds meshBounds;
-        bool isHeld;
-
-        public bool IsHeld => isHeld;
 
         public float BoundHalfDiagonal { get; private set; }
         public float ToTopDistance { get; private set; }
         public float StandingDistance { get; private set; }
-        public Vector3? OverridePosition => UseIfNotZeroes(overrideHoldingPosition);
-        public Vector3? OverrideRotation => useRotationIfZeroes ? overrideHoldingRotation : UseIfNotZeroes(overrideHoldingRotation);
-        
-        static Vector3? UseIfNotZeroes(Vector3 v) => v != Vector3.zero ? v : null;
-
-        public InteractionIcon Icon => InteractionIcon.Pickup;
 
         void OnDrawGizmosSelected()
         {
@@ -41,24 +25,9 @@ namespace Interactables.Holding
                 Gizmos.DrawWireSphere(transform.position, BoundHalfDiagonal);
         }
 
-        void OnValidate()
+        protected override void Reset()
         {
-            if (!Info.canBeDropped && Info.canBeThrown)
-            {
-                Debug.LogWarning("Cannot be throwable if not droppable.", gameObject);
-                
-                var temp = Info;
-                temp.canBeThrown = false;
-                Info = temp;
-            }
-        }
-
-        void Reset()
-        {
-            // Enable dropping/throwing by default.
-            var info = Info;
-            info.canBeDropped = info.canBeThrown = true;
-            Info = info;
+            base.Reset();
             
             TryGetComponent(out rb);
             TryGetComponent(out rend);
@@ -77,9 +46,6 @@ namespace Interactables.Holding
             ToTopDistance = meshBounds.center.y + meshBounds.extents.y;
         }
 
-        // Can hover if the sender is not holding anything.
-        public bool CanInteract(Transform sender) => !isHeld && !Inventory.Main.IsFull;
-
         public bool IsIntersecting(LayerMask mask)
         {
             if (!useColliderBounds)
@@ -91,27 +57,6 @@ namespace Interactables.Holding
             
             return false;
         }
-
-        public void OnInteract(Transform sender) => OnPickup(sender);
-
-        void OnPickup(Transform sender)
-        {
-            var isPlayer = sender.CompareTag("Player");
-            
-            if (isHeld)
-            {
-                if (!isPlayer)
-                    throw new InvalidOperationException("NPC called OnInteract on held pickuppable.");
-                return;
-            }
-            
-            if (isPlayer)
-                Inventory.Main.TryGive(this);
-            else
-                Setup(sender);
-        }
-
-        public void Drop() => Setup(null);
 
         internal void Toss(Vector3 direction, float force)
         {
@@ -130,13 +75,10 @@ namespace Interactables.Holding
                 rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
 
-        internal void Setup(Transform holder)
+        internal override void Equip(Transform holder)
         {
-            transform.parent = holder;
-
-            var pickingUp = (bool)holder;
-            isHeld = pickingUp;
-            if (!nonPhysics) rb.isKinematic = pickingUp;
+            base.Equip(holder);
+            if (!nonPhysics) rb.isKinematic = holder;
         }
     }
 }

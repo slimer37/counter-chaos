@@ -114,12 +114,12 @@ namespace Interactables.Holding
             obj.transform.SetPositionAndRotation(player.position, player.rotation);
             
             obj.SetActive(true);
-            Holder.Hold(slots[index].Item);
+            Holder.Hold(slots[index].Item as Pickuppable);
         }
 
-        public Pickuppable GetSlotContent(int index) => slots[index].Item;
+        public Item GetSlotContent(int index) => slots[index].Item;
 
-        public Pickuppable ClearSlot(int index, bool destroy = false)
+        public Item ClearSlot(int index, bool destroy = false)
         {
             if (index > numSlots) throw new ArgumentOutOfRangeException(nameof(index));
             if (!slots[index].Item) return null;
@@ -134,7 +134,7 @@ namespace Interactables.Holding
             return temp;
         }
 
-        public Pickuppable ClearActiveSlot(bool destroy = false) => ClearSlot(ActiveSlotIndex, destroy);
+        public Pickuppable ClearActiveSlot(bool destroy = false) => ClearSlot(ActiveSlotIndex, destroy) as Pickuppable;
 
         public void ClearAll(bool destroy = false)
         {
@@ -142,7 +142,7 @@ namespace Interactables.Holding
                 ClearSlot(i, destroy);
         }
 
-        public bool TryGive(Pickuppable item)
+        public bool TryGive(Item item)
         {
             if (IsFull) return false;
             

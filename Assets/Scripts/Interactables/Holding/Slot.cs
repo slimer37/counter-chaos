@@ -6,7 +6,7 @@ namespace Interactables.Holding
 {
     internal class Slot
     {
-        public Pickuppable Item
+        public Item Item
         {
             get => item;
             set
@@ -30,7 +30,7 @@ namespace Interactables.Holding
             }
         }
         
-        Pickuppable item;
+        Item item;
         Texture2D previewTex;
 
         readonly RawImage thumbnail;
