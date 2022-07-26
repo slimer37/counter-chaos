@@ -4,9 +4,11 @@ using Steamworks;
 
 public static class SteamHelper
 {
-    [RuntimeInitializeOnLoadMethod]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Init()
     {
+        Object.DontDestroyOnLoad(new GameObject("Steam Manager").AddComponent<SteamManager>());
+        
         GameEvents.AchievementEarned += EarnAchievement;
     }
     

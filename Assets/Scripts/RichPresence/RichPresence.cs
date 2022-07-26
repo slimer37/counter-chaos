@@ -15,7 +15,12 @@ public class RichPresence : MonoBehaviour
     static bool noDiscord;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void Init() => SceneManager.sceneLoaded += (s, _) => UpdateAllRPC(s.buildIndex);
+    static void Init()
+    {
+        DontDestroyOnLoad(new GameObject("RPC Manager").AddComponent<RichPresence>());
+        
+        SceneManager.sceneLoaded += (s, _) => UpdateAllRPC(s.buildIndex);
+    }
 
     static void UpdateAllRPC(int s)
     {
