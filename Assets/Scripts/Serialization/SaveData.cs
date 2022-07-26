@@ -23,13 +23,14 @@ namespace Serialization
 	
         public string AccessPath => Path.Combine(SaveSystem.SaveFolderLocation, FileName);
         public string FileName => baseFileName + SaveSystem.SaveFileEnding;
-        public bool Compromised => !VerifyChecksum();
+        public bool IsCompromised => check != GenerateChecksum();
 
-        public string GetJson() => JsonConvert.SerializeObject(this);
-
-        public string GenerateChecksum()
+        internal string GetJson() => JsonConvert.SerializeObject(this);
+        
+        // https://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
+        internal string GenerateChecksum()
         {
-            // Generates checksum for the version of this object that has no checksum.
+            // Generates checksum for all properties excluding the checksum itself.
             var temp = check;
             check = "";
             using var md5 = MD5.Create();
@@ -37,8 +38,6 @@ namespace Serialization
             check = temp;
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
-
-        public bool VerifyChecksum() => check == GenerateChecksum();
 
         public SaveData(string saveName, string playerName, float startingMoney = 0)
         {
