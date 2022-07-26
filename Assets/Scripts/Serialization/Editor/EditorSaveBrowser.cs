@@ -32,11 +32,19 @@ namespace Serialization.Editor
                 return;
             }
 
+            var style = new GUIStyle(EditorStyles.label) { richText = true };
+
             foreach (var info in infoSet)
             {
                 if (!itemConditionChecker?.Invoke(info) ?? false) continue;
+                
                 var value = valueRetriever(info);
-                EditorGUILayout.LabelField(info.Name + ':', value == null ? "Null" : value.ToString());
+                var isString = value is string;
+                
+                EditorGUILayout.LabelField(info.Name + ':',
+                    value == null ? "<color=red>Null</color>" :
+                        (isString ? $"\"{value}\"" : value.ToString()),
+                    style);
             }
         }
 
