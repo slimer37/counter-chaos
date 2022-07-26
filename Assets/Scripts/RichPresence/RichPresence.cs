@@ -99,5 +99,6 @@ public class RichPresence : MonoBehaviour
         if (noDiscord) return;
         
         activityManager.ClearActivity(_ => { });
+        discordClient.Dispose();
     }
 }
