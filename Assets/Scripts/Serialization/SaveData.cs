@@ -25,7 +25,7 @@ namespace Serialization
         public string FileName => baseFileName + SaveSystem.SaveFileEnding;
         public bool IsCompromised => check != GenerateChecksum();
 
-        internal string GetJson() => JsonConvert.SerializeObject(this);
+        string GetJson() => JsonConvert.SerializeObject(this);
         
         // https://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
         internal string GenerateChecksum()
