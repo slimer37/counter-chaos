@@ -14,6 +14,20 @@ namespace Customization
 
         const string PrefKey = "Skin Color";
 
+        static Color defaultColor;
+
+        public static Color GetPref()
+        {
+            var pref = PlayerPrefs.GetString(PrefKey, "none");
+            
+            var color = defaultColor;
+            
+            if (pref != "none")
+                ColorUtility.TryParseHtmlString("#" + pref, out color);
+
+            return color;
+        }
+
         void Awake()
         {
             bodyRenderers = GetComponentsInChildren<Renderer>();
@@ -24,20 +38,14 @@ namespace Customization
             
             bodyRenderers = list.ToArray();
             
+            defaultColor = bodyRenderers[0].material.color;
             InitColor();
         }
         
         [ContextMenu("Init Color")]
         public void InitColor()
         {
-            var defaultColor = bodyRenderers[0].material.color;
-            var pref = PlayerPrefs.GetString(PrefKey, "none");
-            
-            var color = defaultColor;
-            
-            if (pref != "none")
-                ColorUtility.TryParseHtmlString("#" + pref, out color);
-            
+            var color = GetPref();
             SetColor(color);
             picker.Color = color;
         }
