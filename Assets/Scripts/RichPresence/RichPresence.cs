@@ -12,6 +12,8 @@ public class RichPresence : MonoBehaviour
     static Discord.Discord discordClient;
     static ActivityManager activityManager;
 
+    static bool noDiscord;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Init() => SceneManager.sceneLoaded += (s, _) => UpdateAllRPC(s.buildIndex);
 
@@ -32,14 +34,25 @@ public class RichPresence : MonoBehaviour
 
     static void InitDiscordRPCIfNeeded()
     {
-        if (discordClient != null) return;
-        discordClient = new Discord.Discord(ClientId, (ulong)CreateFlags.NoRequireDiscord);
-        activityManager = discordClient.GetActivityManager();
-        activityManager.RegisterSteam(SteamId);
+        if (discordClient != null || noDiscord) return;
+        
+        try
+        {
+            discordClient = new Discord.Discord(ClientId, (ulong)CreateFlags.NoRequireDiscord);
+            activityManager = discordClient.GetActivityManager();
+            activityManager.RegisterSteam(SteamId);
+        }
+        catch (ResultException)
+        {
+            Debug.Log("No Discord client detected.");
+            noDiscord = true;
+        }
     }
 
     static void UpdateDiscordRPC(int sceneIndex)
     {
+        if (noDiscord) return;
+        
         InitDiscordRPCIfNeeded();
 
         if (discordClient == null) return;
@@ -76,15 +89,15 @@ public class RichPresence : MonoBehaviour
 
     void Update()
     {
-        discordClient?.RunCallbacks();
+        if (noDiscord) return;
+        
+        discordClient.RunCallbacks();
     }
 
     void OnApplicationQuit()
     {
-        activityManager?.ClearActivity(r =>
-        {
-            if (r != Result.Ok)
-                Debug.LogError("(Discord RPC) Clear activity failed: " + r);
-        });
+        if (noDiscord) return;
+        
+        activityManager.ClearActivity(_ => { });
     }
 }
