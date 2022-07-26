@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Interactables.Holding;
 using Interactables.Base;
 using UnityEngine;
@@ -10,17 +11,20 @@ namespace Furniture
         public enum Style { Gondola, Refrigerator, Warehouse }
         
         [field: SerializeField] internal Style ShelfStyle { get; private set; }
+        [SerializeField] Transform meshTransform;
 
         ShelfBase attachedBase;
         int attachmentIndex;
         int numColliding;
         bool interactable = true;
+        
+        Tween shake;
 
         void OnCollisionEnter(Collision other) => numColliding++;
 
         void OnCollisionExit(Collision other) => numColliding--;
 
-        public bool CanInteract(Transform s) => interactable && numColliding == 0;
+        public bool CanInteract(Transform s) => interactable;
 
         internal void Disable() => interactable = false;
         internal void Enable() => interactable = true;
@@ -34,6 +38,13 @@ namespace Furniture
         // Basically OnPickup
         public void OnInteract(Transform sender)
         {
+            if (numColliding > 0)
+            {
+                shake?.Complete();
+                shake = meshTransform.DOShakeRotation(0.4f, new Vector3(0.5f, 2, 0.5f), 15);
+                return;
+            }
+            
             if (attachedBase)
             {
                 attachedBase.Detach(attachmentIndex);
@@ -45,6 +56,7 @@ namespace Furniture
         {
             if (!CanInteract(sender)) return false;
             OnInteract(sender);
+            if (numColliding > 0) return false;
             return true;
         }
     }
