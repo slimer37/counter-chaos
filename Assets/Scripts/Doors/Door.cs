@@ -17,6 +17,7 @@ namespace Doors
         
         const int RotationSpeed = 200;
         const int PullDistance = 2;
+        const int Range = 5;
 
         float delta;
         float requiredDeceleration;
@@ -38,7 +39,7 @@ namespace Doors
         {
             // Release door when releasing control, not when hovering off.
             controls = new Controls();
-            controls.Gameplay.Interact.canceled += OnRelease;
+            controls.Gameplay.Interact.canceled += _ => OnRelease();
         }
 
         void OnDestroy() => controls.Dispose();
@@ -76,6 +77,13 @@ namespace Doors
             {
                 var pullPoint = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
                 var forward = transform.InverseTransformPoint(pullPoint).z;
+
+                if ((Player.Camera.transform.position - transform.position).sqrMagnitude > Range * Range)
+                {
+                    OnRelease();
+                    return;
+                }
+                
                 delta = forward * RotationSpeed * (invert ? -1 : 1);
             }
             else if (delta != 0)
@@ -93,7 +101,7 @@ namespace Doors
             UpdateIcon();
         }
 
-        public void OnRelease(InputAction.CallbackContext ctx)
+        void OnRelease()
         {
             // Decelerate such that delta approaches 0 in stopTime seconds.
             requiredDeceleration = Mathf.Abs(delta / stopTime);
