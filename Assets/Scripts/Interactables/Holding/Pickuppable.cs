@@ -8,17 +8,14 @@ namespace Interactables.Holding
     {
         [field: SerializeField] public HoldableInfo Info { get; private set; }
 
-        [Header("Bounds")]
         [SerializeField] bool useColliderBounds;
         [SerializeField, Tooltip("These are never used if useColliderBounds is false.")]
         BoxCollider[] boxColliders;
         
-        [Header("Overrides")]
         [SerializeField] Vector3 overrideHoldingPosition;
         [SerializeField] bool useRotationIfZeroes;
         [SerializeField] Vector3 overrideHoldingRotation;
         
-        [Space(15)]
         [SerializeField] Rigidbody rb;
         [SerializeField] Renderer rend;
 
