@@ -50,6 +50,12 @@ namespace Doors
 
         void OnDestroy() => controls.Dispose();
 
+        public bool CanInteract(Transform sender)
+        {
+            UpdateIcon();
+            return true;
+        }
+
         public void OnInteract(Transform sender)
         {
             isInteracting = true;
