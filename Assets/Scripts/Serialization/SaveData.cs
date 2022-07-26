@@ -1,23 +1,45 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Serialization
 {
+    [JsonObject(MemberSerialization.Fields)]
     public class SaveData
     {
-        [Savable] public float money;
-        [Savable] public string saveName;
-        [Savable] public string playerName;
-        [Savable] public string upgrades;
-        [Savable] public readonly DateTime creationDate;
+        public float money;
+        public string saveName;
+        public string playerName;
+        public string upgrades;
+        public DateTime creationDate;
+        
+        public string check;
 	
         public readonly string baseFileName;
 
-        public static readonly SaveData TemporarySave = new("Temporary", "Me");
+        public static readonly SaveData TemporarySave = new("Temporary", "Me", 0);
 	
         public string AccessPath => Path.Combine(SaveSystem.SaveFolderLocation, FileName);
         public string FileName => baseFileName + SaveSystem.SaveFileEnding;
-	
+        public bool Compromised => !VerifyChecksum();
+
+        public string GetJson() => JsonConvert.SerializeObject(this);
+
+        public string GenerateChecksum()
+        {
+            // Generates checksum for the version of this object that has no checksum.
+            var temp = check;
+            check = "";
+            using var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.ASCII.GetBytes(GetJson()));
+            check = temp;
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+        }
+
+        public bool VerifyChecksum() => check == GenerateChecksum();
+
         public SaveData(string saveName, string playerName, float startingMoney = 0)
         {
             if (string.IsNullOrWhiteSpace(saveName)) throw new Exception("Can't use blank or whitespace string as file name");
@@ -27,24 +49,15 @@ namespace Serialization
             money = startingMoney;
             baseFileName = SaveSystem.ToValidFileName(saveName);
             creationDate = DateTime.Now;
+
+            check = GenerateChecksum();
         }
 
-        public SaveData(object[] data, string accessPath)
+        internal SaveData(string accessPath)
         {
             // Set reference file name on retrieval.
-            var fileName = accessPath.Substring(accessPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
-            baseFileName = fileName.Substring(0, fileName.Length - SaveSystem.SaveFileEnding.Length);
-		
-            var fieldInfos = typeof(SaveData).GetFields();
-            for (var i = 0; i < fieldInfos.Length; i++)
-            {
-                if (!BinaryReaderWriter.IsSavable(fieldInfos[i])) continue;
-                
-                try
-                { fieldInfos[i].SetValue(this, data[i]); }
-                catch (Exception e)
-                { throw new Exception($"While setting value {fieldInfos[i].Name}: {e.Message}"); }
-            }
+            var fileName = accessPath[(accessPath.LastIndexOf(Path.DirectorySeparatorChar) + 1)..];
+            baseFileName = fileName[..^SaveSystem.SaveFileEnding.Length];
         }
 
         public static implicit operator bool(SaveData data) => data != null;

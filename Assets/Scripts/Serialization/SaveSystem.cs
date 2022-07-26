@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Serialization
@@ -57,30 +58,25 @@ namespace Serialization
                 return;
             }
 
-            using var writer = new BinaryWriter(File.Open(saveData.AccessPath, FileMode.Create));
-            var readerWriter = new BinaryReaderWriter();
-            readerWriter.Write(typeof(SaveData), saveData, writer);
-            writer.Dispose();
+            var json = JsonConvert.SerializeObject(saveData);
+            File.WriteAllText(saveData.AccessPath, json);
         }
 	
         public static bool LoadFromPath(string filePath, out SaveData retrievedData)
         {
             retrievedData = null;
-
-            using var reader = new BinaryReader(File.Open(filePath, FileMode.Open));
-            var readerWriter = new BinaryReaderWriter();
-		
+            
             try
             {
-                var retrieved = readerWriter.Read(typeof(SaveData), reader);
-                retrievedData = new SaveData(retrieved, filePath);
+                var jsonData = File.ReadAllText(filePath);
+                retrievedData = new SaveData(filePath);
+                JsonConvert.PopulateObject(jsonData, retrievedData);
             }
             catch (Exception error)
             {
                 Debug.LogError($"Exception loading at {filePath}\n{error}");
                 return false;
             }
-            finally { reader.Dispose(); }
 
             return true;
         }
