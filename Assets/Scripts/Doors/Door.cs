@@ -1,5 +1,4 @@
 using Core;
-using DG.Tweening;
 using Interactables.Base;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,10 +18,8 @@ namespace Doors
         const int RotationSpeed = 200;
         const int PullDistance = 2;
 
-        Tween resetTween;
-
-        Vector3 center;
         float delta;
+        float requiredDeceleration;
         bool isInteracting;
 
         Hoverable hoverable;
@@ -42,10 +39,6 @@ namespace Doors
             // Release door when releasing control, not when hovering off.
             controls = new Controls();
             controls.Gameplay.Interact.canceled += OnRelease;
-            
-            var rend = GetComponentInChildren<Renderer>();
-            if (!rend) Debug.LogWarning("No renderer found to calculate door center.", this);
-            center = transform.InverseTransformPoint(rend.bounds.center);
         }
 
         void OnDestroy() => controls.Dispose();
@@ -59,8 +52,6 @@ namespace Doors
         public void OnInteract(Transform sender)
         {
             isInteracting = true;
-            if (resetTween.IsActive())
-                resetTween.Kill();
             controls.Enable();
         }
 
@@ -83,27 +74,31 @@ namespace Doors
         {
             if (isInteracting)
             {
-                var a = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
-                var b = Quaternion.Inverse(transform.rotation) * (a - transform.TransformPoint(center));
-                delta = b.z * RotationSpeed * (invert ? -1 : 1);
+                var pullPoint = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
+                var forward = transform.InverseTransformPoint(pullPoint).z;
+                delta = forward * RotationSpeed * (invert ? -1 : 1);
             }
-            else if (delta == 0)
+            else if (delta != 0)
+                delta = Mathf.MoveTowards(delta, 0, requiredDeceleration * Time.deltaTime);
+            else
                 return;
             
             var rot = transform.localEulerAngles;
             if (rot.y > 180) rot.y -= 360;
             rot.y = Mathf.Clamp(rot.y + delta * Time.deltaTime, rotationMin, rotationMax);
             transform.localEulerAngles = rot;
+
+            if (!isInteracting) return;
             
             UpdateIcon();
         }
 
         public void OnRelease(InputAction.CallbackContext ctx)
         {
-            if (!isInteracting) return;
+            // Decelerate such that delta approaches 0 in stopTime seconds.
+            requiredDeceleration = Mathf.Abs(delta / stopTime);
             isInteracting = false;
             controls.Disable();
-            resetTween = DOTween.To(() => delta, a => delta = a, 0, stopTime);
         }
     }
 }
