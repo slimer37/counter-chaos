@@ -11,23 +11,18 @@ public class RichPresence : MonoBehaviour
     const int SteamId = 1835160;
     static Discord.Discord discordClient;
     static ActivityManager activityManager;
-    
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Init()
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void Init() => SceneManager.sceneLoaded += (s, _) => UpdateAllRPC(s.buildIndex);
+
+    static void UpdateAllRPC(int s)
     {
-        SceneManager.sceneLoaded += (s, m) => UpdateAllRPC(s.buildIndex, m);
-        
-        UpdateAllRPC(0, 0);
+        if (SceneManager.GetSceneByBuildIndex(s).name == "Base") return;
+        UpdateSteamRPC(s);
+        UpdateDiscordRPC(s);
     }
 
-    static void UpdateAllRPC(int s, LoadSceneMode m)
-    {
-        if (m == LoadSceneMode.Additive) return;
-        UpdateSteamRPC(s, m);
-        UpdateDiscordRPC(s, m);
-    }
-    
-    static void UpdateSteamRPC(int sceneIndex, LoadSceneMode m)
+    static void UpdateSteamRPC(int sceneIndex)
     {
         if (!SteamManager.Initialized) return;
         SteamFriends.ClearRichPresence();
@@ -43,10 +38,10 @@ public class RichPresence : MonoBehaviour
         activityManager.RegisterSteam(SteamId);
     }
 
-    static void UpdateDiscordRPC(int sceneIndex, LoadSceneMode m)
+    static void UpdateDiscordRPC(int sceneIndex)
     {
         InitDiscordRPCIfNeeded();
-        
+
         if (discordClient == null) return;
 
         activityManager.ClearActivity(_ => { });
@@ -62,7 +57,7 @@ public class RichPresence : MonoBehaviour
             Details = playing ? $"{save.playerName}'s store: {save.money:C}" : "",
             Timestamps =
             {
-                Start = (int)DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds
+                Start = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             },
             Assets =
             {
@@ -71,8 +66,9 @@ public class RichPresence : MonoBehaviour
             },
             Instance = playing
         };
-        
-        activityManager.UpdateActivity(activity, r => {
+
+        activityManager.UpdateActivity(activity, r =>
+        {
             if (r != Result.Ok)
                 Debug.LogError("(Discord RPC) Update activity failed: " + r);
         });
@@ -85,6 +81,10 @@ public class RichPresence : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        activityManager?.ClearActivity(_ => { });
+        activityManager?.ClearActivity(r =>
+        {
+            if (r != Result.Ok)
+                Debug.LogError("(Discord RPC) Clear activity failed: " + r);
+        });
     }
 }
