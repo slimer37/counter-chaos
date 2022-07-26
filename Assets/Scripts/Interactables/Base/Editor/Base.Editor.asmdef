@@ -1,5 +1,5 @@
 {
-    "name": "Holding.Editor",
+    "name": "Base.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:11f3352786a03014da4f46f23c9d7b7f"
