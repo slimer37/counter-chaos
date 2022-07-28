@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Core;
+using Input.Direct;
 using UnityEngine;
 
 namespace Tutorial

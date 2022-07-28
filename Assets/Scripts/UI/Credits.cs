@@ -15,7 +15,8 @@ namespace UI
             public string role;
             [TextArea] public string name;
         }
-        
+
+        [SerializeField] InputProvider input;
         [SerializeField] CanvasGroup fadeGroup;
         [SerializeField] TextMeshProUGUI creditsText;
         [SerializeField] float scrollTime;
@@ -28,7 +29,6 @@ namespace UI
         [SerializeField] Credit[] creditList;
         [SerializeField, TextArea] string endingText;
 
-        Controls controls;
         Sequence scrollSequence;
         RectTransform creditsRect;
 
@@ -47,8 +47,7 @@ namespace UI
             creditsRect = creditsText.GetComponent<RectTransform>();
             fadeGroup.alpha = 0;
             fadeGroup.blocksRaycasts = false;
-            controls = new Controls();
-            controls.Menu.Exit.performed += _ => Stop();
+            input.Exit += Stop;
             
             // Construct scroll sequence.
 
@@ -64,12 +63,10 @@ namespace UI
             scrollSequence.SetAutoKill(false).Pause();
         }
 
-        void OnEnable() => controls.Enable();
-        void OnDisable() => controls.Disable();
         void OnDestroy()
         {
+            input.Exit -= Stop;
             scrollSequence.Kill();
-            controls.Dispose();
         }
 
         void Stop()

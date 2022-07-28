@@ -4,12 +4,12 @@ using DG.Tweening;
 using Interactables.Base;
 using Interactables.Holding;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Furniture
 {
     public class ShelfBase : MonoBehaviour, IInteractable
     {
+        [SerializeField] InputProvider inputProvider;
         [SerializeField] Collider mainCollider;
         [SerializeField] Shelf.Style style;
         [SerializeField] float attachDistance = 4;
@@ -33,8 +33,6 @@ namespace Furniture
         
         Shelf[] shelves;
         int availableSlots;
-
-        Controls controls;
         
         Shelf shelfToAttach;
         bool shelfIsBeingAttached;
@@ -60,8 +58,7 @@ namespace Furniture
 
         void Awake()
         {
-            controls = new Controls();
-            controls.Gameplay.Interact.canceled += OnReleaseInteract;
+            inputProvider.StopInteract += OnReleaseInteract;
             
             shelves = new Shelf[maxShelves];
 
@@ -86,7 +83,7 @@ namespace Furniture
             }
         }
 
-        void OnDestroy() => controls.Dispose();
+        void OnDestroy() => inputProvider.StopInteract -= OnReleaseInteract;
 
         public void OnInteract(Transform sender)
         {
@@ -125,7 +122,6 @@ namespace Furniture
             
             shelfToAttach.Disable();
             shelfIsBeingAttached = true;
-            controls.Enable();
         }
 
         int GetShelfIndex(float atHeight) =>
@@ -154,12 +150,15 @@ namespace Furniture
             shelfToAttach.transform.localPosition = shelfAttachPos;
         }
 
-        void OnReleaseInteract(InputAction.CallbackContext ctx) => Attach();
+        void OnReleaseInteract()
+        {
+            if (!shelfIsBeingAttached) return;
+            Attach();
+        }
 
         void Attach()
         {
-            if (!shelfIsBeingAttached) return;
-
+            if (!shelfIsBeingAttached) throw new Exception("No shelf to attach.");
             if (shelves[shelfIndex]) throw new Exception($"Requested shelf index ({shelfIndex}) is filled.");
 
             var height = shelfToAttach.transform.localPosition.y;
@@ -179,7 +178,6 @@ namespace Furniture
 
             shelfIsBeingAttached = false;
             
-            controls.Disable();
             availableSlots--;
         }
 

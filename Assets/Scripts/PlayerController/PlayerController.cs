@@ -1,9 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] InputProvider input;
     [SerializeField] CharacterController characterController;
 
     [Header("Animation")]
@@ -85,11 +85,10 @@ public class PlayerController : MonoBehaviour
         EnableLook(!value);
     }
 
-    void OnMove(InputValue val)
+    void OnMove(Vector2 moveInput)
     {
         if (!enabled) return;
         
-        var moveInput = val.Get<Vector2>();
         moveVector = new Vector3(moveInput.x, moveVector.y, moveInput.y);
 
         if (!canMove) return;
@@ -119,23 +118,22 @@ public class PlayerController : MonoBehaviour
         if (isSprinting) bobTween.timeScale = sprintBobTimeScale;
     }
 
-    void OnJump(InputValue val)
+    void OnJump()
     {
-        if (!canMove) return;
-        if (val.isPressed)
-        {
-            if (characterController.isGrounded)
-                moveVector.y = jumpForce;
-        }
-    }
-
-    void OnSprint(InputValue val)
-    {
-        if (isSlow) return;
-        isSprinting = val.isPressed;
+        if (!canMove || !characterController.isGrounded) return;
+        moveVector.y = jumpForce;
     }
     
-    void OnMoveMouse(InputValue val) => mouseDelta = sensitivity * MouseScale * val.Get<Vector2>();
+    void OnStartSprint() => OnSprint(true);
+    void OnStopSprint() => OnSprint(false);
+
+    void OnSprint(bool pressed)
+    {
+        if (isSlow) return;
+        isSprinting = pressed;
+    }
+    
+    void OnMoveMouse(Vector2 delta) => mouseDelta = sensitivity * MouseScale * delta;
 
     void Awake()
     {
@@ -148,6 +146,13 @@ public class PlayerController : MonoBehaviour
         
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        input.Move += OnMove;
+        input.MoveMouse += OnMoveMouse;
+        input.StartSprint += OnStartSprint;
+        input.CancelSprint += OnStopSprint;
+        input.StartSlow += OnStartSlow;
+        input.StopSlow += OnStopSlow;
         
         // Construct sprint transition.
         sprintTransition = DOTween.Sequence();
@@ -158,13 +163,27 @@ public class PlayerController : MonoBehaviour
         sprintTransition.SetEase(transitionEase).SetAutoKill(false).Pause();
     }
 
-    void OnDestroy() => sprintTransition.Kill();
+    void OnDestroy()
+    {
+        sprintTransition.Kill();
+        
+        
+        input.Move -= OnMove;
+        input.MoveMouse -= OnMoveMouse;
+        input.StartSprint -= OnStartSprint;
+        input.CancelSprint -= OnStopSprint;
+        input.StartSlow -= OnStartSlow;
+        input.StopSlow -= OnStopSlow;
+    }
 
-    void OnSlow(InputValue val)
+    void OnStartSlow() => OnSlow(true);
+    void OnStopSlow() => OnSlow(false);
+
+    void OnSlow(bool pressed)
     {
         if (!canMove || isSprinting || sprintTransition.IsPlaying()) return;
         
-        isSlow = val.isPressed;
+        isSlow = pressed;
         currentSpeed = isSlow ? slowSpeed : walkSpeed;
         UpdateBobbing();
 

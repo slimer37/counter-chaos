@@ -1,13 +1,13 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
-using Core;
 using Interactables.Holding;
 
 namespace Upgrades
 {
     public class Laptop : MonoBehaviour
     {
+        [SerializeField] InputProvider input;
         [SerializeField] GameObject laptop;
         [SerializeField] CanvasGroup uiGroup;
         [SerializeField] Animator laptopAnimator;
@@ -22,15 +22,12 @@ namespace Upgrades
         int OpenAnimation => Animator.StringToHash(openAnimation);
         int CloseAnimation => Animator.StringToHash(closeAnimation);
 
-        Controls controls;
         bool animating;
         bool open;
 
         void Awake()
         {
-            controls = new Controls();
-            controls.Menu.OpenLaptop.performed += _ => OnOpenLaptop();
-            controls.Enable();
+            input.OpenLaptop += OnOpenLaptop;
             
             laptop.SetActive(false);
             uiGroup.gameObject.SetActive(true);
@@ -38,7 +35,7 @@ namespace Upgrades
             uiGroup.interactable = uiGroup.blocksRaycasts = false;
         }
 
-        void OnDestroy() => controls.Disable();
+        void OnDestroy() => input.OpenLaptop -= OnOpenLaptop;
 
         void OnOpenLaptop()
         {

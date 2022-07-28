@@ -1,7 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Core;
 
 namespace Debugging
 {
@@ -10,6 +10,7 @@ namespace Debugging
         [SerializeField] string cheatCode;
         [SerializeField] bool open;
         [SerializeField] GameObject enableWhenUnlocked;
+        [SerializeField] InputProvider inputProvider;
 
         [Header("Text")]
         [SerializeField] Font outputFont;
@@ -18,11 +19,8 @@ namespace Debugging
         [SerializeField] int inputFontSize;
         [SerializeField, ColorUsage(false)] Color errorColor;
 
-        static DebugConsole current;
-
         static bool unlocked;
         int codeProgress;
-        Controls controls;
 
         string input = "";
         string output = "<b>Wizards only, fools.</b>";
@@ -30,21 +28,11 @@ namespace Debugging
 
         void Awake()
         {
-            if (current)
-            {
-                if (unlocked) enableWhenUnlocked.SetActive(true);
-                Destroy(gameObject);
-            }
-            else
-                current = this;
-
             var kb = Keyboard.current;
             kb.onTextInput += EnterCheatCode;
 
-            controls = new Controls();
-            controls.Enable();
-            controls.Console.Open.performed += _ => open = unlocked ? !open : open;
-            controls.Console.Submit.performed += _ => Submit();
+            inputProvider.ConsoleOpen += () => open = unlocked ? !open : open;
+            inputProvider.ConsoleSubmit += Submit;
 
             DontDestroyOnLoad(gameObject);
         }

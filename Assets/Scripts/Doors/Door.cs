@@ -1,12 +1,13 @@
 using Core;
 using Interactables.Base;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Doors
 {
     public class Door : MonoBehaviour, IInteractable
     {
+        [SerializeField] InputProvider inputProvider;
+        
         [Header("Pulling")]
         [SerializeField] bool invert;
         [SerializeField] bool showPullByDefault;
@@ -24,7 +25,6 @@ namespace Doors
         bool isInteracting;
 
         Hoverable hoverable;
-        Controls controls;
 
         public InteractionIcon Icon { get; protected set; }
 
@@ -38,11 +38,10 @@ namespace Doors
         void Awake()
         {
             // Release door when releasing control, not when hovering off.
-            controls = new Controls();
-            controls.Gameplay.Interact.canceled += _ => OnRelease();
+            inputProvider.StopInteract += OnRelease;
         }
 
-        void OnDestroy() => controls.Dispose();
+        void OnDestroy() => inputProvider.StopInteract -= OnRelease;
 
         public bool CanInteract(Transform sender)
         {
@@ -53,7 +52,6 @@ namespace Doors
         public void OnInteract(Transform sender)
         {
             isInteracting = true;
-            controls.Enable();
         }
 
         void UpdateIcon()
@@ -103,10 +101,11 @@ namespace Doors
 
         void OnRelease()
         {
+            if (!isInteracting) return;
+            
             // Decelerate such that delta approaches 0 in stopTime seconds.
             requiredDeceleration = Mathf.Abs(delta / stopTime);
             isInteracting = false;
-            controls.Disable();
         }
     }
 }

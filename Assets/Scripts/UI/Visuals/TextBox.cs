@@ -2,6 +2,7 @@
 using System.Collections;
 using Core;
 using DG.Tweening;
+using Input.Direct;
 using TMPro;
 using UnityEngine;
 
@@ -9,27 +10,27 @@ namespace UI.Visuals
 {
     public class TextBox : MonoBehaviour
     {
+        [SerializeField] InputProvider input;
         [SerializeField] TextMeshProUGUI textMesh;
         [SerializeField, Min(1)] float charsPerSec = 30;
         [SerializeField] CanvasGroup canvasGroup;
         [SerializeField, Min(0)] float fadeDuration;
         [SerializeField] TextMeshProUGUI skipIndicator;
 
-        Controls controls;
         bool skipPressed;
         bool isDisplaying;
 
         void Awake()
         {
             canvasGroup.alpha = 0;
-            controls = new Controls();
-            controls.Gameplay.Jump.performed += _ => skipPressed = true;
+            input.Jump += Skip;
+            using var controls = new Controls();
             skipIndicator.text = controls.Gameplay.Jump.FormatDisplayString() + " to skip.";
         }
+        
+        void OnDestroy() => input.Jump -= Skip;
 
-        void OnEnable() => controls.Enable();
-        void OnDisable() => controls.Disable();
-        void OnDestroy() => controls.Dispose();
+        void Skip() => skipPressed = true;
 
         IEnumerator PrepareToDisplay(string prepText)
         {

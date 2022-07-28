@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Core;
 using DG.Tweening;
 using Interactables.Holding;
 using UI.Visuals;
 using UnityEngine;
+using Input.Direct;
 
 namespace Tutorial
 {

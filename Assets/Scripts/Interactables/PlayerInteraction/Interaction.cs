@@ -1,13 +1,12 @@
-using System;
 using Core;
 using Interactables.Base;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Interactables
 {
     internal class Interaction : MonoBehaviour
     {
+        [SerializeField] InputProvider input;
         [SerializeField] float reach;
         [SerializeField, Layer] int interactablesLayer;
         [SerializeField] LayerMask inclusionMask;
@@ -16,16 +15,37 @@ namespace Interactables
 
         Hoverable hoveredObject;
 
-        void OnInteract(InputValue value)
+        void Awake()
         {
-            if (!hoveredObject) return;
-            hoveredObject.Interact(transform, value.isPressed, false);
+            input.StartInteract += OnStartInteract;
+            input.StopInteract += OnStopInteract;
+            input.StartSecondaryInteract += OnStartSecondaryInteract;
+            input.StopSecondaryInteract += OnStopSecondaryInteract;
         }
 
-        void OnSecondaryInteract(InputValue value)
+        void OnDestroy()
+        {
+            input.StartInteract -= OnStartInteract;
+            input.StopInteract -= OnStopInteract;
+            input.StartSecondaryInteract -= OnStartSecondaryInteract;
+            input.StopSecondaryInteract -= OnStopSecondaryInteract;
+        }
+
+        void OnStartInteract() => OnInteract(true);
+        void OnStopInteract() => OnInteract(false);
+        void OnStartSecondaryInteract() => OnSecondaryInteract(true);
+        void OnStopSecondaryInteract() => OnSecondaryInteract(false);
+
+        void OnInteract(bool pressed)
         {
             if (!hoveredObject) return;
-            hoveredObject.Interact(transform, value.isPressed, true);
+            hoveredObject.Interact(transform, pressed, false);
+        }
+
+        void OnSecondaryInteract(bool pressed)
+        {
+            if (!hoveredObject) return;
+            hoveredObject.Interact(transform, pressed, true);
         }
 
         void Update()

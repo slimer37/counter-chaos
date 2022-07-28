@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using Core;
 using DG.Tweening;
 
@@ -10,6 +9,7 @@ namespace UI.Tooltip
     [ExecuteInEditMode]
     internal class TooltipDisplay : Singleton<TooltipDisplay>
     {
+        [SerializeField] InputProvider input;
         [SerializeField] TextMeshProUGUI title;
         [SerializeField] TextMeshProUGUI description;
         [SerializeField] int characterWrapLimit;
@@ -21,7 +21,6 @@ namespace UI.Tooltip
         [SerializeField] CanvasGroup group;
         [SerializeField] LayoutElement layoutElement;
         
-        Controls controls;
         RectTransform rectTransform;
         Tween fadeTween;
 
@@ -45,8 +44,13 @@ namespace UI.Tooltip
             OnValidate();
             group.alpha = 0;
             rectTransform = GetComponent<RectTransform>();
-            controls = new Controls();
-            controls.Menu.CursorPosition.performed += RecordPosition;
+            
+            input.ChangeCursorPosition += RecordPosition;
+        }
+
+        void OnDestroy()
+        {
+            input.ChangeCursorPosition -= RecordPosition;
         }
 
         internal void Show(string titleText, string descText)
@@ -60,8 +64,6 @@ namespace UI.Tooltip
             layoutElement.enabled = (descText?.Length ?? 0) > characterWrapLimit;
             
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
-
-            controls.Enable();
             
             if (isShowing) return;
             fadeTween = group.DOFade(1, fadeDuration).SetDelay(showDelay);
@@ -71,16 +73,16 @@ namespace UI.Tooltip
 
         internal void Hide()
         {
-            controls.Disable();
             fadeTween.Kill();
             group.alpha = 0;
             isShowing = false;
         }
 
-        void RecordPosition(InputAction.CallbackContext context)
+        void RecordPosition(Vector2 pos)
         {
-            var pos = context.ReadValue<Vector2>();
-            transform.position = context.ReadValue<Vector2>();
+            if (!isShowing) return;
+            
+            transform.position = pos;
 		
             pos = (pos / new Vector2(Screen.width, Screen.height) - Vector2.one / 2) * 2;
             var absolutePos = new Vector2(Mathf.Abs(pos.x), Mathf.Abs(pos.y));

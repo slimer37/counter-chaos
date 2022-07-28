@@ -1,15 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Interactables.Base;
-using Core;
 using DG.Tweening;
 
 public class Cart : MonoBehaviour, IInteractable
 {
     [SerializeField] float rotSpeed;
     [SerializeField] float moveSpeed;
-    [SerializeField] Hoverable hoverable;
     [SerializeField] Rigidbody rb;
+    [SerializeField] InputProvider input;
     
     [Header("Player Positioning")]
     [SerializeField] float playerStartHeight = 1;
@@ -33,7 +31,6 @@ public class Cart : MonoBehaviour, IInteractable
     [SerializeField] Transform container;
 
     bool isBeingPushed;
-    Controls controls;
     Vector3 moveDirection;
     Vector3 moveRotation;
     PlayerController controller;
@@ -70,30 +67,33 @@ public class Cart : MonoBehaviour, IInteractable
         
         upOffset = playerStartHeight - transform.position.y;
         
-        controls = new Controls();
-        controls.Gameplay.Slow.performed += Exit;
-        controls.Gameplay.Move.performed += Move;
-        controls.Gameplay.Move.canceled += Move;
-        controls.Enable();
+        input.StartSlow += Exit;
+        input.Move += Move;
 
         containerPos = container.transform.localPosition;
         container.transform.parent = null;
         
         rb.maxAngularVelocity = 0;
     }
-    
-    void Move(InputAction.CallbackContext ctx)
+
+    void OnDestroy()
+    {
+        input.StartSlow -= Exit;
+        input.Move -= Move;
+    }
+
+    void Move(Vector2 dir)
     {
         if (!isBeingPushed) return;
-        var dir = ctx.ReadValue<Vector2>();
 
         moveDirection.z = dir.y * moveSpeed;
         moveRotation.y = dir.x * rotSpeed;
     }
 
-    void Exit(InputAction.CallbackContext ctx)
+    void Exit()
     {
         if (!isBeingPushed) return;
+        
         Setup(false);
 
         moveDirection = default;

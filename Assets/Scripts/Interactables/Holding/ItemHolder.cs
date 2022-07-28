@@ -3,7 +3,6 @@ using System.Linq;
 using Core;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Interactables.Holding
@@ -11,7 +10,8 @@ namespace Interactables.Holding
     public class ItemHolder : MonoBehaviour
     {
         public bool useOldSystem;
-        
+
+        [SerializeField] InputProvider inputProvider;
         [SerializeField] new Camera camera;
         [SerializeField] Vector3 defaultHoldingPosition;
         [SerializeField] Vector3 defaultHoldingRotation;
@@ -92,6 +92,27 @@ namespace Interactables.Holding
             cursor3D.gameObject.SetActive(false);
 
             dropReach = maxDropReach;
+            
+            inputProvider.StartRotate += OnStartRotate;
+            inputProvider.StopRotate += OnStopRotate;
+            inputProvider.StartDrop += OnStartDrop;
+            inputProvider.EndDrop += OnEndDrop;
+            inputProvider.StartToss += OnStartToss;
+            inputProvider.EndToss += OnEndToss;
+            inputProvider.MoveMouse += OnMoveMouse;
+            inputProvider.Scroll += OnScroll;
+        }
+
+        void OnDestroy()
+        {
+            inputProvider.StartRotate -= OnStartRotate;
+            inputProvider.StopRotate -= OnStopRotate;
+            inputProvider.StartDrop -= OnStartDrop;
+            inputProvider.EndDrop -= OnEndDrop;
+            inputProvider.StartToss -= OnStartToss;
+            inputProvider.EndToss -= OnEndToss;
+            inputProvider.MoveMouse -= OnMoveMouse;
+            inputProvider.Scroll -= OnScroll;
         }
 
         internal Pickuppable StopHolding()
@@ -127,9 +148,12 @@ namespace Interactables.Holding
             ValidateDropReach();
         }
 
-        void OnRotate(InputValue value)
+        void OnStartRotate() => OnRotate(true);
+        void OnStopRotate() => OnRotate(false);
+
+        void OnRotate(bool value)
         {
-            isRotating = value.isPressed;
+            isRotating = value;
             if (!useOldSystem || !isHoldingDrop) return;
             controller.EnableLook(!isRotating);
         }
@@ -149,12 +173,15 @@ namespace Interactables.Holding
             ghost.Hide();
         }
 
-        void OnDrop(InputValue value)
+        void OnStartDrop() => OnDrop(true);
+        void OnEndDrop() => OnDrop(false);
+
+        void OnDrop(bool pressed)
         {
             if (!heldItem || !heldItem.Info.canBeDropped || isHoldingToss) return;
             
             // On hold
-            if (value.isPressed)
+            if (pressed)
             {
                 isHoldingDrop = true;
                 heldItem.transform.localRotation = dropOrThrowRotation;
@@ -191,15 +218,18 @@ namespace Interactables.Holding
             foreach (Transform child in heldItem.transform)
                 child.gameObject.layer = layer;
         }
+
+        void OnStartToss() => OnToss(true);
+        void OnEndToss() => OnToss(false);
         
-        void OnToss(InputValue value)
+        void OnToss(bool pressed)
         {
             if (!heldItem || !heldItem.Info.canBeThrown || !heldItem.Info.canBeDropped || isHoldingDrop) return;
 
-            holdIndicator.enabled = value.isPressed;
+            holdIndicator.enabled = pressed;
             
             // On hold
-            if (value.isPressed)
+            if (pressed)
             {
                 holdTime = 0;
                 isHoldingToss = true;
@@ -235,17 +265,17 @@ namespace Interactables.Holding
 
         Ray GetCameraRay() => camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-        void OnMoveMouse(InputValue val)
+        void OnMoveMouse(Vector2 delta)
         {
             if (!useOldSystem && isHoldingDrop && !isRotating)
             {
-                mousePos += val.Get<Vector2>();
+                mousePos += delta;
                 mousePos.x = Mathf.Clamp(mousePos.x, 0, Screen.width);
                 mousePos.y = Mathf.Clamp(mousePos.y, 0, Screen.height);
             }
             
             if (!isHoldingDrop || !isRotating) return;
-            rotationDelta = val.Get<Vector2>().x * rotationSpeed;
+            rotationDelta = delta.x * rotationSpeed;
         }
 
         void Update()
@@ -336,9 +366,8 @@ namespace Interactables.Holding
             }
         }
 
-        void OnScroll(InputValue value)
+        void OnScroll(float scroll)
         {
-            var scroll = value.Get<float>();
             if (!IsDroppingItem || scroll == 0) return;
             
             // If the drop ray has hit, use current item distance when decreasing reach

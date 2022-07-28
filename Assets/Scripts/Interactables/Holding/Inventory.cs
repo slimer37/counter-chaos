@@ -1,5 +1,4 @@
 ﻿using System;
-using Core;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -60,7 +59,8 @@ namespace Interactables.Holding
                 thumbnail.enabled = false;
             }
         }
-        
+
+        [SerializeField] InputProvider input;
         [SerializeField, Min(0)] int numSlots;
         [SerializeField] GameObject slotTemplate;
         [SerializeField] Transform activeImage;
@@ -86,8 +86,6 @@ namespace Interactables.Holding
         public int AvailableSlots => numSlots - numItems;
         public int TotalSlots => numSlots;
         public bool IsFull => AvailableSlots == 0;
-
-        Controls controls;
         
         bool CanSwitch => Time.timeScale != 0 && !interactHeld && !secInteractHeld && !Holder.IsDroppingItem;
         bool interactHeld;
@@ -113,20 +111,34 @@ namespace Interactables.Holding
 
             Keyboard.current.onTextInput += OnTextInput;
 
-            controls = new Controls();
-            controls.Enable();
-            controls.Gameplay.Interact.performed += _ => interactHeld = true;
-            controls.Gameplay.Interact.canceled += _ => interactHeld = false;
-            controls.Gameplay.SecondaryInteract.performed += _ => secInteractHeld = true;
-            controls.Gameplay.SecondaryInteract.canceled += _ => secInteractHeld = false;
+            input.StartInteract += StartInteract;
+            input.StopInteract += StopInteract;
+            input.StartSecondaryInteract += StartSecondaryInteract;
+            input.StopSecondaryInteract += StopSecondaryInteract;
 
-            controls.Gameplay.Scroll.performed += OnScroll;
+            input.Scroll += OnScroll;
         }
 
-        void OnScroll(InputAction.CallbackContext ctx)
+        void StartInteract() => interactHeld = true;
+        void StopInteract() => interactHeld = false;
+        void StartSecondaryInteract() => secInteractHeld = true;
+        void StopSecondaryInteract() => secInteractHeld = false;
+
+        void OnDestroy()
+        {
+            Keyboard.current.onTextInput -= OnTextInput;
+            
+            input.StartInteract -= StartInteract;
+            input.StopInteract -= StopInteract;
+            input.StartSecondaryInteract -= StartSecondaryInteract;
+            input.StopSecondaryInteract -= StopSecondaryInteract;
+            input.Scroll -= OnScroll;
+        }
+
+        void OnScroll(float scroll)
         {
             if (!CanSwitch) return;
-            var delta = (invertScrollDirection ? -1 : 1) * (ctx.ReadValue<float>() > 0 ? 1 : -1);
+            var delta = (invertScrollDirection ? -1 : 1) * (scroll > 0 ? 1 : -1);
             var newIndex = (ActiveSlotIndex + delta + numSlots) % numSlots;
             SetActiveSlot(newIndex);
         }
@@ -135,12 +147,6 @@ namespace Interactables.Holding
         {
             if (CanSwitch && int.TryParse(c.ToString(), out var i) && i > 0 && i <= numSlots)
                 SetActiveSlot(i - 1);
-        }
-
-        void OnDestroy()
-        {
-            controls.Dispose();
-            Keyboard.current.onTextInput -= OnTextInput;
         }
 
         void Update()

@@ -1,4 +1,3 @@
-using Core;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,12 +6,11 @@ namespace UI
 {
     public class PauseMenu : MonoBehaviour
     {
+        [SerializeField] InputProvider input;
         [SerializeField] CanvasGroup fadeGroup;
         [SerializeField] float fadeTime;
         [SerializeField] UnityEvent onPause;
         [SerializeField] UnityEvent onUnpause;
-    
-        Controls controls;
 
         bool paused;
 
@@ -21,16 +19,14 @@ namespace UI
     
         void Awake()
         {
-            controls = new Controls();
-            controls.Menu.Exit.performed += _ => TogglePause();
-            controls.Enable();
+            input.Exit += TogglePause;
         
             fadeGroup.gameObject.SetActive(true);
             fadeGroup.alpha = 0;
             fadeGroup.blocksRaycasts = false;
         }
 
-        void OnDestroy() => controls.Dispose();
+        void OnDestroy() => input.Exit -= TogglePause;
 
         public void TogglePause()
         {
