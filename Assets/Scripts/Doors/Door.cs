@@ -1,7 +1,8 @@
+using System;
 using Core;
 using Interactables.Base;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 namespace Doors
 {
@@ -14,6 +15,12 @@ namespace Doors
         [SerializeField, Range(-180, 0)] float rotationMin = -180;
         [SerializeField, Range(0, 180)] float rotationMax = 180;
         [SerializeField] float stopTime = 0.5f;
+
+        [Header("Events")]
+        [SerializeField, Tooltip("How close the door should be to its closed rotation to be considered closed.")]
+        float closedThreshold = 10;
+        [SerializeField] UnityEvent onOpen;
+        [SerializeField] UnityEvent onClose;
         
         const int RotationSpeed = 200;
         const int PullDistance = 2;
@@ -22,6 +29,8 @@ namespace Doors
         float delta;
         float requiredDeceleration;
         bool isInteracting;
+
+        bool isOpen;
 
         Hoverable hoverable;
         Controls controls;
@@ -96,7 +105,15 @@ namespace Doors
             rot.y = Mathf.Clamp(rot.y + delta * Time.deltaTime, rotationMin, rotationMax);
             transform.localEulerAngles = rot;
 
-            if (!isInteracting) return;
+            var openState = Math.Abs(rot.y - (invert ? rotationMax : rotationMin)) > closedThreshold;
+            if (openState != isOpen)
+            {
+                isOpen = openState;
+                if (isOpen)
+                    onOpen?.Invoke();
+                else
+                    onClose?.Invoke();
+            }
             
             UpdateIcon();
         }
