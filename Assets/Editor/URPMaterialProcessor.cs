@@ -24,14 +24,20 @@ namespace Project.Editor
         void OnPreprocessMaterialDescription(MaterialDescription description, Material material, AnimationClip[] animations)
         {
             foreach (var key in floatDefinitions.Keys)
-                if (description.TryGetProperty(key, out float value))
-                {
-                    if (floatConverters.ContainsKey(key)) value = floatConverters[key](value);
-                    material.SetFloat(floatDefinitions[key], value);
-                }
+            {
+                if (!description.TryGetProperty(key, out float value))
+                    throw new Exception($"Could not find key {key} in material description.");
+                
+                if (floatConverters.ContainsKey(key)) value = floatConverters[key](value);
+                
+                material.SetFloat(floatDefinitions[key], value);
+            }
+            
+            if (description.TryGetProperty("DiffuseColor", out TexturePropertyDescription tex))
+                material.mainTextureScale = new Vector2(1 / tex.scale.x, 1 / tex.scale.y);
         }
         
-        void LogProperties(MaterialDescription description)
+        void LogFloatProperties(MaterialDescription description)
         {
             var propertyNames = new List<string>();
             description.GetFloatPropertyNames(propertyNames);
