@@ -1,14 +1,13 @@
 using System;
 using Core;
 using DG.Tweening;
-using Interactables.Base;
 using Interactables.Holding;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Furniture
 {
-    public class ShelfBase : MonoBehaviour, IInteractable
+    public class ShelfBase : MonoBehaviour, IReceptacle<Shelf>
     {
         [SerializeField] Collider mainCollider;
         [SerializeField] Shelf.Style style;
@@ -50,13 +49,11 @@ namespace Furniture
 
         // Only interactable if no shelf is currently being attached and the player is in front,
         // holding a compatible shelf.
-        public bool CanInteract(Transform sender) =>
+        public bool CanAccept(Transform sender, Shelf component) =>
             availableSlots > 0
             && !shelfIsBeingAttached
             && (ignoreDirection || Vector3.Dot(transform.forward, sender.forward) < 0)
-            && Inventory.Main.Holder.IsHoldingItem
-            && Inventory.Main.Holder.HeldItem.TryGetComponent(out Shelf shelf)
-            && shelf.ShelfStyle == style;
+            && component.ShelfStyle == style;
 
         void Awake()
         {
@@ -88,38 +85,23 @@ namespace Furniture
 
         void OnDestroy() => controls.Dispose();
 
-        public void OnInteract(Transform sender)
+        public void StartAdding(Shelf shelf)
         {
-            if (!sender.CompareTag("Player")) return;
-
-            var inventory = Inventory.Main;
-            var holder = inventory.Holder;
-            if (!holder.IsHoldingItem || !holder.HeldItem.TryGetComponent<Shelf>(out var heldShelf)) return;
-            if (heldShelf.ShelfStyle != style) return;
-            
-            shelfToAttach = heldShelf;
+            shelfToAttach = shelf;
 
             var shelfT = shelfToAttach.transform;
 
-            shelfIndex = -1;
-
-            for (var i = 0; i < shelves.Length; i++)
-            {
-                if (!shelves[i])
-                {
-                    shelfIndex = i;
-                    break;
-                }
-            }
+            // Find first null index.
+            shelfIndex = Array.FindIndex(shelves, shelfSlot => !shelfSlot);
 
             if (shelfIndex == -1) throw new Exception("No empty indices found.");
             
-            inventory.ClearActiveSlot();
+            Inventory.Main.ClearActiveSlot();
             
             // Set transform stuff after TakeFrom so shelf parent isn't reset.
             shelfT.parent = transform;
             shelfT.localRotation = Quaternion.identity;
-            shelfT.localPosition = Vector3.forward * shelfPreviewOffset + Vector3.up * (minShelfHeight + shelfIndex * shelfSnapInterval);
+            shelfT.localPosition = GetLocalShelfPosition(shelfIndex);
             tempLayer = shelfToAttach.gameObject.layer;
             shelfToAttach.gameObject.layer = ignoreCollisionLayer;
             
@@ -128,6 +110,9 @@ namespace Furniture
             controls.Enable();
         }
 
+        Vector3 GetLocalShelfPosition(int atIndex) =>
+            Vector3.forward * shelfPreviewOffset + Vector3.up * (minShelfHeight + atIndex * shelfSnapInterval);
+
         int GetShelfIndex(float atHeight) =>
             Mathf.Clamp(Mathf.RoundToInt((atHeight - minShelfHeight) / shelfSnapInterval), 0, maxShelves - 1);
 
@@ -135,42 +120,46 @@ namespace Furniture
         {
             if (!shelfIsBeingAttached) return;
 
-            var requestedShelfIndex = 0;
+            int requestedShelfIndex;
             
             var playerCamera = Player.Camera;
             if ((ignoreDirection || Vector3.Dot(transform.forward, playerCamera.transform.forward) < 0)
                 && mainCollider.Raycast(playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f)), out var hit, attachDistance))
             {
-                shelfAttachPos = Vector3.forward * shelfPreviewOffset;
                 var height = hit.point.y - transform.position.y;
                 requestedShelfIndex = GetShelfIndex(height);
-                var snappedHeight = requestedShelfIndex * shelfSnapInterval;
-                shelfAttachPos.y = minShelfHeight + snappedHeight;
+                shelfAttachPos = GetLocalShelfPosition(requestedShelfIndex);
             }
-            else Attach();
+            else
+            {
+                Attach();
+                return;
+            }
 
             if (shelves[requestedShelfIndex]) return;
             shelfIndex = requestedShelfIndex;
             shelfToAttach.transform.localPosition = shelfAttachPos;
         }
 
-        void OnReleaseInteract(InputAction.CallbackContext ctx) => Attach();
+        void OnReleaseInteract(InputAction.CallbackContext ctx)
+        {
+            if (!shelfIsBeingAttached) return;
+            Attach();
+        }
 
         void Attach()
         {
-            if (!shelfIsBeingAttached) return;
-
             if (shelves[shelfIndex]) throw new Exception($"Requested shelf index ({shelfIndex}) is filled.");
 
             var height = shelfToAttach.transform.localPosition.y;
 
-            var attachmentSequence = DOTween.Sequence();
-            attachmentSequence.Append(shelfToAttach.transform.DOLocalMoveZ(shelfForwardOffset, shelfInDuration));
-            attachmentSequence.Join(shelfToAttach.transform.DOLocalMoveY(height + shelfAnimUp, shelfInDuration));
-            attachmentSequence.Join(shelfToAttach.transform.DOScaleX(scaleX / transform.localScale.x, shelfInDuration));
-            attachmentSequence.AppendInterval(beforeDownInterval);
-            attachmentSequence.Append(shelfToAttach.transform.DOLocalMoveY(height, shelfDownDuration));
-            attachmentSequence.SetId(shelfIndex | GetInstanceID());
+            DOTween.Sequence()
+                .Append(shelfToAttach.transform.DOLocalMoveZ(shelfForwardOffset, shelfInDuration))
+                .Join(shelfToAttach.transform.DOLocalMoveY(height + shelfAnimUp, shelfInDuration))
+                .Join(shelfToAttach.transform.DOScaleX(scaleX / transform.localScale.x, shelfInDuration))
+                .AppendInterval(beforeDownInterval)
+                .Append(shelfToAttach.transform.DOLocalMoveY(height, shelfDownDuration))
+                .SetId(shelfIndex | GetInstanceID());
             
             shelves[shelfIndex] = shelfToAttach;
             shelfToAttach.AttachTo(this, shelfIndex);

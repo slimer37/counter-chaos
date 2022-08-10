@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using Interactables.Holding;
 using Interactables.Base;
@@ -15,14 +16,13 @@ namespace Furniture
 
         ShelfBase attachedBase;
         int attachmentIndex;
-        int numColliding;
         bool interactable = true;
+        List<Transform> colliding = new();
         
         Tween shake;
 
-        void OnCollisionEnter(Collision other) => numColliding++;
-
-        void OnCollisionExit(Collision other) => numColliding--;
+        void OnCollisionEnter(Collision other) => colliding.Add(other.transform);
+        void OnCollisionExit(Collision other) => colliding.Remove(other.transform);
 
         public bool CanInteract(Transform s) => interactable;
 
@@ -38,7 +38,7 @@ namespace Furniture
         // Basically OnPickup
         public void OnInteract(Transform sender)
         {
-            if (numColliding > 0)
+            if (colliding.Count > 0)
             {
                 shake?.Complete();
                 shake = meshTransform.DOShakeRotation(0.4f, new Vector3(0.5f, 2, 0.5f), 15);
@@ -56,7 +56,7 @@ namespace Furniture
         {
             if (!CanInteract(sender)) return false;
             OnInteract(sender);
-            if (numColliding > 0) return false;
+            if (colliding.Count > 0) return false;
             return true;
         }
     }
