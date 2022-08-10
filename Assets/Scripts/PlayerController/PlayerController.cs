@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform body;
     public float sensitivity;
     [SerializeField] float rotLimit;
+    [SerializeField] InputActionReference lookAction;
 
     [Header("Bobbing")]
     [SerializeField] float bobAmount;
@@ -46,7 +47,6 @@ public class PlayerController : MonoBehaviour
     bool isSlow;
     float currentSpeed;
     
-    Vector2 mouseDelta;
     Vector3 camRot;
     Vector3 moveVector;
 
@@ -134,8 +134,6 @@ public class PlayerController : MonoBehaviour
         if (isSlow) return;
         isSprinting = val.isPressed;
     }
-    
-    void OnMoveMouse(InputValue val) => mouseDelta = sensitivity * MouseScale * val.Get<Vector2>();
 
     void Awake()
     {
@@ -203,6 +201,7 @@ public class PlayerController : MonoBehaviour
         
         if (canLook)
         {
+            var mouseDelta = sensitivity * MouseScale * lookAction.action.ReadValue<Vector2>();
             camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y, -rotLimit, rotLimit);
             body.localEulerAngles += mouseDelta.x * Vector3.up;
             cam.transform.localEulerAngles = camRot;
