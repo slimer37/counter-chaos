@@ -24,7 +24,7 @@ namespace Furniture
         void OnCollisionEnter(Collision other) => colliding.Add(other.transform);
         void OnCollisionExit(Collision other) => colliding.Remove(other.transform);
 
-        public bool CanInteract(Transform s) => interactable;
+        public bool CanInteract(Transform s) => !Inventory.Main.IsFull && interactable;
 
         internal void Disable() => interactable = false;
         internal void Enable() => interactable = true;
