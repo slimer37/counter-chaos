@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Interactables.Base
 {
-    public enum InteractionIcon { Invalid, Access, Pickup, Pull, Push, Eye }
+    public enum InteractionIcon { Invalid, Hand, Access, Pickup, Pull, Push, Eye }
     
     public class IconHandler : MonoBehaviour
     {
