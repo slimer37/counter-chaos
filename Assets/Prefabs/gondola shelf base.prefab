@@ -126,12 +126,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a787f6768eb905740bbfaa4b31a8bada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
   mainCollider: {fileID: 2706323337443795866}
   style: 0
   attachDistance: 4
   maxShelves: 9
   shelfForwardOffset: 0.55
   minShelfHeight: 0.486
+  ignoreDirection: 0
   scaleX: 1
   shelfSnapInterval: 0.226
   shelfPreviewOffset: 0.8
@@ -151,7 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab86fc62513470247a6f7c5f7460a6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: 1
   useOutline: 0
 --- !u!208 &7526859863520183298
 NavMeshObstacle:

@@ -20,6 +20,7 @@ namespace Doors
         float closedThreshold = 10;
         [SerializeField] UnityEvent onOpen;
         [SerializeField] UnityEvent onClose;
+        [SerializeField] InteractionChannel channel;
         
         const int RotationSpeed = 200;
         const int PullDistance = 2;
@@ -55,6 +56,7 @@ namespace Doors
         public void OnInteract(Transform sender)
         {
             isInteracting = true;
+            channel.Activate();
             controls.Enable();
         }
 
@@ -98,6 +100,7 @@ namespace Doors
         {
             // Decelerate such that delta approaches 0 in stopTime seconds.
             requiredDeceleration = Mathf.Abs(delta / stopTime);
+            channel.Deactivate();
             isInteracting = false;
             controls.Disable();
         }

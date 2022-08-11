@@ -1,4 +1,3 @@
-using System;
 using Core;
 using Interactables.Base;
 using UnityEngine;
@@ -13,6 +12,7 @@ namespace Interactables
         [SerializeField] LayerMask inclusionMask;
         [SerializeField] new Camera camera;
         [SerializeField] IconHandler iconHandler;
+        [SerializeField] InteractionChannel channel;
 
         Hoverable hoveredObject;
 
@@ -30,6 +30,8 @@ namespace Interactables
 
         void Update()
         {
+            if (channel.IsActive) return;
+            
             var eyeRay = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
             
             if (Physics.Raycast(eyeRay, out var hit, reach, inclusionMask)

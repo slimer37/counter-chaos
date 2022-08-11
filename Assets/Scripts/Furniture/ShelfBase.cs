@@ -3,11 +3,10 @@ using Core;
 using DG.Tweening;
 using Interactables.Holding;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Furniture
 {
-    public class ShelfBase : MonoBehaviour, IReceptacle<Shelf>
+    public class ShelfBase : Receptacle<Shelf>
     {
         [SerializeField] Collider mainCollider;
         [SerializeField] Shelf.Style style;
@@ -32,8 +31,6 @@ namespace Furniture
         
         Shelf[] shelves;
         int availableSlots;
-
-        Controls controls;
         
         Shelf shelfToAttach;
         bool shelfIsBeingAttached;
@@ -49,7 +46,7 @@ namespace Furniture
 
         // Only interactable if no shelf is currently being attached and the player is in front,
         // holding a compatible shelf.
-        public bool CanAccept(Transform sender, Shelf component) =>
+        public override bool CanAccept(Transform sender, Shelf component) =>
             availableSlots > 0
             && !shelfIsBeingAttached
             && (ignoreDirection || Vector3.Dot(transform.forward, sender.forward) < 0)
@@ -57,9 +54,6 @@ namespace Furniture
 
         void Awake()
         {
-            controls = new Controls();
-            controls.Gameplay.Interact.canceled += OnReleaseInteract;
-            
             shelves = new Shelf[maxShelves];
 
             availableSlots = maxShelves;
@@ -83,9 +77,7 @@ namespace Furniture
             }
         }
 
-        void OnDestroy() => controls.Dispose();
-
-        public void StartAdding(Shelf shelf)
+        protected override void StartAdding(Shelf shelf)
         {
             shelfToAttach = shelf;
 
@@ -107,7 +99,6 @@ namespace Furniture
             
             shelfToAttach.Disable();
             shelfIsBeingAttached = true;
-            controls.Enable();
         }
 
         Vector3 GetLocalShelfPosition(int atIndex) =>
@@ -141,7 +132,7 @@ namespace Furniture
             shelfToAttach.transform.localPosition = shelfAttachPos;
         }
 
-        void OnReleaseInteract(InputAction.CallbackContext ctx)
+        protected override void FinishAdd()
         {
             if (!shelfIsBeingAttached) return;
             Attach();
@@ -168,7 +159,6 @@ namespace Furniture
 
             shelfIsBeingAttached = false;
             
-            controls.Disable();
             availableSlots--;
         }
 

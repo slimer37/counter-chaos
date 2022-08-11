@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a787f6768eb905740bbfaa4b31a8bada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
   mainCollider: {fileID: 2417224550940166559}
   style: 1
   attachDistance: 4
@@ -349,6 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a787f6768eb905740bbfaa4b31a8bada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
   mainCollider: {fileID: 2417224551402154131}
   style: 1
   attachDistance: 4
@@ -639,6 +641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a787f6768eb905740bbfaa4b31a8bada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
   mainCollider: {fileID: 2417224551964871976}
   style: 1
   attachDistance: 4
@@ -10513,7 +10516,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 1
-  showPullByDefault: 1
   rotationMin: -90
   rotationMax: 0
   stopTime: 0.5
@@ -10548,6 +10550,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
 --- !u!114 &4172191747181879596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15592,7 +15595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 0
-  showPullByDefault: 1
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
@@ -15627,6 +15629,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
 --- !u!114 &7858487357616025270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15786,7 +15789,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invert: 0
-  showPullByDefault: 1
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
@@ -15821,6 +15823,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
 --- !u!114 &8599752767978158838
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,14 +1,23 @@
-﻿using Interactables.Base;
+﻿using System;
+using Core;
+using Interactables.Base;
 using Interactables.Holding;
 using UnityEngine;
 
 namespace Furniture
 {
-    public interface IReceptacle<in T> : IInteractable where T : MonoBehaviour, IInteractable
+    public abstract class Receptacle<T> : MonoBehaviour, IInteractable
+        where T : MonoBehaviour, IInteractable
     {
-        public void StartAdding(T obj);
+        [SerializeField] InteractionChannel channel;
 
-        public bool CanAccept(Transform sender, T component) => component.TryGetComponent<T>(out _);
+        protected virtual void OnEnable() => channel.OnInteractRelease += FinishAdd;
+        protected virtual void OnDisable() => channel.OnInteractRelease -= FinishAdd;
+        
+        protected abstract void StartAdding(T component);
+        protected abstract void FinishAdd();
+
+        public abstract bool CanAccept(Transform sender, T component);
         
         bool IInteractable.CanInteract(Transform t) =>
             t.CompareTag("Player") &&
