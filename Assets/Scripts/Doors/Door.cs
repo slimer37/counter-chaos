@@ -10,7 +10,6 @@ namespace Doors
     {
         [Header("Pulling")]
         [SerializeField] bool invert;
-        [SerializeField] bool showPullByDefault;
         [Space]
         [SerializeField, Range(-180, 0)] float rotationMin = -180;
         [SerializeField, Range(0, 180)] float rotationMax = 180;
@@ -35,7 +34,7 @@ namespace Doors
         Hoverable hoverable;
         Controls controls;
 
-        public InteractionIcon Icon { get; protected set; }
+        public InteractionIcon Icon => InteractionIcon.Door;
 
         void OnValidate()
         {
@@ -53,31 +52,10 @@ namespace Doors
 
         void OnDestroy() => controls.Dispose();
 
-        public bool CanInteract(Transform sender)
-        {
-            UpdateIcon();
-            return true;
-        }
-
         public void OnInteract(Transform sender)
         {
             isInteracting = true;
             controls.Enable();
-        }
-
-        void UpdateIcon()
-        {
-            var yRot = transform.localEulerAngles.y;
-            if (yRot > 180) yRot -= 360;
-            var facingFront = Vector3.Dot(Player.Camera.transform.forward, transform.forward) < 0;
-            
-            bool push;
-            if (showPullByDefault)
-                push = facingFront != invert ? yRot >= rotationMax : yRot <= rotationMin;
-            else
-                push = facingFront != invert ? yRot > rotationMin : yRot < rotationMax;
-            
-            Icon = push ? InteractionIcon.Push : InteractionIcon.Pull;
         }
 
         void Update()
@@ -114,8 +92,6 @@ namespace Doors
                 else
                     onClose?.Invoke();
             }
-            
-            UpdateIcon();
         }
 
         void OnRelease()
