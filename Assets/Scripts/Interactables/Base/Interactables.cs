@@ -7,7 +7,7 @@ namespace Interactables.Base
         public InteractionIcon Icon => InteractionIcon.Hand;
 
         public bool CanInteract(Transform sender) => true;
-        public void OnInteract(Transform sender) { }
+        public void OnInteract(Transform sender);
         
         /// <summary>
         /// Allows a child class to customize the behavior of chain interaction.
