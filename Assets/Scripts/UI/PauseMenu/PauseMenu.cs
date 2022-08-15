@@ -34,6 +34,8 @@ namespace UI
 
         public void TogglePause()
         {
+            AudioListener.pause = !AudioListener.pause;
+            
             paused = !paused;
             Time.timeScale = paused ? 0 : 1;
             fadeGroup.blocksRaycasts = paused;
