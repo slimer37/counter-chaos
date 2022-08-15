@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Checkout.Editor
+namespace Checkout
 {
     [CustomEditor(typeof(Queue))]
-    public class QueueEditor : UnityEditor.Editor
+    public class QueueEditor : Editor
     {
         static Mesh humanMesh;
         static Vector3[] positions;

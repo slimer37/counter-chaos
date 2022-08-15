@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace Serialization.Editor
+namespace Serialization
 {
     public class EditorSaveBrowser : EditorWindow
     {

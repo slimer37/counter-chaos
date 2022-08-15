@@ -3,10 +3,10 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
-namespace Products.Editor
+namespace Products
 {
     [CustomEditor(typeof(ProductInfo))]
-    public class ProductInfoEditor : UnityEditor.Editor
+    public class ProductInfoEditor : Editor
     {
         static AddressableAssetGroup productGroup;
         
