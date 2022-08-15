@@ -67,7 +67,7 @@ namespace Doors
                 var pullPoint = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
                 var forward = transform.InverseTransformPoint(pullPoint).z;
 
-                if ((Player.Camera.transform.position - transform.position).sqrMagnitude > Range * Range)
+                if ((pullPoint - transform.position).sqrMagnitude > Range * Range)
                 {
                     OnRelease();
                     return;
@@ -98,6 +98,8 @@ namespace Doors
 
         void OnRelease()
         {
+            if (!isInteracting) return;
+            
             // Decelerate such that delta approaches 0 in stopTime seconds.
             requiredDeceleration = Mathf.Abs(delta / stopTime);
             channel.Deactivate();

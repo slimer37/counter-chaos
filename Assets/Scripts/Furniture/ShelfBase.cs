@@ -33,7 +33,6 @@ namespace Furniture
         int availableSlots;
         
         Shelf shelfToAttach;
-        bool shelfIsBeingAttached;
         Vector3 shelfAttachPos;
         
         int shelfIndex;
@@ -48,7 +47,7 @@ namespace Furniture
         // holding a compatible shelf.
         public override bool CanAccept(Transform sender, Shelf component) =>
             availableSlots > 0
-            && !shelfIsBeingAttached
+            && !IsAdding
             && (ignoreDirection || Vector3.Dot(transform.forward, sender.forward) < 0)
             && component.ShelfStyle == style;
 
@@ -98,7 +97,7 @@ namespace Furniture
             shelfToAttach.gameObject.layer = ignoreCollisionLayer;
             
             shelfToAttach.Disable();
-            shelfIsBeingAttached = true;
+            base.StartAdding(shelf);
         }
 
         Vector3 GetLocalShelfPosition(int atIndex) =>
@@ -109,7 +108,7 @@ namespace Furniture
 
         void Update()
         {
-            if (!shelfIsBeingAttached) return;
+            if (!IsAdding) return;
 
             int requestedShelfIndex;
             
@@ -123,7 +122,7 @@ namespace Furniture
             }
             else
             {
-                Attach();
+                FinishAdd();
                 return;
             }
 
@@ -134,7 +133,8 @@ namespace Furniture
 
         protected override void FinishAdd()
         {
-            if (!shelfIsBeingAttached) return;
+            if (!IsAdding) return;
+            base.FinishAdd();
             Attach();
         }
 
@@ -156,8 +156,6 @@ namespace Furniture
             shelfToAttach.AttachTo(this, shelfIndex);
             shelfToAttach.Enable();
             shelfToAttach.gameObject.layer = tempLayer;
-
-            shelfIsBeingAttached = false;
             
             availableSlots--;
         }

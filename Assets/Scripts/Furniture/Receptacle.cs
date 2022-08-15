@@ -1,6 +1,4 @@
-﻿using System;
-using Core;
-using Interactables.Base;
+﻿using Interactables.Base;
 using Interactables.Holding;
 using UnityEngine;
 
@@ -11,11 +9,29 @@ namespace Furniture
     {
         [SerializeField] InteractionChannel channel;
 
-        protected virtual void OnEnable() => channel.OnInteractRelease += FinishAdd;
-        protected virtual void OnDisable() => channel.OnInteractRelease -= FinishAdd;
+        protected bool IsAdding { get; private set; }
+
+        protected virtual void OnEnable() => channel.OnInteractRelease += PostAdd;
+        protected virtual void OnDisable() => channel.OnInteractRelease -= PostAdd;
+
+        void PostAdd()
+        {
+            if (!IsAdding) return;
+            FinishAdd();
+        }
         
-        protected abstract void StartAdding(T component);
-        protected abstract void FinishAdd();
+        protected virtual void StartAdding(T component)
+        {
+            IsAdding = true;
+            channel.Activate();
+        }
+
+        protected virtual void FinishAdd()
+        {
+            if (!IsAdding) return;
+            IsAdding = false;
+            channel.Deactivate();
+        }
 
         public abstract bool CanAccept(Transform sender, T component);
         
