@@ -185,6 +185,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f4daae1fe4245c54bbcf4bbc2a7ba64b, type: 3}
   - {fileID: 21300000, guid: 71a3aa8320ab7b14185365fe6c1e0196, type: 3}
   - {fileID: 21300000, guid: 5d6ff695ebf5755498e27287049ad7d1, type: 3}
+  punchScale: {x: 0.2, y: 0.2, z: 0.2}
+  punchDuration: 0.4
 --- !u!114 &4393142
 MonoBehaviour:
   m_ObjectHideFlags: 0

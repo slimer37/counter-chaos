@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,16 @@ namespace Interactables.Base
         [SerializeField] Image iconImage;
         [SerializeField] Image pointerImage;
         [SerializeField] Sprite[] icons;
+        [SerializeField] Vector3 punchScale;
+        [SerializeField] float punchDuration;
+
+        Tween punch;
+
+        void Awake()
+        {
+            punch = iconImage.rectTransform.DOPunchScale(punchScale, punchDuration);
+            punch.Pause().SetAutoKill(false);
+        }
 
         internal void ShowIcon(InteractionIcon icon)
         {
@@ -33,6 +44,8 @@ namespace Interactables.Base
             // The icon and pointer are always in opposite states.
             iconImage.enabled = value;
             pointerImage.enabled = !value;
+
+            punch.Restart();
         }
     }
 }
