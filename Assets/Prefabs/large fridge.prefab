@@ -10519,7 +10519,9 @@ MonoBehaviour:
   rotationMin: -90
   rotationMax: 0
   stopTime: 0.5
-  closedThreshold: 20
+  closeMagnetism: 4
+  magnetThreshold: 20
+  closedThreshold: 1
   onOpen:
     m_PersistentCalls:
       m_Calls:
@@ -15598,7 +15600,9 @@ MonoBehaviour:
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
-  closedThreshold: 20
+  closeMagnetism: 4
+  magnetThreshold: 20
+  closedThreshold: 1
   onOpen:
     m_PersistentCalls:
       m_Calls:
@@ -15792,7 +15796,9 @@ MonoBehaviour:
   rotationMin: 0
   rotationMax: 90
   stopTime: 0.5
-  closedThreshold: 20
+  closeMagnetism: 4
+  magnetThreshold: 20
+  closedThreshold: 1
   onOpen:
     m_PersistentCalls:
       m_Calls:

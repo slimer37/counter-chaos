@@ -14,10 +14,14 @@ namespace Doors
         [SerializeField, Range(-180, 0)] float rotationMin = -180;
         [SerializeField, Range(0, 180)] float rotationMax = 180;
         [SerializeField] float stopTime = 0.5f;
+        
+        [Header("Magnetic Close")]
+        [SerializeField] float closeMagnetism = 5;
+        [SerializeField] float magnetThreshold;
 
         [Header("Events")]
         [SerializeField, Tooltip("How close the door should be to its closed rotation to be considered closed.")]
-        float closedThreshold = 10;
+        float closedThreshold = 1;
         [SerializeField] UnityEvent onOpen;
         [SerializeField] UnityEvent onClose;
         [SerializeField] InteractionChannel channel;
@@ -62,6 +66,17 @@ namespace Doors
 
         void Update()
         {
+            var closedRotation = invert ? rotationMax : rotationMin;
+            var rot = transform.localEulerAngles;
+            
+            // How far open the door is in degrees.
+            var openness = Math.Abs(rot.y - closedRotation);
+            
+            var openState = openness > closedThreshold;
+            var magnetState = openness < magnetThreshold;
+            
+            var magneticFactor = (magnetThreshold - openness) * closeMagnetism * (invert ? 1 : -1);
+            
             if (isInteracting)
             {
                 var pullPoint = Player.Camera.transform.TransformPoint(Vector3.forward * PullDistance);
@@ -74,18 +89,19 @@ namespace Doors
                 }
                 
                 delta = forward * RotationSpeed * (invert ? -1 : 1);
+                
+                if (magnetState)
+                    delta += magneticFactor;
             }
+            else if (magnetState)
+                delta += magneticFactor * Time.deltaTime;
             else if (delta != 0)
                 delta = Mathf.MoveTowards(delta, 0, requiredDeceleration * Time.deltaTime);
-            else
-                return;
             
-            var rot = transform.localEulerAngles;
             if (rot.y > 180) rot.y -= 360;
             rot.y = Mathf.Clamp(rot.y + delta * Time.deltaTime, rotationMin, rotationMax);
             transform.localEulerAngles = rot;
 
-            var openState = Math.Abs(rot.y - (invert ? rotationMax : rotationMin)) > closedThreshold;
             if (openState != isOpen)
             {
                 isOpen = openState;
