@@ -10325,15 +10325,15 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<size=120%><b>Counter Chaos - Qty: 1</b></size>
+  m_text: '<style=h1>Counter Chaos - Qty: 1</style>
 
     ---------------
 
 
 
 
-    <size=80%><i>Concept
-    | Programming | Modeling</i></size>
+    <style=h2>A
+    game by</style>
 
 
     Alfred
@@ -10342,30 +10342,28 @@ MonoBehaviour:
 
 
 
-    <size=80%><i>Concept</i></size>
+    <style=h2>Textures</style>
 
 
-    Adrian
-
-
-
-
-
-    <size=80%><i>Testing</i></size>
-
-
-    Julian
-    and Tatem
+    cgbookcase.com
 
 
 
 
 
-    <size=80%><i>Outside Assets</i></size>
+    <style=h2>SFX
+    from freesound.org contributors</style>
 
 
-    <size=80%>Quick
-    Outline:</size> Chris Nolet
+    Nox_Sound, babuhr, Fewes
+
+
+
+
+
+    <style=h2>Outside
+    Assets</style>
+
 
     <size=80%>DOTween:</size> Daniele Giardini
 
@@ -10373,13 +10371,14 @@ MonoBehaviour:
 
 
 
-    <size=70%><i>Made
-    with Unity and Blender</i></size>
+    <style=h2>Made
+    with Unity, Blender, and Affinity Designer</style>
 
 
 
 
-    <size=120%><b>Thanks for playing!</b>'
+    <style=h1>Thanks for
+    playing!</style>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 578b7932ee203b74faf05896fdfd0bad, type: 2}
   m_sharedMaterial: {fileID: -8726224954557764152, guid: 578b7932ee203b74faf05896fdfd0bad, type: 2}
@@ -11596,6 +11595,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!114 &1180181673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14576,28 +14576,25 @@ MonoBehaviour:
   scrollTime: 30
   fadeTime: 1
   ease: 1
-  creditFormat: <size=80%><i>{0}</i></size>\n\n{1}\n\n\n\n
-  beginningText: '<size=120%><b>Counter Chaos - Qty: 1</b></size>
+  creditFormat: <style=h2>{0}</style>\n\n{1}\n\n\n\n
+  beginningText: '<style=h1>Counter Chaos - Qty: 1</style>
 
     ---------------
 
     \n\n'
   creditList:
-  - role: Concept | Programming | Modeling
+  - role: A game by
     name: Alfred
-  - role: Concept
-    name: Adrian
-  - role: Testing
-    name: Julian and Tatem
+  - role: Textures
+    name: cgbookcase.com
+  - role: SFX from freesound.org contributors
+    name: Nox_Sound, babuhr, Fewes
   - role: Outside Assets
-    name: '<size=80%>Quick Outline:</size> Chris Nolet
+    name: <size=80%>DOTween:</size> Daniele Giardini
+  endingText: '<style=h2>Made with Unity, Blender, and Affinity Designer</style>\n\n\n
 
-      <size=80%>DOTween:</size>
-      Daniele Giardini'
-  endingText: '<size=70%><i>Made with Unity and Blender</i></size>\n\n\n
-
-    <size=120%><b>Thanks
-    for playing!</b>'
+    <style=h1>Thanks
+    for playing!</style>'
 --- !u!225 &1615607793
 CanvasGroup:
   m_ObjectHideFlags: 0
