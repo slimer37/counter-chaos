@@ -16,7 +16,8 @@ namespace Serialization
         public DateTime creationDate;
         
         public string check;
-	
+	    
+        [JsonIgnore]
         public readonly string baseFileName;
 
         public static readonly SaveData TemporarySave = new("Temporary", "Me", 0);
@@ -52,7 +53,9 @@ namespace Serialization
             check = GenerateChecksum();
         }
 
-        internal SaveData(string accessPath)
+        public static SaveData Blank(string accessPath) => new(accessPath);
+
+        SaveData(string accessPath)
         {
             // Set reference file name on retrieval.
             var fileName = accessPath[(accessPath.LastIndexOf(Path.DirectorySeparatorChar) + 1)..];

@@ -69,7 +69,7 @@ namespace Serialization
             try
             {
                 var jsonData = File.ReadAllText(filePath);
-                retrievedData = new SaveData(filePath);
+                retrievedData = SaveData.Blank(filePath);
                 JsonConvert.PopulateObject(jsonData, retrievedData);
             }
             catch (Exception error)
