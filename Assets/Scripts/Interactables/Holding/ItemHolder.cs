@@ -3,6 +3,7 @@ using System.Linq;
 using Core;
 using UnityEngine;
 using DG.Tweening;
+using Interactables.Base;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ namespace Interactables.Holding
 {
     public class ItemHolder : MonoBehaviour
     {
+        [SerializeField] InteractionChannel channel;
+        
         public bool useOldSystem;
         
         [SerializeField] new Camera camera;
@@ -156,6 +159,7 @@ namespace Interactables.Holding
             // On hold
             if (value.isPressed)
             {
+                channel.Activate(true);
                 isHoldingDrop = true;
                 heldItem.transform.localRotation = dropOrThrowRotation;
                 droppingRotation = heldItem.transform.eulerAngles;
@@ -164,6 +168,7 @@ namespace Interactables.Holding
             // On release
             else if (isHoldingDrop)
             {
+                channel.Deactivate();
                 isHoldingDrop = false;
 
                 controller.EnableLook(true);
@@ -201,6 +206,7 @@ namespace Interactables.Holding
             // On hold
             if (value.isPressed)
             {
+                channel.Activate(true);
                 holdTime = 0;
                 isHoldingToss = true;
                 heldItem.transform.parent = camera.transform;
@@ -209,6 +215,7 @@ namespace Interactables.Holding
             // On release
             else if (isHoldingToss)
             {
+                channel.Deactivate();
                 isHoldingToss = false;
                 
                 // Return the item to the holding position if an obstacle is detected.

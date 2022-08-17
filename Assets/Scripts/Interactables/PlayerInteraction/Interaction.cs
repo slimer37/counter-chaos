@@ -16,15 +16,29 @@ namespace Interactables
 
         Hoverable hoveredObject;
 
+        void Awake()
+        {
+            if (channel.IsActive)
+                 channel.Deactivate();
+
+            channel.OnActivate += HoldInteractionStarted;
+        }
+
+        void HoldInteractionStarted(bool exitHover)
+        {
+            if (exitHover)
+                HoverOff();
+        }
+
         void OnInteract(InputValue value)
         {
-            if (!hoveredObject) return;
+            if (channel.IsActive || !hoveredObject) return;
             hoveredObject.Interact(transform, value.isPressed, false);
         }
 
         void OnSecondaryInteract(InputValue value)
         {
-            if (!hoveredObject) return;
+            if (channel.IsActive || !hoveredObject) return;
             hoveredObject.Interact(transform, value.isPressed, true);
         }
 
@@ -53,15 +67,15 @@ namespace Interactables
             }
             else
                 HoverOff();
-
-            void HoverOff()
-            {
-                if (!hoveredObject) return;
-                hoveredObject.Interact(transform, false, false);
-                hoveredObject.Interact(transform, false, true);
-                hoveredObject.OnHoverExit();
-                hoveredObject = null;
-            }
+        }
+        
+        void HoverOff()
+        {
+            if (!hoveredObject) return;
+            hoveredObject.Interact(transform, false, false);
+            hoveredObject.Interact(transform, false, true);
+            hoveredObject.OnHoverExit();
+            hoveredObject = null;
         }
     }
 }
