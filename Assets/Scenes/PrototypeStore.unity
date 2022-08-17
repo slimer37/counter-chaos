@@ -5433,11 +5433,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2536145305089777937, guid: 51f92362da7b0b344884efb4a4a55cd7, type: 3}
   m_PrefabInstance: {fileID: 414405536}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &414995588 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6000159636961866733, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-  m_PrefabInstance: {fileID: 1320405147669551748}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &416254366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28846,46 +28841,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 165088457}
     m_Modifications:
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: sfxChannel
-      value: 
-      objectReference: {fileID: 11400000, guid: 1ba77d3d9b25208428150354e1e84b9d, type: 2}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: magnetismRange
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: openClips.volume
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: closeClips.volume
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: openClips.pitchVariation
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: closeClips.pitchVariation
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: openClips.clips.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: closeClips.clips.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: openClips.clips.Array.data[0]
-      value: 
-      objectReference: {fileID: 8300000, guid: 275ca093ef1704044b1469b1f9dfb01c, type: 3}
-    - target: {fileID: 1219241051179336189, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
-      propertyPath: closeClips.clips.Array.data[0]
-      value: 
-      objectReference: {fileID: 8300000, guid: 583bbee877ce4254da03e3c76a2b01e1, type: 3}
     - target: {fileID: 6000159636961866733, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
       propertyPath: m_Name
       value: medium fridge
@@ -28950,20 +28905,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7855203525131023721, guid: 9be6a4490e5ce0e4bb91eaf6a8707e35, type: 3}
   m_PrefabInstance: {fileID: 1320405147669551748}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1320405147669551758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 414995588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2332e11bf1745b4bb4a22bed5014e02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clipGroups: []
-  sfxChannel: {fileID: 11400000, guid: 1ba77d3d9b25208428150354e1e84b9d, type: 2}
 --- !u!1 &1357853689579287303
 GameObject:
   m_ObjectHideFlags: 0
