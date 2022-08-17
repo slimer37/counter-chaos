@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 using Random = UnityEngine.Random;
 
 namespace Audio
@@ -14,6 +15,7 @@ namespace Audio
         public float volumeVariation;
         public float pitch = 1;
         public float pitchVariation;
+        public AudioMixerGroup output;
 
         int lastClip;
 

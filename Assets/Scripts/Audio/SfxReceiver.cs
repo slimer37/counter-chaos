@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Pool;
 
 namespace Audio
@@ -7,6 +8,7 @@ namespace Audio
     {
         [SerializeField] AudioChannel channel;
         [SerializeField] int poolSize;
+        [SerializeField] AudioMixerGroup defaultMixerGroup;
         
         ObjectPool<AudioSource> pool;
 
@@ -29,6 +31,7 @@ namespace Audio
         {
             pool.Get(out var s);
             s.transform.position = position;
+            s.outputAudioMixerGroup = group.output ? group.output : defaultMixerGroup;
             
             var clip = group.GetNextClip();
             s.pitch = group.GetPitch();
