@@ -1,4 +1,3 @@
-using System;
 using Core;
 using Interactables.Base;
 using UnityEngine;
@@ -66,11 +65,11 @@ namespace Doors
 
         void Update()
         {
-            var closedRotation = invert ? rotationMax : rotationMin;
+            var closedRotation = Quaternion.Euler(Vector3.up * (invert ? rotationMax : rotationMin));
             var rot = transform.localEulerAngles;
             
             // How far open the door is in degrees.
-            var openness = Math.Abs(rot.y - closedRotation);
+            var openness = Quaternion.Angle(transform.localRotation, closedRotation);
             
             var openState = openness > closedThreshold;
             var magnetState = openness < magnetThreshold;
