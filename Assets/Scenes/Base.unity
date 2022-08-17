@@ -3887,6 +3887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd71bf98870d039478ece77668e3dd0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  channel: {fileID: 11400000, guid: 739d441915434e642a86d9cd0c4cb8d6, type: 2}
   useOldSystem: 0
   camera: {fileID: 1687258584}
   defaultHoldingPosition: {x: 0.25, y: 0.59, z: 0.52}
