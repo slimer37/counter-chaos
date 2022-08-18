@@ -100,15 +100,19 @@ namespace Serialization
             showFileList = EditorGUILayout.BeginFoldoutHeaderGroup(showFileList, "Save Folder Contents");
             if (showFileList)
             {
-                var saveFiles = Directory.GetFiles(SaveSystem.SaveFolderLocation);
+                var folderContents = Directory.GetFiles(SaveSystem.SaveFolderLocation);
 
-                if (saveFiles.Length == 0)
+                if (folderContents.Length == 0)
                     EditorGUILayout.LabelField("Save folder empty.");
 			
-                foreach (var filePath in saveFiles)
+                foreach (var filePath in folderContents)
                 {
-                    EditorGUILayout.BeginHorizontal();
                     var fileName = filePath.Substring(filePath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+                    var isSaveFile = fileName.EndsWith(SaveSystem.SaveFileEnding);
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUI.BeginDisabledGroup(!isSaveFile);
+                    
                     EditorGUILayout.LabelField(fileName);
 
                     var isFocused = viewedSave && viewedSave.FileName == fileName;
@@ -124,7 +128,8 @@ namespace Serialization
                         if (isFocused)
                             viewedSave = null;
                     }
-				
+                    
+                    EditorGUI.EndDisabledGroup();
                     EditorGUILayout.EndHorizontal();
                 }
 
