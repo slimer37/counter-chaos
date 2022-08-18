@@ -80,6 +80,13 @@ namespace Serialization
 
             return true;
         }
+        
+        /// <summary>
+        /// Retrieves save files and excludes non-save files in save folder.
+        /// </summary>
+        /// <returns>An array of save file paths.</returns>
+        public static string[] GetSaveFiles() =>
+            Directory.GetFiles(SaveFolderLocation, '*' + SaveFileEnding);
 
         public static bool NameExists(string match) => Directory.GetFiles(SaveFolderLocation)
             .Any(filePath => filePath.Substring(filePath.LastIndexOf(Path.DirectorySeparatorChar) + 1) == match + SaveFileEnding);

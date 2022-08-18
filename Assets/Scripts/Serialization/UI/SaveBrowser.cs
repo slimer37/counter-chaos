@@ -16,7 +16,7 @@ namespace Serialization.UI
 	
         public void Reload()
         {
-            var saveFiles = Directory.GetFiles(SaveSystem.SaveFolderLocation);
+            var saveFiles = SaveSystem.GetSaveFiles();
 
             noFilesText.SetActive(saveFiles.Length == 0);
             errorText.SetActive(false);
