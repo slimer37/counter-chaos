@@ -15,7 +15,11 @@ namespace Products
         {
             productGroup = AddressableAssetSettingsDefaultObject.Settings.FindGroup("Products");
         }
-        
+
+        void OnEnable() => EditorApplication.update += Update;
+        void OnDisable() => EditorApplication.update -= Update;
+        void Update() => Repaint();
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -63,6 +67,7 @@ namespace Products
             var assetPath = AssetDatabase.GetAssetPath(info);
             var assetGuid = AssetDatabase.AssetPathToGUID(assetPath);
             var entry = settings.CreateOrMoveEntry(assetGuid, productGroup);
+            entry.SetLabel("product", true);
             entry.SetAddress(info.DisplayName);
         }
         
@@ -72,7 +77,8 @@ namespace Products
             var entry = settings.FindAssetEntry(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(info)));
             return entry != null
                    && entry.parentGroup == productGroup
-                   && entry.address == info.DisplayName;
+                   && entry.address == info.DisplayName
+                   && entry.labels.Contains("product");
         }
     }
 }

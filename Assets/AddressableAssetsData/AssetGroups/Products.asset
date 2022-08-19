@@ -40,7 +40,8 @@ MonoBehaviour:
   - m_GUID: cb22d593ffbeafc4292141ee0d581817
     m_Address: Voxel Lab
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - product
   - m_GUID: f1f976224d1a38f43b998c13d9cba5c5
     m_Address: SPAZ Headphones
     m_ReadOnly: 0
