@@ -135,6 +135,8 @@ namespace UI
             { "</pre>", "\n" },
             { "</blockquote>", "\n" },
             { "r:<table>.*?</table>", "[Can't display tables here.]\n" },
+            // Links
+            { "r:<span class=\"bb_link_host\">\\[(.*?)\\]</span>", " ($1)" },
             // Remove all leftover tags (including closing tags)
             // Excludes removal of b, i, and s tags
             { "r:<(?!\\/*b\\b|\\/*i\\b|\\/*s\\b).*?>", "" }
