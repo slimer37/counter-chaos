@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Audio;
 using Core;
 using UnityEngine;
 using DG.Tweening;
@@ -50,6 +51,10 @@ namespace Interactables.Holding
         [SerializeField] float maxTossForce;
         [SerializeField] float maxForceHoldTime;
         [SerializeField] Image holdIndicator;
+
+        [Header("SFX")]
+        [SerializeField] AudioClipGroup switchSfx;
+        [SerializeField] AudioChannel sfxChannel;
 
         public bool IsHoldingItem => heldItem;
         public bool IsDroppingItem => isHoldingDrop;
@@ -112,6 +117,8 @@ namespace Interactables.Holding
         internal void Hold(Pickuppable pickuppable)
         {
             if (heldItem) throw new InvalidOperationException("Cannot give item while player is holding an item.");
+            
+            sfxChannel.RequestAudio(switchSfx, spatialBlend: 0);
 
             holdingPosition = pickuppable.OverridePosition ?? defaultHoldingPosition;
             holdingRotation = Quaternion.Euler(pickuppable.OverrideRotation ?? defaultHoldingRotation);

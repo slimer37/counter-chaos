@@ -3926,6 +3926,16 @@ MonoBehaviour:
   maxTossForce: 15
   maxForceHoldTime: 2
   holdIndicator: {fileID: 785347706}
+  switchSfx:
+    clips:
+    - {fileID: 8300000, guid: 9f2b9a7d02cde4a408c751178011ce51, type: 3}
+    mode: 0
+    volume: 0.5
+    volumeVariation: 0
+    pitch: 1
+    pitchVariation: 0.1
+    output: {fileID: 0}
+  sfxChannel: {fileID: 11400000, guid: 1ba77d3d9b25208428150354e1e84b9d, type: 2}
 --- !u!4 &235475068
 Transform:
   m_ObjectHideFlags: 0
