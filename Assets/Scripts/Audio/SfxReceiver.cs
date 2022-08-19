@@ -27,9 +27,10 @@ namespace Audio
             return s;
         }
 
-        void OnAudioRequested(AudioClipGroup group, Vector3 position)
+        void OnAudioRequested(AudioClipGroup group, Vector3 position, float spatialBlend)
         {
             pool.Get(out var s);
+            s.spatialBlend = spatialBlend;
             s.transform.position = position;
             s.outputAudioMixerGroup = group.output ? group.output : defaultMixerGroup;
             
