@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -30,6 +29,9 @@ namespace UI
         {
             splitter = Regex.Unescape(splitter);
             headerFormat = Regex.Unescape(headerFormat);
+            
+            if (beginTag == "" || endTag == "")
+                throw new ArgumentException("Beginning or ending tags are unspecified.");
         }
 
         public void Refresh() => Start();
@@ -42,61 +44,49 @@ namespace UI
 
         IEnumerator ProcessPosts()
         {
-            if (beginTag == "" || endTag == "")
-                throw new ArgumentException("Beginning or ending tags are unspecified.");
-            
             text.text = loadingMessage;
 
             var posts = new List<Post>();
 
-            var feed = UnityWebRequest.Get(rssFeedSource);
-            yield return feed.SendWebRequest();
-            ShowErrorIfNeeded(feed);
+            var request = UnityWebRequest.Get(rssFeedSource);
+            yield return request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                text.text = $"<color=red>{request.error}</color>";
+                throw new Exception(request.error);
+            }
+
+            var doc = new XmlDocument();
+            doc.LoadXml(request.downloadHandler.text);
+            var postNodes = doc.SelectNodes("//channel/item");
             
             // Start processing RSS feed
             
-            using var strReader = new StringReader(feed.downloadHandler.text);
+            foreach (XmlNode node in postNodes)
             {
-                var settings = new XmlReaderSettings {Async = true};
-                var reader = XmlReader.Create(strReader, settings);
-
-                var readTask = reader.ReadAsync();
-                yield return new WaitUntil(() => readTask.IsCompleted);
-
-                while (readTask.Result)
+                var post = new Post();
+                
+                // format: title, desc, link, pubDate
+                foreach (XmlNode prop in node.ChildNodes)
                 {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "item")
+                    var value = prop.InnerText;
+                    switch (prop.Name)
                     {
-                        yield return Read();
-                        
-                        // Posts must begin with titles
-                        if (reader.Name != "title") continue;
-                        
-                        // format: title, desc, link, pubDate
-                        yield return Read();
-                        var title = reader.Value;
-                        for (var i = 0; i < 2; i++) yield return Read();
-                        var description = reader.Value;
-                        for (var i = 0; i < 4; i++) yield return Read();
-                        var pubDate = DateTime.Parse(reader.Value);
-
-                        posts.Add(new Post { title = title, description = description, pubDate = pubDate });
-                    }
-
-                    yield return Read();
-
-                    IEnumerator Read()
-                    {
-                        readTask = reader.ReadAsync();
-                        yield return new WaitUntil(() => readTask.IsCompleted);
-                        
-                        if (reader.NodeType is XmlNodeType.Whitespace or XmlNodeType.EndElement)
-                            yield return Read();
+                        case "title":
+                            post.title = value;
+                            break;
+                        case "description":
+                            post.description = value;
+                            break;
+                        case "pubDate":
+                            post.pubDate = DateTime.Parse(value);
+                            break;
                     }
                 }
+                posts.Add(post);
             }
             
-            // Grab and format text from each item's link
+            // Reformat description text
             
             var content = "";
 
@@ -121,15 +111,6 @@ namespace UI
             }
 
             text.text = content;
-
-            void ShowErrorIfNeeded(UnityWebRequest request)
-            {
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    text.text = $"<color=red>{request.error}</color>";
-                    throw new Exception(request.error);
-                }
-            }
         }
 
         struct Post
