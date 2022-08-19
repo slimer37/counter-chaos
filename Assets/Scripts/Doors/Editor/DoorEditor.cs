@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Doors
 {
-    [CustomEditor(typeof(Door))]
+    [CustomEditor(typeof(Door)), CanEditMultipleObjects]
     public class DoorEditor : Editor
     {
         void OnSceneGUI()
