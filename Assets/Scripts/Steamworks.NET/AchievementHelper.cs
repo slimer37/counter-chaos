@@ -1,5 +1,6 @@
 ﻿using System;
 using Achievements;
+using Serialization;
 using UnityEngine;
 using Steamworks;
 using Object = UnityEngine.Object;
@@ -17,11 +18,23 @@ public static class AchievementHelper
     
     static void OnEarnAchievement(APIName pchAchievement)
     {
+        if (SaveSystem.LoadedSave.IsCompromised)
+        {
+            Debug.LogWarning("This save file has been modified. Achievements are disabled.");
+            return;
+        }
+        
         SteamUserStats.SetAchievement(pchAchievement.ToString());
     }
 
     static void OnSetStat(APIName pchStat, int data)
     {
+        if (SaveSystem.LoadedSave.IsCompromised)
+        {
+            Debug.LogWarning("This save file has been modified. Stats are disabled.");
+            return;
+        }
+        
         if (!SteamUserStats.RequestCurrentStats())
             throw new Exception("Failed to get current stats. [Not logged in.]");
 
