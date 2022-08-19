@@ -5,18 +5,13 @@ namespace Audio
 {
     public class AudioCue : MonoBehaviour
     {
-        [SerializeField] AudioClipGroup[] clipGroups;
+        [SerializeField] AudioClipGroup clipGroup;
         [SerializeField] AudioChannel sfxChannel;
 
-        void Reset()
-        {
-            clipGroups = new[] { new AudioClipGroup() };
-        }
-
-        public void Play(int i)
+        public void Play()
         {
             if (!sfxChannel) throw new NullReferenceException($"No {nameof(AudioChannel)} assigned.");
-            sfxChannel.RequestAudio(clipGroups[i], transform.position);
+            sfxChannel.RequestAudio(clipGroup, transform.position);
         }
     }
 }

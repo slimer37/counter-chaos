@@ -5020,7 +5020,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2381179800210136975}
         m_TargetAssemblyTypeName: Audio.AudioCue, Assembly-CSharp
         m_MethodName: Play
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5044,10 +5044,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2381179800210136975}
+      - m_Target: {fileID: 305774787161570736}
         m_TargetAssemblyTypeName: Audio.AudioCue, Assembly-CSharp
         m_MethodName: Play
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5651,7 +5651,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2381179800210136975}
         m_TargetAssemblyTypeName: Audio.AudioCue, Assembly-CSharp
         m_MethodName: Play
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5675,10 +5675,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2381179800210136975}
+      - m_Target: {fileID: 305774787161570736}
         m_TargetAssemblyTypeName: Audio.AudioCue, Assembly-CSharp
         m_MethodName: Play
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5725,7 +5725,7 @@ GameObject:
   - component: {fileID: 2400426833884781800}
   - component: {fileID: 2381179800210136975}
   m_Layer: 0
-  m_Name: door sounds
+  m_Name: open cue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5758,21 +5758,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2332e11bf1745b4bb4a22bed5014e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clipGroups:
-  - clips:
+  clipGroup:
+    clips:
     - {fileID: 8300000, guid: 275ca093ef1704044b1469b1f9dfb01c, type: 3}
     mode: 0
     volume: 1
-    volumeVariation: 0
+    volumeVariation: 0.1
     pitch: 1
-    pitchVariation: 0.2
-  - clips:
+    pitchVariation: 0.1
+    output: {fileID: 0}
+  sfxChannel: {fileID: 11400000, guid: 1ba77d3d9b25208428150354e1e84b9d, type: 2}
+--- !u!1 &4031923467345641571
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2202257318982684607}
+  - component: {fileID: 305774787161570736}
+  m_Layer: 0
+  m_Name: close cue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2202257318982684607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4031923467345641571}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7855203525131023721}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &305774787161570736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4031923467345641571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2332e11bf1745b4bb4a22bed5014e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clipGroup:
+    clips:
     - {fileID: 8300000, guid: 583bbee877ce4254da03e3c76a2b01e1, type: 3}
     mode: 0
     volume: 1
-    volumeVariation: 0
+    volumeVariation: 0.1
     pitch: 1
-    pitchVariation: 0.2
+    pitchVariation: 0.1
+    output: {fileID: 0}
   sfxChannel: {fileID: 11400000, guid: 1ba77d3d9b25208428150354e1e84b9d, type: 2}
 --- !u!1 &6000159636961866733
 GameObject:
@@ -5813,6 +5861,7 @@ Transform:
   - {fileID: 1320405147825961948}
   - {fileID: 8766459569237595847}
   - {fileID: 2400426833884781800}
+  - {fileID: 2202257318982684607}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
