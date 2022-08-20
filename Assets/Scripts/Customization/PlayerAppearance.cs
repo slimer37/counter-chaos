@@ -6,12 +6,14 @@ namespace Customization
     {
         [SerializeField] Renderer[] skinRenderers;
 
-        void Awake()
+        void Start()
         {
             var color = SkinColor.GetPref();
 
+            if (color == null) return;
+
             foreach (var r in skinRenderers)
-                r.material.color = color;
+                r.material.color = (Color)color;
         }
     }
 }

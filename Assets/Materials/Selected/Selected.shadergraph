@@ -4,16 +4,7 @@
     "m_ObjectId": "5287d76f6b1c45d9a65bc2254d2e1ad5",
     "m_Properties": [
         {
-            "m_Id": "eafbeeb0bca445249e302b1f4c75c742"
-        },
-        {
             "m_Id": "2512533b980c4c6680bb0c6c73ec9b97"
-        },
-        {
-            "m_Id": "dceb5a164ce64bd79a0ec1a80e9d032c"
-        },
-        {
-            "m_Id": "0944b3d237214842968b03a19f8f41f6"
         }
     ],
     "m_Keywords": [],
@@ -141,33 +132,6 @@
             "m_Id": "a732f735315c4abdaba860844b5b2c74"
         }
     ]
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "0944b3d237214842968b03a19f8f41f6",
-    "m_Guid": {
-        "m_GuidSerialized": "bc81f345-d9c3-49ae-8840-aee825fbd58f"
-    },
-    "m_Name": "Start Time",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Start Time",
-    "m_DefaultReferenceName": "_Start_Time",
-    "m_OverrideReferenceName": "_StartTime",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 0.0,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
 }
 
 {
@@ -405,16 +369,7 @@
     "m_Name": "",
     "m_ChildObjectList": [
         {
-            "m_Id": "eafbeeb0bca445249e302b1f4c75c742"
-        },
-        {
             "m_Id": "2512533b980c4c6680bb0c6c73ec9b97"
-        },
-        {
-            "m_Id": "dceb5a164ce64bd79a0ec1a80e9d032c"
-        },
-        {
-            "m_Id": "0944b3d237214842968b03a19f8f41f6"
         }
     ]
 }
@@ -716,59 +671,5 @@
     },
     "m_Labels": [],
     "m_Space": 0
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "dceb5a164ce64bd79a0ec1a80e9d032c",
-    "m_Guid": {
-        "m_GuidSerialized": "536cf924-df5a-4ed7-b9e6-eaa6827d54d7"
-    },
-    "m_Name": "Max Dither",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Max Dither",
-    "m_DefaultReferenceName": "_Max_Dither",
-    "m_OverrideReferenceName": "_MaxDither",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 0.10000000149011612,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "eafbeeb0bca445249e302b1f4c75c742",
-    "m_Guid": {
-        "m_GuidSerialized": "d949e8c3-8249-493b-be7e-612b872008b0"
-    },
-    "m_Name": "Flash Speed",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Flash Speed",
-    "m_DefaultReferenceName": "_Flash_Speed",
-    "m_OverrideReferenceName": "_FlashSpeed",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 2.0,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
 }
 

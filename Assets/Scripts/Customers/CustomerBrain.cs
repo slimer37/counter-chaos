@@ -35,13 +35,14 @@ namespace Customers
         {
             for (var i = 0; i < Random.Range(minProducts, maxProducts); i++)
             {
-                var newProduct = ProductLibrary.GetRandomProductInstance();
-                
-                while (newProduct.GetComponent<Pickuppable>().IsHeld || requestedProducts.Contains(newProduct))
+                ProductIdentifier newProduct;
+
+                do
+                {
                     newProduct = ProductLibrary.GetRandomProductInstance();
+                } while (newProduct.GetComponent<Pickuppable>().IsHeld || requestedProducts.Contains(newProduct));
                 
-                if (requestedProducts.Count <= i) requestedProducts.Add(newProduct);
-                else requestedProducts[i] = newProduct;
+                requestedProducts.Add(newProduct);
                 
                 yield return MoveToward(newProduct.transform.position);
 

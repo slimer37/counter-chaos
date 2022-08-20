@@ -16332,21 +16332,14 @@ MonoBehaviour:
     Chaos Alpha!</color>
 
 
-    Remember to visit the actual itch.io page!
-
-
-    I
-    know I gave you guys download keys that go straight to where the downloads are,
-    but there''s a lot of important stuff on the game page! Not only did I spend
-    a bunch of time trying to make it look good, but I also spend time logging changes
-    and updates there with devlogs. Check those out; they look better on the site
-    than on the title screen.
-
-
-    And report bugs! That''s probably the most important
-    thing to visit the game page for. I need bugs to be reported because I don''t
-    always catch everything while I''m making the stuff, plus the systems I make
-    don''t always turn out perfect.'
+    test test test test test test test test test test
+    test test test test test test test test test test test test test test test test
+    test test test test test test test test test test test test test test test test
+    test test test test test test test test test test test test test test test test
+    test test test test test test test test test test test test test test test test
+    test test test test test test test test test test test test test test test test
+    test test test test test test test test test test test test test test test test
+    test test test test test test test test test test test test test test'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f15a354760e88f04294d5126f6a2ff7b, type: 2}
   m_sharedMaterial: {fileID: -7701231992684419158, guid: f15a354760e88f04294d5126f6a2ff7b, type: 2}
@@ -19167,6 +19160,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 490915c6af525e944bbf31ccca00790d, type: 3}
       propertyPath: m_Name
       value: handtruck
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 490915c6af525e944bbf31ccca00790d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 490915c6af525e944bbf31ccca00790d, type: 3}

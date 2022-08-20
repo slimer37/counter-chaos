@@ -10,9 +10,6 @@ namespace Interactables.Base
         Material selectedMaterial;
         
         static readonly int ColorID = Shader.PropertyToID("_Color");
-        static readonly int FlashSpeedID = Shader.PropertyToID("_FlashSpeed");
-        static readonly int MaxDitherID = Shader.PropertyToID("_MaxDither");
-        static readonly int StartTimeID = Shader.PropertyToID("_StartTime");
 
         void Awake()
         {
@@ -32,11 +29,7 @@ namespace Interactables.Base
             {
                 var materials = rend.sharedMaterials.ToList();
 
-                if (enable)
-                {
-                    selectedMaterial.SetFloat(StartTimeID, Time.time);
-                    materials.Add(selectedMaterial);
-                }
+                if (enable) materials.Add(selectedMaterial);
                 else materials.Remove(selectedMaterial);
 
                 rend.materials = materials.ToArray();

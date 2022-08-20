@@ -16,14 +16,17 @@ namespace Customization
 
         static Color defaultColor;
 
-        public static Color GetPref()
+        public static Color? GetPref()
         {
-            var pref = PlayerPrefs.GetString(PrefKey, "none");
+            var pref = PlayerPrefs.GetString(PrefKey);
             
-            var color = defaultColor;
-            
-            if (pref != "none")
-                ColorUtility.TryParseHtmlString("#" + pref, out color);
+            Color? color = null;
+
+            if (pref != default)
+            {
+                ColorUtility.TryParseHtmlString("#" + pref, out var c);
+                color = c;
+            }
 
             return color;
         }
@@ -38,14 +41,13 @@ namespace Customization
             
             bodyRenderers = list.ToArray();
             
-            defaultColor = bodyRenderers[0].material.color;
             InitColor();
         }
         
         [ContextMenu("Init Color")]
         public void InitColor()
         {
-            var color = GetPref();
+            var color = GetPref() ?? defaultColor;
             SetColor(color);
             picker.Color = color;
         }
