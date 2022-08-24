@@ -10,7 +10,7 @@ namespace Interactables.Base
     {
         // Interaction channel shows an active state when any hold action (i.e. pulling a door or attaching a shelf)
         // is in progress, allowing any systems, primarily player interaction, to halt cleanly.
-        public bool IsActive { get; private set; }
+        public bool IsHoldingInteraction { get; private set; }
         public event Action<bool> OnActivate;
         public event Action OnDeactivate;
         
@@ -35,19 +35,19 @@ namespace Interactables.Base
 
         public void Activate(bool exitHover = false)
         {
-            if (IsActive)
+            if (IsHoldingInteraction)
                 Debug.LogWarning("Calling activate while already active. This is probably unintended.");
             
-            IsActive = true;
+            IsHoldingInteraction = true;
             OnActivate?.Invoke(exitHover);
         }
 
         public void Deactivate()
         {
-            if (!IsActive)
+            if (!IsHoldingInteraction)
                 Debug.LogWarning("Calling deactivate while already inactive. This is probably unintended.");
             
-            IsActive = false;
+            IsHoldingInteraction = false;
             OnDeactivate?.Invoke();
         }
     }

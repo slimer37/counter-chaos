@@ -18,7 +18,7 @@ namespace Interactables
 
         void Awake()
         {
-            if (channel.IsActive)
+            if (channel.IsHoldingInteraction)
                  channel.Deactivate();
 
             channel.OnActivate += HoldInteractionStarted;
@@ -32,19 +32,19 @@ namespace Interactables
 
         void OnInteract(InputValue value)
         {
-            if (channel.IsActive || !hoveredObject) return;
+            if (channel.IsHoldingInteraction || !hoveredObject) return;
             hoveredObject.Interact(transform, value.isPressed, false);
         }
 
         void OnSecondaryInteract(InputValue value)
         {
-            if (channel.IsActive || !hoveredObject) return;
+            if (channel.IsHoldingInteraction || !hoveredObject) return;
             hoveredObject.Interact(transform, value.isPressed, true);
         }
 
         void Update()
         {
-            if (channel.IsActive) return;
+            if (channel.IsHoldingInteraction) return;
             
             var eyeRay = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
             
