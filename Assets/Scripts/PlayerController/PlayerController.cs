@@ -59,8 +59,6 @@ public class PlayerController : MonoBehaviour
 
     public const string SensitivityPrefKey = "Sensitivity";
     public const float DefaultSensitivity = 40;
-
-    const float MouseScale = 0.05f;
     
     public bool UseGravity { get; set; } = true;
 
@@ -201,7 +199,7 @@ public class PlayerController : MonoBehaviour
         
         if (canLook)
         {
-            var mouseDelta = sensitivity * MouseScale * lookAction.action.ReadValue<Vector2>();
+            var mouseDelta = sensitivity * lookAction.action.ReadValue<Vector2>();
             camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y, -rotLimit, rotLimit);
             body.localEulerAngles += mouseDelta.x * Vector3.up;
             cam.transform.localEulerAngles = camRot;

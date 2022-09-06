@@ -163,10 +163,10 @@
                 },
                 {
                     "name": "",
-                    "id": "b91bc581-72a1-44d4-b6c0-9b8c72b32aca",
+                    "id": "dd31312e-d021-4027-aaa5-8801dce1d32b",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.05,y=0.05)",
                     "groups": "Keyboard + Mouse",
                     "action": "Move Mouse",
                     "isComposite": false,
