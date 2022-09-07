@@ -1,4 +1,5 @@
 using DG.Tweening;
+using UI.Settings.PlayerModifiers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float walkSpeed;
     [SerializeField] float sprintSpeed;
-    [SerializeField] float slowSpeed;
     [SerializeField] float transitionTime;
     [SerializeField] float sprintFov;
     [SerializeField] Ease transitionEase;
@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Camera cam;
     [SerializeField] Camera secondaryCam;
     [SerializeField] Transform body;
-    public float sensitivity;
     [SerializeField] float rotLimit;
+    [SerializeField] float rotScale = 1;
     [SerializeField] InputActionReference lookAction;
 
     [Header("Bobbing")]
@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Ease bobEase;
 
     float originalCamY;
-    float originalFov;
     Tween bobTween;
     Tween returnTween;
     Tween fovTween;
@@ -57,9 +56,6 @@ public class PlayerController : MonoBehaviour
     
     static readonly int Speed = Animator.StringToHash("speed");
 
-    public const string SensitivityPrefKey = "Sensitivity";
-    public const float DefaultSensitivity = 40;
-    
     public bool UseGravity { get; set; } = true;
 
     public void EnableMovement(bool value)
@@ -135,11 +131,8 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        sensitivity = PlayerPrefs.GetFloat(SensitivityPrefKey, DefaultSensitivity);
-        
         camRot = cam.transform.localEulerAngles;
         originalCamY = cam.transform.localPosition.y;
-        originalFov = cam.fieldOfView;
         currentSpeed = walkSpeed;
         
         Cursor.visible = false;
@@ -155,29 +148,6 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnDestroy() => sprintTransition.Kill();
-
-    void OnSlow(InputValue val)
-    {
-        if (!canMove || isSprinting || sprintTransition.IsPlaying()) return;
-        
-        isSlow = val.isPressed;
-        currentSpeed = isSlow ? slowSpeed : walkSpeed;
-        UpdateBobbing();
-
-        if (isSlow)
-        {
-            tempSensitivity = sensitivity;
-            sensitivity /= 2;
-        }
-        else sensitivity = tempSensitivity;
-
-        if (isSlow && isSprinting)
-            fovTween = DOTween.Sequence()
-                .Append(cam.DOFieldOfView(originalFov, transitionTime))
-                .Join(secondaryCam.DOFieldOfView(originalFov, transitionTime));
-        else if (!isSlow)
-            fovTween?.Kill();
-    }
 
     void Update()
     {
@@ -199,7 +169,7 @@ public class PlayerController : MonoBehaviour
         
         if (canLook)
         {
-            var mouseDelta = sensitivity * lookAction.action.ReadValue<Vector2>();
+            var mouseDelta = SensitivitySlider.CurrentValue * rotScale * lookAction.action.ReadValue<Vector2>();
             camRot.x = Mathf.Clamp(camRot.x - mouseDelta.y, -rotLimit, rotLimit);
             body.localEulerAngles += mouseDelta.x * Vector3.up;
             cam.transform.localEulerAngles = camRot;

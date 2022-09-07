@@ -8,11 +8,18 @@ namespace UI.Settings.PlayerModifiers
     {
         [SerializeField] Slider slider;
         [SerializeField] TMP_InputField numInput;
-        [SerializeField] PlayerController controller;
+
+        public static float CurrentValue;
         
+        public const string SensitivityPrefKey = "Sensitivity";
+        public const float DefaultSensitivity = 40;
+        
+        [RuntimeInitializeOnLoadMethod]
+        static void Init() => CurrentValue = PlayerPrefs.GetFloat(SensitivityPrefKey, DefaultSensitivity);
+
         void Awake()
         {
-            var value = PlayerPrefs.GetFloat(PlayerController.SensitivityPrefKey, PlayerController.DefaultSensitivity);
+            var value = PlayerPrefs.GetFloat(SensitivityPrefKey, DefaultSensitivity);
             UpdateUI(value);
             
             slider.onValueChanged.AddListener(ChangeSensitivity);
@@ -30,16 +37,14 @@ namespace UI.Settings.PlayerModifiers
             UpdateUI(value);
             value = slider.value;
             
-            PlayerPrefs.SetFloat(PlayerController.SensitivityPrefKey, value);
-            
-            if (!controller) return;
-            controller.sensitivity = value;
+            PlayerPrefs.SetFloat(SensitivityPrefKey, value);
         }
 
         void UpdateUI(float value)
         {
             slider.value = value;
             numInput.text = slider.value.ToString("F1");
+            CurrentValue = slider.value;
         }
     }
 }

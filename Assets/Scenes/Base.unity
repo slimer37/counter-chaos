@@ -3789,6 +3789,7 @@ MonoBehaviour:
   body: {fileID: 235475068}
   sensitivity: 80
   rotLimit: 85
+  rotScale: 0.05
   lookAction: {fileID: -8026674001516134896, guid: f28102bb5b39ff048ba5e5831da6b9b0, type: 3}
   bobAmount: 0.08
   bobTime: 0.25
